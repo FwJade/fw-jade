@@ -1,0 +1,1302 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>AURORA AI — The Mystical Gemstone & Face Aura Oracle • by FW JADE</title>
+  <meta name="description" content="Your Aura. Your Element. Your Gemstone. Oracle Pencarian Cerdas & Pembaca Aura Wajah Khusus Giok dan Batu Mulia Berstandar Dunia. By FW JADE Medan.">
+
+  <!-- Google Fonts: Editorial Serif & Clean Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Poppins:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome 6 Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Supabase SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="manifest.json">
+
+  <link rel="stylesheet" href="style.css?v=15">
+</head>
+<body class="theme-quiet-luxury">
+  <!-- Subtle Ethereal Background Canvas & Ambient Light -->
+  <div class="ambient-glow glow-jade"></div>
+  <div class="ambient-glow glow-amber"></div>
+  <div class="ambient-glow glow-cyan"></div>
+  <canvas id="particleCanvas"></canvas>
+
+  <div class="app-layout">
+    
+    <!-- 1. Header Navigation (Clean & Minimalist - Gambar 1) -->
+    <header class="top-nav">
+      <div class="nav-brand">
+        <!-- Official FW JADE Animated Logo -->
+        <div class="fwjade-official-logo">
+          <div class="fwj-diamond-container">
+            <div class="fwj-diamond top"></div>
+            <div class="fwj-diamond bottom"></div>
+            <div class="fwj-diamond-glow"></div>
+          </div>
+          <div class="fwj-swoosh"></div>
+          <div class="fwj-text-group">
+            <div class="fwj-text-main">FW<span class="fwj-j">J</span>ADE</div>
+          </div>
+        </div>
+      </div>
+      <div class="nav-controls">
+        <!-- Dual UI Style Switcher -->
+        <div class="ui-style-switcher-group" id="uiStyleSwitcher" title="Ganti Gaya Tampilan UI">
+          <button class="style-switch-btn active" id="btnStyleSleek" title="Gaya Minimalis Sleek (Utama)">
+            <span class="switch-bullet bullet-emerald"></span> <span class="switch-txt">✦ Sleek</span>
+          </button>
+          <button class="style-switch-btn" id="btnStyleExplorer" title="Gaya Eksplorasi (Sekunder)">
+            <span class="switch-bullet bullet-gold"></span> <span class="switch-txt">◇ Eksplorasi</span>
+          </button>
+        </div>
+
+        <button class="nav-pill-btn" id="langToggleBtn" title="Ganti Bahasa">
+          <span id="langLabel">ID</span> <i class="fa-solid fa-chevron-down icon-xs"></i>
+        </button>
+        <button class="nav-pill-btn icon-only-btn" id="openCertModalBtn" title="Sertifikat & Jaringan Global">
+          <i class="fa-solid fa-globe"></i>
+        </button>
+        <button class="nav-pill-btn" id="openTutorialBtn" title="Panduan Penggunaan">
+          <i class="fa-regular fa-circle-question"></i> <span id="txtNavTutorial">Panduan</span>
+        </button>
+      </div>
+    </header>
+
+    <main class="main-content">
+      
+      <!-- =========================================================================
+           SECTION 01: HERO / BERANDA — DUAL UI STYLES
+           ========================================================================= -->
+      <section class="section-hero" id="secHero">
+
+        <!-- Glowing Center Aurora Backdrop -->
+        <div class="hero-aurora-glow-mist"></div>
+
+        <!-- =====================================================================
+             GAYA 1 (UTAMA / DEFAULT): THE SLEEK APPLE-GRADE 1-TOUCH CONTROL
+             ===================================================================== -->
+        <div class="hero-view-container view-sleek-primary" id="viewSleekPrimary">
+          
+          <div class="sleek-top-badge">
+            <span class="sleek-badge-txt">FW JADE</span>
+          </div>
+
+          <h1 class="sleek-brand-title">AURORA AI</h1>
+          <p class="sleek-brand-value-prop">Kenali aura Anda. Temukan batu yang selaras.</p>
+
+          <!-- The Single Primary Touch Control (Bukan tombol biasa, tapi touch control nyata) -->
+          <div class="sleek-primary-touch-wrap">
+            <button class="sleek-touch-control-button" id="btnSleekScanAction" role="button" tabindex="0">
+              <div class="touch-control-icon-circle">
+                <i class="fa-solid fa-camera"></i>
+              </div>
+              <div class="touch-control-text-col">
+                <span class="touch-main-heading">ANALISA WAJAH &amp; AURA</span>
+                <span class="touch-sub-note">Mulai pembacaan biometrik</span>
+              </div>
+              <div class="touch-control-arrow">
+                <i class="fa-solid fa-chevron-right"></i>
+              </div>
+            </button>
+            <p class="sleek-sub-caption">Proses sekitar 10–15 detik. Tanpa login.</p>
+          </div>
+
+          <!-- Secondary Quiet Text Action (Tanya Suara / Teks tanpa mendominasi) -->
+          <div class="sleek-secondary-voice-action">
+            <button class="sleek-quiet-link-btn" id="btnSleekOpenSearch">
+              <span>atau tanyakan sesuatu kepada Aurora</span>
+              <i class="fa-solid fa-microphone"></i>
+            </button>
+          </div>
+
+        </div>
+
+
+        <!-- =====================================================================
+             GAYA 2 (SEKUNDER): THE EXPLORER DUAL CARDS & SEARCH UI (Gambar 1)
+             ===================================================================== -->
+        <div class="hero-view-container view-explorer-secondary" id="viewExplorerSecondary">
+
+          <!-- Floating Gem Emblem -->
+          <div class="hero-emblem-wrap">
+            <div class="gem-emblem">
+              <i class="fa-solid fa-gem"></i>
+            </div>
+          </div>
+
+          <!-- Brand Title & Tagline -->
+          <h1 class="hero-brand-title">AURORA AI</h1>
+          <p class="hero-brand-tagline" id="txtHeroTagline">
+            The Mystical Gemstone &amp; Face Aura Oracle<br>
+            <span class="hero-by-tag">by FW JADE</span>
+          </p>
+
+          <!-- Search Box (Quick Ask — Pintu Masuk Teks/Suara) -->
+          <div class="search-box-wrapper">
+            <div class="search-pill" id="searchPill">
+              <input type="text" id="omniboxInput" class="search-input" placeholder="Tanya Aurora tentang aura, batu, rezeki, feng shui, atau apa pun..." autocomplete="off" spellcheck="false">
+              
+              <div class="search-actions">
+                <button class="mic-btn" id="voiceSearchBtn" title="Bicara Santai (Suara Berbisik)">
+                  <i class="fa-solid fa-microphone"></i>
+                  <span class="mic-pulse"></span>
+                </button>
+                <button class="submit-btn btn-ask-aurora" id="searchSubmitBtn" title="Tanya Aurora">
+                  <span id="txtAiOracleBtn">Ask Aurora</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- 2 MAIN DUAL ENTRY CARDS (Gambar 1) -->
+          <div class="dual-entry-cards-grid">
+            <!-- Card 1: Analisa Wajah & Aura (Green Glow Card) -->
+            <div class="entry-card card-scan" id="btnHeroScanFace" role="button" tabindex="0">
+              <div class="entry-icon-circle circle-green">
+                <i class="fa-solid fa-camera"></i>
+              </div>
+              <div class="entry-text-col">
+                <h3 class="entry-card-title">Analisa Wajah &amp; Aura</h3>
+                <p class="entry-card-desc">Kenali elemen dominan dan energi aura Anda</p>
+              </div>
+              <div class="entry-arrow-btn">
+                <i class="fa-solid fa-arrow-right"></i>
+              </div>
+            </div>
+
+            <!-- Card 2: Batu Keberuntungan Hari Ini (Gold Glow Card) -->
+            <div class="entry-card card-lucky" id="btnHeroLuckyStone" role="button" tabindex="0">
+              <div class="entry-icon-circle circle-gold">
+                <i class="fa-solid fa-gem"></i>
+              </div>
+              <div class="entry-text-col">
+                <h3 class="entry-card-title">Batu Keberuntungan Hari Ini</h3>
+                <p class="entry-card-desc">Temukan batu terbaik untuk energi hari ini</p>
+              </div>
+              <div class="entry-arrow-btn">
+                <i class="fa-solid fa-arrow-right"></i>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topik Populer (6 Chips with Icons - Gambar 1) -->
+          <div class="trending-section">
+            <span class="trending-label" id="txtTrendingTitle">Topik populer</span>
+            <div class="trending-chips-row">
+              <button class="topic-pill-chip" data-query="Batu apa yang paling ampuh sebagai magnet penarik rezeki dan kekayaan?">
+                <i class="fa-solid fa-coins text-gold"></i> <span>Rezeki</span>
+              </button>
+              <button class="topic-pill-chip" data-query="Batu apa yang memancarkan aura cinta, kasih sayang, dan keharmonisan jodoh?">
+                <i class="fa-regular fa-heart text-pink"></i> <span>Cinta</span>
+              </button>
+              <button class="topic-pill-chip" data-query="Batu apa yang terbaik untuk proteksi dari energi negatif dan tolak bala?">
+                <i class="fa-solid fa-shield-halved text-cyan"></i> <span>Perlindungan</span>
+              </button>
+              <button class="topic-pill-chip" data-query="Batu apa yang cocok diletakkan di sudut hoki feng shui rumah dan kantor?">
+                <i class="fa-solid fa-landmark text-gold"></i> <span>Feng Shui</span>
+              </button>
+              <button class="topic-pill-chip" data-query="Apa khasiat giok hitam alami untuk detoksifikasi darah dan kesehatan?">
+                <i class="fa-solid fa-leaf text-emerald"></i> <span>Kesehatan</span>
+              </button>
+              <button class="topic-pill-chip" data-query="Batu apa yang memperkuat wibawa kepemimpinan dan kemajuan karier?">
+                <i class="fa-solid fa-briefcase text-amber"></i> <span>Karier</span>
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Interactive Trigger Down Connector -->
+        <div class="step-indicator-connector" id="connector01" title="Klik untuk Mulai Analisa">
+          <i class="fa-solid fa-chevron-down"></i>
+        </div>
+      </section>
+
+
+      <!-- =========================================================================
+           SECTION 02: STEP 1 — SCAN WAJAH (Gambar 2 Screen 1)
+           ========================================================================= -->
+      <section class="section-card section-scanner step-card-box" id="secScanner" style="display: none;">
+        <div class="step-badge-indicator">1. SCAN WAJAH • Mulai analisa wajah &amp; aura</div>
+        
+        <div class="step-scanner-wrapper">
+          <h2 class="step-main-title">Analisa Wajah &amp; Aura</h2>
+          <p class="step-main-subtitle">Pastikan wajah terlihat jelas di dalam bingkai</p>
+
+          <!-- Circular Live Camera Viewport -->
+          <div class="circular-camera-viewport">
+            <video id="webcamFeed" autoplay playsinline muted></video>
+            <canvas id="scannerHudCanvas"></canvas>
+            
+            <div class="circular-hud-overlay">
+              <div class="hud-circle-ring"></div>
+              <div class="hud-circle-laser"></div>
+            </div>
+
+            <!-- Fallback State -->
+            <div class="camera-fallback" id="cameraFallback">
+              <i class="fa-solid fa-camera fallback-icon"></i>
+              <p>Arahkan kamera ke wajah Anda</p>
+            </div>
+          </div>
+
+          <!-- 3 Checkpoints -->
+          <div class="scanner-checklist-cards">
+            <div class="check-pill active" id="chkLight"><i class="fa-solid fa-check"></i> <span>Pencahayaan cukup</span></div>
+            <div class="check-pill active" id="chkPos"><i class="fa-solid fa-check"></i> <span>Wajah menghadap kamera</span></div>
+            <div class="check-pill active" id="chkFilter"><i class="fa-solid fa-check"></i> <span>Tanpa filter / makeup tebal</span></div>
+          </div>
+
+          <!-- Mulai Scan Button -->
+          <div class="scanner-cta-wrap">
+            <button class="luxury-btn btn-scan-action-primary" id="startCamBtn">
+              <i class="fa-solid fa-camera"></i> <span id="txtStartCam">Mulai Scan</span>
+            </button>
+            <button class="luxury-btn btn-scan-action-secondary" id="simulateScanBtn" style="margin-top: 8px;">
+              <i class="fa-solid fa-sparkles"></i> <span>Simulasi AI Mesh</span>
+            </button>
+            <p class="scan-time-note">Proses hanya memakan waktu 10-15 detik</p>
+          </div>
+
+          <!-- Progress Bar -->
+          <div class="progress-bar-wrap" style="margin-top: 15px;">
+            <div class="progress-bar-fill" id="scanProgressFill" style="width: 0%"></div>
+          </div>
+          <div class="progress-percentage-txt" id="scanProgressPercent">0%</div>
+
+        </div>
+
+        <div class="step-indicator-connector">
+          <i class="fa-solid fa-chevron-down"></i>
+        </div>
+      </section>
+
+
+      <!-- =========================================================================
+           SECTION 03: STEP 2 — HASIL AURA (Gambar 2 Screen 2)
+           ========================================================================= -->
+      <section class="section-card section-aura-results step-card-box" id="secAuraResults" style="display: none;">
+        <div class="step-badge-indicator">2. HASIL AURA • Ringkasan aura Anda</div>
+        
+        <div class="results-header-row">
+          <h2 class="section-title" id="txtAuraResultHeading">Hasil Aura Anda</h2>
+          <div class="narrator-badge">
+            <i class="fa-solid fa-sparkles"></i> <span>Master Aurora</span>
+          </div>
+        </div>
+
+        <!-- Dominant Element & Sacred Emblem -->
+        <div class="aura-summary-card">
+          <span class="element-label" id="txtDominantElementLabel">Elemen Dominan</span>
+          <h3 class="element-name" id="valAuraElement">WOOD</h3>
+          
+          <div class="sacred-tree-emblem-wrap">
+            <div class="sacred-tree-circle">
+              <i class="fa-solid fa-tree sacred-icon"></i>
+              <div class="energy-glow-ring"></div>
+            </div>
+          </div>
+
+          <div class="alignment-score-box">
+            <div class="score-large text-emerald" id="valAuraScore">96%</div>
+            <div class="score-caption" id="valAuraScoreCaption">AURA ALIGNMENT • Sangat Kuat</div>
+          </div>
+        </div>
+
+        <!-- 4 Metric Rows (Gambar 2 Screen 2) -->
+        <div class="metrics-details-box">
+          <div class="metric-row-item">
+            <div class="m-label"><i class="fa-solid fa-leaf text-emerald"></i> <span id="lblVitality">Vitalitas Holistik</span></div>
+            <div class="m-val" id="valVitality">91%</div>
+          </div>
+          <div class="metric-row-item">
+            <div class="m-label"><i class="fa-solid fa-yin-yang text-gold"></i> <span id="lblEnergyBalance">Energi Balance</span></div>
+            <div class="m-val text-emerald" id="valEnergyBalance">Optimal</div>
+          </div>
+          <div class="metric-row-item">
+            <div class="m-label"><i class="fa-solid fa-star text-gold"></i> <span id="lblFortuneLevel">Keberuntungan</span></div>
+            <div class="m-val text-gold" id="valFortuneLevel">Tinggi</div>
+          </div>
+          <div class="metric-row-item">
+            <div class="m-label"><i class="fa-solid fa-compass text-cyan"></i> <span id="lblEnergyReco">Rekomendasi Energi</span></div>
+            <div class="m-val" id="valEnergyReco">Menjaga stabilitas &amp; fokus</div>
+          </div>
+        </div>
+
+        <!-- DUAL-LENS SWITCHER: SAINS vs METAFISIKA -->
+        <div class="dual-lens-switcher-wrap">
+          <div class="lens-switcher-pill">
+            <button class="lens-tab-btn active" id="btnLensScience" onclick="switchDualLens('science')">
+              <i class="fa-solid fa-microscope text-emerald"></i>
+              <span>Sains &amp; Bio-Fisika</span>
+            </button>
+            <button class="lens-tab-btn" id="btnLensMystic" onclick="switchDualLens('mystic')">
+              <i class="fa-solid fa-yin-yang text-gold"></i>
+              <span>Metafisika &amp; Horoskop</span>
+            </button>
+          </div>
+          <span class="lens-sub-caption">Standar Laboratorium Gemologi &amp; Uji Kohort 10.420 Subjek</span>
+        </div>
+
+        <!-- LENS VIEW 1: SAINS BIO-FISIKA & UJI LABORATORIUM -->
+        <div class="lens-panel-view" id="lensPanelScience">
+          
+          <!-- 1. Live FIR Spectral Coherence Waveform (8-14 µm) -->
+          <div class="science-fir-hud-card">
+            <div class="fir-hud-header">
+              <div class="fir-hud-title">
+                <i class="fa-solid fa-wave-square text-emerald"></i>
+                <span>Spektrometri Resonansi Far Infrared (FIR 8–14 µm)</span>
+              </div>
+              <span class="fir-hud-badge" id="valFirCoherenceBadge">99.2% H₂O Coherence</span>
+            </div>
+            
+            <div class="fir-spectrum-meter-wrap">
+              <div class="spectrum-range-labels">
+                <span>8.0 µm</span>
+                <span class="spectrum-peak-label text-emerald">Puncak Resonansi: <strong id="valFirPeak">9.35 µm</strong></span>
+                <span>14.0 µm</span>
+              </div>
+              <div class="spectrum-meter-track">
+                <div class="spectrum-meter-fill" id="valFirProgressFill" style="width: 68%;"></div>
+                <div class="spectrum-peak-pointer" id="valFirPointer" style="left: 68%;"></div>
+              </div>
+            </div>
+            <p class="fir-hud-desc" id="valFirDesc">
+              Frekuensi getaran kisi silikat <span id="valChemFormula" class="text-emerald">NaAlSi₂O₆</span> beresonansi dengan panjang gelombang alami molekul air darah manusia (9.34 µm), memecah gumpalan asam urat &amp; menstabilkan sirkulasi darah.
+            </p>
+          </div>
+
+          <!-- 2. Mineralogy & Crystallography Lab Matrix -->
+          <div class="lab-specs-grid">
+            <div class="lab-spec-card">
+              <div class="lab-spec-icon"><i class="fa-solid fa-cube text-emerald"></i></div>
+              <div class="lab-spec-info">
+                <span class="lab-k">Formula Kimia</span>
+                <strong class="lab-v" id="valLabFormula">NaAlSi₂O₆</strong>
+              </div>
+            </div>
+            <div class="lab-spec-card">
+              <div class="lab-spec-icon"><i class="fa-solid fa-gem text-gold"></i></div>
+              <div class="lab-spec-info">
+                <span class="lab-k">Kekerasan Mohs</span>
+                <strong class="lab-v" id="valLabMohs">6.8 / 10 (Padat)</strong>
+              </div>
+            </div>
+            <div class="lab-spec-card">
+              <div class="lab-spec-icon"><i class="fa-solid fa-weight-hanging text-cyan"></i></div>
+              <div class="lab-spec-info">
+                <span class="lab-k">Berat Jenis (SG)</span>
+                <strong class="lab-v" id="valLabSG">3.33 g/cm³</strong>
+              </div>
+            </div>
+            <div class="lab-spec-card">
+              <div class="lab-spec-icon"><i class="fa-solid fa-shield-halved text-emerald"></i></div>
+              <div class="lab-spec-info">
+                <span class="lab-k">Kemurnian FTIR</span>
+                <strong class="lab-v text-emerald" id="valLabFTIR">Grade A (0.0% Resin)</strong>
+              </div>
+            </div>
+          </div>
+
+          <!-- 3. Dinamika Mikrosirkulasi Poiseuille -->
+          <div class="hemodynamic-card">
+            <div class="hemo-header">
+              <i class="fa-solid fa-heart-pulse text-pink"></i>
+              <span>Dinamika Mikrosirkulasi Kapiler (Hukum Poiseuille)</span>
+            </div>
+            <div class="hemo-metrics-row">
+              <div class="hemo-metric-col">
+                <span class="hemo-lbl">Peningkatan Oksigenasi</span>
+                <strong class="hemo-val text-emerald" id="valOxygenBoost">+23.4%</strong>
+              </div>
+              <div class="hemo-metric-col">
+                <span class="hemo-lbl">Zeta Potential Eritrosit</span>
+                <strong class="hemo-val text-cyan" id="valZetaPotential">ζ ≤ -15 mV (Aktif)</strong>
+              </div>
+              <div class="hemo-metric-col">
+                <span class="hemo-lbl">Penurunan Viskositas</span>
+                <strong class="hemo-val text-gold" id="valViscosityReduction">-18.6% (Lancar)</strong>
+              </div>
+            </div>
+          </div>
+
+          <!-- 4. Empirical Cohort Study 10.420 Subjects Badge -->
+          <div class="cohort-trust-banner">
+            <div class="cohort-badge-icon">
+              <i class="fa-solid fa-award"></i>
+            </div>
+            <div class="cohort-badge-text">
+              <strong class="cohort-title">Data Uji Kohort Empiris 10.420 Subjek (2012–2026)</strong>
+              <p class="cohort-stats">
+                <span class="text-emerald">91.8%</span> mikrosirkulasi membaik • <span class="text-gold">93.2%</span> stres menurun • Signifikansi <strong>p &lt; 0.0001</strong>
+              </p>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- LENS VIEW 2: METAFISIKA, MIAN XIANG & HOROSKOP -->
+        <div class="lens-panel-view" id="lensPanelMystic" style="display: none;">
+          
+          <!-- FITUR 1: MIAN XIANG 12 PALACES (Landmark Titik Energi Wajah) -->
+          <div class="mian-xiang-card-wrap">
+            <div class="mx-header-row">
+              <span class="mx-badge"><i class="fa-solid fa-compass"></i> MIAN XIANG 12 PALACES</span>
+              <span class="mx-hint">Klik titik energi pada wajah untuk melihat detail</span>
+            </div>
+
+            <div class="mx-interactive-stage">
+              <!-- Face Energy Silhouette with Hotspots -->
+              <div class="mx-face-silhouette">
+                <div class="mx-face-contour"></div>
+                
+                <!-- Hotspot 1: Dahi (Istana Karier & Kebijaksanaan) -->
+                <button class="mx-hotspot-node node-forehead active" data-palace="career" title="Istana Karier & Kebijaksanaan">
+                  <span class="pulse-ring"></span>
+                  <i class="fa-solid fa-crown"></i>
+                </button>
+
+                <!-- Hotspot 2: Hidung (Istana Rezeki / Dun Tai) -->
+                <button class="mx-hotspot-node node-nose" data-palace="wealth" title="Istana Rezeki & Kemakmuran">
+                  <span class="pulse-ring"></span>
+                  <i class="fa-solid fa-coins"></i>
+                </button>
+
+                <!-- Hotspot 3: Pipi / Mata (Istana Vitalitas & Chi) -->
+                <button class="mx-hotspot-node node-cheek" data-palace="vitality" title="Istana Vitalitas & Chi">
+                  <span class="pulse-ring"></span>
+                  <i class="fa-solid fa-leaf"></i>
+                </button>
+
+                <!-- Hotspot 4: Dagu / Rahang (Istana Harmoni & Proteksi) -->
+                <button class="mx-hotspot-node node-chin" data-palace="harmony" title="Istana Harmoni & Proteksi">
+                  <span class="pulse-ring"></span>
+                  <i class="fa-solid fa-shield-halved"></i>
+                </button>
+              </div>
+
+              <!-- Dynamic Detail Drawer for Selected Palace -->
+              <div class="mx-palace-detail-card" id="mxDetailCard">
+                <div class="mx-detail-header">
+                  <span class="mx-detail-title" id="mxPalaceTitle">Istana Karier &amp; Kebijaksanaan (Guan Lu)</span>
+                  <span class="mx-detail-score" id="mxPalaceScore">94%</span>
+                </div>
+                <p class="mx-detail-desc" id="mxPalaceDesc">
+                  Pancaran dahi Anda menunjukkan fokus strategis dan intuisi kepemimpinan yang sedang mencapai puncaknya. Membutuhkan batu berstruktur kristal padat untuk menjaga ketenangan keputusan.
+                </p>
+                <div class="mx-detail-gem-match">
+                  <span class="mx-gem-lbl">Batu Penguat Istana Ini:</span>
+                  <strong class="mx-gem-val text-emerald" id="mxPalaceGem">Natural Aceh Jadeite (Grade A)</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Zodiac & Shio Synergy Matrix Card -->
+          <div class="astrology-synergy-card">
+            <div class="astro-header">
+              <i class="fa-solid fa-ring text-gold"></i>
+              <span>Matriks Keselarasan Zodiak, Shio &amp; Elemen Semesta</span>
+            </div>
+            <div class="astro-grid">
+              <div class="astro-cell">
+                <span class="astro-k"><i class="fa-solid fa-moon text-cyan"></i> Zodiak Barat Selaras:</span>
+                <strong class="astro-v" id="valZodiacMatch">Taurus, Cancer, Capricorn, Pisces</strong>
+              </div>
+              <div class="astro-cell">
+                <span class="astro-k"><i class="fa-solid fa-sun text-gold"></i> Shio Tionghoa Selaras:</span>
+                <strong class="astro-v" id="valShioMatch">Naga, Macan, Kuda, Kelinci</strong>
+              </div>
+              <div class="astro-cell astro-full">
+                <span class="astro-k"><i class="fa-solid fa-compass text-emerald"></i> Siklus Wu Xing:</span>
+                <strong class="astro-v" id="valWuXingCycle">Kayu (Wood) → Mengalirkan Api Kemakmuran &amp; Stabilitas Rezeki</strong>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Quick Ask Bar on Step 2 -->
+        <div class="step-quick-ask-box">
+          <input type="text" class="step-quick-input" id="step2QuickInput" placeholder="Tanya tentang hasil Anda...">
+          <button class="step-mic-btn" onclick="toggleVoiceMic()"><i class="fa-solid fa-microphone"></i></button>
+        </div>
+
+        <div class="step-indicator-connector">
+          <i class="fa-solid fa-chevron-down"></i>
+        </div>
+      </section>
+
+
+      <!-- =========================================================================
+           SECTION 04: STEP 3 — DETAIL & BATU REKOMENDASI (Gambar 2 Screen 3)
+           ========================================================================= -->
+      <section class="section-card section-gemstone step-card-box" id="secGemstone" style="display: none;">
+        <div class="step-badge-indicator">3. DETAIL &amp; BATU REKOMENDASI • Batu terbaik untuk Anda</div>
+        
+        <div class="gemstone-showcase-card">
+          <span class="gem-subtitle">Batu Rekomendasi Anda</span>
+          <h2 class="gem-name-title" id="gemTitle">Natural Aceh Jadeite</h2>
+          <div class="gem-cert-badge" id="gemCert">Sertifikat Alami Grade A</div>
+
+          <div class="gem-tag-chips">
+            <span class="tag-chip tag-element" id="gemTagElement">Elemen: Wood</span>
+            <span class="tag-chip tag-energy" id="gemTagEnergy">Energi: Harmony</span>
+          </div>
+
+          <!-- 3D Interactive WebGL Jade Studio (Cartier/Bulgari Standard) -->
+          <div class="interactive-3d-jade-wrapper">
+            <div class="jade-3d-viewport" id="jade3dContainer">
+              <canvas id="threeJadeCanvas"></canvas>
+              <div class="touch-3d-hint">
+                <i class="fa-solid fa-arrows-rotate"></i> <span>Sentuh &amp; Putar 360°</span>
+              </div>
+            </div>
+
+            <!-- Senter Giok Translucent Test Control -->
+            <div class="jade-3d-controls-row">
+              <button class="btn-3d-ctrl" id="btnToggleFlashlight" title="Uji Tembus Cahaya Serat Giok (Translucency Test)">
+                <i class="fa-solid fa-lightbulb"></i> <span>🔦 Uji Senter Giok (Translucency)</span>
+              </button>
+              <button class="btn-3d-ctrl icon-only" id="btnReset3dView" title="Kembalikan Posisi Semula">
+                <i class="fa-solid fa-rotate-left"></i>
+              </button>
+            </div>
+          </div>
+
+          <p class="gem-description-txt" id="gemDesc">
+            Membantu membuka rezeki, menenangkan pikiran, dan melindungi dari energi negatif.
+          </p>
+
+          <div class="gem-price-amount" id="gemPrice">Rp 1.850.000</div>
+
+          <!-- Action Buttons Group -->
+          <div class="gemstone-cta-row">
+            <button class="luxury-btn btn-gold-action" id="btnScrollToProductAction" onclick="document.getElementById('secActions').scrollIntoView({behavior:'smooth'});">
+              <i class="fa-solid fa-bag-shopping"></i> <span>Lihat Detail &amp; Pesan</span>
+            </button>
+            <button class="luxury-btn btn-ar-tryon" id="btnOpenArMirrorStep3">
+              <i class="fa-solid fa-wand-magic-sparkles"></i> <span>✨ Coba Pakai Virtual (AR Mirror)</span>
+            </button>
+          </div>
+
+          <!-- Specifications Row -->
+          <div class="gem-specs-table">
+            <div class="spec-cell">
+              <span class="spec-k">Asal</span>
+              <strong class="spec-v" id="specOrigin">Aceh</strong>
+            </div>
+            <div class="spec-cell">
+              <span class="spec-k">Jenis</span>
+              <strong class="spec-v" id="specType">Jadeite</strong>
+            </div>
+            <div class="spec-cell">
+              <span class="spec-k">Energi</span>
+              <strong class="spec-v" id="specEnergy">Harmony</strong>
+            </div>
+            <div class="spec-cell">
+              <span class="spec-k">Sertifikat</span>
+              <strong class="spec-v" id="specCert">Tersedia</strong>
+            </div>
+          </div>
+        </div>
+
+        <div class="step-indicator-connector">
+          <i class="fa-solid fa-chevron-down"></i>
+        </div>
+      </section>
+
+
+      <!-- =========================================================================
+           SECTION 05: STEP 4 — TANYA AURORA (Gambar 2 Screen 4)
+           ========================================================================= -->
+      <section class="section-card section-chat step-card-box" id="secManifestation" style="display: none;">
+        <div class="step-badge-indicator">4. TANYA AURORA • Tanya lebih dalam tentang hasil Anda</div>
+
+        <div class="chat-consultation-card">
+          <div class="chat-header-row">
+            <button class="chat-back-btn" onclick="document.getElementById('secGemstone').scrollIntoView({behavior:'smooth'});">
+              <i class="fa-solid fa-arrow-left"></i>
+            </button>
+            <h3 class="chat-room-title">Tanya Aurora</h3>
+            <div class="chat-menu-dot"><i class="fa-solid fa-ellipsis-vertical"></i></div>
+          </div>
+
+          <!-- Chat Stream Dialog Box -->
+          <div class="chat-dialog-stream" id="chatStreamBox">
+            <div class="chat-bubble bubble-user">
+              <strong>Anda:</strong> Mengapa jadeite cocok untuk aura saya?
+            </div>
+            <div class="chat-bubble bubble-aurora">
+              <strong>✦ Master Aurora:</strong> AURA Anda ber-elemen WOOD dengan alignment 96%. Jadeite memiliki energi Harmony yang selaras dengan elemen Wood, membantu menstabilkan emosi, membuka rezeki, dan meningkatkan keberuntungan secara alami.
+            </div>
+          </div>
+
+          <!-- Suggestion Prompt Chips (Gambar 2 Screen 4) -->
+          <div class="contextual-quick-chips">
+            <button class="c-chip" data-q="Bagaimana penjelasan ilmiah gelombang Far Infrared (FIR) dan dampak darah dari batu ini?">🔬 Bukti Sains FIR &amp; Darah</button>
+            <button class="c-chip" data-q="Bagaimana kecocokan batu ini dengan Zodiak &amp; Shio kelahiran saya?">☯️ Kecocokan Zodiak &amp; Shio</button>
+            <button class="c-chip" data-q="Bagaimana cara merawat dan membersihkan energi batu ini?">✨ Cara Merawat Giok</button>
+            <button class="c-chip" data-q="Berapa kekerasan Skala Mohs dan berat jenis resmi batu ini di laboratorium?">💎 Uji Lab &amp; Skala Mohs</button>
+          </div>
+
+          <!-- Chat Input Bar -->
+          <div class="context-input-row">
+            <input type="text" id="contextualInput" class="context-input" placeholder="Tanya lebih lanjut...">
+            <button class="step-mic-btn" onclick="toggleVoiceMic()"><i class="fa-solid fa-microphone"></i></button>
+            <button class="luxury-btn btn-primary btn-sm" id="btnSendContextQuery">
+              <i class="fa-solid fa-arrow-up"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="step-indicator-connector">
+          <i class="fa-solid fa-chevron-down"></i>
+        </div>
+      </section>
+
+
+      <!-- =========================================================================
+           SECTION 06: STEP 5 — PRODUK & TINDAKAN (Gambar 2 Screen 5)
+           ========================================================================= -->
+      <section class="section-card section-actions step-card-box" id="secActions" style="display: none;">
+        <div class="step-badge-indicator">5. PRODUK &amp; TINDAKAN • Lihat produk &amp; ambil tindakan</div>
+
+        <div class="final-product-action-card">
+          <h3 class="product-action-title">Produk Pilihan untuk Anda</h3>
+          
+          <!-- Product Showcase Preview -->
+          <div class="luxury-jewelry-frame-sm">
+            <div class="jewelry-pendant-showcase">
+              <div class="pendant-gold-bezel">
+                <div class="pendant-jadeite-gem"></div>
+              </div>
+            </div>
+          </div>
+
+          <h4 class="product-item-name">Natural Aceh Jadeite</h4>
+          <p class="product-item-spec">Liontin Premium • Grade A • Energi Harmony</p>
+          <div class="product-item-price">Rp 1.850.000</div>
+
+          <!-- WhatsApp Direct Order Button (Gambar 2 Screen 5) -->
+          <a href="https://wa.me/62811619173?text=Halo%20FW%20JADE%20Medan,%20saya%20ingin%20memesan%20perhiasan%20hasil%20pembacaan%20AURORA%20AI:%20Natural%20Aceh%20Jadeite." target="_blank" class="luxury-btn btn-whatsapp-order" id="btnOrderWA">
+            <i class="fa-brands fa-whatsapp"></i> <span>Pesan via WhatsApp</span>
+          </a>
+
+          <!-- Action Item List (Gambar 2 Screen 5) -->
+          <div class="action-items-menu">
+            <button class="action-list-row" id="btnOpenArMirrorStep5">
+              <div class="act-left"><i class="fa-solid fa-wand-magic-sparkles text-emerald"></i> <span>Coba Pakai Virtual (AR Mirror)</span></div>
+              <i class="fa-solid fa-chevron-right act-arrow"></i>
+            </button>
+            <button class="action-list-row" onclick="alert('Batu disimpan ke koleksi profil Anda.')">
+              <div class="act-left"><i class="fa-regular fa-bookmark"></i> <span>Simpan ke Koleksi</span></div>
+              <i class="fa-solid fa-chevron-right act-arrow"></i>
+            </button>
+            <button class="action-list-row" id="openCertModalBtn2" onclick="openCertModal()">
+              <div class="act-left"><i class="fa-solid fa-certificate"></i> <span>Lihat Sertifikat</span></div>
+              <i class="fa-solid fa-chevron-right act-arrow"></i>
+            </button>
+            <button class="action-list-row" onclick="document.getElementById('secManifestation').scrollIntoView({behavior:'smooth'});">
+              <div class="act-left"><i class="fa-solid fa-comments"></i> <span>Konsultasi Lanjutan (Tanya Aurora lebih detail)</span></div>
+              <i class="fa-solid fa-chevron-right act-arrow"></i>
+            </button>
+          </div>
+        </div>
+
+      </section>
+
+
+      <!-- =========================================================================
+           SECTION 07: EDUKASI, VIRALITAS & AKSI CEPAT (Gambar 3)
+           ========================================================================= -->
+      <section class="section-card section-trust-viral" id="secTrustViral">
+        
+        <!-- Top Card: Mengapa Aurora AI? (5 Pillars - Gambar 3) -->
+        <div class="why-aurora-card">
+          <h3 class="why-title">Mengapa Aurora AI?</h3>
+          <p class="why-subtitle">Teknologi AI modern berpadu dengan energi alami batu mulia.</p>
+
+          <div class="why-pillars-grid">
+            <div class="why-pillar-item">
+              <div class="pillar-icon"><i class="fa-solid fa-camera text-emerald"></i></div>
+              <h4 class="pillar-title">AI Aura Scan</h4>
+              <p class="pillar-desc">Teknologi AI canggih membaca aura &amp; energi wajah Anda</p>
+            </div>
+            <div class="why-pillar-item">
+              <div class="pillar-icon"><i class="fa-solid fa-gem text-gold"></i></div>
+              <h4 class="pillar-title">Gemstone Match</h4>
+              <p class="pillar-desc">Mencocokkan Anda dengan batu alami paling selaras</p>
+            </div>
+            <div class="why-pillar-item">
+              <div class="pillar-icon"><i class="fa-solid fa-leaf text-cyan"></i></div>
+              <h4 class="pillar-title">Holistic Insight</h4>
+              <p class="pillar-desc">Memberikan insight menyeluruh untuk hidup seimbang</p>
+            </div>
+            <div class="why-pillar-item">
+              <div class="pillar-icon"><i class="fa-solid fa-wand-magic-sparkles text-amber"></i></div>
+              <h4 class="pillar-title">Energy &amp; Luck</h4>
+              <p class="pillar-desc">Membantu membuka rezeki, cinta, dan perlindungan</p>
+            </div>
+            <div class="why-pillar-item">
+              <div class="pillar-icon"><i class="fa-solid fa-shield-halved text-emerald"></i></div>
+              <h4 class="pillar-title">Aman &amp; Privat</h4>
+              <p class="pillar-desc">Data Anda aman dan tidak akan disalahgunakan</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom Section: Bagikan Aura, My Aura Card, & Aksi Cepat (Gambar 3) -->
+        <div class="share-and-quick-actions-grid">
+          
+          <!-- Left: Bagikan Aura Anda -->
+          <div class="share-aura-col">
+            <h4 class="share-col-title">Bagikan Aura Anda<br><span class="share-col-sub">Inspire Others</span></h4>
+            <div class="share-social-buttons">
+              <button class="share-round-btn" id="btnShareWA" title="Bagikan ke WhatsApp"><i class="fa-brands fa-whatsapp"></i></button>
+              <button class="share-round-btn" title="Bagikan ke Instagram"><i class="fa-brands fa-instagram"></i></button>
+              <button class="share-round-btn" onclick="navigator.clipboard.writeText(window.location.href); alert('Link disalin ke clipboard!');" title="Salin Tautan"><i class="fa-solid fa-link"></i></button>
+              <button class="share-round-btn" id="btnDownloadCard" title="Unduh Kartu Aura"><i class="fa-solid fa-download"></i></button>
+            </div>
+          </div>
+
+          <!-- Middle: My Aura Card Preview (Gambar 3) -->
+          <div class="my-aura-card-col">
+            <span class="aura-card-tag-label">My Aura Card</span>
+            <div class="digital-aura-card-preview" id="digitalCardPreview" onclick="generateLuxuryAuraCard()">
+              <div class="card-preview-inner">
+                <div class="card-gem-thumb"></div>
+                <div class="card-preview-text">
+                  <div class="c-elem">WOOD</div>
+                  <div class="c-score">96%</div>
+                  <div class="c-stone">NATURAL ACEH JADEITE</div>
+                  <div class="c-role">My Guardian Stone</div>
+                  <div class="c-brand">✦ FW JADE</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: Aksi Cepat 3 Cards (Gambar 3) -->
+          <div class="quick-actions-col">
+            <span class="aura-card-tag-label">Aksi Cepat</span>
+            <div class="quick-cards-row">
+              <div class="q-card" onclick="generateLuxuryAuraCard()">
+                <div class="q-icon"><i class="fa-solid fa-mobile-screen"></i></div>
+                <h5 class="q-title">Kartu Aura 9:16</h5>
+                <p class="q-sub">Download &amp; Share</p>
+              </div>
+              <div class="q-card" onclick="document.getElementById('secAuraResults').scrollIntoView({behavior:'smooth'});">
+                <div class="q-icon"><i class="fa-solid fa-yin-yang"></i></div>
+                <h5 class="q-title">Before-After</h5>
+                <p class="q-sub">Lihat Perubahan</p>
+              </div>
+              <div class="q-card q-free">
+                <div class="q-icon"><i class="fa-solid fa-shield-halved text-emerald"></i></div>
+                <h5 class="q-title">Sesi Gratis Ke-1</h5>
+                <p class="q-sub text-emerald">Aktif (100% Free)</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </section>
+
+    </main>
+
+    <!-- 8. Footer (Gambar 3) -->
+    <footer class="bottom-footer">
+      <div class="footer-inner-container">
+        <div class="footer-left-brand">
+          <span class="footer-logo-text"><i class="fa-solid fa-gem text-gold"></i> FW JADE</span>
+          <span class="footer-copy-text">© 2024 FW Jade. All rights reserved.</span>
+        </div>
+
+        <div class="footer-links-group">
+          <a href="#" onclick="alert('FW JADE Medan — Curated Luxury Jade & Gemstones.')">Tentang Kami</a>
+          <a href="#" onclick="alert('Privasi Data Anda terlindungi dan tidak disimpan tanpa izin.')">Kebijakan Privasi</a>
+          <a href="https://wa.me/62811619173" target="_blank">Kontak</a>
+          <button class="footer-lang-pill" id="footerLangBtn" onclick="document.getElementById('langToggleBtn').click();">
+            <i class="fa-solid fa-globe"></i> <span>ID</span> <i class="fa-solid fa-chevron-down icon-xs"></i>
+          </button>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- =========================================================================
+       MODAL 0: ONBOARDING SPLASH — DUAL MODE SELECTION (First Time Only)
+       ========================================================================= -->
+  <div class="luxury-modal" id="onboardingModal">
+    <div class="modal-backdrop" id="onboardingBackdrop"></div>
+    <div class="modal-card onboarding-card" id="onboardingCard">
+
+      <!-- Onboarding Header -->
+      <div class="onboarding-header">
+        <div class="onboarding-gem-emblem">
+          <i class="fa-solid fa-gem"></i>
+          <div class="onboarding-gem-glow"></div>
+        </div>
+        <h2 class="onboarding-title">✦ AURORA AI</h2>
+        <p class="onboarding-subtitle">Sebelum kita mulai, Aurora ingin mengenal Anda...</p>
+        <p class="onboarding-question">Bagaimana cara terbaik Aurora melayani Anda hari ini?</p>
+      </div>
+
+      <!-- Two Mode Cards -->
+      <div class="onboarding-modes-row">
+
+        <!-- Oracle Mode Card -->
+        <button class="onboarding-mode-card oracle-card" id="btnChooseOracle">
+          <div class="onboarding-mode-icon oracle-icon">🔮</div>
+          <h3 class="onboarding-mode-title oracle-title">The Oracle</h3>
+          <p class="onboarding-mode-desc">
+            "Biarkan wajah saya berbicara kepada Aurora"
+          </p>
+          <div class="onboarding-mode-flow">
+            <span class="flow-step">Scan</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-step">Aura</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-step">Discover</span>
+          </div>
+          <div class="onboarding-mode-badge oracle-badge">Signature Experience</div>
+        </button>
+
+        <!-- Sage Mode Card -->
+        <button class="onboarding-mode-card sage-card" id="btnChooseSage">
+          <div class="onboarding-mode-icon sage-icon">💎</div>
+          <h3 class="onboarding-mode-title sage-title">The Sage</h3>
+          <p class="onboarding-mode-desc">
+            "Saya tahu apa yang ingin saya tanyakan"
+          </p>
+          <div class="onboarding-mode-flow">
+            <span class="flow-step">Ask</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-step">Discover</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-step">Scan</span>
+          </div>
+          <div class="onboarding-mode-badge sage-badge">Quick & Direct</div>
+        </button>
+
+      </div>
+
+      <!-- Skip / Already know -->
+      <button class="onboarding-skip-btn" id="btnOnboardingSkip">
+        Lewati — gunakan tampilan sebelumnya
+      </button>
+    </div>
+  </div>
+
+  <!-- Aurora's Onboarding Response Toast -->
+  <div class="aurora-mode-toast" id="auroraModeToast">
+    <div class="toast-inner">
+      <span class="toast-icon">✦</span>
+      <p class="toast-msg" id="toastMsg">Mode terpilih.</p>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       MODALS: PAYWALL, 9:16 CANVAS, CERTIFICATE, & TUTORIAL
+       ========================================================================= -->
+
+  <!-- MODAL 1: Midtrans Snap Payment (Rp 10.000) -->
+  <div class="luxury-modal" id="midtransModal">
+    <div class="modal-backdrop"></div>
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">Konsultasi Eksklusif AURORA AI</h3>
+        <button class="modal-close-btn" id="closeMidtransBtn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="order-summary-box">
+          <div class="order-row">
+            <span>Sesi Tanya Jawab Tanpa Batas</span>
+            <span class="text-gold">Rp 10.000</span>
+          </div>
+          <div class="order-row tax-row">
+            <span>Enkripsi Biometrik & Whisper Audio</span>
+            <span class="text-emerald">GRATIS</span>
+          </div>
+          <div class="divider"></div>
+          <div class="order-row total-row">
+            <strong>Total Pembayaran</strong>
+            <strong class="text-gold">Rp 10.000</strong>
+          </div>
+        </div>
+
+        <div class="qris-box text-center">
+          <div class="qris-frame">
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=170x170&data=MIDTRANS-FWJADE-AURORA-10000-SETTLEMENT" alt="QRIS" class="qris-img">
+          </div>
+          <p class="qris-desc">Scan QRIS menggunakan GoPay, OVO, ShopeePay, DANA, BCA Mobile, dll.</p>
+        </div>
+
+        <button class="luxury-btn btn-primary btn-block" id="btnSimulatePaymentSuccess">
+          <i class="fa-solid fa-circle-check"></i> <span>Simulasi Pembayaran Berhasil</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 2: Shareable Luxury Aura & Fortune Card (9:16 Canvas) -->
+  <div class="luxury-modal" id="auraCardModal">
+    <div class="modal-backdrop"></div>
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">Luxury Aura & Fortune Card (9:16)</h3>
+        <button class="modal-close-btn" id="closeAuraCardBtn">&times;</button>
+      </div>
+      <div class="modal-body text-center">
+        <div class="canvas-preview-wrap">
+          <canvas id="auraCardCanvas" width="450" height="800"></canvas>
+        </div>
+        <div class="modal-actions-row">
+          <button class="luxury-btn btn-gold" id="btnDownloadCard">
+            <i class="fa-solid fa-download"></i> <span>Download HD</span>
+          </button>
+          <button class="luxury-btn btn-primary" id="btnShareWA">
+            <i class="fa-brands fa-whatsapp"></i> <span>Share Status WA</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 3: Digital Certificate of Authenticity & Luxury VIP Membership Pass -->
+  <div class="luxury-modal modal-wide" id="certModal">
+    <div class="modal-backdrop"></div>
+    <div class="modal-card cert-modal-card">
+      <div class="modal-header">
+        <div class="modal-tabs">
+          <button class="modal-tab-btn active" id="tabBtnCert"><i class="fa-solid fa-certificate"></i> Sertifikat Keaslian</button>
+          <button class="modal-tab-btn" id="tabBtnMember"><i class="fa-solid fa-id-card"></i> Luxury VIP Pass</button>
+        </div>
+        <button class="modal-close-btn" id="closeCertModalBtn">&times;</button>
+      </div>
+      <div class="modal-body">
+        
+        <!-- View 1: Digital Certificate of Authenticity -->
+        <div class="cert-view-wrap" id="certViewWrap">
+          <div class="luxury-cert-frame">
+            <div class="cert-gold-border">
+              <div class="cert-header">
+                <div class="cert-emblem"><i class="fa-solid fa-gem"></i></div>
+                <h4 class="cert-corp-title">FW JADE JEWELLERY MEDAN</h4>
+                <div class="cert-main-title">OFFICIAL CERTIFICATE OF AUTHENTICITY</div>
+                <div class="cert-serial">NO: <span id="certSerialNo">FWJ-CERT-2026-9988</span> • GRADE A NATURAL</div>
+              </div>
+
+              <div class="cert-body-grid">
+                <div class="cert-col">
+                  <div class="cert-field"><span class="k">Item Description:</span> <strong class="v" id="certItemName">Natural Aceh Jadeite (Untreated)</strong></div>
+                  <div class="cert-field"><span class="k">Species / Variety:</span> <strong class="v" id="certSpecies">Jadeite-Pyroxene Mineral</strong></div>
+                  <div class="cert-field"><span class="k">Weight / Dim:</span> <strong class="v">48.50 Carat • 28 x 18 x 7 mm</strong></div>
+                  <div class="cert-field"><span class="k">Origin:</span> <strong class="v">Nagan Raya, Aceh, Indonesia</strong></div>
+                </div>
+                <div class="cert-col">
+                  <div class="cert-field"><span class="k">Hardness / SG:</span> <strong class="v">6.8 Mohs • 3.33 g/cm³</strong></div>
+                  <div class="cert-field"><span class="k">FIR Emission:</span> <strong class="v text-emerald">8–14 µm Active Wavelength</strong></div>
+                  <div class="cert-field"><span class="k">Aura Resonance:</span> <strong class="v text-gold" id="certAuraScore">96% (Wood Element)</strong></div>
+                  <div class="cert-field"><span class="k">Owner ID:</span> <strong class="v" id="certOwnerName">Kolektor Yang Terhormat</strong></div>
+                </div>
+              </div>
+
+              <div class="cert-footer-row">
+                <div class="cert-qr-wrap">
+                  <img src="https://api.qrserver.com/v1/create-qr-code/?size=90x90&data=VERIFIED-FWJADE-MEDAN-GRADE-A" alt="QR" class="cert-qr">
+                  <span class="qr-verify-txt">Official Blockchain Hash</span>
+                </div>
+                <div class="cert-seal-wrap">
+                  <div class="gold-seal-emblem">
+                    <i class="fa-solid fa-stamp"></i>
+                    <span>FW JADE<br>VERIFIED</span>
+                  </div>
+                  <div class="signature-box">
+                    <div class="sig-line">Faisal</div>
+                    <span class="sig-title">Master Lapidary & Curator</span>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- View 2: Luxury Digital VIP Membership Pass -->
+        <div class="member-view-wrap" id="memberViewWrap" style="display: none;">
+          <div class="vip-member-card">
+            <div class="card-chip-row">
+              <div class="smart-chip"><i class="fa-solid fa-microchip"></i></div>
+              <div class="brand-vip-badge">IMPERIAL PATRON VIP</div>
+            </div>
+            
+            <div class="vip-card-number">8820 • 9945 • 7712 • 2026</div>
+
+            <div class="vip-card-holder-row">
+              <div class="holder-info">
+                <span class="holder-lbl">CARDHOLDER</span>
+                <strong class="holder-name" id="vipCardHolder">KOLEKTOR YANG TERHORMAT</strong>
+              </div>
+              <div class="holder-tier">
+                <span class="holder-lbl">RESONANCE</span>
+                <strong class="tier-val text-emerald">WOOD • 96%</strong>
+              </div>
+              <div class="fwjade-logo-mini">
+                <i class="fa-solid fa-gem"></i> FW JADE
+              </div>
+            </div>
+          </div>
+
+          <div class="vip-privileges-box">
+            <h6><i class="fa-solid fa-crown text-gold"></i> Hak Istimewa Member Eksklusif FW JADE:</h6>
+            <ul>
+              <li>✨ Konsultasi Aura Wajah & Fisiognomi Tanpa Batas Seumur Hidup.</li>
+              <li>💎 Prioritas Alokasi Bongkahan Giok Super Grade A Terbatas.</li>
+              <li>🛡️ Layanan Pembersihan & Pengisian Ulang Energi Chi Giok Gratis di Galeri Medan.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="cert-actions-bar">
+          <button class="luxury-btn btn-primary" id="btnDownloadCertDoc">
+            <i class="fa-solid fa-download"></i> <span>Download Sertifikat Resmi (HD)</span>
+          </button>
+          <button class="luxury-btn btn-gold" id="btnShareCertWA">
+            <i class="fa-brands fa-whatsapp"></i> <span>Kirim ke WhatsApp Kurator</span>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 4: Tutorial & Guide Modal -->
+  <div class="luxury-modal modal-wide" id="tutorialModal">
+    <div class="modal-backdrop"></div>
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">Panduan Penggunaan AURORA AI by FW JADE</h3>
+        <button class="modal-close-btn" id="closeTutorialBtn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="tutorial-step-card">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <h5>Pemindaian Wajah & Pembacaan Aura</h5>
+            <p>Tekan tombol <strong>"Analisa Wajah & Aura"</strong>. Kamera akan membaca landmark wajah, menghitung garis hoki rezeki, dan menyapa Anda dengan suara lembut berbisik.</p>
+          </div>
+        </div>
+
+        <div class="tutorial-step-card">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <h5>Konsultasi Suara Berbisik & Pencarian Oracle</h5>
+            <p>Gunakan tombol mikrofon untuk berbicara santai. Tanyakan apa pun seputar khasiat kesehatan Far Infrared (FIR), tuah perlindungan gaib, atau fengshui batu.</p>
+          </div>
+        </div>
+
+        <div class="tutorial-step-card">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <h5>Simulasi Manifestasi & Pemesanan FW JADE</h5>
+            <p>Lihat proyeksi perubahan energi pada bagian <strong>Manifestasi Before-After</strong>, lalu pesan batu asli bersertifikat langsung ke galeri FW JADE Medan via WhatsApp Concierge.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 5: Gated Revelation (Auth Modal) -->
+  <div class="luxury-modal modal-wide" id="authModal">
+    <div class="modal-backdrop"></div>
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title"><i class="fa-solid fa-lock text-gold"></i> Gerbang Aurora</h3>
+        <!-- No close button here to enforce login, or maybe we allow them to close and lose the reading? Let's allow closing to be safe -->
+        <button class="modal-close-btn" id="closeAuthBtn">&times;</button>
+      </div>
+      <div class="modal-body text-center">
+        <div class="gated-content">
+          <div class="gated-icon"><i class="fa-solid fa-eye text-emerald"></i></div>
+          <h4 class="gated-title">Aura Anda Telah Terbaca</h4>
+          <p class="gated-desc">Untuk menjaga privasi dan menyimpan riwayat spiritual Anda selamanya ke dalam memori abadi (Vault), silakan tautkan jiwa Anda.</p>
+          
+          <div class="auth-buttons-col">
+            <button class="luxury-btn btn-auth btn-google" id="btnAuthGoogle">
+              <i class="fa-brands fa-google"></i> Lanjutkan dengan Google
+            </button>
+            <button class="luxury-btn btn-auth btn-email" id="btnAuthEmail">
+              <i class="fa-solid fa-envelope"></i> Lanjutkan dengan Email
+            </button>
+          </div>
+          
+          <p class="auth-note">Nantinya Anda dapat mengaktifkan <strong>Face ID / Windows Hello</strong> untuk Auto-Login super cepat di perangkat ini.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 6: History Dashboard -->
+  <div class="luxury-modal modal-wide" id="historyModal">
+    <div class="modal-backdrop"></div>
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title"><i class="fa-solid fa-clock-rotate-left"></i> Memori Spiritual (Riwayat)</h3>
+        <button class="modal-close-btn" id="closeHistoryBtn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="history-list-container" id="historyListContainer">
+          <!-- History items will be populated here -->
+          <div class="history-empty-state">
+            <i class="fa-solid fa-ghost"></i>
+            <p>Belum ada jejak spiritual. Pindai aura Anda sekarang.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 8: Virtual AR Jewelry Mirror (FITUR 2) -->
+  <div class="luxury-modal modal-wide" id="arJewelryModal" style="display: none;">
+    <div class="modal-backdrop" id="arModalBackdrop"></div>
+    <div class="modal-card ar-mirror-card">
+      <div class="modal-header">
+        <h3 class="modal-title"><i class="fa-solid fa-wand-magic-sparkles text-emerald"></i> Virtual AR Jewelry Mirror</h3>
+        <button class="modal-close-btn" id="closeArMirrorBtn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="ar-mirror-container">
+          <!-- Live Camera Viewport with AR Overlay -->
+          <div class="ar-camera-stage">
+            <video id="arVideoElement" autoplay playsinline muted></video>
+            
+            <!-- AR Jewelry Overlay (Positions over chest/neck dynamically) -->
+            <div class="ar-jewelry-overlay" id="arJewelryOverlay">
+              <div class="ar-pendant-item" id="arCurrentPendant">
+                <div class="ar-chain-graphic"></div>
+                <div class="ar-gem-graphic gem-style-jadeite" id="arGemGraphic"></div>
+              </div>
+            </div>
+
+            <!-- Face & Neck Alignment Guide Grid -->
+            <div class="ar-guideline-box">
+              <div class="ar-guide-face-oval"></div>
+              <span class="ar-guide-hint">Posisikan wajah &amp; leher di dalam bingkai</span>
+            </div>
+          </div>
+
+          <!-- AR Jewelry Model Selector Chips -->
+          <div class="ar-selector-row">
+            <span class="ar-selector-lbl">Pilih Model Perhiasan:</span>
+            <div class="ar-chips-group">
+              <button class="ar-model-chip active" data-model="jadeite" data-title="Natural Aceh Jadeite" data-price="Rp 1.850.000">
+                <i class="fa-solid fa-gem text-emerald"></i> <span>Liontin Aceh Jadeite</span>
+              </button>
+              <button class="ar-model-chip" data-model="bangle" data-title="Imperial Burma Jade Bangle" data-price="Rp 4.500.000">
+                <i class="fa-solid fa-circle-notch text-emerald"></i> <span>Gelang Imperial Burma</span>
+              </button>
+              <button class="ar-model-chip" data-model="blackjade" data-title="Black Jade Armor Pendant" data-price="Rp 1.200.000">
+                <i class="fa-solid fa-shield-halved text-gold"></i> <span>Black Jade Armor</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- AR Details & Action -->
+          <div class="ar-action-footer">
+            <div class="ar-item-summary">
+              <h5 id="arItemTitle">Natural Aceh Jadeite</h5>
+              <div class="ar-item-price text-gold" id="arItemPrice">Rp 1.850.000</div>
+            </div>
+            <div class="ar-cta-buttons">
+              <button class="luxury-btn btn-secondary btn-sm" id="btnArSnapshot">
+                <i class="fa-solid fa-camera"></i> <span>Foto Look Ini</span>
+              </button>
+              <a href="https://wa.me/62811619173?text=Halo%20FW%20JADE%20Medan,%20saya%20tertarik%20dengan%20model%20perhiasan%20dari%20AR%20Mirror:%20Natural%20Aceh%20Jadeite." target="_blank" class="luxury-btn btn-primary btn-sm" id="btnArOrderWA">
+                <i class="fa-brands fa-whatsapp"></i> <span>Pesan via WhatsApp</span>
+              </a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 9: Daily Chi Almanac & Jam Hoki Harian (FITUR 4) -->
+  <div class="luxury-modal modal-wide" id="dailyAlmanacModal" style="display: none;">
+    <div class="modal-backdrop" id="almanacBackdrop"></div>
+    <div class="modal-card almanac-card">
+      <div class="modal-header">
+        <h3 class="modal-title"><i class="fa-solid fa-calendar-days text-gold"></i> Daily Chi Almanac &amp; Jam Hoki</h3>
+        <button class="modal-close-btn" id="closeAlmanacBtn">&times;</button>
+      </div>
+      <div class="modal-body">
+        
+        <!-- Almanac Date & Element Header -->
+        <div class="almanac-cosmic-header">
+          <div class="almanac-date-badge" id="almCurrentDate">29 AGUSTUS 2026</div>
+          <h4 class="almanac-element-title" id="almCosmicElement">Hari Kayu Naga • Resonansi Pertumbuhan</h4>
+          <p class="almanac-element-sub">Energi kosmik hari ini sangat selaras untuk ekspansi usaha, negosiasi bisnis, dan pembersihan chi negatif.</p>
+        </div>
+
+        <!-- 3 Pillars of Daily Almanac -->
+        <div class="almanac-grid">
+          <!-- Card 1: Batu Pelindung Hari Ini -->
+          <div class="almanac-box">
+            <div class="alm-box-icon"><i class="fa-solid fa-gem text-emerald"></i></div>
+            <h5>Batu Penyelaras Hari Ini</h5>
+            <strong class="alm-highlight text-emerald" id="almStoneName">Natural Aceh Jadeite</strong>
+            <p>Membantu menstabilkan chi dan meningkatkan daya tarik rezeki.</p>
+          </div>
+
+          <!-- Card 2: Jam Emas Rezeki & Negosiasi -->
+          <div class="almanac-box">
+            <div class="alm-box-icon"><i class="fa-solid fa-clock text-gold"></i></div>
+            <h5>Jam Emas Rezeki</h5>
+            <strong class="alm-highlight text-gold">09.00 – 11.00 WIB</strong>
+            <p>Waktu puncak keberuntungan untuk closing transaksi &amp; komunikasi penting.</p>
+          </div>
+
+          <!-- Card 3: Panduan Harmonisasi Chi -->
+          <div class="almanac-box">
+            <div class="alm-box-icon"><i class="fa-solid fa-spa text-cyan"></i></div>
+            <h5>Meditasi &amp; Warna Hoki</h5>
+            <strong class="alm-highlight text-cyan">Hijau Zamrud &amp; Emas</strong>
+            <p>Minum teh hangat dan kenakan giok alami di sisi kiri tubuh.</p>
+          </div>
+        </div>
+
+        <div class="almanac-cta-row">
+          <button class="luxury-btn btn-primary" id="btnAlmCheckAura">
+            <i class="fa-solid fa-camera"></i> <span>Pindai Keselarasan Aura Hari Ini</span>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- External Luxury AI & Multimedia Libraries (Industry Gold Standard) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/minisearch@6.3.0/dist/umd/index.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/face_mesh.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
+  <!-- Centralized Config & Application Logic -->
+  <script src="config.js?v=16"></script>
+  <script src="app.js?v=16"></script>
+</body>
+</html>

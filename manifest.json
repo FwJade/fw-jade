@@ -1,0 +1,21 @@
+{
+  "name": "AURORA AI Oracle",
+  "short_name": "AURORA",
+  "description": "Your Aura. Your Element. Your Gemstone.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#040907",
+  "theme_color": "#040907",
+  "icons": [
+    {
+      "src": "icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

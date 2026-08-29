@@ -1,0 +1,20 @@
+{
+  "name": "aurora-ai-fwjade",
+  "version": "1.0.0",
+  "description": "AURORA AI — The Mystical Gemstone, Face Aura & Wealth Oracle by FW JADE",
+  "main": "app.js",
+  "scripts": {
+    "dev": "npx -y serve .",
+    "start": "npx -y serve .",
+    "serve": "npx -y serve ."
+  },
+  "keywords": [
+    "fw-jade",
+    "aurora-ai",
+    "gemstone",
+    "mian-xiang",
+    "luxury"
+  ],
+  "author": "FW JADE Medan",
+  "license": "ISC"
+}
