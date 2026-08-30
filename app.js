@@ -331,18 +331,207 @@ function speakWithAuroraWhisper(text) {
 }
 
 // ==========================================
-// 5. GOOGLE MEDIAPIPE FACE MESH & BIOMETRIC SCANNER (Industry Gold Standard)
+// 5. OFFICIAL GOOGLE IDENTITY SERVICES (GIS) SSO
 // ==========================================
-let faceMeshInstance = null;
-let isMediaPipeActive = false;
+function handleGoogleCredentialResponse(response) {
+  try {
+    if (!response || !response.credential) return;
 
-function startScannerFlow() {
+    // Decode JWT Payload
+    const base64Url = response.credential.split('.')[1];
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const jsonPayload = decodeURIComponent(
+      atob(base64)
+        .split('')
+        .map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+        .join('')
+    );
+    const payload = JSON.parse(jsonPayload);
+
+    console.log('Google Identity Verified:', payload);
+
+    // Save to App State
+    AppState.user.name = payload.name;
+    AppState.user.email = payload.email;
+    AppState.user.picture = payload.picture;
+    AppState.user.isGoogleAuth = true;
+
+    // Auto-fill Input fields if currently visible
+    const inputName = document.getElementById('inputUserName');
+    const inputEmail = document.getElementById('inputUserEmail');
+    if (inputName) inputName.value = payload.name;
+    if (inputEmail) inputEmail.value = payload.email;
+
+    // Check if Master Admin
+    if (payload.email && payload.email.toLowerCase() === 'fwjade.com@gmail.com') {
+      AppState.user.isAdmin = true;
+      alert(`Selamat Datang, Master Administrator FW JADE (${payload.email})! Akses penuh diaktifkan.`);
+      openAdminModal();
+    } else {
+      // Sound & Notification
+      playChimeReverb();
+      if (typeof confetti === 'function') {
+        confetti({ particleCount: 40, spread: 60, origin: { y: 0.7 } });
+      }
+    }
+  } catch (err) {
+    console.error('Error decoding Google credential:', err);
+  }
+}
+window.handleGoogleCredentialResponse = handleGoogleCredentialResponse;
+
+// ==========================================
+// 5. PRE-SCAN IDENTITY FORM & BAZI ASTROLOGICAL CALCULATOR
+// ==========================================
+function initIdentityFormSelectors() {
+  const daySel = document.getElementById('inputDobDay');
+  const yearSel = document.getElementById('inputDobYear');
+
+  if (daySel && daySel.options.length <= 1) {
+    for (let d = 1; d <= 31; d++) {
+      const opt = document.createElement('option');
+      opt.value = d;
+      opt.textContent = `${d}`;
+      daySel.appendChild(opt);
+    }
+  }
+
+  if (yearSel && yearSel.options.length <= 1) {
+    const curYear = new Date().getFullYear();
+    for (let y = curYear; y >= 1940; y--) {
+      const opt = document.createElement('option');
+      opt.value = y;
+      opt.textContent = `${y}`;
+      yearSel.appendChild(opt);
+    }
+  }
+
+  // Listeners for live Bazi badge update
+  ['inputDobDay', 'inputDobMonth', 'inputDobYear'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener('change', calculateLiveBazi);
+  });
+}
+
+function calculateLiveBazi() {
+  const d = parseInt(document.getElementById('inputDobDay')?.value);
+  const m = parseInt(document.getElementById('inputDobMonth')?.value);
+  const y = parseInt(document.getElementById('inputDobYear')?.value);
+  const badge = document.getElementById('baziLiveBadge');
+
+  if (!d || !m || !y) {
+    if (badge) badge.style.display = 'none';
+    return null;
+  }
+
+  // 1. Western Zodiac
+  let zodiac = 'Aries';
+  if ((m === 1 && d >= 20) || (m === 2 && d <= 18)) zodiac = 'Aquarius';
+  else if ((m === 2 && d >= 19) || (m === 3 && d <= 20)) zodiac = 'Pisces';
+  else if ((m === 3 && d >= 21) || (m === 4 && d <= 19)) zodiac = 'Aries';
+  else if ((m === 4 && d >= 20) || (m === 5 && d <= 20)) zodiac = 'Taurus';
+  else if ((m === 5 && d >= 21) || (m === 6 && d <= 20)) zodiac = 'Gemini';
+  else if ((m === 6 && d >= 21) || (m === 7 && d <= 22)) zodiac = 'Cancer';
+  else if ((m === 7 && d >= 23) || (m === 8 && d <= 22)) zodiac = 'Leo';
+  else if ((m === 8 && d >= 23) || (m === 9 && d <= 22)) zodiac = 'Virgo';
+  else if ((m === 9 && d >= 23) || (m === 10 && d <= 22)) zodiac = 'Libra';
+  else if ((m === 10 && d >= 23) || (m === 11 && d <= 21)) zodiac = 'Scorpio';
+  else if ((m === 11 && d >= 22) || (m === 12 && d <= 21)) zodiac = 'Sagittarius';
+  else if ((m === 12 && d >= 22) || (m === 1 && d <= 19)) zodiac = 'Capricorn';
+
+  // 2. Chinese Zodiac (Shio)
+  const animals = ['Tikus (Rat)', 'Kerbau (Ox)', 'Macan (Tiger)', 'Kelinci (Rabbit)', 'Naga (Dragon)', 'Ular (Snake)', 'Kuda (Horse)', 'Kambing (Goat)', 'Monyet (Monkey)', 'Ayam (Rooster)', 'Anjing (Dog)', 'Babi (Pig)'];
+  const shioIdx = (y - 4) % 12;
+  const shio = animals[shioIdx >= 0 ? shioIdx : shioIdx + 12];
+
+  // 3. Wu Xing Bazi Birth Element
+  const lastDigit = y % 10;
+  let element = 'Kayu (Wood / 木)';
+  let rawElement = 'WOOD';
+  if (lastDigit === 0 || lastDigit === 1) { element = 'Logam (Metal / 金)'; rawElement = 'METAL'; }
+  else if (lastDigit === 2 || lastDigit === 3) { element = 'Air (Water / 水)'; rawElement = 'WATER'; }
+  else if (lastDigit === 4 || lastDigit === 5) { element = 'Kayu (Wood / 木)'; rawElement = 'WOOD'; }
+  else if (lastDigit === 6 || lastDigit === 7) { element = 'Api (Fire / 火)'; rawElement = 'FIRE'; }
+  else if (lastDigit === 8 || lastDigit === 9) { element = 'Tanah (Earth / 土)'; rawElement = 'EARTH'; }
+
+  // Update Preview Badge
+  const elZ = document.getElementById('valBaziZodiac');
+  const elS = document.getElementById('valBaziShio');
+  const elE = document.getElementById('valBaziElement');
+  if (elZ) elZ.textContent = zodiac;
+  if (elS) elS.textContent = shio;
+  if (elE) elE.textContent = element;
+  if (badge) badge.style.display = 'block';
+
+  return { zodiac, shio, element, rawElement, dobStr: `${d}/${m}/${y}` };
+}
+
+async function submitIdentityForm() {
+  const name = document.getElementById('inputUserName')?.value.trim();
+  const phone = document.getElementById('inputUserPhone')?.value.trim();
+  const email = document.getElementById('inputUserEmail')?.value.trim();
+  const bazi = calculateLiveBazi();
+
+  if (!name || !phone || !bazi) {
+    alert('Mohon lengkapi Nama, Tanggal Lahir, dan Nomor WhatsApp Anda.');
+    return;
+  }
+
+  // Save to App State
+  AppState.user.name = name;
+  AppState.user.phone = phone.startsWith('+') ? phone : `+62${phone.replace(/^0+/, '')}`;
+  AppState.user.email = email || '-';
+  AppState.user.dob = bazi.dobStr;
+  AppState.user.bazi = bazi;
+  AppState.user.metrics.element = bazi.rawElement;
+
+  // Post to Cloudflare Leads Endpoint asynchronously
+  try {
+    fetch('/api/leads', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name: AppState.user.name,
+        dob: AppState.user.dob,
+        zodiac: bazi.zodiac,
+        shio: bazi.shio,
+        element: bazi.rawElement,
+        phone: AppState.user.phone,
+        email: AppState.user.email,
+        gemstone: 'Natural Aceh Jadeite',
+        price: 'Rp 1.850.000'
+      })
+    }).catch(e => console.warn('Lead submit error:', e));
+  } catch (e) {}
+
+  // Smooth transition to Camera Scanner
+  const secForm = document.getElementById('secIdentityForm');
+  if (secForm) secForm.style.display = 'none';
+
   const secScanner = document.getElementById('secScanner');
   if (secScanner) {
     secScanner.style.display = 'block';
     secScanner.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
+
   startWebcam();
+}
+window.submitIdentityForm = submitIdentityForm;
+
+function startScannerFlow() {
+  initIdentityFormSelectors();
+  const secForm = document.getElementById('secIdentityForm');
+  if (secForm) {
+    secForm.style.display = 'block';
+    secForm.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  } else {
+    const secScanner = document.getElementById('secScanner');
+    if (secScanner) {
+      secScanner.style.display = 'block';
+      secScanner.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    startWebcam();
+  }
 }
 
 async function startWebcam() {
@@ -503,6 +692,26 @@ function drawScannerHudAnimation() {
   draw();
 }
 
+function captureWebcamSnapshot() {
+  const video = document.getElementById('webcamFeed');
+  if (!video || video.videoWidth === 0) return null;
+
+  const canvas = document.createElement('canvas');
+  canvas.width = 480;
+  canvas.height = 480;
+  const ctx = canvas.getContext('2d');
+
+  // Crop & draw center square
+  const minDim = Math.min(video.videoWidth, video.videoHeight);
+  const startX = (video.videoWidth - minDim) / 2;
+  const startY = (video.videoHeight - minDim) / 2;
+
+  ctx.drawImage(video, startX, startY, minDim, minDim, 0, 0, 480, 480);
+  const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
+  AppState.user.lastSnapshotBase64 = dataUrl;
+  return dataUrl;
+}
+
 function animateScannerProgression() {
   const pBar = document.getElementById('scanProgressFill');
   const pTxt = document.getElementById('scanProgressPercent');
@@ -513,7 +722,7 @@ function animateScannerProgression() {
   playChimeReverb();
 
   let percent = 0;
-  const interval = setInterval(() => {
+  const interval = setInterval(async () => {
     percent += 4;
     if (pBar) pBar.style.width = `${percent}%`;
     if (pTxt) pTxt.textContent = `${percent}%`;
@@ -535,27 +744,71 @@ function animateScannerProgression() {
         });
       }
 
-      setTimeout(() => {
-        promptGatedAuth(GemstoneDatabase[0]);
-      }, 600);
+      // Capture snapshot & Call Cloudflare Workers AI Vision Model
+      const snapshot = captureWebcamSnapshot();
+      await processAiVisionScan(snapshot);
     }
   }, 60);
 }
 
-function promptGatedAuth(gemObj) {
-  // Save the temporary reading result to be revealed after auth
-  AppState.tempReading = gemObj;
-  
-  // Pause the scanner UI
-  document.getElementById('secScanner').style.display = 'none';
-  
-  // Show the Gated Revelation Auth Modal
-  document.getElementById('authModal').classList.add('open');
-  
-  speakWithAuroraWhisper('Aura Anda telah terbaca. Tautkan identitas Anda untuk membuka gerbang rahasia ini.');
+async function processAiVisionScan(snapshotBase64) {
+  let matchedGem = GemstoneDatabase[0];
+  let customGreeting = null;
+
+  try {
+    const res = await fetch('/api/vision', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        imageBase64: snapshotBase64 || '',
+        language: AppState.lang
+      })
+    });
+
+    if (res.ok) {
+      const data = await res.json();
+      if (data.success && data.analysis) {
+        const a = data.analysis;
+        AppState.user.metrics.element = a.element || 'WOOD';
+        AppState.user.metrics.alignmentScore = a.alignmentScore || 96;
+        AppState.user.metrics.vitality = a.vitality || 91;
+        AppState.user.metrics.energyBalance = a.energyBalance || 'Optimal';
+        AppState.user.metrics.fortuneLevel = a.fortuneLevel || 'Tinggi';
+        AppState.user.metrics.energyReco = a.energyReco || 'Menjaga stabilitas & fokus';
+
+        // Match Gemstone
+        if (a.recommendedGemId) {
+          const found = GemstoneDatabase.find(g => g.id === a.recommendedGemId);
+          if (found) matchedGem = found;
+        } else if (a.element) {
+          const foundByEl = GemstoneDatabase.find(g => g.element.includes(a.element));
+          if (foundByEl) matchedGem = foundByEl;
+        }
+
+        // Dynamically update Mian Xiang Palaces
+        if (a.mianXiangAnalysis) {
+          if (MIAN_XIANG_DATA.career) MIAN_XIANG_DATA.career.desc = a.mianXiangAnalysis.forehead || MIAN_XIANG_DATA.career.desc;
+          if (MIAN_XIANG_DATA.wealth) MIAN_XIANG_DATA.wealth.desc = a.mianXiangAnalysis.nose || MIAN_XIANG_DATA.wealth.desc;
+          if (MIAN_XIANG_DATA.vitality) MIAN_XIANG_DATA.vitality.desc = a.mianXiangAnalysis.eyesCheek || MIAN_XIANG_DATA.vitality.desc;
+          if (MIAN_XIANG_DATA.harmony) MIAN_XIANG_DATA.harmony.desc = a.mianXiangAnalysis.chin || MIAN_XIANG_DATA.harmony.desc;
+        }
+
+        if (a.whisperGreeting) {
+          customGreeting = a.whisperGreeting;
+        }
+      }
+    }
+  } catch (e) {
+    console.warn('AI Vision Scan Edge Fetch error, using graceful fallback:', e);
+  }
+
+  setTimeout(() => {
+    // Direct Instant Reveal (Pilihan A: No blocker popup for maximum conversion)
+    revealFullResults(matchedGem, customGreeting);
+  }, 400);
 }
 
-function revealFullResults(gemObj) {
+function revealFullResults(gemObj, customGreeting) {
   AppState.user.metrics.selectedGem = gemObj;
 
   // Bind Gemstone Data Defensively
@@ -592,10 +845,56 @@ function revealFullResults(gemObj) {
   const elTag = document.getElementById('valWearingGemTag');
   if (elTag) elTag.innerHTML = `<i class="fa-solid ${gemObj.icon || 'fa-gem'}"></i> ${gemObj.name}`;
 
-  // WhatsApp Order URLs
-  const waUrl = `https://wa.me/62811619173?text=${encodeURIComponent(`Halo FW JADE Medan, saya ingin memesan perhiasan hasil pembacaan AURORA AI: ${gemObj.name}. Mohon info ketersediaan & pengiriman.`)}`;
+  // Update Aura Metrics in UI
+  const valEl = document.getElementById('valAuraElement');
+  if (valEl) valEl.textContent = AppState.user.metrics.element || 'WOOD';
+
+  const valScore = document.getElementById('valAuraScore');
+  if (valScore) valScore.textContent = `${AppState.user.metrics.alignmentScore || 96}%`;
+
+  const valVit = document.getElementById('valVitality');
+  if (valVit) valVit.textContent = `${AppState.user.metrics.vitality || 91}%`;
+
+  const valBal = document.getElementById('valEnergyBalance');
+  if (valBal) valBal.textContent = AppState.user.metrics.energyBalance || 'Optimal';
+
+  const valFort = document.getElementById('valFortuneLevel');
+  if (valFort) valFort.textContent = AppState.user.metrics.fortuneLevel || 'Tinggi';
+
+  const valReco = document.getElementById('valEnergyReco');
+  if (valReco) valReco.textContent = AppState.user.metrics.energyReco || 'Menjaga stabilitas & fokus';
+
+  // Update Dermatological Health Metrics
+  const skinBarrier = Math.min(98, (AppState.user.metrics.vitality || 91) - 2);
+  const eyeFatigue = Math.max(18, 100 - (AppState.user.metrics.vitality || 91) + 12);
+
+  const elSkinScore = document.getElementById('valSkinBarrierScore');
+  const elSkinFill = document.getElementById('valSkinBarrierFill');
+  if (elSkinScore) elSkinScore.textContent = `${skinBarrier}% (${skinBarrier >= 85 ? 'Sangat Sehat' : 'Sehat'})`;
+  if (elSkinFill) elSkinFill.style.width = `${skinBarrier}%`;
+
+  const elEyeScore = document.getElementById('valEyeFatigueScore');
+  const elEyeFill = document.getElementById('valEyeFatigueFill');
+  if (elEyeScore) elEyeScore.textContent = `${eyeFatigue}% (${eyeFatigue <= 35 ? 'Kelelahan Ringan' : 'Kelelahan Sedang'})`;
+  if (elEyeFill) elEyeFill.style.width = `${eyeFatigue}%`;
+
+  const elDermTherapy = document.getElementById('valDermTherapyNote');
+  if (elDermTherapy) {
+    elDermTherapy.textContent = `Berdasarkan deteksi vitalitas ${AppState.user.name} (${AppState.user.dob || 'Penyelarasan Bazi'}), getaran mineral bio-fisika ${gemObj.name} membantu menyejukkan lapisan epidermis wajah dan melancarkan mikrosirkulasi kapiler darah.`;
+  }
+
+  // Personalized WhatsApp Order URL for High-Conversion Closing
+  const customerName = AppState.user.name || 'Kolektor FW JADE';
+  const customerDob = AppState.user.dob ? ` (Tgl Lahir: ${AppState.user.dob})` : '';
+  const customerPhone = AppState.user.phone ? ` [No: ${AppState.user.phone}]` : '';
+  const waMsg = `Halo FW JADE Medan, saya ${customerName}${customerDob}. Hasil scan AI aura & dermatologi wajah saya selaras dengan ${gemObj.name} (${gemObj.price}). Saya ingin memesan perhiasan ini dan konsultasi pengiriman.`;
+  const waUrl = `https://wa.me/62811619173?text=${encodeURIComponent(waMsg)}`;
+
   const btnWA = document.getElementById('btnOrderWA');
   if (btnWA) btnWA.href = waUrl;
+
+  const btnArWA = document.getElementById('btnArOrderWA');
+  if (btnArWA) btnArWA.href = waUrl;
 
   // Hide Scanner Section and Show Results Sections
   const secScan = document.getElementById('secScanner');
@@ -617,17 +916,14 @@ function revealFullResults(gemObj) {
     secAura.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
-  const hour = new Date().getHours();
-  const timeGreeting = hour < 11 ? 'Selamat pagi' : hour < 15 ? 'Selamat siang' : hour < 18 ? 'Selamat sore' : 'Selamat malam';
-  const whisperGreeting = `${timeGreeting}... Pembacaan aura Anda selaras dengan elemen ${gemObj.element_id || 'Kayu'} di angka 96 persen. Batu pelindung dan magnet rezeki yang dihadirkan untuk Anda adalah ${gemObj.name}.`;
-  
-  speakWithAuroraWhisper(whisperGreeting);
+  const whisperText = customGreeting || `Selamat... Pembacaan aura ${customerName} selaras dengan elemen ${gemObj.element_id || 'Kayu'} di angka ${AppState.user.metrics.alignmentScore || 96} persen. Batu pelindung dan magnet rezeki yang dihadirkan untuk Anda adalah ${gemObj.name}.`;
+  speakWithAuroraWhisper(whisperText);
 
   // Update scientific and astrological metrics
   updateScienceAndAstroMetrics(gemObj);
 
   // Apply element-adaptive theming
-  applyElementTheme(gemObj.element || gemObj.element_id || 'WOOD');
+  applyElementTheme(AppState.user.metrics.element || gemObj.element || 'WOOD');
 
   // Update curiosity hook with specific gem context
   updateCuriosityHook(gemObj);
@@ -732,10 +1028,10 @@ function handleSearchQuery(rawQuery) {
   revealFullResults(matched);
 }
 
-// ==========================================
-// 7. LEVEL 3 CONTEXTUAL CHAT DRAWER
-// ==========================================
-function handleContextualAsk(customQuery) {
+// Conversation History Buffer for Contextual Memory
+if (!AppState.chatHistory) AppState.chatHistory = [];
+
+async function handleContextualAsk(customQuery) {
   const input = document.getElementById('contextualInput');
   const query = customQuery || (input ? input.value.trim() : '');
   if (!query) return;
@@ -748,35 +1044,60 @@ function handleContextualAsk(customQuery) {
   userBubble.className = 'chat-bubble bubble-user';
   userBubble.innerHTML = `<strong>Anda:</strong> ${query}`;
   streamBox.appendChild(userBubble);
+  streamBox.scrollTop = streamBox.scrollHeight;
+
+  // Add thinking indicator bubble
+  const thinkingBubble = document.createElement('div');
+  thinkingBubble.className = 'chat-bubble bubble-aurora thinking-bubble';
+  thinkingBubble.innerHTML = `<strong>✦ Master Aurora:</strong> <span class="ai-typing-glow"><i class="fa-solid fa-sparkles fa-spin"></i> Menyelaraskan energi semesta...</span>`;
+  streamBox.appendChild(thinkingBubble);
+  streamBox.scrollTop = streamBox.scrollHeight;
 
   const gem = AppState.user.metrics.selectedGem || GemstoneDatabase[0];
   let answer = '';
 
-  if (query.toLowerCase().includes('fir') || query.toLowerCase().includes('sains') || query.toLowerCase().includes('darah')) {
-    answer = `Secara bio-fisika, kisi kristal ${gem.name} (${gem.chemFormula}) memancarkan radiasi Far Infrared (FIR) pada puncak ${gem.firPeak || '9.35 µm'}. Resonansi ini menggetarkan molekul air darah, memulihkan Zeta Potential eritrosit (ζ ≤ -15 mV), dan meningkatkan oksigenasi mikrosirkulasi hingga ${gem.oxygenBoost || '+23.4%'} sesuai Hukum Poiseuille.`;
-  } else if (query.toLowerCase().includes('zodiak') || query.toLowerCase().includes('shio') || query.toLowerCase().includes('kelahiran')) {
-    answer = `Batu ${gem.name} memiliki resonansi harmonis luar biasa dengan Zodiak (${gem.zodiacMatch}) dan Shio (${gem.shioMatch}). Siklus energinya adalah ${gem.wuXingCycle}, menciptakan pelindung aura sekaligus magnet kemakmuran personal.`;
-  } else if (query.toLowerCase().includes('lab') || query.toLowerCase().includes('mohs') || query.toLowerCase().includes('berat jenis') || query.toLowerCase().includes('formula')) {
-    answer = `Data Laboratorium Resmi FW JADE: Formula ${gem.chemFormula}, Kekerasan Skala Mohs ${gem.mohs}, Berat Jenis ${gem.sg}, dan Uji FTIR menunjukkan ${gem.ftirPurity || 'Grade A murni tanpa resin sintetis'}.`;
-  } else if (query.toLowerCase().includes('rawat') || query.toLowerCase().includes('bersih')) {
-    answer = `Untuk merawat ${gem.name}, cukup bilas dengan air mineral mengalir setiap awal bulan lunar untuk melarutkan sisa energi statis. Hindari kontak langsung dengan bahan kimia keras.`;
-  } else if (query.toLowerCase().includes('tidur')) {
-    answer = `Ya, ${gem.name} sangat aman bahkan dianjurkan diletakkan di dekat bantal atau dikenakan saat tidur untuk menstabilkan gelombang otak delta dan mempercepat regenerasi Chi seluler.`;
-  } else if (query.toLowerCase().includes('negosiasi') || query.toLowerCase().includes('bisnis') || query.toLowerCase().includes('kerja')) {
-    answer = `Sangat ideal! Pancaran resonansi ${gem.element_id} pada ${gem.name} memperkuat wibawa batin dan menajamkan intuisi diplomasi Anda saat berhadapan dengan rekan bisnis penting.`;
-  } else {
-    answer = `Berdasarkan profil getaran aura Anda (${gem.element_id} 96%), ${gem.name} (${gem.chemFormula}) bekerja optimal saat bersentuhan langsung dengan denyut nadi leher atau pergelangan tangan kiri Anda.`;
+  try {
+    const res = await fetch('/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        message: query,
+        conversationHistory: AppState.chatHistory,
+        selectedGem: gem,
+        userAura: AppState.user.metrics
+      })
+    });
+
+    if (res.ok) {
+      const data = await res.json();
+      if (data.success && data.reply) {
+        answer = data.reply;
+      }
+    }
+  } catch (e) {
+    console.warn('AI Chat Edge Fetch fallback:', e);
   }
 
-  // Add Aurora bubble with delay
-  setTimeout(() => {
-    const auroraBubble = document.createElement('div');
-    auroraBubble.className = 'chat-bubble bubble-aurora';
-    auroraBubble.innerHTML = `<strong>✦ Master Aurora:</strong> ${answer}`;
-    streamBox.appendChild(auroraBubble);
-    streamBox.scrollTop = streamBox.scrollHeight;
-    speakWithAuroraWhisper(answer);
-  }, 400);
+  // Graceful Fallback if offline
+  if (!answer) {
+    if (query.toLowerCase().includes('fir') || query.toLowerCase().includes('sains') || query.toLowerCase().includes('darah')) {
+      answer = `Secara bio-fisika, kisi kristal ${gem.name} (${gem.chemFormula}) memancarkan radiasi Far Infrared (FIR) pada puncak ${gem.firPeak || '9.35 µm'}. Resonansi ini menggetarkan molekul air darah, memulihkan Zeta Potential eritrosit (ζ ≤ -15 mV), dan meningkatkan oksigenasi mikrosirkulasi hingga ${gem.oxygenBoost || '+23.4%'} sesuai Hukum Poiseuille.`;
+    } else if (query.toLowerCase().includes('zodiak') || query.toLowerCase().includes('shio') || query.toLowerCase().includes('kelahiran')) {
+      answer = `Batu ${gem.name} memiliki resonansi harmonis luar biasa dengan Zodiak (${gem.zodiacMatch}) dan Shio (${gem.shioMatch}). Siklus energinya adalah ${gem.wuXingCycle}, menciptakan pelindung aura sekaligus magnet kemakmuran personal.`;
+    } else {
+      answer = `Pancaran energi ${gem.name} (${gem.chemFormula}) bekerja optimal dengan profil aura Anda (${gem.element_id || 'Kayu'}). Membantu menyeimbangkan medan elektromagnetik tubuh dan memperlancar aliran chi rezeki harian Anda.`;
+    }
+  }
+
+  // Record to Conversation History
+  AppState.chatHistory.push({ role: 'user', content: query });
+  AppState.chatHistory.push({ role: 'assistant', content: answer });
+
+  // Replace thinking bubble with final response
+  thinkingBubble.classList.remove('thinking-bubble');
+  thinkingBubble.innerHTML = `<strong>✦ Master Aurora:</strong> ${answer}`;
+  streamBox.scrollTop = streamBox.scrollHeight;
+  speakWithAuroraWhisper(answer);
 }
 
 // ==========================================
@@ -2062,11 +2383,173 @@ function searchGemstonesSemantically(query) {
 }
 
 
+// ==========================================================================
+// 23. MASTER ADMIN LEADS PORTAL (fwjade.com@gmail.com)
+// ==========================================================================
+let allLoadedLeads = [];
+
+function initAdminPortal() {
+  const btnOpen = document.getElementById('openAdminModalBtn');
+  const btnClose = document.getElementById('closeAdminBtn');
+  const backdrop = document.getElementById('adminModalBackdrop');
+
+  if (btnOpen) {
+    btnOpen.addEventListener('click', openAdminModal);
+  }
+  if (btnClose) {
+    btnClose.addEventListener('click', closeAdminModal);
+  }
+  if (backdrop) {
+    backdrop.addEventListener('click', closeAdminModal);
+  }
+}
+
+function openAdminModal() {
+  const modal = document.getElementById('adminModal');
+  if (modal) {
+    modal.style.display = 'flex';
+    modal.classList.add('open');
+    loadAdminLeads();
+  }
+}
+window.openAdminModal = openAdminModal;
+
+function closeAdminModal() {
+  const modal = document.getElementById('adminModal');
+  if (modal) {
+    modal.style.display = 'none';
+    modal.classList.remove('open');
+  }
+}
+window.closeAdminModal = closeAdminModal;
+
+async function loadAdminLeads() {
+  const tbody = document.getElementById('adminLeadsTableBody');
+  const statTotal = document.getElementById('adminStatTotal');
+  const statRev = document.getElementById('adminStatRevenue');
+
+  if (tbody) {
+    tbody.innerHTML = '<tr><td colspan="6" class="text-center"><i class="fa-solid fa-spinner fa-spin text-emerald"></i> Memuat database prospek dari Cloudflare Edge...</td></tr>';
+  }
+
+  try {
+    const res = await fetch('/api/leads?admin=fwjade.com@gmail.com');
+    if (res.ok) {
+      const data = await res.json();
+      if (data.success && data.leads) {
+        allLoadedLeads = data.leads;
+        renderAdminLeadsTable(allLoadedLeads);
+
+        if (statTotal) statTotal.textContent = `${data.totalLeads} Orang`;
+        if (statRev) {
+          const totalRev = data.leads.reduce((acc, cur) => {
+            const num = parseInt((cur.price || '0').replace(/[^0-9]/g, '')) || 1850000;
+            return acc + num;
+          }, 0);
+          statRev.textContent = `Rp ${totalRev.toLocaleString('id-ID')}`;
+        }
+        return;
+      }
+    }
+  } catch (e) {
+    console.warn('Admin fetch fallback:', e);
+  }
+
+  // Graceful Local Fallback if offline
+  renderAdminLeadsTable(allLoadedLeads);
+}
+window.loadAdminLeads = loadAdminLeads;
+
+function renderAdminLeadsTable(leads) {
+  const tbody = document.getElementById('adminLeadsTableBody');
+  if (!tbody) return;
+
+  if (!leads || leads.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="6" class="text-center text-muted">Belum ada data prospek yang masuk.</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = leads.map(l => {
+    const cleanPhone = (l.phone || '').replace(/[^0-9]/g, '');
+    const waUrl = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(`Halo Bapak/Ibu ${l.name}, kami dari Galeri FW JADE Medan. Berdasarkan hasil pembacaan energi aura & Bazi Anda (${l.gemstone || 'Natural Aceh Jadeite'}), apakah ada yang bisa kami bantu mengenai pemilihan liontin atau gelang giok alami Anda?`)}`;
+
+    return `
+      <tr>
+        <td><span class="text-dim text-xs">${l.timestamp || '-'}</span></td>
+        <td><strong>${l.name}</strong>${l.email && l.email !== '-' ? `<br><small class="text-dim">${l.email}</small>` : ''}</td>
+        <td><span class="text-gold">${l.dob || '-'}</span><br><small class="text-emerald">${l.zodiac || ''} • ${l.shio || ''}</small></td>
+        <td><strong>${l.phone}</strong></td>
+        <td><strong class="text-emerald">${l.gemstone || 'Natural Aceh Jadeite'}</strong><br><small class="text-gold">${l.price || 'Rp 1.850.000'}</small></td>
+        <td>
+          <a href="${waUrl}" target="_blank" class="luxury-btn btn-primary btn-xs" title="Chat WhatsApp Customer Langsung">
+            <i class="fa-brands fa-whatsapp"></i> <span>Chat CS</span>
+          </a>
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+function filterAdminTable() {
+  const query = document.getElementById('adminSearchInput')?.value.toLowerCase() || '';
+  if (!query) {
+    renderAdminLeadsTable(allLoadedLeads);
+    return;
+  }
+
+  const filtered = allLoadedLeads.filter(l =>
+    (l.name && l.name.toLowerCase().includes(query)) ||
+    (l.phone && l.phone.includes(query)) ||
+    (l.gemstone && l.gemstone.toLowerCase().includes(query)) ||
+    (l.zodiac && l.zodiac.toLowerCase().includes(query))
+  );
+  renderAdminLeadsTable(filtered);
+}
+window.filterAdminTable = filterAdminTable;
+
+function exportLeadsToCSV() {
+  if (!allLoadedLeads || allLoadedLeads.length === 0) {
+    alert('Belum ada data untuk diunduh.');
+    return;
+  }
+
+  let csvContent = 'data:text/csv;charset=utf-8,';
+  csvContent += 'ID,Waktu,Nama,Tanggal Lahir,Zodiak,Shio,Elemen,WhatsApp,Email,Batu Rekomendasi,Harga\n';
+
+  allLoadedLeads.forEach(l => {
+    const row = [
+      l.id,
+      `"${l.timestamp}"`,
+      `"${l.name}"`,
+      `"${l.dob}"`,
+      `"${l.zodiac}"`,
+      `"${l.shio}"`,
+      `"${l.element}"`,
+      `"${l.phone}"`,
+      `"${l.email}"`,
+      `"${l.gemstone}"`,
+      `"${l.price}"`
+    ].join(',');
+    csvContent += row + '\n';
+  });
+
+  const encodedUri = encodeURI(csvContent);
+  const link = document.createElement('a');
+  link.setAttribute('href', encodedUri);
+  link.setAttribute('download', `FWJADE_Leads_Database_${new Date().toISOString().slice(0, 10)}.csv`);
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+window.exportLeadsToCSV = exportLeadsToCSV;
+
 // Initialize All Features on startup
 document.addEventListener('DOMContentLoaded', () => {
   const savedStyle = localStorage.getItem('aurora_ui_style') || 'sleek';
   setUIStyle(savedStyle);
 
+  initIdentityFormSelectors();
+  initAdminPortal();
   initMianXiangPalaces();
   initArJewelryMirror();
   initDailyAlmanac();
@@ -2074,3 +2557,4 @@ document.addEventListener('DOMContentLoaded', () => {
   initMagneticTouchPhysics();
   initMiniSearchEngine();
 });
+

@@ -17,10 +17,13 @@
   <!-- Supabase SDK -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+  <!-- Official Google Identity Services SDK -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+
   <!-- PWA Manifest -->
   <link rel="manifest" href="manifest.json">
 
-  <link rel="stylesheet" href="style.css?v=15">
+  <link rel="stylesheet" href="style.css?v=17">
 </head>
 <body class="theme-quiet-luxury">
   <!-- Subtle Ethereal Background Canvas & Ambient Light -->
@@ -63,6 +66,9 @@
         </button>
         <button class="nav-pill-btn icon-only-btn" id="openCertModalBtn" title="Sertifikat & Jaringan Global">
           <i class="fa-solid fa-globe"></i>
+        </button>
+        <button class="nav-pill-btn icon-only-btn" id="openAdminModalBtn" title="Master Admin (fwjade.com@gmail.com)">
+          <i class="fa-solid fa-user-shield text-gold"></i>
         </button>
         <button class="nav-pill-btn" id="openTutorialBtn" title="Panduan Penggunaan">
           <i class="fa-regular fa-circle-question"></i> <span id="txtNavTutorial">Panduan</span>
@@ -222,10 +228,123 @@
 
 
       <!-- =========================================================================
-           SECTION 02: STEP 1 — SCAN WAJAH (Gambar 2 Screen 1)
+           SECTION 02: STEP 0 — FORM IDENTITAS & KALKULASI BAZI (Langkah Awal)
+           ========================================================================= -->
+      <section class="section-card section-identity-form step-card-box" id="secIdentityForm" style="display: none;">
+        <div class="step-badge-indicator">1. PENYELARASAN JIWA • Data Kelahiran &amp; Bazi</div>
+        
+        <div class="identity-form-wrapper">
+          <div class="form-header-badge">
+            <i class="fa-solid fa-compass text-gold"></i> <span>Kalender Kosmik &amp; Fisiognomi</span>
+          </div>
+          <h2 class="step-main-title">Penyelarasan Data Spiritual</h2>
+          <p class="step-main-subtitle">Lengkapi data Anda agar pembacaan biometrik kamera &amp; elemen Bazi selaras 100%</p>
+
+          <form class="luxury-identity-form" id="spiritualIdentityForm" onsubmit="event.preventDefault(); submitIdentityForm();">
+            
+            <!-- Google One-Tap Quick Fill Button -->
+            <div class="google-quick-auth-card">
+              <div id="g_id_onload"
+                   data-client_id="734583908123-ugbaqutk7pr713hmmbk03nnk1kij2hor.apps.googleusercontent.com"
+                   data-context="signin"
+                   data-ux_mode="popup"
+                   data-callback="handleGoogleCredentialResponse"
+                   data-auto_prompt="false">
+              </div>
+              <div class="g_id_signin"
+                   data-type="standard"
+                   data-shape="pill"
+                   data-theme="filled_black"
+                   data-text="continue_with"
+                   data-size="large"
+                   data-logo_alignment="left"
+                   data-width="100%">
+              </div>
+              <div class="divider-or-text"><span>atau isi manual di bawah</span></div>
+            </div>
+
+            <div class="form-group-row">
+              <div class="form-field-col">
+                <label class="form-label"><i class="fa-solid fa-user text-emerald"></i> Nama Lengkap / Panggilan <span class="req-star">*</span></label>
+                <input type="text" id="inputUserName" class="luxury-text-input" placeholder="Contoh: Faisal Paisan" required autocomplete="name">
+              </div>
+            </div>
+
+            <div class="form-group-row dob-row">
+              <label class="form-label full-width"><i class="fa-solid fa-calendar-day text-gold"></i> Tanggal Lahir (Untuk Bazi, Shio &amp; Zodiak) <span class="req-star">*</span></label>
+              <div class="dob-selectors-grid">
+                <select id="inputDobDay" class="luxury-select" required title="Hari Lahir">
+                  <option value="">Hari</option>
+                  <!-- 1 to 31 populated by JS -->
+                </select>
+                <select id="inputDobMonth" class="luxury-select" required title="Bulan Lahir">
+                  <option value="">Bulan</option>
+                  <option value="1">Januari</option>
+                  <option value="2">Februari</option>
+                  <option value="3">Maret</option>
+                  <option value="4">April</option>
+                  <option value="5">Mei</option>
+                  <option value="6">Juni</option>
+                  <option value="7">Juli</option>
+                  <option value="8">Agustus</option>
+                  <option value="9">September</option>
+                  <option value="10">Oktober</option>
+                  <option value="11">November</option>
+                  <option value="12">Desember</option>
+                </select>
+                <select id="inputDobYear" class="luxury-select" required title="Tahun Lahir">
+                  <option value="">Tahun</option>
+                  <!-- 1940 to 2026 populated by JS -->
+                </select>
+              </div>
+            </div>
+
+            <!-- Instant Live Bazi Cosmic Badge Preview -->
+            <div class="bazi-preview-badge" id="baziLiveBadge" style="display: none;">
+              <div class="bazi-badge-inner">
+                <div class="bazi-item"><span class="b-lbl">Zodiak Barat:</span> <strong id="valBaziZodiac" class="text-cyan">-</strong></div>
+                <div class="bazi-item"><span class="b-lbl">Shio Tionghoa:</span> <strong id="valBaziShio" class="text-gold">-</strong></div>
+                <div class="bazi-item"><span class="b-lbl">Elemen Bazi:</span> <strong id="valBaziElement" class="text-emerald">-</strong></div>
+              </div>
+            </div>
+
+            <div class="form-group-row">
+              <div class="form-field-col">
+                <label class="form-label"><i class="fa-brands fa-whatsapp text-emerald"></i> Nomor WhatsApp Aktif <span class="req-star">*</span></label>
+                <div class="phone-input-wrap">
+                  <span class="phone-prefix">+62</span>
+                  <input type="tel" id="inputUserPhone" class="luxury-text-input" placeholder="811-619-173" required autocomplete="tel">
+                </div>
+                <span class="form-hint">Sertifikat Digital &amp; Kartu Aura Anda akan dikirimkan ke nomor ini.</span>
+              </div>
+            </div>
+
+            <div class="form-group-row">
+              <div class="form-field-col">
+                <label class="form-label"><i class="fa-solid fa-envelope text-gold"></i> Email (Opsional)</label>
+                <input type="email" id="inputUserEmail" class="luxury-text-input" placeholder="nama@gmail.com" autocomplete="email">
+              </div>
+            </div>
+
+            <div class="form-submit-row">
+              <button type="submit" class="luxury-btn btn-scan-action-primary" id="btnSubmitIdentity">
+                <span>Lanjutkan ke Kamera &amp; Pindai Biometrik</span> <i class="fa-solid fa-arrow-right"></i>
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <div class="step-indicator-connector">
+          <i class="fa-solid fa-chevron-down"></i>
+        </div>
+      </section>
+
+
+      <!-- =========================================================================
+           SECTION 03: STEP 1 — SCAN WAJAH (Gambar 2 Screen 1)
            ========================================================================= -->
       <section class="section-card section-scanner step-card-box" id="secScanner" style="display: none;">
-        <div class="step-badge-indicator">1. SCAN WAJAH • Mulai analisa wajah &amp; aura</div>
+        <div class="step-badge-indicator">2. SCAN WAJAH • Mulai analisa wajah &amp; aura</div>
         
         <div class="step-scanner-wrapper">
           <h2 class="step-main-title">Analisa Wajah &amp; Aura</h2>
@@ -425,6 +544,43 @@
               <div class="hemo-metric-col">
                 <span class="hemo-lbl">Penurunan Viskositas</span>
                 <strong class="hemo-val text-gold" id="valViscosityReduction">-18.6% (Lancar)</strong>
+              </div>
+            </div>
+          </div>
+
+          <!-- 3.5 Evaluasi Dermatologis & Kesehatan Kulit Bio-Medis -->
+          <div class="dermatology-health-card">
+            <div class="derm-header">
+              <div class="derm-title">
+                <i class="fa-solid fa-shield-virus text-emerald"></i>
+                <span>Evaluasi Dermatologis Wajah &amp; Skin Vitality Index</span>
+              </div>
+              <span class="derm-badge" id="valDermGrade">Grade: Optimal Skin Barrier</span>
+            </div>
+
+            <div class="derm-metrics-grid">
+              <div class="derm-metric-box">
+                <span class="derm-lbl">Skin Barrier &amp; Kelembaban</span>
+                <div class="derm-val-bar">
+                  <div class="derm-bar-fill" id="valSkinBarrierFill" style="width: 88%;"></div>
+                </div>
+                <strong class="derm-score text-emerald" id="valSkinBarrierScore">88% (Sangat Sehat)</strong>
+              </div>
+
+              <div class="derm-metric-box">
+                <span class="derm-lbl">Indeks Kelelahan &amp; Kantung Mata</span>
+                <div class="derm-val-bar">
+                  <div class="derm-bar-fill fill-amber" id="valEyeFatigueFill" style="width: 32%;"></div>
+                </div>
+                <strong class="derm-score text-gold" id="valEyeFatigueScore">32% (Kelelahan Ringan)</strong>
+              </div>
+            </div>
+
+            <div class="derm-reco-box">
+              <div class="derm-reco-icon"><i class="fa-solid fa-spa text-cyan"></i></div>
+              <div class="derm-reco-txt">
+                <strong>Rekomendasi Terapi Dermatologi Alami:</strong>
+                <p id="valDermTherapyNote">Gunakan terapi pendinginan giok alami (Cooling Stone Therapy) pada area bawah mata dan pipi selama 5 menit setiap pagi untuk mengencangkan pori-pori dan melancarkan mikrosirkulasi kapiler darah.</p>
               </div>
             </div>
           </div>
@@ -1281,6 +1437,73 @@
           <button class="luxury-btn btn-primary" id="btnAlmCheckAura">
             <i class="fa-solid fa-camera"></i> <span>Pindai Keselarasan Aura Hari Ini</span>
           </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 10: Master Admin Leads Portal (fwjade.com@gmail.com) -->
+  <div class="luxury-modal modal-wide" id="adminModal" style="display: none;">
+    <div class="modal-backdrop" id="adminModalBackdrop"></div>
+    <div class="modal-card admin-dashboard-card">
+      <div class="modal-header">
+        <div class="admin-header-title">
+          <h3 class="modal-title"><i class="fa-solid fa-user-shield text-gold"></i> Master Admin Leads Portal</h3>
+          <span class="admin-email-badge">fwjade.com@gmail.com</span>
+        </div>
+        <button class="modal-close-btn" id="closeAdminBtn">&times;</button>
+      </div>
+      <div class="modal-body">
+        
+        <!-- Admin Stats Row -->
+        <div class="admin-stats-row">
+          <div class="admin-stat-card">
+            <span class="stat-k">Total Prospek / Leads</span>
+            <strong class="stat-v text-emerald" id="adminStatTotal">0</strong>
+          </div>
+          <div class="admin-stat-card">
+            <span class="stat-k">Potensi Omset Perhiasan</span>
+            <strong class="stat-v text-gold" id="adminStatRevenue">Rp 0</strong>
+          </div>
+          <div class="admin-stat-card">
+            <span class="stat-k">Status Akses</span>
+            <strong class="stat-v text-cyan">Master Admin Verified</strong>
+          </div>
+        </div>
+
+        <!-- Admin Controls Bar -->
+        <div class="admin-controls-bar">
+          <input type="text" id="adminSearchInput" class="admin-search-box" placeholder="Cari nama, WhatsApp, atau batu..." oninput="filterAdminTable()">
+          <div class="admin-btn-group">
+            <button class="luxury-btn btn-secondary btn-sm" id="btnRefreshLeads" onclick="loadAdminLeads()">
+              <i class="fa-solid fa-rotate-right"></i> <span>Refresh</span>
+            </button>
+            <button class="luxury-btn btn-gold-action btn-sm" id="btnExportLeadsCSV" onclick="exportLeadsToCSV()">
+              <i class="fa-solid fa-file-csv"></i> <span>Unduh CSV / Excel</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Leads Table Container -->
+        <div class="admin-table-container">
+          <table class="luxury-admin-table" id="adminLeadsTable">
+            <thead>
+              <tr>
+                <th>Waktu</th>
+                <th>Nama Pelanggan</th>
+                <th>Tgl Lahir / Bazi</th>
+                <th>No. WhatsApp (Follow-Up)</th>
+                <th>Batu Rekomendasi</th>
+                <th>Aksi CS</th>
+              </tr>
+            </thead>
+            <tbody id="adminLeadsTableBody">
+              <tr>
+                <td colspan="6" class="text-center">Memuat database prospek...</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
 
       </div>

@@ -1,10 +1,29 @@
 /**
- * AURORA AI — Centralized Configuration & API Gateway Orchestrator
- * Memuat kredensial dari Environment Variables atau Fallback Defaults
+ * AURORA AI — Centralized Configuration & Edge AI Gateway Orchestrator
+ * Powered by Cloudflare Pages Functions & Google Identity Services
  */
 
 const AURORA_CONFIG = {
-  // 1. Database Backend (Supabase)
+  // 1. Google OAuth 2.0 Client ID (Official Google Cloud)
+  GOOGLE_AUTH: {
+    CLIENT_ID: '734583908123-ugbaqutk7pr713hmmbk03nnk1kij2hor.apps.googleusercontent.com',
+    ADMIN_EMAIL: 'fwjade.com@gmail.com'
+  },
+
+  // 2. Edge AI Gateways (Cloudflare Pages Functions)
+  EDGE_AI: {
+    CHAT_ENDPOINT: '/api/chat',
+    VISION_ENDPOINT: '/api/vision',
+    IMAGE_ENDPOINT: '/api/image',
+    LEADS_ENDPOINT: '/api/leads',
+    MODELS: {
+      TEXT: '@cf/meta/llama-3.3-70b-instruct',
+      VISION: '@cf/meta/llama-3.2-11b-vision-instruct',
+      IMAGE: '@cf/runwayml/stable-diffusion-v1-5-img2img'
+    }
+  },
+
+  // 3. Database Backend (Supabase)
   SUPABASE: {
     URL: window.ENV?.VITE_SUPABASE_URL || 'https://your-project-id.supabase.co',
     ANON_KEY: window.ENV?.VITE_SUPABASE_ANON_KEY || 'your_anon_key_here',
@@ -15,7 +34,7 @@ const AURORA_CONFIG = {
     }
   },
 
-  // 2. Payment Gateway (Midtrans Snap)
+  // 4. Payment Gateway (Midtrans Snap)
   MIDTRANS: {
     CLIENT_KEY: window.ENV?.VITE_MIDTRANS_CLIENT_KEY || 'SB-Mid-client-demo12345678',
     IS_PRODUCTION: window.ENV?.VITE_MIDTRANS_IS_PRODUCTION === 'true' || false,
@@ -24,7 +43,7 @@ const AURORA_CONFIG = {
       : 'https://app.sandbox.midtrans.com/snap/snap.js'
   },
 
-  // 3. Multi-Provider AI Fallback URLs & Models
+  // 5. Multi-Provider AI Fallback Pools
   AI_PROVIDERS: {
     GEMINI: {
       KEY: window.ENV?.VITE_GEMINI_API_KEY || '',
@@ -43,14 +62,13 @@ const AURORA_CONFIG = {
     }
   },
 
-  // 4. AI Image Transformation Generator (Before vs After)
+  // 6. AI Image Generation & Face Preservation
   IMAGE_GENERATION: {
-    // Menggunakan Pollinations AI Engine (100% Bebas Biaya & Otomatis)
     POLLINATIONS_BASE: 'https://image.pollinations.ai/prompt/',
     HF_TOKEN: window.ENV?.VITE_HF_API_TOKEN || ''
   },
 
-  // 5. WhatsApp Hotline (FW JADE Medan)
+  // 7. WhatsApp Hotline (FW JADE Medan)
   WHATSAPP: {
     NUMBER: '62811619173',
     NAME: 'FW JADE Medan'

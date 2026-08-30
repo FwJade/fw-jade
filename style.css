@@ -4475,3 +4475,427 @@ body.style-explorer .view-explorer-secondary {
   }
 }
 
+/* ── AI Thinking & Typing Glow Animation ───────────────────────────────────── */
+.ai-typing-glow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--color-aurora-jade);
+  font-style: italic;
+  font-size: 0.88rem;
+  letter-spacing: 0.5px;
+  animation: pulseAiGlow 1.8s infinite ease-in-out;
+}
+
+.thinking-bubble {
+  border-left: 2px solid var(--color-aurora-jade);
+  background: rgba(43, 224, 133, 0.08) !important;
+}
+
+@keyframes pulseAiGlow {
+  0% { opacity: 0.6; filter: drop-shadow(0 0 2px rgba(43, 224, 133, 0.3)); }
+  50% { opacity: 1; filter: drop-shadow(0 0 10px rgba(43, 224, 133, 0.7)); }
+  100% { opacity: 0.6; filter: drop-shadow(0 0 2px rgba(43, 224, 133, 0.3)); }
+}
+
+/* ── 24. PRE-SCAN IDENTITY & BAZI FORM STYLING ─────────────────────────────── */
+.section-identity-form {
+  border: 1px solid rgba(215, 182, 90, 0.25);
+  background: linear-gradient(180deg, rgba(14, 23, 21, 0.95) 0%, rgba(8, 15, 14, 0.98) 100%);
+}
+
+.identity-form-wrapper {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 10px 0;
+}
+
+.luxury-identity-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin-top: 24px;
+}
+
+.form-group-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-align: left;
+}
+
+.form-label {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-main);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.req-star {
+  color: #EF4444;
+  font-weight: bold;
+}
+
+.luxury-text-input, .luxury-select {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 12px 16px;
+  color: #fff;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  transition: all 0.25s ease;
+  outline: none;
+}
+
+.luxury-text-input:focus, .luxury-select:focus {
+  border-color: var(--color-aurora-jade);
+  box-shadow: 0 0 12px rgba(43, 224, 133, 0.25);
+}
+
+.dob-selectors-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.4fr 1.2fr;
+  gap: 8px;
+}
+
+.bazi-preview-badge {
+  background: rgba(43, 224, 133, 0.06);
+  border: 1px dashed rgba(43, 224, 133, 0.35);
+  border-radius: var(--radius-md);
+  padding: 12px 16px;
+  animation: fadeIn 0.3s ease;
+}
+
+.bazi-badge-inner {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.bazi-item {
+  font-size: 0.82rem;
+}
+
+.phone-input-wrap {
+  display: flex;
+  align-items: center;
+}
+
+.phone-prefix {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--border-subtle);
+  border-right: none;
+  border-radius: var(--radius-md) 0 0 var(--radius-md);
+  padding: 12px 14px;
+  color: var(--color-gold);
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.phone-input-wrap .luxury-text-input {
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+}
+
+.form-hint {
+  font-size: 0.74rem;
+  color: var(--text-dim);
+  margin-top: 2px;
+}
+
+/* ── 25. DERMATOLOGICAL FACIAL HEALTH HUD CARD ────────────────────────────── */
+.dermatology-health-card {
+  background: rgba(8, 15, 14, 0.8);
+  border: 1px solid rgba(43, 224, 133, 0.2);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  margin-top: 16px;
+  text-align: left;
+}
+
+.derm-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.derm-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  font-size: 0.92rem;
+  color: #fff;
+}
+
+.derm-badge {
+  background: rgba(43, 224, 133, 0.15);
+  color: var(--color-aurora-jade);
+  font-size: 0.75rem;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  border: 1px solid rgba(43, 224, 133, 0.3);
+}
+
+.derm-metrics-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.derm-metric-box {
+  background: rgba(0, 0, 0, 0.35);
+  border-radius: var(--radius-md);
+  padding: 12px 14px;
+}
+
+.derm-lbl {
+  font-size: 0.74rem;
+  color: var(--text-muted);
+  display: block;
+  margin-bottom: 6px;
+}
+
+.derm-val-bar {
+  height: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 6px;
+}
+
+.derm-bar-fill {
+  height: 100%;
+  background: var(--color-aurora-jade);
+  border-radius: 3px;
+  transition: width 0.8s ease;
+}
+
+.derm-bar-fill.fill-amber {
+  background: var(--color-gold);
+}
+
+.derm-score {
+  font-size: 0.84rem;
+}
+
+.derm-reco-box {
+  display: flex;
+  gap: 12px;
+  background: rgba(14, 23, 21, 0.9);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 12px 14px;
+}
+
+.derm-reco-icon {
+  font-size: 1.2rem;
+  padding-top: 2px;
+}
+
+.derm-reco-txt strong {
+  font-size: 0.82rem;
+  color: var(--color-gold);
+  display: block;
+  margin-bottom: 4px;
+}
+
+.derm-reco-txt p {
+  font-size: 0.78rem;
+  color: var(--text-main);
+  line-height: 1.45;
+  margin: 0;
+}
+
+/* ── 26. MASTER ADMIN DASHBOARD MODAL ──────────────────────────────────────── */
+.admin-dashboard-card {
+  max-width: 960px !important;
+  width: 95% !important;
+  background: #080F0E !important;
+  border: 1px solid var(--color-gold) !important;
+}
+
+.admin-header-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.admin-email-badge {
+  background: rgba(215, 182, 90, 0.15);
+  color: var(--color-gold);
+  border: 1px solid rgba(215, 182, 90, 0.3);
+  padding: 3px 8px;
+  border-radius: var(--radius-full);
+  font-size: 0.74rem;
+  font-weight: 600;
+}
+
+.admin-stats-row {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr 1fr;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.admin-stat-card {
+  background: rgba(14, 23, 21, 0.85);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 14px;
+  text-align: center;
+}
+
+.stat-k {
+  font-size: 0.74rem;
+  color: var(--text-muted);
+  display: block;
+  margin-bottom: 4px;
+}
+
+.stat-v {
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.admin-controls-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.admin-search-box {
+  flex: 1;
+  min-width: 240px;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 10px 14px;
+  color: #fff;
+  font-size: 0.88rem;
+  outline: none;
+}
+
+.admin-search-box:focus {
+  border-color: var(--color-aurora-jade);
+}
+
+.admin-btn-group {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-gold-action {
+  background: linear-gradient(135deg, var(--color-gold) 0%, #B89635 100%);
+  color: #000;
+  font-weight: 600;
+}
+
+.btn-gold-action:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(215, 182, 90, 0.4);
+}
+
+.admin-table-container {
+  max-height: 420px;
+  overflow-y: auto;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+}
+
+.luxury-admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 0.82rem;
+}
+
+.luxury-admin-table th {
+  background: rgba(14, 23, 21, 0.95);
+  color: var(--color-gold);
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border-subtle);
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+.luxury-admin-table td {
+  padding: 12px 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  color: var(--text-main);
+  vertical-align: middle;
+}
+
+.luxury-admin-table tr:hover {
+  background: rgba(43, 224, 133, 0.03);
+}
+
+.btn-xs {
+  padding: 5px 10px;
+  font-size: 0.75rem;
+  border-radius: var(--radius-full);
+}
+
+@media (max-width: 768px) {
+  .admin-stats-row {
+    grid-template-columns: 1fr;
+  }
+  .dob-selectors-grid {
+    grid-template-columns: 1fr;
+  }
+  .derm-metrics-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── 27. GOOGLE IDENTITY SERVICES QUICK AUTH CARD ─────────────────────────── */
+.google-quick-auth-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-lg);
+  padding: 16px;
+  margin-bottom: 8px;
+}
+
+.g_id_signin {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.divider-or-text {
+  width: 100%;
+  text-align: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  line-height: 0.1em;
+  margin: 10px 0 4px;
+}
+
+.divider-or-text span {
+  background: #080F0E;
+  padding: 0 10px;
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+
+
+

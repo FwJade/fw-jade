@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "npx -y serve .",
     "start": "npx -y serve .",
-    "serve": "npx -y serve ."
+    "serve": "npx -y serve .",
+    "deploy": "wrangler pages deploy . --project-name fwjade --branch main --commit-dirty=true"
   },
   "keywords": [
     "fw-jade",
