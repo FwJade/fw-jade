@@ -258,11 +258,6 @@
           </div>
 
         </div>
-
-        <!-- Interactive Trigger Down Connector -->
-        <div class="step-indicator-connector" id="connector01" title="Klik untuk Mulai Analisa">
-          <i class="fa-solid fa-chevron-down"></i>
-        </div>
       </section>
 
 
@@ -270,7 +265,10 @@
            SECTION 02: STEP 0 — FORM IDENTITAS & KALKULASI BAZI (Langkah Awal)
            ========================================================================= -->
       <section class="section-card section-identity-form step-card-box" id="secIdentityForm" style="display: none;">
-        <div class="step-badge-indicator">1. PENYELARASAN JIWA • Data Kelahiran &amp; Bazi</div>
+        <div class="step-card-header-bar">
+          <div class="step-badge-indicator">1. PENYELARASAN JIWA • Data Kelahiran &amp; Bazi</div>
+          <button type="button" class="step-close-btn" onclick="closeScannerFlowToHome()" title="Tutup &amp; Kembali ke Beranda">&times;</button>
+        </div>
         
         <div class="identity-form-wrapper">
           <div class="form-header-badge">
@@ -372,10 +370,6 @@
             </div>
           </form>
         </div>
-
-        <div class="step-indicator-connector">
-          <i class="fa-solid fa-chevron-down"></i>
-        </div>
       </section>
 
 
@@ -383,7 +377,10 @@
            SECTION 03: STEP 1 — SCAN WAJAH (Gambar 2 Screen 1)
            ========================================================================= -->
       <section class="section-card section-scanner step-card-box" id="secScanner" style="display: none;">
-        <div class="step-badge-indicator">2. SCAN WAJAH • Mulai analisa wajah &amp; aura</div>
+        <div class="step-card-header-bar">
+          <div class="step-badge-indicator">2. SCAN WAJAH • Mulai analisa wajah &amp; aura</div>
+          <button type="button" class="step-close-btn" onclick="closeScannerFlowToHome()" title="Batalkan &amp; Kembali ke Beranda">&times;</button>
+        </div>
         
         <div class="step-scanner-wrapper">
           <h2 class="step-main-title">Analisa Wajah &amp; Aura</h2>
@@ -442,7 +439,10 @@
            SECTION 03: STEP 2 — HASIL AURA (Gambar 2 Screen 2)
            ========================================================================= -->
       <section class="section-card section-aura-results step-card-box" id="secAuraResults" style="display: none;">
-        <div class="step-badge-indicator">2. HASIL AURA • Ringkasan aura Anda</div>
+        <div class="step-card-header-bar">
+          <div class="step-badge-indicator">2. HASIL AURA • Ringkasan aura Anda</div>
+          <button type="button" class="step-close-btn" onclick="closeScannerFlowToHome()" title="Kembali ke Beranda"><i class="fa-solid fa-house" style="font-size: 0.95rem;"></i></button>
+        </div>
         
         <div class="results-header-row">
           <h2 class="section-title" id="txtAuraResultHeading">Hasil Aura Anda</h2>

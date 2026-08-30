@@ -519,6 +519,43 @@ async function submitIdentityForm() {
 }
 window.submitIdentityForm = submitIdentityForm;
 
+function closeScannerFlowToHome() {
+  // Stop webcam stream if active
+  if (AppState.camera.stream) {
+    try {
+      AppState.camera.stream.getTracks().forEach(t => t.stop());
+      AppState.camera.stream = null;
+    } catch (e) {}
+  }
+
+  // Hide all step sections
+  const secForm = document.getElementById('secIdentityForm');
+  const secScan = document.getElementById('secScanner');
+  const secAura = document.getElementById('secAuraResults');
+  const secDerm = document.getElementById('secDermatology');
+  const secGem = document.getElementById('secGemstone');
+  const secMan = document.getElementById('secManifestation');
+  const secAct = document.getElementById('secActions');
+  const secViral = document.getElementById('secTrustViral');
+
+  if (secForm) secForm.style.display = 'none';
+  if (secScan) secScan.style.display = 'none';
+  if (secAura) secAura.style.display = 'none';
+  if (secDerm) secDerm.style.display = 'none';
+  if (secGem) secGem.style.display = 'none';
+  if (secMan) secMan.style.display = 'none';
+  if (secAct) secAct.style.display = 'none';
+  if (secViral) secViral.style.display = 'none';
+
+  // Restore Hero section cleanly
+  const secHero = document.getElementById('secHero');
+  if (secHero) {
+    secHero.style.display = 'block';
+    secHero.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+window.closeScannerFlowToHome = closeScannerFlowToHome;
+
 function startScannerFlow() {
   initIdentityFormSelectors();
   
