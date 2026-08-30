@@ -1966,7 +1966,8 @@ let deferredPrompt;
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('/sw.js').then(reg => {
-      console.log('AURORA SW Registered:', reg.scope);
+      reg.update();
+      console.log('AURORA SW Registered & Updated:', reg.scope);
     }).catch(err => {
       console.log('AURORA SW Reg failed:', err);
     });
