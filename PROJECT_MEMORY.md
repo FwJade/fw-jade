@@ -1,5 +1,5 @@
 ## 1. Project Overview & Product Vision
-* **Nama Produk:** **AURORA AI — by FW JADE**
+* **Nama Produk:** **AURA AI — by FW JADE**
 * **Brand Asal:** **FW Jade Jewellery (Medan Giok)**
 * **Visi Produk:** *The World's First Luxury Mystical Gemstone, Face Aura & Wealth Oracle* yang menggabungkan **ChatGPT Conversational**, **AI Face/Aura Scanner (Mian Xiang & Health Physiognomy)**, **Hands-free Voice AI**, dan **E-Commerce Funnel Terpadu** khusus perhiasan giok & batu mulia.
 

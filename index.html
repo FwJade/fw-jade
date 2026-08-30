@@ -95,7 +95,7 @@
             <span class="sleek-badge-txt">FW JADE</span>
           </div>
 
-          <h1 class="sleek-brand-title">AURORA AI</h1>
+          <h1 class="sleek-brand-title">AURA AI</h1>
           <p class="sleek-brand-value-prop">Kenali aura Anda. Temukan batu yang selaras.</p>
 
           <!-- The Single Primary Touch Control (Bukan tombol biasa, tapi touch control nyata) -->
@@ -115,10 +115,13 @@
             <p class="sleek-sub-caption">Proses sekitar 10–15 detik. Tanpa login.</p>
           </div>
 
-          <!-- Secondary Quiet Text Action (Tanya Suara / Teks tanpa mendominasi) -->
+          <!-- Secondary Quick Actions (Batu Keberuntungan Hari Ini & Tanya Suara) -->
           <div class="sleek-secondary-voice-action">
+            <button class="luxury-btn btn-secondary btn-sm" id="btnSleekLuckyStone" onclick="openDailyAlmanac()" style="margin-bottom: 8px;">
+              <i class="fa-solid fa-calendar-days text-gold"></i> <span>Batu Keberuntungan Hari Ini</span>
+            </button>
             <button class="sleek-quiet-link-btn" id="btnSleekOpenSearch">
-              <span>atau tanyakan sesuatu kepada Aurora</span>
+              <span>atau tanyakan sesuatu kepada Master Aura</span>
               <i class="fa-solid fa-microphone"></i>
             </button>
           </div>
@@ -139,7 +142,7 @@
           </div>
 
           <!-- Brand Title & Tagline -->
-          <h1 class="hero-brand-title">AURORA AI</h1>
+          <h1 class="hero-brand-title">AURA AI</h1>
           <p class="hero-brand-tagline" id="txtHeroTagline">
             The Mystical Gemstone &amp; Face Aura Oracle<br>
             <span class="hero-by-tag">by FW JADE</span>
@@ -148,15 +151,15 @@
           <!-- Search Box (Quick Ask — Pintu Masuk Teks/Suara) -->
           <div class="search-box-wrapper">
             <div class="search-pill" id="searchPill">
-              <input type="text" id="omniboxInput" class="search-input" placeholder="Tanya Aurora tentang aura, batu, rezeki, feng shui, atau apa pun..." autocomplete="off" spellcheck="false">
+              <input type="text" id="omniboxInput" class="search-input" placeholder="Tanya Master Aura tentang aura, batu keberuntungan, rezeki, atau feng shui..." autocomplete="off" spellcheck="false">
               
               <div class="search-actions">
                 <button class="mic-btn" id="voiceSearchBtn" title="Bicara Santai (Suara Berbisik)">
                   <i class="fa-solid fa-microphone"></i>
                   <span class="mic-pulse"></span>
                 </button>
-                <button class="submit-btn btn-ask-aurora" id="searchSubmitBtn" title="Tanya Aurora">
-                  <span id="txtAiOracleBtn">Ask Aurora</span>
+                <button class="submit-btn btn-ask-aurora" id="searchSubmitBtn" title="Tanya Master Aura">
+                  <span id="txtAiOracleBtn">Ask Aura</span>
                 </button>
               </div>
             </div>
@@ -1394,49 +1397,53 @@
     <div class="modal-backdrop" id="almanacBackdrop"></div>
     <div class="modal-card almanac-card">
       <div class="modal-header">
-        <h3 class="modal-title"><i class="fa-solid fa-calendar-days text-gold"></i> Daily Chi Almanac &amp; Jam Hoki</h3>
+        <h3 class="modal-title"><i class="fa-solid fa-calendar-star text-gold"></i> Analisa Hari &amp; Batu Keberuntungan Hari Ini</h3>
         <button class="modal-close-btn" id="closeAlmanacBtn">&times;</button>
       </div>
       <div class="modal-body">
         
         <!-- Almanac Date & Element Header -->
         <div class="almanac-cosmic-header">
-          <div class="almanac-date-badge" id="almCurrentDate">29 AGUSTUS 2026</div>
-          <h4 class="almanac-element-title" id="almCosmicElement">Hari Kayu Naga • Resonansi Pertumbuhan</h4>
-          <p class="almanac-element-sub">Energi kosmik hari ini sangat selaras untuk ekspansi usaha, negosiasi bisnis, dan pembersihan chi negatif.</p>
+          <div class="almanac-date-badge" id="almCurrentDate">MINGGU, 30 AGUSTUS 2026</div>
+          <h4 class="almanac-element-title" id="almCosmicElement">Hari Matahari (Sun) • Elemen Api Surya &amp; Emas Murni</h4>
+          <p class="almanac-element-sub" id="almElementSub">Energi kosmik hari ini memancarkan puncak vitalitas, wibawa kepemimpinan, dan kelancaran membuka pintu rezeki baru.</p>
         </div>
 
         <!-- 3 Pillars of Daily Almanac -->
         <div class="almanac-grid">
           <!-- Card 1: Batu Pelindung Hari Ini -->
-          <div class="almanac-box">
-            <div class="alm-box-icon"><i class="fa-solid fa-gem text-emerald"></i></div>
-            <h5>Batu Penyelaras Hari Ini</h5>
+          <div class="almanac-box alm-box-highlight">
+            <div class="alm-box-icon"><i class="fa-solid fa-gem text-emerald" id="almStoneIcon"></i></div>
+            <h5>Batu Keberuntungan Utama Hari Ini</h5>
             <strong class="alm-highlight text-emerald" id="almStoneName">Natural Aceh Jadeite</strong>
-            <p>Membantu menstabilkan chi dan meningkatkan daya tarik rezeki.</p>
+            <p id="almStoneDesc">Pancaran kisi silikat NaAlSi₂O₆ menyeimbangkan suhu tubuh, menenangkan pikiran, dan membuka gelombang rezeki harmonis.</p>
+            <div class="alm-stone-perks-badge" id="almStonePerks">Puncak FIR 9.35 µm • Magnet Harmoni</div>
           </div>
 
           <!-- Card 2: Jam Emas Rezeki & Negosiasi -->
           <div class="almanac-box">
             <div class="alm-box-icon"><i class="fa-solid fa-clock text-gold"></i></div>
-            <h5>Jam Emas Rezeki</h5>
-            <strong class="alm-highlight text-gold">09.00 – 11.00 WIB</strong>
-            <p>Waktu puncak keberuntungan untuk closing transaksi &amp; komunikasi penting.</p>
+            <h5>Jam Emas Rezeki &amp; Negosiasi</h5>
+            <strong class="alm-highlight text-gold" id="almGoldenHours">08.30 – 11.00 &amp; 15.30 – 18.00 WIB</strong>
+            <p id="almGoldenHoursSub">Waktu puncak resonansi chi untuk closing transaksi, presentasi penting, dan komunikasi bisnis tingkat tinggi.</p>
           </div>
 
           <!-- Card 3: Panduan Harmonisasi Chi -->
           <div class="almanac-box">
-            <div class="alm-box-icon"><i class="fa-solid fa-spa text-cyan"></i></div>
-            <h5>Meditasi &amp; Warna Hoki</h5>
-            <strong class="alm-highlight text-cyan">Hijau Zamrud &amp; Emas</strong>
-            <p>Minum teh hangat dan kenakan giok alami di sisi kiri tubuh.</p>
+            <div class="alm-box-icon"><i class="fa-solid fa-compass text-cyan"></i></div>
+            <h5>Arah &amp; Warna Hoki Hari Ini</h5>
+            <strong class="alm-highlight text-cyan" id="almDirectionColor">Tenggara • Hijau Zamrud &amp; Emas</strong>
+            <p id="almChiBooster">Kenakan perhiasan giok alami di sisi kiri tubuh dan hadap arah tenggara saat bermeditasi pagi.</p>
           </div>
         </div>
 
         <div class="almanac-cta-row">
           <button class="luxury-btn btn-primary" id="btnAlmCheckAura">
-            <i class="fa-solid fa-camera"></i> <span>Pindai Keselarasan Aura Hari Ini</span>
+            <i class="fa-solid fa-camera"></i> <span>Pindai Keselarasan Aura Wajah Hari Ini</span>
           </button>
+          <a href="https://wa.me/62811619173" target="_blank" class="luxury-btn btn-secondary" id="btnAlmOrderWA">
+            <i class="fa-brands fa-whatsapp"></i> <span>Konsultasi Batu Hari Ini via WhatsApp</span>
+          </a>
         </div>
 
       </div>

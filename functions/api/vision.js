@@ -23,7 +23,7 @@ export async function onRequestPost(context) {
     const accountId = env.CLOUDFLARE_ACCOUNT_ID;
     const apiToken = env.CLOUDFLARE_API_TOKEN;
 
-    const prompt = `Anda adalah Master Vision AI Pakar Mian Xiang (Fisiognomi Wajah Tionghoa), Aura Chi, dan Gemologi FW JADE Medan.
+    const prompt = `Anda adalah Master Aura Vision AI Pakar Mian Xiang (Fisiognomi Wajah Tionghoa), Aura Chi, dan Gemologi AURA AI by FW JADE Medan.
 Analisis foto wajah pengguna ini dan berikan output JSON yang valid (HANYA JSON, tanpa markdown backticks atau teks tambahan):
 {
   "element": "WOOD" | "FIRE" | "WATER" | "EARTH" | "METAL",

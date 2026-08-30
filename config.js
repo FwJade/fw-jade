@@ -1,9 +1,9 @@
 /**
- * AURORA AI — Centralized Configuration & Edge AI Gateway Orchestrator
+ * AURA AI — Centralized Configuration & Edge AI Gateway Orchestrator
  * Powered by Cloudflare Pages Functions & Google Identity Services
  */
 
-const AURORA_CONFIG = {
+const AURA_CONFIG = {
   // 1. Google OAuth 2.0 Client ID (Official Google Cloud)
   GOOGLE_AUTH: {
     CLIENT_ID: '734583908123-ugbaqutk7pr713hmmbk03nnk1kij2hor.apps.googleusercontent.com',
@@ -28,9 +28,9 @@ const AURORA_CONFIG = {
     URL: window.ENV?.VITE_SUPABASE_URL || 'https://your-project-id.supabase.co',
     ANON_KEY: window.ENV?.VITE_SUPABASE_ANON_KEY || 'your_anon_key_here',
     TABLES: {
-      USERS: 'aurora_users',
-      TRANSFERS: 'aurora_transactions',
-      AURA_READINGS: 'aurora_readings'
+      USERS: 'aura_users',
+      TRANSFERS: 'aura_transactions',
+      AURA_READINGS: 'aura_readings'
     }
   },
 
@@ -76,4 +76,5 @@ const AURORA_CONFIG = {
 };
 
 // Export to Global Scope
-window.AURORA_CONFIG = AURORA_CONFIG;
+window.AURA_CONFIG = AURA_CONFIG;
+window.AURORA_CONFIG = AURA_CONFIG; // Alias for backward compatibility

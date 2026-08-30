@@ -305,7 +305,7 @@ function playChimeReverb() {
   } catch (e) {}
 }
 
-function speakWithAuroraWhisper(text) {
+function speakWithAuraWhisper(text) {
   if (!AppState.voice.synthesis) return;
   AppState.voice.synthesis.cancel();
   playChimeReverb();
@@ -329,6 +329,7 @@ function speakWithAuroraWhisper(text) {
 
   AppState.voice.synthesis.speak(utterance);
 }
+const speakWithAuroraWhisper = speakWithAuraWhisper; // Backward-compatible alias
 
 // ==========================================
 // 5. OFFICIAL GOOGLE IDENTITY SERVICES (GIS) SSO
@@ -1049,7 +1050,7 @@ async function handleContextualAsk(customQuery) {
   // Add thinking indicator bubble
   const thinkingBubble = document.createElement('div');
   thinkingBubble.className = 'chat-bubble bubble-aurora thinking-bubble';
-  thinkingBubble.innerHTML = `<strong>✦ Master Aurora:</strong> <span class="ai-typing-glow"><i class="fa-solid fa-sparkles fa-spin"></i> Menyelaraskan energi semesta...</span>`;
+  thinkingBubble.innerHTML = `<strong>✦ Master Aura:</strong> <span class="ai-typing-glow"><i class="fa-solid fa-sparkles fa-spin"></i> Menyelaraskan energi semesta...</span>`;
   streamBox.appendChild(thinkingBubble);
   streamBox.scrollTop = streamBox.scrollHeight;
 
@@ -1095,9 +1096,9 @@ async function handleContextualAsk(customQuery) {
 
   // Replace thinking bubble with final response
   thinkingBubble.classList.remove('thinking-bubble');
-  thinkingBubble.innerHTML = `<strong>✦ Master Aurora:</strong> ${answer}`;
+  thinkingBubble.innerHTML = `<strong>✦ Master Aura:</strong> ${answer}`;
   streamBox.scrollTop = streamBox.scrollHeight;
-  speakWithAuroraWhisper(answer);
+  speakWithAuraWhisper(answer);
 }
 
 // ==========================================
@@ -2133,32 +2134,191 @@ function initArJewelryMirror() {
 
 
 // ==========================================================================
-// 19. FITUR 4: DAILY CHI ALMANAC & JAM HOKI CONTROLLER
+// 19. FITUR 4: DAILY CHI ALMANAC & BATU KEBERUNTUNGAN HARI INI
 // ==========================================================================
+const DAILY_COSMIC_DATA = [
+  // 0: MINGGU (Sunday / Sun / Matahari)
+  {
+    dayName: 'Minggu',
+    planet: 'Matahari (Sun / 太阳)',
+    elementTitle: 'Hari Matahari (Sun) • Elemen Api Surya & Emas Murni',
+    elementSub: 'Pancaran energi kosmik hari ini memancarkan puncak vitalitas, wibawa kepemimpinan, dan kelancaran membuka pintu rezeki baru.',
+    stoneName: 'Natural Aceh Jadeite (Pucuk Lumut)',
+    stoneIcon: 'fa-gem',
+    stoneDesc: 'Pancaran kisi kristal silikat memancarkan Far Infrared 9.35 µm yang selaras dengan medan bio-elektrik jantung, memperkuat aura kepemimpinan dan magnet kemakmuran.',
+    stonePerks: 'Puncak FIR 9.35 µm • Magnet Karisma & Vitalitas',
+    goldenHours: '08.30 – 11.00 & 15.30 – 18.00 WIB',
+    goldenHoursSub: 'Puncak resonansi energi kosmik untuk negosiasi bisnis, closing transaksi bernilai tinggi, dan penyusunan strategi jangka panjang.',
+    directionColor: 'Tenggara & Selatan • Emas Berkilau & Hijau Zamrud',
+    chiGuide: 'Minum air mineral berenergi di pagi hari, hadap arah Tenggara, dan kenakan liontin giok alami di dekat cakra dada.'
+  },
+  // 1: SENIN (Monday / Moon / Bulan)
+  {
+    dayName: 'Senin',
+    planet: 'Bulan (Moon / 太阴)',
+    elementTitle: 'Hari Bulan (Moon) • Elemen Air Murni & Kayu Teduh',
+    elementSub: 'Energi yin Bulan yang menyejukkan menyeimbangkan emosi, meredakan ketegangan sistem saraf, dan menumbuhkan daya pikat relasi bisnis yang harmonis.',
+    stoneName: 'Imperial Burma Jade (Jadeite Grade A)',
+    stoneIcon: 'fa-gem',
+    stoneDesc: 'Resonansi giok alami menstabilkan gelombang otak delta dan mempercepat regenerasi Chi seluler setelah beraktivitas padat.',
+    stonePerks: 'Zeta Potential Aktif • Relaksasi Mental & Harmoni',
+    goldenHours: '09.00 – 11.30 & 19.30 – 21.30 WIB',
+    goldenHoursSub: 'Waktu terbaik untuk diplomasi personal, penandatanganan kesepakatan kerjasama, dan komunikasi batin.',
+    directionColor: 'Utara & Timur • Hijau Giok Cerah & Putih Mutiara',
+    chiGuide: 'Kenakan gelang giok di pergelangan tangan kiri untuk menyerap energi pendinginan chi dan menjaga stabilitas detak nadi.'
+  },
+  // 2: SELASA (Tuesday / Mars / Api)
+  {
+    dayName: 'Selasa',
+    planet: 'Mars (Fire / 火星)',
+    elementTitle: 'Hari Mars (Fire) • Elemen Api Bergelora & Karisma Batin',
+    elementSub: 'Resonansi gelombang elektromagnetik memacu keberanian mengambil keputusan besar, menepis keraguan, dan mengunci peluang keuntungan baru.',
+    stoneName: 'Kecubung Lavender & Natural Ruby Fire',
+    stoneIcon: 'fa-fire',
+    stoneDesc: 'Pancaran frekuensi kristal ungu dan merah mengaktifkan cakra mahkota dan cakra dasar, mempertajam intuisi diplomasi di saat genting.',
+    stonePerks: 'Peningkatan Oksigenasi Darah • Wibawa Eksekutif',
+    goldenHours: '08.00 – 10.30 & 14.00 – 16.30 WIB',
+    goldenHoursSub: 'Waktu paling efektif untuk presentasi ekspansi pasar, negosiasi alot, dan memimpin rapat penting.',
+    directionColor: 'Selatan • Merah Delima & Ungu Royal',
+    chiGuide: 'Bermeditasi 5 menit menghadap Selatan dengan memegang kristal alami untuk menyelaraskan chi keberanian.'
+  },
+  // 3: RABU (Wednesday / Mercury / Air & Logam)
+  {
+    dayName: 'Rabu',
+    planet: 'Merkurius (Mercury / 水星)',
+    elementTitle: 'Hari Merkurius (Mercury) • Elemen Air Cerdas & Logam Pelindung',
+    elementSub: 'Aliran energi Merkurius memperlancar komunikasi dagang, ketajaman hitungan finansial, dan menangkal radiasi elektromagnetik perangkat kerja.',
+    stoneName: 'Black Jade Aceh (Armor Giok Hitam)',
+    stoneIcon: 'fa-shield-halved',
+    stoneDesc: 'Pancaran ion negatif dan gelombang FIR giok hitam menembus jaringan mikrosirkulasi kapiler hingga 4 cm, mengikis toksin darah dan menjadi perisai tolak bala.',
+    stonePerks: 'Detoksifikasi Darah • Perisai Anti Radiasi & Chi Negatif',
+    goldenHours: '10.00 – 12.00 & 16.00 – 18.00 WIB',
+    goldenHoursSub: 'Saat ideal untuk transaksi perdagangan, audit keuangan, dan komunikasi intensif lintas wilayah.',
+    directionColor: 'Utara & Barat Laut • Hitam Mengkilap & Perak Emas',
+    chiGuide: 'Kenakan cincin atau liontin Black Jade di sisi tubuh sebelah kiri saat bekerja di depan layar monitor.'
+  },
+  // 4: KAMIS (Thursday / Jupiter / Kayu Agung)
+  {
+    dayName: 'Kamis',
+    planet: 'Yupiter (Jupiter / 木星)',
+    elementTitle: 'Hari Yupiter (Jupiter) • Elemen Kayu Raksasa & Pertumbuhan Rezeki',
+    elementSub: 'Siklus Kayu Agung melambangkan pertumbuhan tanpa batas, perluasan jaringan koneksi, serta keberuntungan mendatangkan mentor dan mitra berbobot.',
+    stoneName: 'Imperial Jade Bangle (Gelang Giok Burma)',
+    stoneIcon: 'fa-circle-notch',
+    stoneDesc: 'Kekayaan struktur silikat Grade A memancarkan vibrasi kemakmuran yang memperbesar wadah rezeki dan menjauhkan konflik energi.',
+    stonePerks: 'Siklus Wu Xing Pertumbuhan • Magnet Sahabat & Investor',
+    goldenHours: '07.30 – 10.00 & 13.30 – 15.30 WIB',
+    goldenHoursSub: 'Waktu pembuka rezeki besar untuk meluncurkan produk, membuka cabang baru, dan menjalin aliansi strategis.',
+    directionColor: 'Timur & Tenggara • Hijau Lumut & Toska Dalam',
+    chiGuide: 'Kenakan perhiasan giok sambil menikmati udara pagi menghadap Timur untuk menyerap chi pertumbuhan.'
+  },
+  // 5: JUMAT (Friday / Venus / Logam & Emas)
+  {
+    dayName: 'Jumat',
+    planet: 'Venus (Venus / 金星)',
+    elementTitle: 'Hari Venus (Venus) • Elemen Logam Mulia & Emas Rezeki',
+    elementSub: 'Frekuensi getaran mineral silikat kuning merangsang cakra solar plexus, menjadi magnet penarik aliran uang tunai cepat, kelancaran piutang, dan kemakmuran dagang.',
+    stoneName: 'Natural Golden Citrine & Giok Kuning Imperial',
+    stoneIcon: 'fa-coins',
+    stoneDesc: 'Kristal kuarsa emas menstimulasi vibrasi magnetik rezeki, menarik pembeli loyal, dan mengalirkan kelimpahan kas harian.',
+    stonePerks: 'Resonansi Solar Plexus • Magnet Arus Kas & Closing Cepat',
+    goldenHours: '09.00 – 11.30 & 15.00 – 17.30 WIB',
+    goldenHoursSub: 'Waktu emas penguncian transaksi dagang, pelunasan pembayaran, dan belanja aset berharga.',
+    directionColor: 'Barat & Barat Daya • Kuning Emas & Jingga Kristal',
+    chiGuide: 'Letakkan batu citrine atau giok kuning di dekat dompet atau meja kasir untuk memancarkan aura kelimpahan.'
+  },
+  // 6: SABTU (Saturday / Saturnus / Tanah Pengunci)
+  {
+    dayName: 'Sabtu',
+    planet: 'Saturnus (Saturn / 土星)',
+    elementTitle: 'Hari Saturnus (Saturn) • Elemen Tanah Gunung & Pengunci Harta',
+    elementSub: 'Elemen Tanah melambangkan pondasi kokoh yang mengunci aset, mencegah pemborosan rezeki yang bocor, dan menjaga stabilitas keharmonisan keluarga.',
+    stoneName: 'Cat\'s Eye Jadeite & Nephrite Jade',
+    stoneIcon: 'fa-eye',
+    stoneDesc: 'Fenomena optik chatoyancy pada giok alami memantulkan getaran pelindung aset, menstabilkan fondasi rumah tangga dan bisnis.',
+    stonePerks: 'Pengunci Aset Abadi • Stabilitas Chi & Perlindungan Rumah',
+    goldenHours: '08.00 – 10.30 & 16.30 – 19.00 WIB',
+    goldenHoursSub: 'Waktu terbaik untuk evaluasi portofolio investasi, perencanaan masa depan, dan quality time bersama keluarga.',
+    directionColor: 'Pusat & Barat Daya • Cokelat Karamel, Kuning Tua & Hijau Tua',
+    chiGuide: 'Lakukan refleksi tenang sore hari sambil menyentuh tekstur halus giok alami untuk grounding energi.'
+  }
+];
+
+function getTodayCosmicData() {
+  const now = new Date();
+  const dayIdx = now.getDay(); // 0 (Minggu) to 6 (Sabtu)
+  return {
+    ...DAILY_COSMIC_DATA[dayIdx],
+    fullDateStr: now.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }).toUpperCase()
+  };
+}
+
 function openDailyAlmanac() {
   const modal = document.getElementById('dailyAlmanacModal');
   if (!modal) return;
   
-  // Format current date in Indonesian
+  const data = getTodayCosmicData();
+
+  // Populate Header
   const dateBadge = document.getElementById('almCurrentDate');
-  if (dateBadge) {
-    const today = new Date();
-    const options = { day: 'numeric', month: 'long', year: 'numeric' };
-    dateBadge.textContent = today.toLocaleDateString('id-ID', options).toUpperCase();
+  const elemTitle = document.getElementById('almCosmicElement');
+  const elemSub = document.getElementById('almElementSub');
+  if (dateBadge) dateBadge.textContent = data.fullDateStr;
+  if (elemTitle) elemTitle.textContent = data.elementTitle;
+  if (elemSub) elemSub.textContent = data.elementSub;
+
+  // Populate Card 1: Batu Keberuntungan Hari Ini
+  const stoneName = document.getElementById('almStoneName');
+  const stoneDesc = document.getElementById('almStoneDesc');
+  const stonePerks = document.getElementById('almStonePerks');
+  const stoneIcon = document.getElementById('almStoneIcon');
+  if (stoneName) stoneName.textContent = data.stoneName;
+  if (stoneDesc) stoneDesc.textContent = data.stoneDesc;
+  if (stonePerks) stonePerks.textContent = data.stonePerks;
+  if (stoneIcon) stoneIcon.className = `fa-solid ${data.stoneIcon} text-emerald`;
+
+  // Populate Card 2: Jam Emas Rezeki
+  const goldenHours = document.getElementById('almGoldenHours');
+  const goldenHoursSub = document.getElementById('almGoldenHoursSub');
+  if (goldenHours) goldenHours.textContent = data.goldenHours;
+  if (goldenHoursSub) goldenHoursSub.textContent = data.goldenHoursSub;
+
+  // Populate Card 3: Arah & Warna Hoki
+  const dirColor = document.getElementById('almDirectionColor');
+  const chiBooster = document.getElementById('almChiBooster');
+  if (dirColor) dirColor.textContent = data.directionColor;
+  if (chiBooster) chiBooster.textContent = data.chiGuide;
+
+  // Update WhatsApp URL
+  const btnWA = document.getElementById('btnAlmOrderWA');
+  if (btnWA) {
+    const waMsg = `Halo FW JADE Medan, saya ingin konsultasi mengenai Batu Keberuntungan Hari Ini (${data.dayName}): ${data.stoneName}. Mohon info ketersediaan koleksi alami Grade A ini.`;
+    btnWA.href = `https://wa.me/62811619173?text=${encodeURIComponent(waMsg)}`;
   }
 
   modal.style.display = 'flex';
+  speakWithAuraWhisper(`Hari ini adalah ${data.dayName}. Batu keberuntungan yang selaras untuk Anda hari ini adalah ${data.stoneName}.`);
 }
+window.openDailyAlmanac = openDailyAlmanac;
 
 function closeDailyAlmanac() {
   const modal = document.getElementById('dailyAlmanacModal');
   if (modal) modal.style.display = 'none';
 }
+window.closeDailyAlmanac = closeDailyAlmanac;
 
 function initDailyAlmanac() {
   const luckyStoneBtn = document.getElementById('btnHeroLuckyStone');
+  const sleekLuckyBtn = document.getElementById('btnSleekLuckyStone');
+
   if (luckyStoneBtn) {
     luckyStoneBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      openDailyAlmanac();
+    });
+  }
+  if (sleekLuckyBtn) {
+    sleekLuckyBtn.addEventListener('click', (e) => {
       e.stopPropagation();
       openDailyAlmanac();
     });

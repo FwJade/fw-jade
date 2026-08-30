@@ -1,11 +1,11 @@
 # PRODUCT REQUIREMENTS DOCUMENT (PRD)
-# AURORA AI — by FW JADE
+# AURA AI — by FW JADE
 ### *The World's First Luxury Mystical Gemstone, Face Aura & Wealth Oracle*
 
 ---
 
 ## 1. DOKUMEN KONTROL & INFORMASI PRODUK
-* **Nama Produk:** **AURORA AI**
+* **Nama Produk:** **AURA AI**
 * **Brand Induk:** **FW JADE (FW Jade Jewellery — Medan Giok)**
 * **Versi Dokumen:** v1.0 (Production Blueprint)
 * **Author / Architect:** Senior Software Architect & Lead AI Systems Engineer
@@ -20,7 +20,7 @@
 Pasar batu mulia dan giok bernilai miliaran rupiah sering kali terhambat oleh minimnya literasi keaslian, mitos yang simpang siur, serta proses konsultasi fengshui/energi yang kaku dan mahal. Di sisi lain, tren spiritual wellness, fengshui modern, dan terapi kristal (*crystal healing*) mengalami ledakan minat di kalangan generasi muda, eksekutif, dan pebisnis global.
 
 ### 2.2 Visi Produk
-**AURORA AI by FW JADE** adalah platform *Luxury Web AI Oracle* pertama di dunia yang menggabungkan:
+**AURA AI by FW JADE** adalah platform *Luxury Web AI Oracle* pertama di dunia yang menggabungkan:
 1. **Zero-Login Biometric Face & Aura Scanner:** Pemindaian fisiognomi wajah (*Mian Xiang*) dan kebugaran holistik seketika.
 2. **Conversational Multi-Modal Stone Intelligence:** Mesin penjawab suara bebas sentuhan (*hands-free voice*) dengan kurasi 100% mendalam tentang kesehatan bio-energi, mistis tuah, fengshui hoki, dan magnet kekayaan.
 3. **Automated High-Conversion Sales Funnel:** Terintegrasi langsung dengan payment gateway instan (Midtrans) untuk pasar domestik dan WhatsApp Concierge VIP multi-bahasa untuk pasar internasional.
