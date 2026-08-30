@@ -1275,92 +1275,311 @@ function generateLuxuryAuraCard() {
   if (!canvas) return;
   const ctx = canvas.getContext('2d');
   const gem = AppState.user.metrics.selectedGem || GemstoneDatabase[0];
+  const userName = AppState.user.name || 'Pencari Giok Alami';
+  const element = AppState.user.metrics.dominantElement || 'WOOD';
 
-  ctx.fillStyle = '#080F0E';
+  // 1. Deep Obsidian Luxury Canvas Background
+  ctx.fillStyle = '#060B09';
   ctx.fillRect(0, 0, 450, 800);
 
-  const grad = ctx.createRadialGradient(225, 260, 20, 225, 260, 220);
-  grad.addColorStop(0, 'rgba(43, 224, 133, 0.4)');
-  grad.addColorStop(0.5, 'rgba(255, 200, 87, 0.2)');
-  grad.addColorStop(1, 'rgba(8, 15, 14, 0)');
+  // 2. Multi-layer Radial Emerald & Gold Ambient Aura Glow
+  const grad = ctx.createRadialGradient(225, 250, 20, 225, 250, 240);
+  grad.addColorStop(0, 'rgba(43, 224, 133, 0.28)');
+  grad.addColorStop(0.4, 'rgba(212, 175, 55, 0.18)');
+  grad.addColorStop(1, 'rgba(6, 11, 9, 0)');
   ctx.fillStyle = grad;
   ctx.fillRect(0, 0, 450, 800);
 
-  ctx.strokeStyle = '#D7B65A';
-  ctx.lineWidth = 3;
+  // 3. Double Gold Hairline Border Frame
+  ctx.strokeStyle = '#D4AF37';
+  ctx.lineWidth = 1.5;
   ctx.strokeRect(16, 16, 418, 768);
 
-  ctx.fillStyle = '#FFC857';
-  ctx.font = '700 13px Cinzel';
+  ctx.strokeStyle = 'rgba(212, 175, 55, 0.35)';
+  ctx.lineWidth = 0.8;
+  ctx.strokeRect(22, 22, 406, 756);
+
+  // Corner Diamond Accents
+  ctx.fillStyle = '#D4AF37';
+  const drawDiamond = (x, y, s) => {
+    ctx.beginPath();
+    ctx.moveTo(x, y - s);
+    ctx.lineTo(x + s, y);
+    ctx.lineTo(x, y + s);
+    ctx.lineTo(x - s, y);
+    ctx.closePath();
+    ctx.fill();
+  };
+  drawDiamond(22, 22, 5);
+  drawDiamond(428, 22, 5);
+  drawDiamond(22, 778, 5);
+  drawDiamond(428, 778, 5);
+
+  // 4. Header: FW JADE Brand & Heritage
   ctx.textAlign = 'center';
-  ctx.fillText('FW JADE MEDAN • AURA ORACLE', 225, 55);
+  ctx.fillStyle = '#D4AF37';
+  ctx.font = '700 22px Cinzel, serif';
+  ctx.fillText('FW JADE', 225, 62);
 
-  ctx.fillStyle = '#E6E9EC';
-  ctx.font = '700 22px Cinzel';
-  ctx.fillText('AURA AI AURA REPORT', 225, 88);
+  ctx.fillStyle = '#A3B19B';
+  ctx.font = '500 10px Poppins, sans-serif';
+  ctx.fillText('MEDAN • AUTHENTIC NATURAL GEMSTONES • EST. 2009', 225, 82);
 
-  ctx.strokeStyle = '#2BE085';
-  ctx.lineWidth = 2;
+  // Thin separator
+  ctx.strokeStyle = 'rgba(212, 175, 55, 0.4)';
   ctx.beginPath();
-  ctx.arc(225, 220, 75, 0, Math.PI * 2);
+  ctx.moveTo(120, 96);
+  ctx.lineTo(330, 96);
   ctx.stroke();
 
+  // Subtitle
+  ctx.fillStyle = '#FFFFFF';
+  ctx.font = '600 12px Cinzel, serif';
+  ctx.fillText('AURA & GUARDIAN STONE REPORT', 225, 122);
+
+  // 5. Central Ethereal Energy Ring
+  ctx.strokeStyle = 'rgba(43, 224, 133, 0.6)';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.arc(225, 235, 78, 0, Math.PI * 2);
+  ctx.stroke();
+
+  ctx.strokeStyle = 'rgba(212, 175, 55, 0.4)';
+  ctx.lineWidth = 1;
+  ctx.setLineDash([4, 6]);
+  ctx.beginPath();
+  ctx.arc(225, 235, 90, 0, Math.PI * 2);
+  ctx.stroke();
+  ctx.setLineDash([]); // Reset dash
+
+  // Central Element Symbol
   ctx.fillStyle = '#2BE085';
-  ctx.font = '600 15px Poppins';
-  ctx.fillText('✨ AURA ALIGNMENT 96% ✨', 225, 325);
+  ctx.font = '700 28px Cinzel, serif';
+  ctx.fillText(element, 225, 230);
 
-  ctx.fillStyle = '#FFC857';
-  ctx.font = '700 20px Poppins';
-  ctx.fillText(AppState.user.name, 225, 360);
+  ctx.fillStyle = '#D4AF37';
+  ctx.font = '600 13px Poppins, sans-serif';
+  ctx.fillText('96% AFFINITY MATCH', 225, 258);
 
-  ctx.fillStyle = '#13221F';
-  ctx.fillRect(40, 390, 370, 240);
-  ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
-  ctx.strokeRect(40, 390, 370, 240);
+  // User Name Banner
+  ctx.fillStyle = '#FFFFFF';
+  ctx.font = '600 17px Poppins, sans-serif';
+  ctx.fillText(userName, 225, 360);
+
+  ctx.fillStyle = '#8E9894';
+  ctx.font = '400 11px Poppins, sans-serif';
+  ctx.fillText('Personalized Cosmic Vibration & Physiognomy Profile', 225, 380);
+
+  // 6. Specification & Guardian Stone Card
+  ctx.fillStyle = '#0D1A16';
+  ctx.fillRect(38, 405, 374, 230);
+  ctx.strokeStyle = 'rgba(212, 175, 55, 0.25)';
+  ctx.lineWidth = 1;
+  ctx.strokeRect(38, 405, 374, 230);
 
   ctx.textAlign = 'left';
-  ctx.font = '500 14px Poppins';
+  
+  // Row 1: Guardian Stone
+  ctx.font = '500 12px Poppins, sans-serif';
   ctx.fillStyle = '#8E9894';
-  ctx.fillText('Elemen Dominan:', 60, 435);
+  ctx.fillText('Batu Penjaga:', 56, 442);
   ctx.fillStyle = '#2BE085';
-  ctx.fillText('WOOD (Kayu)', 250, 435);
+  ctx.font = '700 14px Cinzel, serif';
+  ctx.fillText(gem.name, 170, 442);
 
+  // Row 2: Origin & Grade
+  ctx.font = '500 12px Poppins, sans-serif';
   ctx.fillStyle = '#8E9894';
-  ctx.fillText('Vitalitas Holistik:', 60, 480);
-  ctx.fillStyle = '#FFC857';
-  ctx.fillText('91% (Optimal)', 250, 480);
+  ctx.fillText('Kualitas Mineral:', 56, 485);
+  ctx.fillStyle = '#D4AF37';
+  ctx.font = '600 12px Poppins, sans-serif';
+  ctx.fillText('Grade A Natural (Untreated)', 170, 485);
 
+  // Row 3: Vitality Alignment
+  ctx.font = '500 12px Poppins, sans-serif';
   ctx.fillStyle = '#8E9894';
-  ctx.fillText('Batu Penjaga:', 60, 525);
+  ctx.fillText('Harmoni Energi:', 56, 528);
+  ctx.fillStyle = '#FFFFFF';
+  ctx.font = '500 12px Poppins, sans-serif';
+  ctx.fillText('Stabilitas Chi & Vitalitas', 170, 528);
+
+  // Row 4: Asal Daerah
+  ctx.font = '500 12px Poppins, sans-serif';
+  ctx.fillStyle = '#8E9894';
+  ctx.fillText('Asal Spesimen:', 56, 571);
+  ctx.fillStyle = '#A3B19B';
+  ctx.font = '500 12px Poppins, sans-serif';
+  ctx.fillText(gem.origin || 'Nusantara / Burma', 170, 571);
+
+  // Row 5: Verified Authenticity
+  ctx.font = '500 12px Poppins, sans-serif';
+  ctx.fillStyle = '#8E9894';
+  ctx.fillText('Status Keaslian:', 56, 614);
   ctx.fillStyle = '#2BE085';
-  ctx.font = '700 13px Poppins';
-  ctx.fillText(gem.name, 200, 525);
+  ctx.font = '600 12px Poppins, sans-serif';
+  ctx.fillText('100% Batu Alam Terverifikasi', 170, 614);
 
+  // 7. Footer: Verification & Social Watermark
   ctx.textAlign = 'center';
-  ctx.fillStyle = '#D7B65A';
-  ctx.font = '600 11px Poppins';
-  ctx.fillText('VERIFIED BY FW JADE MEDAN', 225, 680);
+  ctx.fillStyle = '#D4AF37';
+  ctx.font = '600 12px Cinzel, serif';
+  ctx.fillText('DISCOVER YOURS AT FWJADE.COM', 225, 685);
 
-  document.getElementById('auraCardModal').classList.add('open');
+  ctx.fillStyle = '#8E9894';
+  ctx.font = '400 10px Poppins, sans-serif';
+  ctx.fillText('WhatsApp Concierge: +62 811-619-173 • Medan, Indonesia', 225, 706);
+
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
+  ctx.font = '400 9px Poppins, sans-serif';
+  ctx.fillText('AURA AI © 2026 FW JADE. Non-Clinical Personalization Experience.', 225, 745);
+
+  const modal = document.getElementById('auraCardModal');
+  if (modal) {
+    modal.classList.add('open');
+    modal.style.display = 'flex';
+  }
+}
+
+function closeAuraCardModal() {
+  const modal = document.getElementById('auraCardModal');
+  if (modal) {
+    modal.classList.remove('open');
+    modal.style.display = 'none';
+  }
 }
 
 function downloadAuraCard() {
   const canvas = document.getElementById('auraCardCanvas');
+  if (!canvas) return;
   const link = document.createElement('a');
-  link.download = `AURA-AI-Aura-Card-${Date.now()}.png`;
+  link.download = `FWJADE-Aura-Guardian-Card-${Date.now()}.png`;
   link.href = canvas.toDataURL('image/png');
   link.click();
 }
 
 // ==========================================
-// 11. DIGITAL CERTIFICATE & VIP PASS LOGIC
+// 11. DIGITAL CERTIFICATE & VIP PASS LOGIC (>2X PURCHASES UNLOCK)
 // ==========================================
-function openCertModal() {
-  const gem = AppState.user.metrics.selectedGem || GemstoneDatabase[0];
-  document.getElementById('certItemName').textContent = `${gem.name} (Untreated)`;
-  document.getElementById('certAuraScore').textContent = `96% (${gem.element_id})`;
-  document.getElementById('certOwnerName').textContent = AppState.user.name;
-  document.getElementById('vipCardHolder').textContent = AppState.user.name.toUpperCase();
+
+// Order History & VIP Tracker in localStorage
+function getUserOrders() {
+  try {
+    const raw = localStorage.getItem('fwjade_orders');
+    return raw ? JSON.parse(raw) : [];
+  } catch (e) {
+    return [];
+  }
+}
+
+function saveUserOrder(order) {
+  try {
+    const orders = getUserOrders();
+    orders.unshift(order);
+    localStorage.setItem('fwjade_orders', JSON.stringify(orders));
+    return orders;
+  } catch (e) {
+    console.warn('Failed to save order to localStorage', e);
+    return [];
+  }
+}
+
+function checkUserVipStatus() {
+  const orders = getUserOrders();
+  const completedOrders = orders.filter(o => o.status === 'Paid / Transferred' || o.status === 'Completed');
+  const count = completedOrders.length;
+  // VIP Rule: Unlocked when user has purchased MORE than 2 times (> 2x, i.e. 3 or more completed purchases)
+  const isVip = count > 2;
+  return {
+    isVip: isVip,
+    count: count,
+    discountPercent: isVip ? 15 : 0,
+    orders: completedOrders
+  };
+}
+
+function recordPurchaseAndIssueCert(gemObj) {
+  const gem = gemObj || AppState.user.metrics.selectedGem || GemstoneDatabase[0];
+  const orderId = 'FWJ-ORD-' + Date.now().toString(36).toUpperCase();
+  const serialNo = 'FWJ-CERT-' + new Date().getFullYear() + '-' + Math.floor(1000 + Math.random() * 9000);
+  
+  const newOrder = {
+    orderId: orderId,
+    serialNo: serialNo,
+    timestamp: new Date().toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' }),
+    gemName: gem.name,
+    species: gem.mineral_species || 'Natural Jadeite-Pyroxene Grade A',
+    weight: gem.weight || '48.50 Carat • 28 x 18 x 7 mm',
+    origin: gem.origin || 'Nagan Raya, Aceh, Indonesia',
+    hardness: gem.mohs || '6.8 Mohs • 3.33 g/cm³',
+    element: gem.element_id || 'Wood (Kayu / 木)',
+    price: gem.price || 'Rp 1.850.000',
+    buyerName: AppState.user.name || 'Kolektor FW JADE',
+    buyerPhone: AppState.user.phone || '+62811619173',
+    status: 'Paid / Transferred'
+  };
+
+  saveUserOrder(newOrder);
+  return newOrder;
+}
+
+function openCertModal(customGem) {
+  const gem = customGem || AppState.user.metrics.selectedGem || GemstoneDatabase[0];
+  const orders = getUserOrders();
+  const latestOrder = orders.find(o => o.gemName === gem.name) || orders[0];
+  
+  const serialNo = latestOrder ? latestOrder.serialNo : ('FWJ-CERT-' + new Date().getFullYear() + '-' + Math.floor(1000 + Math.random() * 9000));
+  const ownerName = AppState.user.name || (latestOrder ? latestOrder.buyerName : 'Kolektor Yang Terhormat');
+
+  // Update Certificate UI Fields specifically to the product
+  const certSerialEl = document.getElementById('certSerialNo');
+  if (certSerialEl) certSerialEl.textContent = serialNo;
+
+  const certItemEl = document.getElementById('certItemName');
+  if (certItemEl) certItemEl.textContent = `${gem.name} (Untreated Natural)`;
+
+  const certSpeciesEl = document.getElementById('certSpecies');
+  if (certSpeciesEl) certSpeciesEl.textContent = gem.mineral_species || 'Jadeite-Pyroxene Mineral Grade A';
+
+  const certAuraEl = document.getElementById('certAuraScore');
+  if (certAuraEl) certAuraEl.textContent = `${AppState.user.metrics.alignmentScore || 96}% (${gem.element_id || 'Wood'})`;
+
+  const certOwnerEl = document.getElementById('certOwnerName');
+  if (certOwnerEl) certOwnerEl.textContent = ownerName;
+
+  // VIP Pass Evaluation (> 2x Completed Orders)
+  const vipStatus = checkUserVipStatus();
+  const vipHolderEl = document.getElementById('vipCardHolder');
+  if (vipHolderEl) vipHolderEl.textContent = ownerName.toUpperCase();
+
+  const vipBanner = document.getElementById('vipLockedBanner');
+  const vipCard = document.getElementById('vipCardDisplay');
+  const vipFill = document.getElementById('vipProgressFill');
+  const vipLbl = document.getElementById('vipProgressLabel');
+  const vipBadge = document.getElementById('vipCardBadge');
+  const vipDiscount = document.getElementById('vipDiscountTier');
+
+  if (vipStatus.isVip) {
+    if (vipBanner) vipBanner.style.display = 'none';
+    if (vipCard) {
+      vipCard.style.opacity = '1';
+      vipCard.style.filter = 'none';
+    }
+    if (vipBadge) vipBadge.textContent = 'IMPERIAL PATRON VIP (ACTIVE)';
+    if (vipDiscount) vipDiscount.textContent = '15% OFF ALL JEWELLERY';
+  } else {
+    if (vipBanner) vipBanner.style.display = 'block';
+    const currentCount = vipStatus.count;
+    const pct = Math.min(100, Math.round((currentCount / 3) * 100));
+    if (vipFill) vipFill.style.width = `${pct}%`;
+    if (vipLbl) vipLbl.textContent = `Progres: ${currentCount} / 3 Pesanan Selesai (Beli > 2x untuk Unlock Diskon 15%)`;
+    if (vipCard) {
+      vipCard.style.opacity = '0.75';
+      vipCard.style.filter = 'grayscale(0.3)';
+    }
+    if (vipBadge) vipBadge.textContent = 'VIP PASS (LOCKED — MEMERLUKAN > 2X ORDER)';
+    if (vipDiscount) vipDiscount.textContent = 'LOCKED (15% OFF)';
+  }
+
   document.getElementById('certModal').classList.add('open');
 }
 
@@ -1436,18 +1655,58 @@ function bindEventHandlers() {
     handleSearchQuery(document.getElementById('omniboxInput').value);
   });
 
-  const input = document.getElementById('omniboxInput');
-  if (input) input.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') handleSearchQuery(e.target.value);
-  });
+  // DUAL-MODE HERO SWITCHER (Single-Focus Mode Switcher)
+  const heroZone = document.getElementById('heroInteractionZone');
+  const btnTriggerChat = document.getElementById('btnTriggerAuraChat');
+  const btnCollapseChat = document.getElementById('btnCollapseAuraChat');
+  const btnSwitchToScan = document.getElementById('btnSwitchToScan');
+  const omniboxInput = document.getElementById('omniboxInput');
+
+  function setHeroMode(mode) {
+    if (!heroZone) return;
+    if (mode === 'chat') {
+      heroZone.classList.add('mode-chat-hero');
+      if (omniboxInput) {
+        setTimeout(() => omniboxInput.focus(), 150);
+      }
+    } else {
+      heroZone.classList.remove('mode-chat-hero');
+    }
+  }
+
+  if (btnTriggerChat) {
+    btnTriggerChat.addEventListener('click', () => setHeroMode('chat'));
+  }
+
+  if (btnCollapseChat) {
+    btnCollapseChat.addEventListener('click', (e) => {
+      e.stopPropagation();
+      setHeroMode('scan');
+    });
+  }
+
+  if (btnSwitchToScan) {
+    btnSwitchToScan.addEventListener('click', () => {
+      setHeroMode('scan');
+    });
+  }
+
+  if (omniboxInput) {
+    omniboxInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') handleSearchQuery(e.target.value);
+      if (e.key === 'Escape') setHeroMode('scan');
+    });
+  }
 
   // Mic Button
   const micBtn = document.getElementById('voiceSearchBtn');
   if (micBtn) micBtn.addEventListener('click', toggleVoiceMic);
 
-  // Trending Chips
+  // Trending Preset Chips (Click activates chat mode & executes query)
   document.querySelectorAll('.topic-chip, .topic-pill-chip').forEach(chip => {
     chip.addEventListener('click', () => {
+      setHeroMode('chat');
+      if (omniboxInput) omniboxInput.value = chip.dataset.query;
       handleSearchQuery(chip.dataset.query);
     });
   });
@@ -1531,6 +1790,8 @@ function bindEventHandlers() {
     document.getElementById('secGemstone').style.display = 'none';
     document.getElementById('secManifestation').style.display = 'none';
     document.getElementById('secActions').style.display = 'none';
+    const heroZone = document.getElementById('heroInteractionZone');
+    if (heroZone) heroZone.classList.remove('mode-chat-hero');
     document.getElementById('omniboxInput').value = '';
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
@@ -1544,9 +1805,13 @@ function bindEventHandlers() {
 
   // Aura Card Modal
   const closeAura = document.getElementById('closeAuraCardBtn');
-  if (closeAura) closeAura.addEventListener('click', () => {
-    document.getElementById('auraCardModal').classList.remove('open');
-  });
+  if (closeAura) closeAura.addEventListener('click', closeAuraCardModal);
+
+  const auraModal = document.getElementById('auraCardModal');
+  if (auraModal) {
+    const backdrop = auraModal.querySelector('.modal-backdrop');
+    if (backdrop) backdrop.addEventListener('click', closeAuraCardModal);
+  }
 
   const dlCard = document.getElementById('btnDownloadCard');
   if (dlCard) dlCard.addEventListener('click', downloadAuraCard);
@@ -2283,14 +2548,104 @@ const DAILY_COSMIC_DATA = [
   }
 ];
 
+function getLunarPhaseData(date = new Date()) {
+  // Known new moon reference: Jan 11, 2024
+  const refNewMoon = new Date('2024-01-11T11:57:00Z');
+  const synodicMonth = 29.53058867;
+  const daysDiff = (date.getTime() - refNewMoon.getTime()) / (1000 * 60 * 60 * 24);
+  const lunarAge = ((daysDiff % synodicMonth) + synodicMonth) % synodicMonth;
+  
+  if (lunarAge < 1.845) {
+    return { name: 'Bulan Baru (New Moon)', phaseText: 'Fase Bulan Baru • Inisiasi Chi & Penanaman Hajat', icon: 'fa-circle' };
+  } else if (lunarAge < 5.536) {
+    return { name: 'Bulan Sabit Muda (Waxing Crescent)', phaseText: 'Sabit Muda • Pertumbuhan Energi & Peluang Baru', icon: 'fa-moon' };
+  } else if (lunarAge < 9.228) {
+    return { name: 'Kuartal Pertama (First Quarter)', phaseText: 'Kuartal Pertama • Momentum Aksi & Keberanian', icon: 'fa-adjust' };
+  } else if (lunarAge < 12.919) {
+    return { name: 'Bulan Cembung (Waxing Gibbous)', phaseText: 'Bulan Cembung • Pematangan Rencana & Magnet Harta', icon: 'fa-circle' };
+  } else if (lunarAge < 16.610) {
+    return { name: 'Bulan Purnama (Full Moon)', phaseText: 'Purnama Agung • Puncak Energi Metafisika & Intuisi', icon: 'fa-circle' };
+  } else if (lunarAge < 20.302) {
+    return { name: 'Bulan Susut (Waning Gibbous)', phaseText: 'Bulan Susut • Evaluasi Hasil & Penguncian Laba', icon: 'fa-circle' };
+  } else if (lunarAge < 23.993) {
+    return { name: 'Kuartal Terakhir (Last Quarter)', phaseText: 'Kuartal Akhir • Pelepasan Beban & Harmoni Batin', icon: 'fa-adjust' };
+  } else {
+    return { name: 'Bulan Sabit Tua (Waning Crescent)', phaseText: 'Sabit Tua • Relaksasi, Pembersihan & Detoks Chi', icon: 'fa-moon' };
+  }
+}
+
+function checkIsGoldenHourActive(dayIdx, currentHour, currentMinute) {
+  const currentTotalMin = currentHour * 60 + currentMinute;
+  const ranges = [
+    [[8*60+30, 11*60], [15*60+30, 18*60]], // 0: Sun
+    [[9*60, 11*60+30], [19*60+30, 21*60+30]], // 1: Mon
+    [[8*60, 10*60+30], [14*60, 16*60+30]], // 2: Tue
+    [[10*60, 12*60], [16*60, 18*60]], // 3: Wed
+    [[7*60+30, 10*60], [13*60+30, 15*60+30]], // 4: Thu
+    [[9*60, 11*60+30], [15*60, 17*60+30]], // 5: Fri
+    [[8*60, 10*60+30], [16*60+30, 19*60]], // 6: Sat
+  ];
+  const todayRanges = ranges[dayIdx] || [];
+  for (const [start, end] of todayRanges) {
+    if (currentTotalMin >= start && currentTotalMin <= end) {
+      return true;
+    }
+  }
+  return false;
+}
+
 function getTodayCosmicData() {
   const now = new Date();
   const dayIdx = now.getDay(); // 0 (Minggu) to 6 (Sabtu)
+  const lunar = getLunarPhaseData(now);
+  const isGoldenActive = checkIsGoldenHourActive(dayIdx, now.getHours(), now.getMinutes());
+
   return {
     ...DAILY_COSMIC_DATA[dayIdx],
+    lunar,
+    isGoldenActive,
     fullDateStr: now.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }).toUpperCase()
   };
 }
+
+let isAlmVoiceMuted = false;
+
+function speakWithAuraWhisper(text) {
+  if (isAlmVoiceMuted) return;
+  try {
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'id-ID';
+      utterance.rate = 0.95;
+      utterance.pitch = 1.05;
+      window.speechSynthesis.speak(utterance);
+    }
+  } catch (e) {
+    console.warn('Speech synthesis not available:', e);
+  }
+}
+window.speakWithAuraWhisper = speakWithAuraWhisper;
+
+function toggleAlmanacVoice() {
+  const btn = document.getElementById('btnAlmanacVoiceToggle');
+  const txt = document.getElementById('txtAlmVoiceState');
+  if ('speechSynthesis' in window) {
+    if (window.speechSynthesis.speaking) {
+      window.speechSynthesis.cancel();
+      isAlmVoiceMuted = true;
+      if (btn) btn.classList.add('muted');
+      if (txt) txt.textContent = 'Suara Mati';
+    } else {
+      isAlmVoiceMuted = false;
+      if (btn) btn.classList.remove('muted');
+      if (txt) txt.textContent = 'Suara Aktif';
+      const data = getTodayCosmicData();
+      speakWithAuraWhisper(`Hari ini adalah ${data.dayName}. ${data.elementTitle}. Batu keberuntungan Anda hari ini adalah ${data.stoneName}. ${data.stonePerks}.`);
+    }
+  }
+}
+window.toggleAlmanacVoice = toggleAlmanacVoice;
 
 function openDailyAlmanac() {
   const modal = document.getElementById('dailyAlmanacModal');
@@ -2298,11 +2653,16 @@ function openDailyAlmanac() {
   
   const data = getTodayCosmicData();
 
-  // Populate Header
+  // Populate Header & Lunar
   const dateBadge = document.getElementById('almCurrentDate');
+  const moonBadge = document.getElementById('almMoonPhaseDetail');
+  const lunarHeader = document.getElementById('almLunarPhase');
   const elemTitle = document.getElementById('almCosmicElement');
   const elemSub = document.getElementById('almElementSub');
+  
   if (dateBadge) dateBadge.textContent = data.fullDateStr;
+  if (moonBadge) moonBadge.textContent = `✦ ${data.lunar.phaseText}`;
+  if (lunarHeader) lunarHeader.innerHTML = `<i class="fa-solid ${data.lunar.icon} text-cyan"></i> ${data.lunar.name}`;
   if (elemTitle) elemTitle.textContent = data.elementTitle;
   if (elemSub) elemSub.textContent = data.elementSub;
 
@@ -2319,8 +2679,21 @@ function openDailyAlmanac() {
   // Populate Card 2: Jam Emas Rezeki
   const goldenHours = document.getElementById('almGoldenHours');
   const goldenHoursSub = document.getElementById('almGoldenHoursSub');
+  const goldenStatus = document.getElementById('almGoldenStatus');
+  const hoursLiveNote = document.getElementById('almHoursLiveNote');
+
   if (goldenHours) goldenHours.textContent = data.goldenHours;
   if (goldenHoursSub) goldenHoursSub.textContent = data.goldenHoursSub;
+  if (goldenStatus) {
+    if (data.isGoldenActive) {
+      goldenStatus.innerHTML = '<i class="fa-solid fa-bolt text-emerald"></i> <span class="text-emerald">PUNCAK AKTIF SEKARANG!</span>';
+    } else {
+      goldenStatus.innerHTML = '<i class="fa-solid fa-clock text-gold"></i> <span>Jam Hoki Harian</span>';
+    }
+  }
+  if (hoursLiveNote) {
+    hoursLiveNote.textContent = data.isGoldenActive ? '🟢 Medan Resonansi Chi Sedang Terbuka Optimal' : 'Siklus 12 Cabang Bumi (Shichen)';
+  }
 
   // Populate Card 3: Arah & Warna Hoki
   const dirColor = document.getElementById('almDirectionColor');
@@ -2331,18 +2704,25 @@ function openDailyAlmanac() {
   // Update WhatsApp URL
   const btnWA = document.getElementById('btnAlmOrderWA');
   if (btnWA) {
-    const waMsg = `Halo FW JADE Medan, saya ingin konsultasi mengenai Batu Keberuntungan Hari Ini (${data.dayName}): ${data.stoneName}. Mohon info ketersediaan koleksi alami Grade A ini.`;
+    const waMsg = `Halo FW JADE Medan, saya ingin konsultasi mengenai Batu Keberuntungan Hari Ini (${data.dayName}, ${data.fullDateStr}): ${data.stoneName}. Mohon info koleksi alami Grade A ini.`;
     btnWA.href = `https://wa.me/62811619173?text=${encodeURIComponent(waMsg)}`;
   }
 
   modal.style.display = 'flex';
-  speakWithAuraWhisper(`Hari ini adalah ${data.dayName}. Batu keberuntungan yang selaras untuk Anda hari ini adalah ${data.stoneName}.`);
+  setTimeout(() => modal.classList.add('open'), 10);
+  speakWithAuraWhisper(`Hari ini adalah ${data.dayName}. Batu keberuntungan yang selaras untuk Anda hari ini adalah ${data.stoneName}. ${data.lunar.name}.`);
 }
 window.openDailyAlmanac = openDailyAlmanac;
 
 function closeDailyAlmanac() {
   const modal = document.getElementById('dailyAlmanacModal');
-  if (modal) modal.style.display = 'none';
+  if (modal) {
+    modal.classList.remove('open');
+    setTimeout(() => { modal.style.display = 'none'; }, 250);
+  }
+  if ('speechSynthesis' in window) {
+    window.speechSynthesis.cancel();
+  }
 }
 window.closeDailyAlmanac = closeDailyAlmanac;
 
@@ -2376,6 +2756,11 @@ function initDailyAlmanac() {
   const backdrop = document.getElementById('almanacBackdrop');
   if (closeBtn) closeBtn.addEventListener('click', closeDailyAlmanac);
   if (backdrop) backdrop.addEventListener('click', closeDailyAlmanac);
+
+  const voiceToggleBtn = document.getElementById('btnAlmanacVoiceToggle');
+  if (voiceToggleBtn) {
+    voiceToggleBtn.addEventListener('click', toggleAlmanacVoice);
+  }
 
   const btnCheckAura = document.getElementById('btnAlmCheckAura');
   if (btnCheckAura) {
@@ -2445,7 +2830,6 @@ function initThreeJsJadeStudio() {
     roughness: 0.12,
     metalness: 0.05,
     transmission: 0.65,
-    thickness: 1.2,
     ior: 1.66 // Natural Jadeite Refractive Index
   });
   const jadeMesh = new THREE.Mesh(jadeGeo, jadeMat);
@@ -2751,6 +3135,50 @@ function exportLeadsToCSV() {
 }
 window.exportLeadsToCSV = exportLeadsToCSV;
 
+// ==========================================================================
+// 23. LUXURY SIDEBAR DRAWER (Mobile Slide-Over Menu & Complete Trust Suite)
+// ==========================================================================
+function openSidebarDrawer() {
+  const drawer = document.getElementById('luxurySidebarDrawer');
+  if (drawer) {
+    drawer.classList.add('open');
+    drawer.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+}
+window.openSidebarDrawer = openSidebarDrawer;
+
+function closeSidebarDrawer() {
+  const drawer = document.getElementById('luxurySidebarDrawer');
+  if (drawer) {
+    drawer.classList.remove('open');
+    drawer.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+}
+window.closeSidebarDrawer = closeSidebarDrawer;
+
+function toggleLanguageFromDrawer() {
+  const langToggleBtn = document.getElementById('langToggleBtn');
+  if (langToggleBtn) {
+    langToggleBtn.click();
+    const langFlag = document.getElementById('langFlag')?.textContent || '🇮🇩';
+    const langText = document.getElementById('langText')?.textContent || 'ID';
+    const badge = document.getElementById('drawerLangBadge');
+    const desc = document.getElementById('drawerLangDesc');
+    if (badge) badge.textContent = `${langFlag} ${langText}`;
+    if (desc) desc.textContent = langText === 'EN' ? 'English (Global)' : 'Bahasa Indonesia (ID)';
+  }
+}
+window.toggleLanguageFromDrawer = toggleLanguageFromDrawer;
+
+// Bind ESC key to close drawer
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    closeSidebarDrawer();
+  }
+});
+
 // Initialize All Features on startup
 document.addEventListener('DOMContentLoaded', () => {
   const savedStyle = localStorage.getItem('aurora_ui_style') || 'sleek';
@@ -2765,4 +3193,5 @@ document.addEventListener('DOMContentLoaded', () => {
   initMagneticTouchPhysics();
   initMiniSearchEngine();
 });
+
 

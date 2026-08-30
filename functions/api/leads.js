@@ -92,11 +92,29 @@ export async function onRequest(context) {
 
     // Admin Verification
     if (adminEmail && adminEmail.toLowerCase() === 'fwjade.com@gmail.com') {
+      // Calculate order frequency per phone number to track VIP (> 2x purchases)
+      const phoneCounts = {};
+      globalLeadsMemory.forEach(l => {
+        if (l.phone) {
+          phoneCounts[l.phone] = (phoneCounts[l.phone] || 0) + 1;
+        }
+      });
+
+      const enrichedLeads = globalLeadsMemory.map(l => {
+        const count = phoneCounts[l.phone] || 1;
+        return {
+          ...l,
+          ordersCount: count,
+          isVip: count > 2,
+          tier: count > 2 ? 'Imperial Patron VIP (15% Disc)' : 'Collector'
+        };
+      });
+
       return new Response(JSON.stringify({
         success: true,
         role: 'Master Admin',
         totalLeads: globalLeadsMemory.length,
-        leads: globalLeadsMemory
+        leads: enrichedLeads
       }), {
         status: 200,
         headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }

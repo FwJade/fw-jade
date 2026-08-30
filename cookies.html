@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Strategi &amp; Kebijakan Cookie (Cookie Strategy) — FW JADE &amp; AURA AI</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background: #060B0A;
+      color: #E6E9EC;
+      font-family: 'Poppins', sans-serif;
+      padding: 40px 20px 60px 20px;
+      line-height: 1.8;
+    }
+    .legal-container {
+      max-width: 920px;
+      margin: 0 auto;
+      background: rgba(11, 18, 16, 0.96);
+      border: 1px solid rgba(215, 182, 90, 0.35);
+      border-radius: 20px;
+      padding: 48px;
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.95);
+    }
+    .legal-header {
+      border-bottom: 1px solid rgba(215, 182, 90, 0.2);
+      padding-bottom: 24px;
+      margin-bottom: 32px;
+    }
+    .brand-tag {
+      font-family: 'Cinzel', serif;
+      font-size: 0.85rem;
+      letter-spacing: 3px;
+      color: #D7B65A;
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    h1 {
+      color: #FFF;
+      font-family: 'Cinzel', serif;
+      font-size: 2.1rem;
+      margin-bottom: 12px;
+      letter-spacing: 0.5px;
+      line-height: 1.3;
+    }
+    .last-update {
+      font-size: 0.85rem;
+      color: #7F8B93;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    h2 {
+      color: #2BE085;
+      font-size: 1.25rem;
+      margin-top: 32px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 600;
+    }
+    p, li {
+      font-size: 0.93rem;
+      color: #A8B5BC;
+      margin-bottom: 12px;
+    }
+    ul {
+      padding-left: 24px;
+      margin-bottom: 16px;
+    }
+    li {
+      margin-bottom: 8px;
+    }
+    .table-frame {
+      border: 1px solid rgba(215, 182, 90, 0.25);
+      border-radius: 12px;
+      overflow: hidden;
+      margin: 24px 0;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+    }
+    th {
+      background: rgba(215, 182, 90, 0.12);
+      color: #D7B65A;
+      padding: 14px 16px;
+      text-align: left;
+      font-weight: 600;
+      border-bottom: 1px solid rgba(215, 182, 90, 0.2);
+    }
+    td {
+      padding: 14px 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      color: #D1D5DB;
+    }
+    tr:last-child td { border-bottom: none; }
+    .cookie-badge {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    .badge-essential { background: rgba(43, 224, 133, 0.15); color: #2BE085; border: 1px solid rgba(43, 224, 133, 0.3); }
+    .badge-pref { background: rgba(215, 182, 90, 0.15); color: #D7B65A; border: 1px solid rgba(215, 182, 90, 0.3); }
+    .footer-action-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 40px;
+      padding-top: 24px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 28px;
+      background: #D7B65A;
+      color: #080F0E;
+      font-weight: 700;
+      text-decoration: none;
+      border-radius: 30px;
+      transition: all 0.25s ease;
+    }
+    .back-btn:hover {
+      background: #E8CA75;
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(215, 182, 90, 0.3);
+    }
+    .other-links {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .other-links a {
+      color: #7F8B93;
+      text-decoration: none;
+      font-size: 0.88rem;
+      transition: color 0.2s ease;
+    }
+    .other-links a:hover {
+      color: #D7B65A;
+    }
+    @media (max-width: 768px) {
+      .legal-container { padding: 24px 20px; }
+      h1 { font-size: 1.6rem; }
+      .footer-action-row { flex-direction: column; align-items: stretch; text-align: center; }
+      .back-btn { justify-content: center; }
+      .other-links { justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="legal-container">
+    
+    <div class="legal-header">
+      <div class="brand-tag"><i class="fa-solid fa-cookie-bite"></i> FW JADE &amp; AURA AI</div>
+      <h1>Strategi &amp; Kebijakan Cookie (Cookie Strategy)</h1>
+      <div class="last-update">
+        <i class="fa-solid fa-code-commit text-cyan"></i> Terakhir Diperbarui: 31 Agustus 2026 • Transparansi Penyimpanan Lokal &amp; PWA Cache
+      </div>
+    </div>
+
+    <p>
+      Di <strong>FW JADE</strong> dan <strong>AURA AI</strong>, kami menganut prinsip <em>Zero-Invasive Tracking</em>. Kami tidak menggunakan cookie pelacak pihak ketiga (*third-party advertising cookies*) yang memata-matai aktivitas penjelajahan Anda di internet. Kami hanya menggunakan penyimpanan lokal browser untuk memastikan fitur website berjalan mulus, cepat, dan responsif.
+    </p>
+
+    <h2><i class="fa-solid fa-database"></i> 1. Kategori Penyimpanan yang Kami Gunakan</h2>
+    <div class="table-frame">
+      <table>
+        <thead>
+          <tr>
+            <th>Kunci Penyimpanan</th>
+            <th>Kategori</th>
+            <th>Tujuan &amp; Fungsi</th>
+            <th>Masa Simpan</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>fwjade_orders</code></td>
+            <td><span class="cookie-badge badge-essential">Essential</span></td>
+            <td>Melacak riwayat pesanan lokal dan status otomatis Luxury VIP Pass (> 2x pembelian).</td>
+            <td>Persisten (Lokal)</td>
+          </tr>
+          <tr>
+            <td><code>fwjade_theme_lang</code></td>
+            <td><span class="cookie-badge badge-pref">Preference</span></td>
+            <td>Mengingat pilihan bahasa antarmuka (ID / EN) dan mode Quiet Luxury.</td>
+            <td>Persisten (Lokal)</td>
+          </tr>
+          <tr>
+            <td><code>aurora_pwa_cache</code></td>
+            <td><span class="cookie-badge badge-essential">PWA Cache</span></td>
+            <td>Menyimpan aset model MediaPipe dan shader 3D Three.js agar loading instan.</td>
+            <td>Service Worker</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2><i class="fa-solid fa-shield-halved"></i> 2. Komitmen Nol-Pelacak Pihak Ketiga (Zero Ad-Trackers)</h2>
+    <ul>
+      <li><strong>Tanpa Cookie Iklan:</strong> Kami tidak memasang piksel pelacak iklan (*Ad Retargeting*) seperti Facebook Pixel atau Google Ads Tracker invasif.</li>
+      <li><strong>Privasi Biometrik:</strong> Pemrosesan video webcam dan mesh wajah tidak pernah menghasilkan cookie biometrik apa pun. Seluruh perhitungan selesai di RAM lokal browser saat Anda menutup tab.</li>
+    </ul>
+
+    <h2><i class="fa-solid fa-gear"></i> 3. Cara Mengelola &amp; Menghapus Data Lokal Anda</h2>
+    <p>
+      Anda memiliki kendali 100% atas data yang tersimpan di peramban Anda. Anda dapat menghapus riwayat pesanan lokal atau cache PWA kapan saja melalui pengaturan browser:
+    </p>
+    <ul>
+      <li><strong>Google Chrome:</strong> Buka Pengaturan &rarr; Privasi dan Keamanan &rarr; Hapus Data Penjelajahan &rarr; Pilih "Cookie dan data situs lainnya".</li>
+      <li><strong>Safari (iOS / macOS):</strong> Pengaturan &rarr; Safari &rarr; Bersihkan Riwayat dan Data Situs Web.</li>
+      <li><strong>Mozilla Firefox:</strong> Opsi &rarr; Privasi &amp; Keamanan &rarr; Cookie dan Data Situs &rarr; Hapus Data.</li>
+    </ul>
+
+    <div class="footer-action-row">
+      <a href="/" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Kembali ke Beranda FW JADE</a>
+      <div class="other-links">
+        <a href="terms.html">Terms of Agreement</a> •
+        <a href="privacy.html">Privacy Protocol</a> •
+        <a href="refund.html">Refund Protocol</a> •
+        <a href="security.html">Security Center</a> •
+        <a href="disclaimer.html">Disclaimer</a>
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>
