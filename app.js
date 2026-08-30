@@ -535,7 +535,6 @@ function closeScannerFlowToHome() {
   const secDerm = document.getElementById('secDermatology');
   const secGem = document.getElementById('secGemstone');
   const secMan = document.getElementById('secManifestation');
-  const secAct = document.getElementById('secActions');
   const secViral = document.getElementById('secTrustViral');
 
   if (secForm) secForm.style.display = 'none';
@@ -544,7 +543,6 @@ function closeScannerFlowToHome() {
   if (secDerm) secDerm.style.display = 'none';
   if (secGem) secGem.style.display = 'none';
   if (secMan) secMan.style.display = 'none';
-  if (secAct) secAct.style.display = 'none';
   if (secViral) secViral.style.display = 'none';
 
   // Restore Hero section cleanly
@@ -950,9 +948,6 @@ function revealFullResults(gemObj, customGreeting) {
 
   const secMan = document.getElementById('secManifestation');
   if (secMan) secMan.style.display = 'block';
-
-  const secAct = document.getElementById('secActions');
-  if (secAct) secAct.style.display = 'block';
 
   const secViral = document.getElementById('secTrustViral');
   if (secViral) secViral.style.display = 'block';

@@ -5277,3 +5277,256 @@ body.style-explorer .view-explorer-secondary {
     text-align: center;
   }
 }
+
+/* ── 30. MASTER LUXURY RESPONSIVE DESIGN SYSTEM (DESKTOP PRECISION) ──────── */
+
+/* 1. App Layout Expansion */
+.app-layout {
+  max-width: 1200px !important;
+  width: 100% !important;
+  padding: 24px 32px 60px !important;
+}
+
+.hero-master-container {
+  width: 100%;
+  max-width: 920px;
+  margin: 0 auto;
+}
+
+.section-card {
+  max-width: 1080px;
+  margin: 0 auto 20px;
+  width: 100%;
+}
+
+/* 2. Unified Master Gemstone Showcase (2-Column Grid on Desktop) */
+.gemstone-unified-grid {
+  display: grid;
+  grid-template-columns: 380px 1fr;
+  gap: 36px;
+  align-items: start;
+  text-align: left;
+  margin-top: 14px;
+}
+
+.gem-left-stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(43, 224, 133, 0.2);
+  border-radius: var(--radius-xl);
+  padding: 24px 20px;
+}
+
+.gem-left-stage .interactive-3d-jade-wrapper {
+  max-width: 100%;
+  margin: 0;
+}
+
+.gem-left-stage .jade-3d-viewport {
+  width: 280px;
+  height: 280px;
+  border-radius: 20px;
+}
+
+.btn-ar-tryon-lg {
+  width: 100%;
+  margin-top: 18px;
+  background: linear-gradient(135deg, rgba(43, 224, 133, 0.18) 0%, rgba(43, 224, 133, 0.08) 100%) !important;
+  border: 1.5px solid var(--color-aurora-jade) !important;
+  color: var(--color-aurora-jade) !important;
+  font-weight: 700 !important;
+  border-radius: var(--radius-full) !important;
+  padding: 12px 18px !important;
+  font-size: 0.88rem !important;
+  cursor: pointer !important;
+  transition: all 0.3s ease !important;
+  box-shadow: 0 0 20px rgba(43, 224, 133, 0.15) !important;
+}
+.btn-ar-tryon-lg:hover {
+  background: var(--color-aurora-jade) !important;
+  color: #000 !important;
+  transform: translateY(-2px);
+  box-shadow: 0 0 30px rgba(43, 224, 133, 0.4) !important;
+}
+
+.gem-right-details {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.gem-header-tags {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.gem-name-title {
+  font-family: var(--font-serif);
+  font-size: 2rem;
+  font-weight: 700;
+  color: #FFFFFF;
+  margin: 2px 0 6px;
+  letter-spacing: 0.5px;
+}
+
+.gem-description-txt {
+  font-size: 0.92rem;
+  color: var(--text-soft);
+  line-height: 1.65;
+  margin-bottom: 6px;
+}
+
+.gem-specs-table-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 14px;
+}
+.spec-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.spec-k {
+  font-size: 0.72rem;
+  color: var(--text-dim);
+}
+.spec-v {
+  font-size: 0.85rem;
+  color: #fff;
+}
+
+.gem-pricing-cta-box {
+  background: rgba(14, 23, 21, 0.9);
+  border: 1px solid rgba(255, 200, 87, 0.3);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.gem-price-wrap {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+.price-lbl {
+  font-size: 0.82rem;
+  color: var(--text-dim);
+}
+.gem-price-amount {
+  font-family: var(--font-serif);
+  font-size: 1.7rem;
+  font-weight: 700;
+  color: var(--color-gold);
+  margin: 0;
+}
+
+.btn-whatsapp-order-lg {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 16px 24px;
+  background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+  color: #FFFFFF;
+  border-radius: var(--radius-full);
+  font-weight: 700;
+  font-size: 1rem;
+  text-decoration: none;
+  box-shadow: 0 0 30px rgba(16, 185, 129, 0.4);
+  transition: all 0.3s ease;
+  border: none;
+}
+.btn-whatsapp-order-lg:hover {
+  background: linear-gradient(135deg, #34D399 0%, #10B981 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 0 40px rgba(16, 185, 129, 0.6);
+  color: #061F17;
+}
+
+.gem-sub-actions-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  border-top: 1px solid var(--border-subtle);
+  padding-top: 12px;
+}
+.sub-action-btn {
+  background: none;
+  border: none;
+  color: var(--text-soft);
+  font-size: 0.78rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  padding: 6px 8px;
+  border-radius: var(--radius-sm);
+  transition: all 0.2s ease;
+}
+.sub-action-btn:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: #FFFFFF;
+}
+
+/* 3. Wide Lab Specs Grid & Why Pillars Grid */
+.lab-specs-grid {
+  display: grid !important;
+  grid-template-columns: repeat(4, 1fr) !important;
+  gap: 14px !important;
+}
+
+.why-pillars-grid {
+  display: grid !important;
+  grid-template-columns: repeat(5, 1fr) !important;
+  gap: 14px !important;
+}
+
+.share-and-quick-actions-grid {
+  display: grid !important;
+  grid-template-columns: 1fr 1.2fr 1fr !important;
+  gap: 24px !important;
+  align-items: center !important;
+}
+
+/* Responsive Breakpoints */
+@media (max-width: 900px) {
+  .gemstone-unified-grid {
+    grid-template-columns: 1fr;
+  }
+  .lab-specs-grid {
+    grid-template-columns: 1fr 1fr !important;
+  }
+  .why-pillars-grid {
+    grid-template-columns: 1fr 1fr !important;
+  }
+  .share-and-quick-actions-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .gem-specs-table-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+@media (max-width: 580px) {
+  .dual-entry-cards-grid {
+    grid-template-columns: 1fr;
+  }
+  .why-pillars-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .gem-sub-actions-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

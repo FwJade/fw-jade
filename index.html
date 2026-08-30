@@ -655,84 +655,110 @@
       <!-- =========================================================================
            SECTION 04: STEP 3 — DETAIL & BATU REKOMENDASI (Gambar 2 Screen 3)
            ========================================================================= -->
+      <!-- =========================================================================
+           SECTION 04: STEP 3 — BATU REKOMENDASI & PEMESANAN (UNIFIED LUXURY SHOWCASE)
+           ========================================================================= -->
       <section class="section-card section-gemstone step-card-box" id="secGemstone" style="display: none;">
-        <div class="step-badge-indicator">3. DETAIL &amp; BATU REKOMENDASI • Batu terbaik untuk Anda</div>
+        <div class="step-card-header-bar">
+          <div class="step-badge-indicator">✦ BATU PENJAGA &amp; REKOMENDASI TERBAIK UNTUK ANDA</div>
+          <button type="button" class="step-close-btn" onclick="closeScannerFlowToHome()" title="Kembali ke Beranda"><i class="fa-solid fa-house" style="font-size: 0.95rem;"></i></button>
+        </div>
         
-        <div class="gemstone-showcase-card">
-          <span class="gem-subtitle">Batu Rekomendasi Anda</span>
-          <h2 class="gem-name-title" id="gemTitle">Natural Aceh Jadeite</h2>
-          <div class="gem-cert-badge" id="gemCert">Sertifikat Alami Grade A</div>
+        <div class="gemstone-unified-grid">
+          
+          <!-- Kolom Kiri: 3D Interactive WebGL Stage & Virtual AR Try-On -->
+          <div class="gem-left-stage">
+            <div class="interactive-3d-jade-wrapper">
+              <div class="jade-3d-viewport" id="jade3dContainer">
+                <canvas id="threeJadeCanvas"></canvas>
+                <div class="touch-3d-hint">
+                  <i class="fa-solid fa-arrows-rotate"></i> <span>Sentuh &amp; Putar 360°</span>
+                </div>
+              </div>
 
-          <div class="gem-tag-chips">
-            <span class="tag-chip tag-element" id="gemTagElement">Elemen: Wood</span>
-            <span class="tag-chip tag-energy" id="gemTagEnergy">Energi: Harmony</span>
+              <!-- Senter Giok Translucent Controls & AR Mirror -->
+              <div class="jade-3d-controls-row">
+                <button class="btn-3d-ctrl" id="btnToggleFlashlight" title="Uji Tembus Cahaya Serat Giok (Translucency Test)">
+                  <i class="fa-solid fa-lightbulb text-gold"></i> <span>🔦 Senter Translusen</span>
+                </button>
+                <button class="btn-3d-ctrl icon-only" id="btnReset3dView" title="Reset Sudut Pandang">
+                  <i class="fa-solid fa-rotate-left"></i>
+                </button>
+              </div>
+
+              <button class="luxury-btn btn-ar-tryon-lg" id="btnOpenArMirrorStep3">
+                <i class="fa-solid fa-wand-magic-sparkles"></i> <span>✨ Coba Pakai Virtual (AR Mirror)</span>
+              </button>
+            </div>
           </div>
 
-          <!-- 3D Interactive WebGL Jade Studio (Cartier/Bulgari Standard) -->
-          <div class="interactive-3d-jade-wrapper">
-            <div class="jade-3d-viewport" id="jade3dContainer">
-              <canvas id="threeJadeCanvas"></canvas>
-              <div class="touch-3d-hint">
-                <i class="fa-solid fa-arrows-rotate"></i> <span>Sentuh &amp; Putar 360°</span>
+          <!-- Kolom Kanan: Detail Kurasi, Spesifikasi Gemologi & Direct WhatsApp Closing -->
+          <div class="gem-right-details">
+            <div class="gem-header-tags">
+              <span class="gem-cert-badge" id="gemCert"><i class="fa-solid fa-certificate text-gold"></i> Sertifikat Alami Grade A</span>
+              <span class="tag-chip tag-element" id="gemTagElement">Elemen: Wood</span>
+              <span class="tag-chip tag-energy" id="gemTagEnergy">Energi: Harmony</span>
+            </div>
+
+            <h2 class="gem-name-title" id="gemTitle">Natural Aceh Jadeite</h2>
+            <p class="gem-description-txt" id="gemDesc">
+              Membantu membuka gerbang rezeki harmonis, menenangkan pikiran dari kegelisahan, serta melindungi perisai medan aura tubuh dari getaran energi negatif.
+            </p>
+
+            <!-- Specifications Matrix Grid -->
+            <div class="gem-specs-table-grid">
+              <div class="spec-cell">
+                <span class="spec-k">Asal Daerah</span>
+                <strong class="spec-v" id="specOrigin">Nagan Raya, Aceh</strong>
+              </div>
+              <div class="spec-cell">
+                <span class="spec-k">Spesies Mineral</span>
+                <strong class="spec-v" id="specType">Jadeite Pyroxene</strong>
+              </div>
+              <div class="spec-cell">
+                <span class="spec-k">Kekerasan Mohs</span>
+                <strong class="spec-v" id="specMohs">6.8 / 10 (Padat)</strong>
+              </div>
+              <div class="spec-cell">
+                <span class="spec-k">Keaslian</span>
+                <strong class="spec-v text-emerald" id="specCert">Grade A (Untreated)</strong>
               </div>
             </div>
 
-            <!-- Senter Giok Translucent Test Control -->
-            <div class="jade-3d-controls-row">
-              <button class="btn-3d-ctrl" id="btnToggleFlashlight" title="Uji Tembus Cahaya Serat Giok (Translucency Test)">
-                <i class="fa-solid fa-lightbulb"></i> <span>🔦 Uji Senter Giok (Translucency)</span>
-              </button>
-              <button class="btn-3d-ctrl icon-only" id="btnReset3dView" title="Kembalikan Posisi Semula">
-                <i class="fa-solid fa-rotate-left"></i>
-              </button>
+            <!-- Price & Direct CTA -->
+            <div class="gem-pricing-cta-box">
+              <div class="gem-price-wrap">
+                <span class="price-lbl">Investasi Mahakarya Alami:</span>
+                <div class="gem-price-amount" id="gemPrice">Rp 1.850.000</div>
+              </div>
+
+              <!-- Single WhatsApp Concierge Order Button -->
+              <a href="https://wa.me/62811619173" target="_blank" class="luxury-btn btn-whatsapp-order-lg" id="btnOrderWA">
+                <i class="fa-brands fa-whatsapp"></i> <span>Pesan via WhatsApp Concierge</span>
+              </a>
+
+              <!-- Secondary Quick Action Links -->
+              <div class="gem-sub-actions-row">
+                <button class="sub-action-btn" onclick="openCertModal()">
+                  <i class="fa-solid fa-certificate text-gold"></i> <span>Sertifikat Digital</span>
+                </button>
+                <button class="sub-action-btn" onclick="generateLuxuryAuraCard()">
+                  <i class="fa-solid fa-share-nodes text-cyan"></i> <span>Unduh Kartu Aura</span>
+                </button>
+                <button class="sub-action-btn" onclick="document.getElementById('secManifestation').scrollIntoView({behavior:'smooth'});">
+                  <i class="fa-solid fa-comments text-emerald"></i> <span>Tanya Master Aura</span>
+                </button>
+              </div>
             </div>
+
           </div>
 
-          <p class="gem-description-txt" id="gemDesc">
-            Membantu membuka rezeki, menenangkan pikiran, dan melindungi dari energi negatif.
-          </p>
-
-          <div class="gem-price-amount" id="gemPrice">Rp 1.850.000</div>
-
-          <!-- Action Buttons Group -->
-          <div class="gemstone-cta-row">
-            <button class="luxury-btn btn-gold-action" id="btnScrollToProductAction" onclick="document.getElementById('secActions').scrollIntoView({behavior:'smooth'});">
-              <i class="fa-solid fa-bag-shopping"></i> <span>Lihat Detail &amp; Pesan</span>
-            </button>
-            <button class="luxury-btn btn-ar-tryon" id="btnOpenArMirrorStep3">
-              <i class="fa-solid fa-wand-magic-sparkles"></i> <span>✨ Coba Pakai Virtual (AR Mirror)</span>
-            </button>
-          </div>
-
-          <!-- Specifications Row -->
-          <div class="gem-specs-table">
-            <div class="spec-cell">
-              <span class="spec-k">Asal</span>
-              <strong class="spec-v" id="specOrigin">Aceh</strong>
-            </div>
-            <div class="spec-cell">
-              <span class="spec-k">Jenis</span>
-              <strong class="spec-v" id="specType">Jadeite</strong>
-            </div>
-            <div class="spec-cell">
-              <span class="spec-k">Energi</span>
-              <strong class="spec-v" id="specEnergy">Harmony</strong>
-            </div>
-            <div class="spec-cell">
-              <span class="spec-k">Sertifikat</span>
-              <strong class="spec-v" id="specCert">Tersedia</strong>
-            </div>
-          </div>
-        </div>
-
-        <div class="step-indicator-connector">
-          <i class="fa-solid fa-chevron-down"></i>
         </div>
       </section>
 
 
       <!-- =========================================================================
-           SECTION 05: STEP 4 — TANYA AURORA (Gambar 2 Screen 4)
+           SECTION 05: STEP 4 — TANYA AURORA (KONSULTASI MASTER AURA)
            ========================================================================= -->
       <section class="section-card section-chat step-card-box" id="secManifestation" style="display: none;">
         <div class="step-badge-indicator">4. TANYA AURORA • Tanya lebih dalam tentang hasil Anda</div>
@@ -777,57 +803,6 @@
         <div class="step-indicator-connector">
           <i class="fa-solid fa-chevron-down"></i>
         </div>
-      </section>
-
-
-      <!-- =========================================================================
-           SECTION 06: STEP 5 — PRODUK & TINDAKAN (Gambar 2 Screen 5)
-           ========================================================================= -->
-      <section class="section-card section-actions step-card-box" id="secActions" style="display: none;">
-        <div class="step-badge-indicator">5. PRODUK &amp; TINDAKAN • Lihat produk &amp; ambil tindakan</div>
-
-        <div class="final-product-action-card">
-          <h3 class="product-action-title">Produk Pilihan untuk Anda</h3>
-          
-          <!-- Product Showcase Preview -->
-          <div class="luxury-jewelry-frame-sm">
-            <div class="jewelry-pendant-showcase">
-              <div class="pendant-gold-bezel">
-                <div class="pendant-jadeite-gem"></div>
-              </div>
-            </div>
-          </div>
-
-          <h4 class="product-item-name">Natural Aceh Jadeite</h4>
-          <p class="product-item-spec">Liontin Premium • Grade A • Energi Harmony</p>
-          <div class="product-item-price">Rp 1.850.000</div>
-
-          <!-- WhatsApp Direct Order Button (Gambar 2 Screen 5) -->
-          <a href="https://wa.me/62811619173?text=Halo%20FW%20JADE%20Medan,%20saya%20ingin%20memesan%20perhiasan%20hasil%20pembacaan%20AURORA%20AI:%20Natural%20Aceh%20Jadeite." target="_blank" class="luxury-btn btn-whatsapp-order" id="btnOrderWA">
-            <i class="fa-brands fa-whatsapp"></i> <span>Pesan via WhatsApp</span>
-          </a>
-
-          <!-- Action Item List (Gambar 2 Screen 5) -->
-          <div class="action-items-menu">
-            <button class="action-list-row" id="btnOpenArMirrorStep5">
-              <div class="act-left"><i class="fa-solid fa-wand-magic-sparkles text-emerald"></i> <span>Coba Pakai Virtual (AR Mirror)</span></div>
-              <i class="fa-solid fa-chevron-right act-arrow"></i>
-            </button>
-            <button class="action-list-row" onclick="alert('Batu disimpan ke koleksi profil Anda.')">
-              <div class="act-left"><i class="fa-regular fa-bookmark"></i> <span>Simpan ke Koleksi</span></div>
-              <i class="fa-solid fa-chevron-right act-arrow"></i>
-            </button>
-            <button class="action-list-row" id="openCertModalBtn2" onclick="openCertModal()">
-              <div class="act-left"><i class="fa-solid fa-certificate"></i> <span>Lihat Sertifikat</span></div>
-              <i class="fa-solid fa-chevron-right act-arrow"></i>
-            </button>
-            <button class="action-list-row" onclick="document.getElementById('secManifestation').scrollIntoView({behavior:'smooth'});">
-              <div class="act-left"><i class="fa-solid fa-comments"></i> <span>Konsultasi Lanjutan (Tanya Master Aura lebih detail)</span></div>
-              <i class="fa-solid fa-chevron-right act-arrow"></i>
-            </button>
-          </div>
-        </div>
-
       </section>
 
 
