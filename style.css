@@ -2495,12 +2495,42 @@ body.style-explorer .view-explorer-secondary {
   text-shadow: 0 0 30px rgba(43, 224, 133, 0.2);
 }
 
-.sleek-brand-value-prop {
+.sleek-tagline-wrap {
+  margin-bottom: 30px;
+  display: flex;
+  justify-content: center;
+}
+
+.sleek-lucky-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255, 200, 87, 0.08);
+  border: 1px solid rgba(255, 200, 87, 0.4);
+  color: #f7eed6;
+  padding: 10px 22px;
+  border-radius: 50px;
+  font-size: 0.95rem;
   font-family: var(--font-body);
-  font-size: 1.05rem;
-  color: var(--text-soft);
-  margin-bottom: 34px;
-  letter-spacing: 0.3px;
+  font-weight: 500;
+  cursor: pointer;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+  user-select: none;
+}
+
+.sleek-lucky-pill:hover {
+  background: rgba(255, 200, 87, 0.18);
+  border-color: var(--color-gold);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(255, 200, 87, 0.28);
+  color: #ffffff;
+}
+
+.sleek-lucky-pill:active {
+  transform: scale(0.97);
 }
 
 /* The Native Touch Control Button */

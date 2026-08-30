@@ -913,6 +913,9 @@ function revealFullResults(gemObj, customGreeting) {
   const secAct = document.getElementById('secActions');
   if (secAct) secAct.style.display = 'block';
 
+  const secViral = document.getElementById('secTrustViral');
+  if (secViral) secViral.style.display = 'block';
+
   if (secAura) {
     secAura.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }

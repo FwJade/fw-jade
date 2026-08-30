@@ -96,7 +96,15 @@
           </div>
 
           <h1 class="sleek-brand-title">AURA AI</h1>
-          <p class="sleek-brand-value-prop">Kenali aura Anda. Temukan batu yang selaras.</p>
+          
+          <!-- Tagline: Cek batu keberuntungan Hari ini (Interactive Luxury Pill) -->
+          <div class="sleek-tagline-wrap">
+            <button class="sleek-lucky-pill" onclick="openDailyAlmanac()" title="Cek Batu Keberuntungan Hari Ini">
+              <i class="fa-solid fa-sparkles text-gold"></i>
+              <span>Cek batu keberuntungan Hari ini</span>
+              <i class="fa-solid fa-chevron-right icon-xs" style="font-size: 0.75rem; opacity: 0.7; margin-left: 2px;"></i>
+            </button>
+          </div>
 
           <!-- The Single Primary Touch Control (Bukan tombol biasa, tapi touch control nyata) -->
           <div class="sleek-primary-touch-wrap">
@@ -115,11 +123,8 @@
             <p class="sleek-sub-caption">Proses sekitar 10–15 detik. Tanpa login.</p>
           </div>
 
-          <!-- Secondary Quick Actions (Batu Keberuntungan Hari Ini & Tanya Suara) -->
+          <!-- Secondary Quiet Text Action (Tanya Suara / Teks tanpa mendominasi) -->
           <div class="sleek-secondary-voice-action">
-            <button class="luxury-btn btn-secondary btn-sm" id="btnSleekLuckyStone" onclick="openDailyAlmanac()" style="margin-bottom: 8px;">
-              <i class="fa-solid fa-calendar-days text-gold"></i> <span>Batu Keberuntungan Hari Ini</span>
-            </button>
             <button class="sleek-quiet-link-btn" id="btnSleekOpenSearch">
               <span>atau tanyakan sesuatu kepada Master Aura</span>
               <i class="fa-solid fa-microphone"></i>
@@ -143,8 +148,8 @@
 
           <!-- Brand Title & Tagline -->
           <h1 class="hero-brand-title">AURA AI</h1>
-          <p class="hero-brand-tagline" id="txtHeroTagline">
-            The Mystical Gemstone &amp; Face Aura Oracle<br>
+          <p class="hero-brand-tagline" id="txtHeroTagline" onclick="openDailyAlmanac()" style="cursor: pointer;" title="Klik untuk Cek Batu Keberuntungan Hari Ini">
+            <i class="fa-solid fa-sparkles text-gold"></i> Cek batu keberuntungan Hari ini<br>
             <span class="hero-by-tag">by FW JADE</span>
           </p>
 
@@ -878,7 +883,7 @@
       <!-- =========================================================================
            SECTION 07: EDUKASI, VIRALITAS & AKSI CEPAT (Gambar 3)
            ========================================================================= -->
-      <section class="section-card section-trust-viral" id="secTrustViral">
+      <section class="section-card section-trust-viral" id="secTrustViral" style="display: none;">
         
         <!-- Top Card: Mengapa AURA AI? (5 Pillars - Gambar 3) -->
         <div class="why-aurora-card">
