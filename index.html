@@ -106,21 +106,52 @@
             </button>
           </div>
 
-          <!-- The Single Primary Touch Control (Bukan tombol biasa, tapi touch control nyata) -->
-          <div class="sleek-primary-touch-wrap">
-            <button class="sleek-touch-control-button" id="btnSleekScanAction" role="button" tabindex="0">
-              <div class="touch-control-icon-circle">
-                <i class="fa-solid fa-camera"></i>
+          <!-- 3-Pillar Horizon Grid (Desktop: 3 Balanced Luxury Pillars | Mobile: Clean Single Touch) -->
+          <div class="sleek-horizon-grid">
+            
+            <!-- Pillar 1 (Kiri): Teaser Batu Hari Ini -->
+            <div class="sleek-side-pillar pillar-left" onclick="openDailyAlmanac()" role="button" tabindex="0" title="Buka Detail Batu Hoki Hari Ini">
+              <div class="pillar-icon-wrap">
+                <i class="fa-solid fa-calendar-star text-gold"></i>
               </div>
-              <div class="touch-control-text-col">
-                <span class="touch-main-heading">ANALISA WAJAH &amp; AURA</span>
-                <span class="touch-sub-note">Mulai pembacaan biometrik</span>
+              <div class="pillar-info">
+                <span class="pillar-label">Batu Hoki Hari Ini</span>
+                <strong class="pillar-title" id="desktopPillarStone">Aceh Jadeite</strong>
+                <span class="pillar-sub" id="desktopPillarHours">08.30 – 11.00 WIB</span>
               </div>
-              <div class="touch-control-arrow">
-                <i class="fa-solid fa-chevron-right"></i>
+              <div class="pillar-badge-action"><i class="fa-solid fa-arrow-right"></i></div>
+            </div>
+
+            <!-- Pillar 2 (Tengah - HERO UTAMA): Touch Control Analisa Wajah & Aura -->
+            <div class="sleek-primary-touch-wrap">
+              <button class="sleek-touch-control-button" id="btnSleekScanAction" role="button" tabindex="0">
+                <div class="touch-control-icon-circle">
+                  <i class="fa-solid fa-camera"></i>
+                </div>
+                <div class="touch-control-text-col">
+                  <span class="touch-main-heading">ANALISA WAJAH &amp; AURA</span>
+                  <span class="touch-sub-note">Mulai pembacaan biometrik</span>
+                </div>
+                <div class="touch-control-arrow">
+                  <i class="fa-solid fa-chevron-right"></i>
+                </div>
+              </button>
+              <p class="sleek-sub-caption">Proses sekitar 10–15 detik. Tanpa login.</p>
+            </div>
+
+            <!-- Pillar 3 (Kanan): Bio-Fisika & Lab Trust -->
+            <div class="sleek-side-pillar pillar-right" onclick="document.getElementById('btnSleekOpenSearch').click();" role="button" tabindex="0" title="Tanya Seputar Bio-Fisika Giok">
+              <div class="pillar-icon-wrap">
+                <i class="fa-solid fa-shield-halved text-emerald"></i>
               </div>
-            </button>
-            <p class="sleek-sub-caption">Proses sekitar 10–15 detik. Tanpa login.</p>
+              <div class="pillar-info">
+                <span class="pillar-label">Standar Mutu &amp; Lab</span>
+                <strong class="pillar-title">100% Giok Alami</strong>
+                <span class="pillar-sub">Far Infrared 9.35 µm</span>
+              </div>
+              <div class="pillar-badge-action"><i class="fa-solid fa-arrow-right"></i></div>
+            </div>
+
           </div>
 
           <!-- Secondary Quiet Text Action (Tanya Suara / Teks tanpa mendominasi) -->

@@ -521,6 +521,10 @@ window.submitIdentityForm = submitIdentityForm;
 
 function startScannerFlow() {
   initIdentityFormSelectors();
+  
+  const secHero = document.getElementById('secHero');
+  if (secHero) secHero.style.display = 'none';
+
   const secForm = document.getElementById('secIdentityForm');
   if (secForm) {
     secForm.style.display = 'block';
@@ -2311,6 +2315,15 @@ function closeDailyAlmanac() {
 window.closeDailyAlmanac = closeDailyAlmanac;
 
 function initDailyAlmanac() {
+  // Auto-populate desktop pillar preview
+  try {
+    const data = getTodayCosmicData();
+    const pillarStone = document.getElementById('desktopPillarStone');
+    const pillarHours = document.getElementById('desktopPillarHours');
+    if (pillarStone) pillarStone.textContent = data.stoneName;
+    if (pillarHours) pillarHours.textContent = data.goldenHours.split('&')[0].trim();
+  } catch (e) {}
+
   const luckyStoneBtn = document.getElementById('btnHeroLuckyStone');
   const sleekLuckyBtn = document.getElementById('btnSleekLuckyStone');
 
