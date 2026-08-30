@@ -38,7 +38,7 @@ Monograf ilmiah ini merangkum konvergensi multidisiplin antara:
   5000 SM               3000 SM             200 M                1600 M               2026 M
     │                     │                   │                    │                    │
     ├─► Hongshan Era      ├─► Liangzhu        ├─► Shennong         ├─► Dinasti Qing     ├─► FW JADE &
-    │   (Kultus Giok      │   (Artefak Bi &   │   Bencaojing       │   & Giok Rencong   │   AURORA AI Engine
+    │   (Kultus Giok      │   (Artefak Bi &   │   Bencaojing       │   & Giok Rencong   │   AURA AI Engine
     │   Naga C-Jade)      │   Cong Nefrit)    │   (Farmakope Medis)│   Nusantara        │   (Bio-Fisika & AI)
     │                     │                   │                    │                    │
     ▼                     ▼                   ▼                    ▼                    ▼
@@ -154,7 +154,7 @@ Berikut adalah parameter gemologi dan kristalografi baku laboratorium yang diter
 
 ## 6. FORMULASI MATEMATIKA HARMONISASI WU XING & MIAN XIANG 12 PALACES
 
-AURORA AI menghubungkan geometri biometrik wajah $468$ *landmarks* 3D dengan vektor keselarasan energi batu mulia.
+AURA AI menghubungkan geometri biometrik wajah $468$ *landmarks* 3D dengan vektor keselarasan energi batu mulia.
 
 ```mermaid
 graph TD
@@ -268,7 +268,7 @@ Setiap perhiasan yang dirilis oleh **FW JADE Medan** melewati alur verifikasi mu
 
 Disertasi ini menetapkan bahwa:
 1. Giok dan batu perhiasan alami memiliki **landasan sains bio-fisika dan mineralogi yang kokoh**, bekerja melalui transmisi gelombang Far Infrared (8–14 $\mu\text{m}$) dan mikro-piezoelektrik denyut nadi.
-2. Korelasi **Fisiognomi Mian Xiang & Horoskop** merupakan sistem pemodelan energi berbasis pengenalan pola peradaban ribuan tahun yang kini diakselerasi secara matematis oleh algoritma AI Biometrik AURORA AI.
+2. Korelasi **Fisiognomi Mian Xiang & Horoskop** merupakan sistem pemodelan energi berbasis pengenalan pola peradaban ribuan tahun yang kini diakselerasi secara matematis oleh algoritma AI Biometrik AURA AI.
 3. Kepercayaan dan kemakmuran dibangun di atas **data otentik, transparansi uji laboratorium, dan integritas kualitas alami Grade A tanpa rekayasa sintetis**.
 
 ---

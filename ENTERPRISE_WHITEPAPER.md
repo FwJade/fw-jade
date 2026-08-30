@@ -1,4 +1,4 @@
-# AURORA AI — ENTERPRISE PRODUCT REQUIREMENTS DOCUMENT & TECHNOLOGY WHITEPAPER
+# AURA AI — ENTERPRISE PRODUCT REQUIREMENTS DOCUMENT & TECHNOLOGY WHITEPAPER
 ### *Proprietary Neural Gemstone Oracle, Biometric Physiognomy & Wealth Matrix*
 **By FW JADE Global Enterprise × Next-Gen AI Consortium**
 
@@ -6,10 +6,10 @@
 
 ## 1. EXECUTIVE OVERVIEW & ENTERPRISE PROPRIETARY SUITE
 
-AURORA AI adalah ekosistem kecerdasan buatan kelas *Ultra-Luxury Enterprise* yang mengintegrasikan 4 pilar mesin neural berpemilik (*Proprietary Neural Engine Suite*):
+AURA AI adalah ekosistem kecerdasan buatan kelas *Ultra-Luxury Enterprise* yang mengintegrasikan 4 pilar mesin neural berpemilik (*Proprietary Neural Engine Suite*):
 
 ```
-                        AURORA AI ENTERPRISE SUITE
+                        AURA AI ENTERPRISE SUITE
                                     │
     ┌───────────────────────┬───────┴───────────────┬───────────────────────┐
     ▼                       ▼                       ▼                       ▼
@@ -55,7 +55,7 @@ flowchart TD
     subgraph SkynetCore [SKYNET AI: Conversational Audio Pipeline]
         STTEngine[Neural Speech-to-Text Transcriber]
         WaveVisualizer[Dynamic Jade Orb Waveform Generator]
-        TTSEngine[Master Aurora Voice Synthesizer]
+        TTSEngine[Master Aura Voice Synthesizer]
     end
 
     subgraph HaineoCore [HAINEO AI: Knowledge & Guardrail Reasoning]
@@ -91,14 +91,14 @@ flowchart TD
 ## 3. TUTORIAL LENGKAP PANDUAN PENGGUNAAN (ENTERPRISE USER MANUAL)
 
 ### Tahap 1: Membuka Aplikasi & Pemindaian Wajah Biometrik (Richkeyrick AI™)
-1. Buka aplikasi **AURORA AI by FW JADE** di browser ponsel atau laptop Anda.
+1. Buka aplikasi **AURA AI by FW JADE** di browser ponsel atau laptop Anda.
 2. Izinkan akses kamera. Layar akan menampilkan **Holographic Emerald Scanner HUD** dengan animasi kristal memindai wajah Anda secara otomatis.
 3. **Jika Anda Pengguna Baru:**
    * AI akan menyapa dengan hangat dan meminta nama panggilan Anda. Anda cukup menjawab lewat suara: *"Nama saya Paisan"*.
    * Richkeyrick AI™ akan mengunci fitur biometrik wajah Anda ke dalam database memori tanpa memerlukan kata sandi.
 4. **Jika Anda Pengguna Lama (*Returning User*):**
    * Richkeyrick AI™ langsung mengenali wajah Anda dalam 0.3 detik.
-   * Suara **Master Aurora (SkyNET AI™)** akan menyapa seketika: *"Selamat pagi/siang/malam Pak Paisan, senang melihat Anda kembali..."*
+   * Suara **Master Aura (SkyNET AI™)** akan menyapa seketika: *"Selamat pagi/siang/malam Pak Paisan, senang melihat Anda kembali..."*
 
 ---
 

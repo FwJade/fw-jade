@@ -1,5 +1,5 @@
 /**
- * AURORA AI — by FW JADE (Medan Giok)
+ * AURA AI — by FW JADE (Medan Giok)
  * Architected & Engineered by Richkeyrick (www.richkeyrick.com)
  * Quiet Mystic Luxury Experience Engine
  */
@@ -1019,8 +1019,8 @@ function handleSearchQuery(rawQuery) {
   const isStone = IN_SCOPE_KEYWORDS.some(k => query.toLowerCase().includes(k));
   if (!isStone) {
     alert(AppState.lang === 'id' 
-      ? 'Mohon maaf, AURORA AI khusus memandu seputar khasiat kesehatan, energi mistis, feng shui, dan rezeki dari batu mulia/giok.'
-      : 'AURORA AI is strictly focused on gemstone healing, mystical armor, feng shui, and wealth attraction.');
+      ? 'Mohon maaf, AURA AI khusus memandu seputar khasiat kesehatan, energi mistis, feng shui, dan rezeki dari batu mulia/giok.'
+      : 'AURA AI is strictly focused on gemstone healing, mystical armor, feng shui, and wealth attraction.');
     return;
   }
 
@@ -1116,7 +1116,7 @@ function exportToHTML() {
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>Laporan Resmi Aura & Batu Mulia — AURORA AI by FW JADE</title>
+  <title>Laporan Resmi Aura & Batu Mulia — AURA AI by FW JADE</title>
   <style>
     body { font-family: 'Georgia', serif; background: #080F0E; color: #E6E9EC; padding: 40px 20px; line-height: 1.6; }
     .card { max-width: 680px; margin: 0 auto; background: #0E1715; border: 2px solid #D7B65A; border-radius: 16px; padding: 32px; box-shadow: 0 20px 40px rgba(0,0,0,0.8); }
@@ -1131,7 +1131,7 @@ function exportToHTML() {
 <body>
   <div class="card">
     <h1>FW JADE JEWELLERY MEDAN</h1>
-    <div class="sub">AURORA AI AURA & GEMSTONE REPORT • DITERBITKAN: ${dateStr}</div>
+    <div class="sub">AURA AI AURA & GEMSTONE REPORT • DITERBITKAN: ${dateStr}</div>
     <div class="row"><span class="k">Nama Pemilik:</span><span class="v">${AppState.user.name}</span></div>
     <div class="row"><span class="k">Elemen Dominan:</span><span class="v">${gem.element_id}</span></div>
     <div class="row"><span class="k">Aura Alignment:</span><span class="v">96% (Sangat Kuat)</span></div>
@@ -1155,7 +1155,7 @@ function exportToHTML() {
   const blob = new Blob([htmlContent], { type: 'text/html' });
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
-  a.download = `AURORA_AI_Laporan_Aura_${Date.now()}.html`;
+  a.download = `AURA_AI_Laporan_Aura_${Date.now()}.html`;
   a.click();
 }
 
@@ -1258,7 +1258,7 @@ function generateLuxuryAuraCard() {
 
   ctx.fillStyle = '#E6E9EC';
   ctx.font = '700 22px Cinzel';
-  ctx.fillText('AURORA AI AURA REPORT', 225, 88);
+  ctx.fillText('AURA AI AURA REPORT', 225, 88);
 
   ctx.strokeStyle = '#2BE085';
   ctx.lineWidth = 2;
@@ -1308,7 +1308,7 @@ function generateLuxuryAuraCard() {
 function downloadAuraCard() {
   const canvas = document.getElementById('auraCardCanvas');
   const link = document.createElement('a');
-  link.download = `AURORA-AI-Aura-Card-${Date.now()}.png`;
+  link.download = `AURA-AI-Aura-Card-${Date.now()}.png`;
   link.href = canvas.toDataURL('image/png');
   link.click();
 }
@@ -1514,7 +1514,7 @@ function bindEventHandlers() {
 
   const shareWA = document.getElementById('btnShareWA');
   if (shareWA) shareWA.addEventListener('click', () => {
-    window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent('Lihat hasil pembacaan Aura Wajah & Batu Keberuntungan saya di AURORA AI by FW JADE: https://fwjade.com')}`, '_blank');
+    window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent('Lihat hasil pembacaan Aura Wajah & Batu Keberuntungan saya di AURA AI by FW JADE: https://fwjade.com')}`, '_blank');
   });
 
   // Certificate Modal Buttons
@@ -1597,7 +1597,7 @@ function simulateLogin(provider) {
 
   // Optional: Prompt for WebAuthn (Passkeys) after 3 seconds
   setTimeout(() => {
-    if (confirm("Aurora merekomendasikan: Aktifkan Face ID / Windows Hello untuk masuk instan di masa depan tanpa sandi? (WebAuthn Passkeys)")) {
+    if (confirm("Master Aura merekomendasikan: Aktifkan Face ID / Windows Hello untuk masuk instan di masa depan tanpa sandi? (WebAuthn Passkeys)")) {
       alert("Simulasi: Kredensial Passkey didaftarkan pada perangkat ini.");
     }
   }, 5000);
@@ -1730,12 +1730,12 @@ const DUAL_MODE = {
 };
 
 const ORACLE_RESPONSES = {
-  id: `Mereka yang membiarkan semesta berbicara terlebih dahulu memiliki intuisi elemen yang kuat dan jiwa yang terbuka. Aurora akan membaca aura wajah Anda sekarang...`,
+  id: `Mereka yang membiarkan semesta berbicara terlebih dahulu memiliki intuisi elemen yang kuat dan jiwa yang terbuka. Master Aura akan membaca aura wajah Anda sekarang...`,
   en: `Those who let the universe speak first carry a powerful elemental intuition and an open soul. Aurora will now read your facial aura...`
 };
 
 const SAGE_RESPONSES = {
-  id: `Pikiran yang jernih dan terarah adalah tanda elemen yang seimbang. Apa yang ingin Anda ketahui dari Aurora hari ini?`,
+  id: `Pikiran yang jernih dan terarah adalah tanda elemen yang seimbang. Apa yang ingin Anda ketahui dari Master Aura hari ini?`,
   en: `A clear and purposeful mind is the mark of balanced elements. What would you like to know from Aurora today?`
 };
 
@@ -1789,7 +1789,7 @@ function applyMode(mode, animate = true) {
     if (sageBtn) sageBtn.classList.remove('active');
     // Oracle mode placeholder
     const omnibox = document.getElementById('omniboxInput');
-    if (omnibox) omnibox.placeholder = 'Atau tanyakan sesuatu kepada Aurora...';
+    if (omnibox) omnibox.placeholder = 'Atau tanyakan sesuatu kepada Master Aura...';
   }
 
   // Persist to localStorage
@@ -1895,7 +1895,7 @@ function updateCuriosityHook(gemObj) {
     headline.textContent = `Mengapa ${gemObj.name} dipilih khusus untuk Anda?`;
   }
   if (sub && gemObj) {
-    sub.textContent = `Aurora telah membaca elemen ${gemObj.element_id || 'Anda'} dan menemukan resonansi terkuat dengan batu ini.`;
+    sub.textContent = `Master Aura telah membaca elemen ${gemObj.element_id || 'Anda'} dan menemukan resonansi terkuat dengan batu ini.`;
   }
 }
 
@@ -1911,8 +1911,8 @@ document.addEventListener('DOMContentLoaded', () => {
     btnModeOracle.addEventListener('click', () => {
       if (document.body.classList.contains('mode-oracle')) return; // already active
       const msg = AppState.lang === 'en'
-        ? '🔮 Oracle Mode — Let Aurora read your face and aura first.'
-        : '🔮 Oracle Mode — Biarkan Aurora membaca wajah dan aura Anda terlebih dahulu.';
+        ? '🔮 Oracle Mode — Let Master Aura read your face and aura first.'
+        : '🔮 Oracle Mode — Biarkan Master Aura membaca wajah dan aura Anda terlebih dahulu.';
       switchMode(DUAL_MODE.ORACLE, msg);
     });
   }
@@ -1921,8 +1921,8 @@ document.addEventListener('DOMContentLoaded', () => {
     btnModeSage.addEventListener('click', () => {
       if (document.body.classList.contains('mode-sage')) return; // already active
       const msg = AppState.lang === 'en'
-        ? '💎 Sage Mode — Ask Aurora anything. Direct and clear.'
-        : '💎 Sage Mode — Tanyakan apa saja kepada Aurora. Langsung dan jelas.';
+        ? '💎 Sage Mode — Ask Master Aura anything. Direct and clear.'
+        : '💎 Sage Mode — Tanyakan apa saja kepada Master Aura. Langsung dan jelas.';
       switchMode(DUAL_MODE.SAGE, msg);
     });
   }
