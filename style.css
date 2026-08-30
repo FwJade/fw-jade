@@ -2469,56 +2469,22 @@ body.style-explorer .view-explorer-secondary {
   display: flex !important;
 }
 
-/* ── GAYA 1 (UTAMA): THE SLEEK 1-TOUCH CONTROL STYLING ───────────────────── */
-.view-sleek-primary {
-  text-align: center;
-  padding: 20px 0 10px;
-}
-
-.sleek-top-badge {
-  display: inline-block;
-  font-family: var(--font-serif);
-  font-size: 0.76rem;
-  letter-spacing: 4px;
-  color: var(--color-gold);
-  opacity: 0.9;
-  text-transform: uppercase;
-  margin-bottom: 12px;
-}
-
-.sleek-brand-title {
-  font-family: var(--font-serif);
-  font-size: 3rem;
-  letter-spacing: 6px;
-  color: #fff;
-  margin-bottom: 8px;
-  text-shadow: 0 0 30px rgba(43, 224, 133, 0.2);
-}
-
-.sleek-tagline-wrap {
-  margin-bottom: 30px;
+/* ── UNIFIED MASTER HERO CONTAINER ───────────────────── */
+.hero-master-container {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 10px 16px 20px;
+  position: relative;
+  z-index: 2;
 }
 
-.sleek-lucky-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  background: rgba(255, 200, 87, 0.08);
-  border: 1px solid rgba(255, 200, 87, 0.4);
-  color: #f7eed6;
-  padding: 10px 22px;
-  border-radius: 50px;
-  font-size: 0.95rem;
-  font-family: var(--font-body);
-  font-weight: 500;
-  cursor: pointer;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
-  user-select: none;
+.hero-brand-badge-wrap {
+  margin-bottom: 8px;
 }
 
 .sleek-lucky-pill:hover {

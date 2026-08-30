@@ -51,16 +51,6 @@
         </div>
       </div>
       <div class="nav-controls">
-        <!-- Dual UI Style Switcher -->
-        <div class="ui-style-switcher-group" id="uiStyleSwitcher" title="Ganti Gaya Tampilan UI">
-          <button class="style-switch-btn active" id="btnStyleSleek" title="Gaya Minimalis Sleek (Utama)">
-            <span class="switch-bullet bullet-emerald"></span> <span class="switch-txt">✦ Sleek</span>
-          </button>
-          <button class="style-switch-btn" id="btnStyleExplorer" title="Gaya Eksplorasi (Sekunder)">
-            <span class="switch-bullet bullet-gold"></span> <span class="switch-txt">◇ Eksplorasi</span>
-          </button>
-        </div>
-
         <button class="nav-pill-btn" id="langToggleBtn" title="Ganti Bahasa">
           <span id="langLabel">ID</span> <i class="fa-solid fa-chevron-down icon-xs"></i>
         </button>
@@ -79,112 +69,62 @@
     <main class="main-content">
       
       <!-- =========================================================================
-           SECTION 01: HERO / BERANDA — DUAL UI STYLES
+           SECTION 01: HERO / BERANDA — UNIFIED MASTER DUAL GRAND GATEWAY
            ========================================================================= -->
       <section class="section-hero" id="secHero">
 
-        <!-- Glowing Center Aurora Backdrop -->
+        <!-- Glowing Center Ambient Aura Backdrop -->
         <div class="hero-aurora-glow-mist"></div>
 
-        <!-- =====================================================================
-             GAYA 1 (UTAMA / DEFAULT): THE SLEEK APPLE-GRADE 1-TOUCH CONTROL
-             ===================================================================== -->
-        <div class="hero-view-container view-sleek-primary" id="viewSleekPrimary">
-          
-          <div class="sleek-top-badge">
-            <span class="sleek-badge-txt">FW JADE</span>
-          </div>
+        <div class="hero-master-container">
 
-          <h1 class="sleek-brand-title">AURA AI</h1>
-          
-          <!-- Tagline: Cek batu keberuntungan Hari ini (Interactive Luxury Pill) -->
-          <div class="sleek-tagline-wrap">
-            <button class="sleek-lucky-pill" onclick="openDailyAlmanac()" title="Cek Batu Keberuntungan Hari Ini">
-              <i class="fa-solid fa-sparkles text-gold"></i>
-              <span>Cek batu keberuntungan Hari ini</span>
-              <i class="fa-solid fa-chevron-right icon-xs" style="font-size: 0.75rem; opacity: 0.7; margin-left: 2px;"></i>
-            </button>
-          </div>
-
-          <!-- 3-Pillar Horizon Grid (Desktop: 3 Balanced Luxury Pillars | Mobile: Clean Single Touch) -->
-          <div class="sleek-horizon-grid">
-            
-            <!-- Pillar 1 (Kiri): Teaser Batu Hari Ini -->
-            <div class="sleek-side-pillar pillar-left" onclick="openDailyAlmanac()" role="button" tabindex="0" title="Buka Detail Batu Hoki Hari Ini">
-              <div class="pillar-icon-wrap">
-                <i class="fa-solid fa-calendar-star text-gold"></i>
-              </div>
-              <div class="pillar-info">
-                <span class="pillar-label">Batu Hoki Hari Ini</span>
-                <strong class="pillar-title" id="desktopPillarStone">Aceh Jadeite</strong>
-                <span class="pillar-sub" id="desktopPillarHours">08.30 – 11.00 WIB</span>
-              </div>
-              <div class="pillar-badge-action"><i class="fa-solid fa-arrow-right"></i></div>
-            </div>
-
-            <!-- Pillar 2 (Tengah - HERO UTAMA): Touch Control Analisa Wajah & Aura -->
-            <div class="sleek-primary-touch-wrap">
-              <button class="sleek-touch-control-button" id="btnSleekScanAction" role="button" tabindex="0">
-                <div class="touch-control-icon-circle">
-                  <i class="fa-solid fa-camera"></i>
-                </div>
-                <div class="touch-control-text-col">
-                  <span class="touch-main-heading">ANALISA WAJAH &amp; AURA</span>
-                  <span class="touch-sub-note">Mulai pembacaan biometrik</span>
-                </div>
-                <div class="touch-control-arrow">
-                  <i class="fa-solid fa-chevron-right"></i>
-                </div>
-              </button>
-              <p class="sleek-sub-caption">Proses sekitar 10–15 detik. Tanpa login.</p>
-            </div>
-
-            <!-- Pillar 3 (Kanan): Bio-Fisika & Lab Trust -->
-            <div class="sleek-side-pillar pillar-right" onclick="document.getElementById('btnSleekOpenSearch').click();" role="button" tabindex="0" title="Tanya Seputar Bio-Fisika Giok">
-              <div class="pillar-icon-wrap">
-                <i class="fa-solid fa-shield-halved text-emerald"></i>
-              </div>
-              <div class="pillar-info">
-                <span class="pillar-label">Standar Mutu &amp; Lab</span>
-                <strong class="pillar-title">100% Giok Alami</strong>
-                <span class="pillar-sub">Far Infrared 9.35 µm</span>
-              </div>
-              <div class="pillar-badge-action"><i class="fa-solid fa-arrow-right"></i></div>
-            </div>
-
-          </div>
-
-          <!-- Secondary Quiet Text Action (Tanya Suara / Teks tanpa mendominasi) -->
-          <div class="sleek-secondary-voice-action">
-            <button class="sleek-quiet-link-btn" id="btnSleekOpenSearch">
-              <span>atau tanyakan sesuatu kepada Master Aura</span>
-              <i class="fa-solid fa-microphone"></i>
-            </button>
-          </div>
-
-        </div>
-
-
-        <!-- =====================================================================
-             GAYA 2 (SEKUNDER): THE EXPLORER DUAL CARDS & SEARCH UI (Gambar 1)
-             ===================================================================== -->
-        <div class="hero-view-container view-explorer-secondary" id="viewExplorerSecondary">
-
-          <!-- Floating Gem Emblem -->
+          <!-- Brand Emblem & Badges -->
           <div class="hero-emblem-wrap">
             <div class="gem-emblem">
               <i class="fa-solid fa-gem"></i>
             </div>
           </div>
 
-          <!-- Brand Title & Tagline -->
           <h1 class="hero-brand-title">AURA AI</h1>
-          <p class="hero-brand-tagline" id="txtHeroTagline" onclick="openDailyAlmanac()" style="cursor: pointer;" title="Klik untuk Cek Batu Keberuntungan Hari Ini">
-            <i class="fa-solid fa-sparkles text-gold"></i> Cek batu keberuntungan Hari ini<br>
+          <p class="hero-brand-tagline">
+            The World's First Luxury Gemstone &amp; Face Aura Oracle<br>
             <span class="hero-by-tag">by FW JADE</span>
           </p>
 
-          <!-- Search Box (Quick Ask — Pintu Masuk Teks/Suara) -->
+          <!-- 2 MAIN DUAL GRAND GATEWAYS (50:50 Simetris & Sempurna di Desktop, Stack di Mobile) -->
+          <div class="dual-entry-cards-grid">
+            
+            <!-- Gate 1 (Kiri - Gold Theme): Batu Keberuntungan Hari Ini -->
+            <div class="entry-card card-lucky" id="btnHeroLuckyStone" onclick="openDailyAlmanac()" role="button" tabindex="0" title="Buka Analisa Batu Hari Ini">
+              <div class="entry-icon-circle circle-gold">
+                <i class="fa-solid fa-gem"></i>
+              </div>
+              <div class="entry-text-col">
+                <h3 class="entry-card-title">Batu Keberuntungan Hari Ini</h3>
+                <p class="entry-card-desc" id="heroTodayStoneName">Temukan batu alami yang selaras dengan hari ini</p>
+              </div>
+              <div class="entry-arrow-btn">
+                <i class="fa-solid fa-arrow-right"></i>
+              </div>
+            </div>
+
+            <!-- Gate 2 (Kanan - Green Theme): Analisa Wajah & Aura Biometrik -->
+            <div class="entry-card card-scan" id="btnHeroScanFace" onclick="startScannerFlow()" role="button" tabindex="0" title="Mulai Pindai Wajah & Aura">
+              <div class="entry-icon-circle circle-green">
+                <i class="fa-solid fa-camera"></i>
+              </div>
+              <div class="entry-text-col">
+                <h3 class="entry-card-title">Analisa Wajah &amp; Aura</h3>
+                <p class="entry-card-desc">Kenali elemen dominan dan energi aura Anda</p>
+              </div>
+              <div class="entry-arrow-btn">
+                <i class="fa-solid fa-arrow-right"></i>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Search Box (Quick Ask Master Aura — Pintu Masuk Teks/Suara) -->
           <div class="search-box-wrapper">
             <div class="search-pill" id="searchPill">
               <input type="text" id="omniboxInput" class="search-input" placeholder="Tanya Master Aura tentang aura, batu keberuntungan, rezeki, atau feng shui..." autocomplete="off" spellcheck="false">
@@ -201,38 +141,7 @@
             </div>
           </div>
 
-          <!-- 2 MAIN DUAL ENTRY CARDS (Gambar 1) -->
-          <div class="dual-entry-cards-grid">
-            <!-- Card 1: Analisa Wajah & Aura (Green Glow Card) -->
-            <div class="entry-card card-scan" id="btnHeroScanFace" role="button" tabindex="0">
-              <div class="entry-icon-circle circle-green">
-                <i class="fa-solid fa-camera"></i>
-              </div>
-              <div class="entry-text-col">
-                <h3 class="entry-card-title">Analisa Wajah &amp; Aura</h3>
-                <p class="entry-card-desc">Kenali elemen dominan dan energi aura Anda</p>
-              </div>
-              <div class="entry-arrow-btn">
-                <i class="fa-solid fa-arrow-right"></i>
-              </div>
-            </div>
-
-            <!-- Card 2: Batu Keberuntungan Hari Ini (Gold Glow Card) -->
-            <div class="entry-card card-lucky" id="btnHeroLuckyStone" role="button" tabindex="0">
-              <div class="entry-icon-circle circle-gold">
-                <i class="fa-solid fa-gem"></i>
-              </div>
-              <div class="entry-text-col">
-                <h3 class="entry-card-title">Batu Keberuntungan Hari Ini</h3>
-                <p class="entry-card-desc">Temukan batu terbaik untuk energi hari ini</p>
-              </div>
-              <div class="entry-arrow-btn">
-                <i class="fa-solid fa-arrow-right"></i>
-              </div>
-            </div>
-          </div>
-
-          <!-- Topik Populer (6 Chips with Icons - Gambar 1) -->
+          <!-- Topik Populer (6 Chips with Icons) -->
           <div class="trending-section">
             <span class="trending-label" id="txtTrendingTitle">Topik populer</span>
             <div class="trending-chips-row">
