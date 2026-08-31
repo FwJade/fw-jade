@@ -44,8 +44,54 @@ Analisis foto wajah pengguna ini dan berikan output JSON yang valid (HANYA JSON,
 }`;
 
     let visionResult = null;
+    let usedModel = 'seed-fallback';
 
-    if (accountId && apiToken) {
+    // 1. High-Accuracy: Google Gemini 3.6 Flash Vision
+    const geminiKey = env.GEMINI_API_KEY || env.VITE_GEMINI_API_KEY;
+    if (geminiKey) {
+      try {
+        const geminiRes = await fetch(
+          `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=${geminiKey}`,
+          {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              contents: [
+                {
+                  parts: [
+                    { text: prompt },
+                    {
+                      inlineData: {
+                        mimeType: 'image/jpeg',
+                        data: cleanBase64
+                      }
+                    }
+                  ]
+                }
+              ],
+              generationConfig: {
+                responseMimeType: 'application/json',
+                temperature: 0.3
+              }
+            })
+          }
+        );
+
+        if (geminiRes.ok) {
+          const gData = await geminiRes.json();
+          const rawText = gData.candidates?.[0]?.content?.parts?.[0]?.text;
+          if (rawText) {
+            visionResult = JSON.parse(rawText);
+            usedModel = 'gemini-3.6-flash';
+          }
+        }
+      } catch (gemErr) {
+        console.warn('Gemini Vision API error, falling back:', gemErr);
+      }
+    }
+
+    // 2. Fallback: Cloudflare Workers AI Vision (@cf/meta/llama-3.2-11b-vision-instruct)
+    if (!visionResult && accountId && apiToken) {
       try {
         const cfRes = await fetch(
           `https://api.cloudflare.com/client/v4/accounts/${accountId}/ai/run/@cf/meta/llama-3.2-11b-vision-instruct`,
@@ -69,10 +115,11 @@ Analisis foto wajah pengguna ini dan berikan output JSON yang valid (HANYA JSON,
           const jsonMatch = rawText.match(/\{[\s\S]*\}/);
           if (jsonMatch) {
             visionResult = JSON.parse(jsonMatch[0]);
+            usedModel = '@cf/meta/llama-3.2-11b-vision-instruct';
           }
         }
       } catch (e) {
-        console.warn('Vision model API call error:', e);
+        console.warn('Cloudflare Vision model API call error:', e);
       }
     }
 
@@ -110,7 +157,7 @@ Analisis foto wajah pengguna ini dan berikan output JSON yang valid (HANYA JSON,
 
     return new Response(JSON.stringify({
       success: true,
-      model: '@cf/meta/llama-3.2-11b-vision-instruct',
+      model: usedModel,
       analysis: visionResult
     }), {
       status: 200,

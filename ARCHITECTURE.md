@@ -101,11 +101,11 @@ flowchart TD
   └─ IndexedDB / Supabase Free Tier (Penyimpanan Face Vector Memori)
                  │
                  ▼
-[ Layer 2: Cloud Multi-Provider Fallback (Gratis 100%) ]
-  ├─ Primary: Google Gemini 2.0 Flash Free Tier (15 RPM / 1.500 RPD Vision & Multimodal)
-  ├─ Fallback 1: Groq Cloud Vision (Llama-3.2-11b-vision & Whisper v3 — 500 tokens/sec)
-  ├─ Fallback 2: OpenRouter Free Pool (Gemini Flash :free & Qwen-2.5-VL :free)
-  ├─ Fallback 3: Cloudflare Workers AI (10.000 Neurons/hari gratis)
-  └─ Ultimate Fallback: Client-Side Rule Engine (Tetap menyala meski kuota API habis)
+[ Layer 2: Cloud Multi-Provider Fallback (100% GRATIS / ZERO COST) ]
+  ├─ Ultra-Fast Tier: Groq Cloud Free Tier (qwen/qwen3.8-27b & groq/compound — <900ms, 14.400 RPD)
+  ├─ High-Availability Tier: OpenRouter Free Pool (minimax-m3:free, nemotron:free, openrouter/free)
+  ├─ Multimodal Vision Tier: Google Gemini 3.6 Flash Free Tier (1.500 RPD / 15 RPM)
+  ├─ Native Edge Tier: Cloudflare Workers AI (10.000 Neurons/hari gratis bawaan Pages)
+  └─ Ultimate Safety Fallback: Client-Side Rule & Bio-Physics Matrix Engine (Tetap menyala meski kuota API habis)
 ```
 

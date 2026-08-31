@@ -47,18 +47,21 @@ const AURA_CONFIG = {
   AI_PROVIDERS: {
     GEMINI: {
       KEY: window.ENV?.VITE_GEMINI_API_KEY || '',
-      ENDPOINT: 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent'
+      ENDPOINT: 'https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent',
+      MODEL: 'gemini-3.6-flash'
     },
     GROQ: {
       KEY: window.ENV?.VITE_GROQ_API_KEY || '',
       ENDPOINT: 'https://api.groq.com/openai/v1/chat/completions',
-      VISION_MODEL: 'llama-3.2-11b-vision-preview',
-      TEXT_MODEL: 'llama-3.3-70b-versatile'
+      TEXT_MODEL: 'qwen/qwen3.8-27b',
+      FALLBACK_MODEL: 'groq/compound',
+      WHISPER_MODEL: 'whisper-large-v3-turbo'
     },
     OPENROUTER: {
       KEY: window.ENV?.VITE_OPENROUTER_API_KEY || '',
       ENDPOINT: 'https://openrouter.ai/api/v1/chat/completions',
-      MODEL: 'google/gemini-2.0-flash-exp:free'
+      MODEL: 'openrouter/free',
+      FALLBACK_MODEL: 'google/gemma-4-31b-it:free'
     }
   },
 

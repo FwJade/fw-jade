@@ -1,0 +1,42 @@
+# ==============================================================================
+# FW JADE (fwjade.com) — Official Robots Protocol
+# Luxury Natural Gemstones & Fine Jewellery • Powered by AURA AI
+# ==============================================================================
+
+User-agent: *
+Allow: /
+Disallow: /functions/
+Disallow: /api/
+
+# Priority Search Engine Crawlers
+User-agent: Googlebot
+Allow: /
+Allow: /*.jpg$
+Allow: /*.png$
+Allow: /*.css$
+Allow: /*.js$
+
+User-agent: Googlebot-Image
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Slurp
+Allow: /
+
+User-agent: DuckDuckBot
+Allow: /
+
+User-agent: Baiduspider
+Allow: /
+
+User-agent: YandexBot
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+# Host & Sitemap Declaration
+Host: https://fwjade.com
+Sitemap: https://fwjade.com/sitemap.xml

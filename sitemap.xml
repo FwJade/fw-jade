@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  
+  <!-- 1. Homepage / AURA AI Gemstone Discovery Sanctuary -->
+  <url>
+    <loc>https://fwjade.com/</loc>
+    <lastmod>2026-08-31</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="id" href="https://fwjade.com/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://fwjade.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://fwjade.com/" />
+    <image:image>
+      <image:loc>https://fwjade.com/og-preview.jpg</image:loc>
+      <image:title>FW JADE — Authentic Natural Gemstones &amp; Fine Jewellery • Powered by AURA AI</image:title>
+      <image:caption>FW JADE Medan — Authentic Natural Gemstones &amp; Fine Jewellery since 2009. Temukan giok alami dan batu mulia yang selaras dengan energi Anda.</image:caption>
+    </image:image>
+  </url>
+
+  <!-- 2. About Us / Story Since 2009 -->
+  <url>
+    <loc>https://fwjade.com/about.html</loc>
+    <lastmod>2026-08-31</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="id" href="https://fwjade.com/about.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://fwjade.com/about.html" />
+  </url>
+
+  <!-- 3. Contact & Private VIP Concierge -->
+  <url>
+    <loc>https://fwjade.com/contact.html</loc>
+    <lastmod>2026-08-31</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="id" href="https://fwjade.com/contact.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://fwjade.com/contact.html" />
+  </url>
+
+  <!-- 4. Terms & Conditions -->
+  <url>
+    <loc>https://fwjade.com/terms.html</loc>
+    <lastmod>2026-08-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+
+  <!-- 5. Privacy Policy -->
+  <url>
+    <loc>https://fwjade.com/privacy.html</loc>
+    <lastmod>2026-08-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+
+  <!-- 6. Refund & Authenticity Warranty -->
+  <url>
+    <loc>https://fwjade.com/refund.html</loc>
+    <lastmod>2026-08-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <!-- 7. Cookies Policy -->
+  <url>
+    <loc>https://fwjade.com/cookies.html</loc>
+    <lastmod>2026-08-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+  </url>
+
+  <!-- 8. Security & Data Protection -->
+  <url>
+    <loc>https://fwjade.com/security.html</loc>
+    <lastmod>2026-08-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <!-- 9. Non-Clinical Disclaimer -->
+  <url>
+    <loc>https://fwjade.com/disclaimer.html</loc>
+    <lastmod>2026-08-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+
+</urlset>
