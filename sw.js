@@ -1,4 +1,4 @@
-const CACHE_NAME = "aurora-vip-v33";
+const CACHE_NAME = "aurora-vip-v34";
 const urlsToCache = [
   "/",
   "/index.html",
@@ -6,7 +6,9 @@ const urlsToCache = [
   "/app.js",
   "/config.js",
   "/hero-bg-crystals.jpg",
-  "/hero-bg-crystals-mobile.jpg"
+  "/hero-bg-crystals-mobile.jpg",
+  "/hero-bg-crystals-light.jpg",
+  "/hero-bg-crystals-light-mobile.jpg"
 ];
 
 self.addEventListener("install", event => {

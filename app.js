@@ -574,7 +574,7 @@ function closeUserAccountModal() {
 window.closeUserAccountModal = closeUserAccountModal;
 
 /**
- * Log out user — clears localStorage and resets AppState.
+ * Log out user — clears localStorage and resets AppState, resets form inputs and restores Google Auth button.
  */
 function logoutUser() {
   localStorage.removeItem('fw_jade_user');
@@ -583,6 +583,61 @@ function logoutUser() {
   AppState.user.picture = null;
   AppState.user.isGoogleAuth = false;
   AppState.user.isRegistered = false;
+
+  // Clear inputs in form
+  const inputName = document.getElementById('inputUserName');
+  const inputEmail = document.getElementById('inputUserEmail');
+  const inputPhone = document.getElementById('inputUserPhone');
+  if (inputName) inputName.value = '';
+  if (inputEmail) inputEmail.value = '';
+  if (inputPhone) inputPhone.value = '';
+
+  // Restore Google Quick Auth Card in Step 1 Form
+  const googleCard = document.querySelector('.google-quick-auth-card');
+  if (googleCard) {
+    googleCard.innerHTML = `
+      <div id="g_id_onload"
+           data-client_id="734583908123-ugbaqutk7pr713hmmbk03nnk1kij2hor.apps.googleusercontent.com"
+           data-context="signin"
+           data-ux_mode="popup"
+           data-callback="handleGoogleCredentialResponse"
+           data-auto_prompt="false">
+      </div>
+      <div class="g_id_signin"
+           data-type="standard"
+           data-shape="pill"
+           data-theme="${document.body.classList.contains('theme-imperial-light') ? 'outline' : 'filled_black'}"
+           data-text="continue_with"
+           data-size="large"
+           data-logo_alignment="left"
+           data-width="320">
+      </div>
+      <div class="divider-or-text"><span>atau isi manual di bawah</span></div>
+    `;
+    if (window.google && google.accounts && google.accounts.id) {
+      try {
+        google.accounts.id.initialize({
+          client_id: '734583908123-ugbaqutk7pr713hmmbk03nnk1kij2hor.apps.googleusercontent.com',
+          callback: handleGoogleCredentialResponse
+        });
+        const signinDiv = googleCard.querySelector('.g_id_signin');
+        if (signinDiv) {
+          google.accounts.id.renderButton(signinDiv, {
+            type: 'standard',
+            shape: 'pill',
+            theme: document.body.classList.contains('theme-imperial-light') ? 'outline' : 'filled_black',
+            text: 'continue_with',
+            size: 'large',
+            logo_alignment: 'left',
+            width: 320
+          });
+        }
+      } catch (e) {
+        console.warn('GIS re-render error:', e);
+      }
+    }
+  }
+
   updateUserProfileUI();
   playChimeReverb();
 }
@@ -800,7 +855,7 @@ function closeScannerFlowToHome() {
   const secHero = document.getElementById('secHero');
   if (secHero) {
     secHero.style.display = 'block';
-    secHero.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 }
 window.closeScannerFlowToHome = closeScannerFlowToHome;
@@ -808,20 +863,24 @@ window.closeScannerFlowToHome = closeScannerFlowToHome;
 function startScannerFlow() {
   initIdentityFormSelectors();
   
+  // 1. Strictly hide the Hero section completely to eliminate any redundancy
   const secHero = document.getElementById('secHero');
-  if (secHero) secHero.style.display = 'none';
+  if (secHero) {
+    secHero.style.display = 'none';
+  }
 
+  // 2. Open Step 1 (Identity & Bazi Form) with full focus
   const secForm = document.getElementById('secIdentityForm');
   if (secForm) {
     secForm.style.display = 'block';
-    secForm.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    // Pre-fill if user already logged in (fix: form should reflect session)
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    // Pre-fill if user already logged in (reflect session)
     prefillFormIfLoggedIn();
   } else {
     const secScanner = document.getElementById('secScanner');
     if (secScanner) {
       secScanner.style.display = 'block';
-      secScanner.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
     startWebcam();
   }

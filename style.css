@@ -2256,13 +2256,14 @@ body {
   position: relative;
   width: 140px;
   perspective: 1000px;
-  padding-top: 14px; /* Space for the diamond and swoosh */
+  padding-top: 10px; /* Space for the diamond and swoosh */
+  margin-top: 2px;
 }
 
 /* The Glowing Green Diamond */
 .fwj-diamond-container {
   position: absolute;
-  top: -6px; /* Moved up to sit on the swoosh line */
+  top: -1px; /* Perfectly aligned to sit on swoosh without navbar clipping */
   width: 14px;
   height: 22px;
   z-index: 2;
@@ -2298,7 +2299,7 @@ body {
 /* The Golden Swoosh Arc */
 .fwj-swoosh {
   position: absolute;
-  top: -2px;
+  top: 3px;
   width: 130%;
   height: 40px;
   border-radius: 50%;
@@ -5302,19 +5303,35 @@ body.style-explorer .view-explorer-secondary {
   background: rgba(43, 224, 133, 0.06);
   border: 1px dashed rgba(43, 224, 133, 0.35);
   border-radius: var(--radius-md);
-  padding: 12px 16px;
+  padding: 12px 18px;
   animation: fadeIn 0.3s ease;
 }
 
 .bazi-badge-inner {
-  display: flex;
-  justify-content: space-around;
-  flex-wrap: wrap;
-  gap: 10px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  text-align: center;
+  align-items: center;
 }
 
 .bazi-item {
-  font-size: 0.82rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 0.84rem;
+}
+
+@media (max-width: 540px) {
+  .bazi-badge-inner {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  .bazi-item {
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 2px 8px;
+  }
 }
 
 .phone-input-wrap {
@@ -7101,23 +7118,35 @@ body.style-explorer .view-explorer-secondary {
    Masterclass High-Jewellery Salon Aesthetic for Senior Collectors
    ========================================================== */
 
-/* ── 0. Base Background & Atmosphere ────────────────────────── */
+/* ── 0. Base Background & Atmosphere (Light Luxury Ruby & Jade) ────────────────────────── */
 body.theme-imperial-light {
   background: radial-gradient(circle at 50% 10%, #FFFFFF 0%, #FAF8F2 45%, #F2EDE2 100%) !important;
   color: #0E221B !important;
 }
 
-/* Hide muddy bleached dark rocks in light mode for pure silk aesthetic */
+/* Luminous Royal Jade & Crimson Ruby Crystal Backdrop in Light Mode */
 body.theme-imperial-light .fullscreen-crystal-backdrop {
-  display: none !important;
+  display: block !important;
+  background: 
+    radial-gradient(ellipse at 50% 28%, rgba(255, 255, 255, 0.4) 0%, rgba(250, 248, 242, 0.82) 58%, #F2EDE2 100%),
+    url('hero-bg-crystals-light.jpg') center top / cover no-repeat !important;
+  opacity: 0.92 !important;
+}
+
+@media (max-width: 768px), (orientation: portrait) {
+  body.theme-imperial-light .fullscreen-crystal-backdrop {
+    background: 
+      radial-gradient(ellipse at 50% 32%, rgba(255, 255, 255, 0.35) 0%, rgba(250, 248, 242, 0.85) 62%, #F2EDE2 100%),
+      url('hero-bg-crystals-light-mobile.jpg') center bottom / cover no-repeat !important;
+  }
 }
 
 body.theme-imperial-light .ambient-glow {
-  opacity: 0.12 !important;
+  opacity: 0.1 !important;
 }
 
 body.theme-imperial-light #particleCanvas {
-  opacity: 0.2 !important;
+  opacity: 0.25 !important;
 }
 
 /* ── 1. Top Navigation in Light Mode ────────────────────────── */
@@ -7133,8 +7162,8 @@ body.theme-imperial-light #particleCanvas {
 }
 
 body.theme-imperial-light .top-nav {
-  background: rgba(255, 255, 255, 0.88) !important;
-  border: 1px solid rgba(216, 195, 144, 0.4) !important;
+  background: rgba(255, 255, 255, 0.92) !important;
+  border: 1px solid rgba(216, 195, 144, 0.5) !important;
   border-radius: 40px !important;
   backdrop-filter: blur(16px) !important;
   -webkit-backdrop-filter: blur(16px) !important;
@@ -7143,15 +7172,17 @@ body.theme-imperial-light .top-nav {
 
 body.theme-imperial-light .fwj-text-main {
   color: #0D221A !important;
+  text-shadow: none !important;
 }
 
 body.theme-imperial-light .fwj-j {
   color: #059669 !important;
+  text-shadow: none !important;
 }
 
 body.theme-imperial-light .nav-pill-btn {
   background: #FFFFFF !important;
-  border: 1px solid rgba(216, 195, 144, 0.45) !important;
+  border: 1px solid rgba(216, 195, 144, 0.5) !important;
   color: #0E221B !important;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03) !important;
 }
@@ -7170,43 +7201,82 @@ body.theme-imperial-light .nav-theme-toggle {
 
 /* ── 2. Hero Section in Light Mode ──────────────────────────── */
 body.theme-imperial-light .hero-aurora-glow-mist {
-  background: radial-gradient(circle, rgba(216, 195, 144, 0.4) 0%, rgba(5, 150, 105, 0.12) 50%, transparent 75%) !important;
+  background: radial-gradient(circle, rgba(216, 195, 144, 0.35) 0%, rgba(5, 150, 105, 0.1) 50%, transparent 75%) !important;
 }
 
+/* High-Contrast Celestial Diamond Emblem */
+body.theme-imperial-light .celestial-emblem-container {
+  filter: drop-shadow(0 4px 18px rgba(140, 109, 35, 0.3)) drop-shadow(0 2px 10px rgba(5, 150, 105, 0.25)) !important;
+}
+
+body.theme-imperial-light .celestial-emblem-svg circle[stroke] {
+  stroke: #8C6D23 !important;
+  stroke-opacity: 0.9 !important;
+  stroke-width: 1.4 !important;
+}
+
+body.theme-imperial-light .celestial-emblem-svg g[stroke] {
+  stroke: #8C6D23 !important;
+  stroke-opacity: 0.95 !important;
+}
+
+body.theme-imperial-light .celestial-emblem-svg polygon {
+  stroke: #059669 !important;
+  stroke-width: 1.8 !important;
+  fill: rgba(5, 150, 105, 0.08) !important;
+}
+
+body.theme-imperial-light .celestial-emblem-svg line {
+  stroke: #059669 !important;
+  stroke-width: 1.4 !important;
+}
+
+body.theme-imperial-light .celestial-emblem-svg path,
+body.theme-imperial-light .celestial-emblem-svg circle[fill] {
+  fill: #8C6D23 !important;
+}
+
+/* Pure Haute Typography without dark shadows */
 body.theme-imperial-light .hero-brand-title {
-  background: linear-gradient(135deg, #0A1C16 0%, #163B30 50%, #946C18 100%) !important;
+  background: linear-gradient(135deg, #0A1C16 0%, #163B30 50%, #8C6D23 100%) !important;
   -webkit-background-clip: text !important;
   -webkit-text-fill-color: transparent !important;
-  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.06)) !important;
+  text-shadow: none !important;
+  filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.08)) !important;
 }
 
 body.theme-imperial-light .hero-by-fwjade-text {
   color: #8C6D23 !important;
   letter-spacing: 3px !important;
   font-weight: 700 !important;
+  text-shadow: none !important;
 }
 
 body.theme-imperial-light .sacred-star-divider .divider-gem-star {
   color: #8C6D23 !important;
+  text-shadow: none !important;
 }
 
 body.theme-imperial-light .sacred-star-divider .divider-taper {
-  background: linear-gradient(90deg, transparent, rgba(216, 195, 144, 0.6), transparent) !important;
+  background: linear-gradient(90deg, transparent, rgba(216, 195, 144, 0.7), transparent) !important;
 }
 
 body.theme-imperial-light .hero-sacred-headline {
-  color: #0B1E17 !important;
+  color: #0A1C16 !important;
   font-weight: 700 !important;
+  text-shadow: none !important;
+  filter: none !important;
 }
 
 body.theme-imperial-light .hero-sacred-description {
   color: #2D4A3E !important;
   font-weight: 500 !important;
+  text-shadow: none !important;
 }
 
 body.theme-imperial-light .hero-heritage-badge {
   background: #FFFFFF !important;
-  border: 1px solid rgba(216, 195, 144, 0.6) !important;
+  border: 1px solid rgba(216, 195, 144, 0.65) !important;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
 }
 
@@ -7251,25 +7321,160 @@ body.theme-imperial-light .cta-arrow-circle {
 }
 
 body.theme-imperial-light .hero-trust-strip,
-body.theme-imperial-light .hero-trust-strip span {
+body.theme-imperial-light .hero-trust-strip span,
+body.theme-imperial-light .hero-assurance-strip,
+body.theme-imperial-light .hero-assurance-strip span {
   color: #4A655A !important;
 }
 
-body.theme-imperial-light .trust-link-gold {
+body.theme-imperial-light .assure-item {
+  color: #38554B !important;
+  font-weight: 500 !important;
+}
+
+body.theme-imperial-light .assure-item.assure-clickable {
   color: #8C6D23 !important;
   font-weight: 600 !important;
 }
 
-body.theme-imperial-light .btn-hero-ask-oracle {
-  background: #FFFFFF !important;
-  border: 1px solid rgba(5, 150, 105, 0.35) !important;
-  color: #0B1E17 !important;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04) !important;
+body.theme-imperial-light .assure-dot {
+  color: rgba(216, 195, 144, 0.8) !important;
 }
 
-body.theme-imperial-light .btn-hero-ask-oracle span {
-  color: #0B1E17 !important;
+/* ── 2B. Hero Chat Module & Input Bar in Light Mode ───────────────── */
+body.theme-imperial-light .aura-capsule-trigger {
+  background: #FFFFFF !important;
+  border: 1.5px solid rgba(5, 150, 105, 0.4) !important;
+  box-shadow: 0 4px 20px rgba(5, 150, 105, 0.12), 0 2px 6px rgba(0, 0, 0, 0.04) !important;
+  color: #0A1C16 !important;
+}
+
+body.theme-imperial-light .aura-capsule-trigger:hover {
+  background: #F4F1EA !important;
+  border-color: #059669 !important;
+  box-shadow: 0 6px 25px rgba(5, 150, 105, 0.2) !important;
+}
+
+body.theme-imperial-light .aura-capsule-text {
+  color: #0A1C16 !important;
   font-weight: 600 !important;
+}
+
+body.theme-imperial-light .aura-capsule-divider {
+  background: rgba(216, 195, 144, 0.5) !important;
+}
+
+body.theme-imperial-light .hero-scan-compact-pill {
+  background: #FFFFFF !important;
+  border: 1.5px solid rgba(5, 150, 105, 0.4) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05) !important;
+}
+
+body.theme-imperial-light .hero-scan-compact-pill:hover {
+  border-color: #059669 !important;
+  box-shadow: 0 6px 20px rgba(5, 150, 105, 0.2) !important;
+}
+
+body.theme-imperial-light .compact-text {
+  color: #0A1C16 !important;
+  font-weight: 600 !important;
+}
+
+/* Expanded Chat Input Bar in Light Mode */
+body.theme-imperial-light .search-pill {
+  background: #FFFFFF !important;
+  border: 1.5px solid rgba(5, 150, 105, 0.35) !important;
+  box-shadow: 0 8px 30px rgba(5, 150, 105, 0.1), 0 2px 8px rgba(0, 0, 0, 0.03) !important;
+}
+
+body.theme-imperial-light .search-pill:hover,
+body.theme-imperial-light .search-pill:focus-within {
+  background: #FFFFFF !important;
+  border-color: #059669 !important;
+  box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.18), 0 10px 30px rgba(0, 0, 0, 0.06) !important;
+}
+
+body.theme-imperial-light .search-input {
+  color: #0A1C16 !important;
+  font-weight: 500 !important;
+}
+
+body.theme-imperial-light .search-input::placeholder {
+  color: #5A746B !important;
+}
+
+body.theme-imperial-light .pill-close-btn {
+  background: #F4F1EA !important;
+  border: 1px solid rgba(216, 195, 144, 0.45) !important;
+  color: #5A746B !important;
+}
+
+body.theme-imperial-light .pill-close-btn:hover {
+  background: #FEE2E2 !important;
+  border-color: #EF4444 !important;
+  color: #DC2626 !important;
+}
+
+body.theme-imperial-light .mic-btn {
+  background: rgba(5, 150, 105, 0.08) !important;
+  border: 1px solid rgba(5, 150, 105, 0.25) !important;
+  color: #059669 !important;
+}
+
+body.theme-imperial-light .btn-ask-aurora {
+  background: linear-gradient(135deg, #10B981, #059669) !important;
+  color: #FFFFFF !important;
+  border: none !important;
+  box-shadow: 0 4px 14px rgba(5, 150, 105, 0.3) !important;
+}
+
+/* ── 2C. Preset Topic Chips in Light Mode (High Contrast & Colorful Icons) ─ */
+body.theme-imperial-light .trending-label {
+  color: #2D4A3E !important;
+  font-weight: 600 !important;
+}
+
+body.theme-imperial-light .topic-pill-chip,
+body.theme-imperial-light .topic-chip {
+  background: #FFFFFF !important;
+  border: 1px solid rgba(216, 195, 144, 0.7) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
+  color: #0D221A !important;
+  font-weight: 500 !important;
+}
+
+body.theme-imperial-light .topic-pill-chip:hover,
+body.theme-imperial-light .topic-chip:hover {
+  background: #F4F1EA !important;
+  border-color: #059669 !important;
+  color: #059669 !important;
+  box-shadow: 0 4px 14px rgba(5, 150, 105, 0.15) !important;
+  transform: translateY(-2px) !important;
+}
+
+body.theme-imperial-light .topic-pill-chip .text-gold,
+body.theme-imperial-light .topic-chip .text-gold {
+  color: #B45309 !important; /* Rich amber gold for Rezeki & Feng Shui */
+}
+
+body.theme-imperial-light .topic-pill-chip .text-pink,
+body.theme-imperial-light .topic-chip .text-pink {
+  color: #BE185D !important; /* Deep crimson rose for Cinta */
+}
+
+body.theme-imperial-light .topic-pill-chip .text-cyan,
+body.theme-imperial-light .topic-chip .text-cyan {
+  color: #0284C7 !important; /* Deep sapphire blue for Perlindungan */
+}
+
+body.theme-imperial-light .topic-pill-chip .text-emerald,
+body.theme-imperial-light .topic-chip .text-emerald {
+  color: #047857 !important; /* Imperial jade green for Giok Alami */
+}
+
+body.theme-imperial-light .topic-pill-chip .text-amber,
+body.theme-imperial-light .topic-chip .text-amber {
+  color: #B45309 !important; /* Warm gold amber for Karier */
 }
 
 /* ── 3. Step Cards & Identity Form in Light Mode ─────────────── */
@@ -7288,12 +7493,14 @@ body.theme-imperial-light h2,
 body.theme-imperial-light h3,
 body.theme-imperial-light h4 {
   color: #0A1C16 !important;
+  text-shadow: none !important;
 }
 
 body.theme-imperial-light .step-main-subtitle,
 body.theme-imperial-light .form-hint,
 body.theme-imperial-light p {
   color: #38554B !important;
+  text-shadow: none !important;
 }
 
 body.theme-imperial-light .step-badge-indicator {
@@ -7391,12 +7598,30 @@ body.theme-imperial-light .form-label {
 
 body.theme-imperial-light .bazi-preview-badge {
   background: rgba(5, 150, 105, 0.06) !important;
-  border: 1px dashed rgba(5, 150, 105, 0.4) !important;
+  border: 1.5px dashed rgba(5, 150, 105, 0.45) !important;
+  border-radius: 14px !important;
+  padding: 12px 18px !important;
   color: #0A1C16 !important;
 }
 
 body.theme-imperial-light .b-lbl {
   color: #4A655A !important;
+  font-weight: 500 !important;
+}
+
+body.theme-imperial-light #valBaziZodiac {
+  color: #0284C7 !important;
+  font-weight: 700 !important;
+}
+
+body.theme-imperial-light #valBaziShio {
+  color: #B45309 !important;
+  font-weight: 700 !important;
+}
+
+body.theme-imperial-light #valBaziElement {
+  color: #047857 !important;
+  font-weight: 700 !important;
 }
 
 body.theme-imperial-light .form-privacy-assurance {
