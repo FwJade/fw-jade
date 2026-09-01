@@ -439,29 +439,139 @@ function restoreUserSession() {
 
 /**
  * Updates the floating user profile bar at the top of the page.
- * Shows name + avatar if logged in, otherwise shows login prompt.
+ * Shows name + avatar if logged in, and clicking it opens the User Data Panel.
  */
 function updateUserProfileUI() {
   const bar = document.getElementById('userProfileBar');
-  if (!bar) return;
+  const navAccountLabel = document.getElementById('navAccountLabel');
   const name = AppState.user.name;
   const picture = AppState.user.picture;
   const isAuth = AppState.user.isGoogleAuth || AppState.user.isRegistered;
+
+  if (navAccountLabel) {
+    navAccountLabel.textContent = (isAuth && name && name !== 'Kolektor Yang Terhormat') ? name.split(' ')[0] : 'Akun';
+  }
+
+  if (!bar) return;
   if (isAuth && name) {
     const initial = name.charAt(0).toUpperCase();
     const avatarHtml = picture
       ? `<img src="${picture}" alt="${name}" class="user-bar-avatar" referrerpolicy="no-referrer" />`
       : `<div class="user-bar-avatar user-bar-initial">${initial}</div>`;
     bar.innerHTML = `
-      ${avatarHtml}
-      <span class="user-bar-name">${name}</span>
-      <button class="user-bar-logout" onclick="logoutUser()" title="Keluar"><i class="fa-solid fa-right-from-bracket"></i></button>
+      <div class="user-bar-click-area" onclick="openUserAccountModal()" title="Buka Panel Data Akun & Aura">
+        ${avatarHtml}
+        <span class="user-bar-name">${name}</span>
+      </div>
+      <button class="user-bar-logout" onclick="event.stopPropagation(); logoutUser();" title="Keluar"><i class="fa-solid fa-right-from-bracket"></i></button>
     `;
     bar.classList.add('visible');
   } else {
     bar.classList.remove('visible');
   }
 }
+
+/**
+ * Opens User Account & Aura Data Sanctuary Panel
+ */
+function openUserAccountModal() {
+  const modal = document.getElementById('userAccountModal');
+  if (!modal) return;
+
+  const uName = document.getElementById('uModalName');
+  const uEmail = document.getElementById('uModalEmail');
+  const uStatus = document.getElementById('uModalStatus');
+  const uAvatarImg = document.getElementById('uModalAvatarImg');
+  const uAvatarInit = document.getElementById('uModalAvatarInit');
+  const uTier = document.getElementById('uModalTierBadge');
+
+  const uDob = document.getElementById('uModalDob');
+  const uZodiac = document.getElementById('uModalZodiac');
+  const uShio = document.getElementById('uModalShio');
+  const uElement = document.getElementById('uModalElement');
+
+  const uGem = document.getElementById('uModalGemstone');
+  const uScore = document.getElementById('uModalScore');
+  const uVit = document.getElementById('uModalVitality');
+  const uBal = document.getElementById('uModalBalance');
+
+  const uFacePair = document.getElementById('uModalFaceThumbPair');
+  const uNoScanMsg = document.getElementById('uModalNoScanMsg');
+  const uBeforeThumb = document.getElementById('uModalBeforeThumb');
+  const uAfterThumb = document.getElementById('uModalAfterThumb');
+
+  // Populate Identity
+  const name = AppState.user.name || 'Kolektor FW JADE';
+  const email = AppState.user.email;
+  const isAuth = AppState.user.isGoogleAuth || AppState.user.isRegistered;
+
+  if (uName) uName.textContent = name;
+  if (uEmail) uEmail.textContent = email || 'Belum terhubung akun Google';
+  if (uStatus) {
+    uStatus.innerHTML = isAuth 
+      ? '<i class="fa-solid fa-circle-check text-emerald"></i> Akun Terverifikasi & Tersimpan di Perangkat'
+      : '<i class="fa-solid fa-user-clock text-gold"></i> Sesi Tamu Eksklusif';
+  }
+  if (uTier) {
+    uTier.innerHTML = isAuth ? '<i class="fa-solid fa-gem text-emerald"></i> VIP Collector' : '<i class="fa-solid fa-shield text-gold"></i> Member';
+  }
+
+  if (AppState.user.picture && uAvatarImg) {
+    uAvatarImg.src = AppState.user.picture;
+    uAvatarImg.style.display = 'block';
+    if (uAvatarInit) uAvatarInit.style.display = 'none';
+  } else if (uAvatarInit) {
+    uAvatarInit.textContent = name.charAt(0).toUpperCase();
+    uAvatarInit.style.display = 'flex';
+    if (uAvatarImg) uAvatarImg.style.display = 'none';
+  }
+
+  // Populate Bazi & Astrology
+  if (uDob) uDob.textContent = AppState.user.dob || '-';
+  if (uZodiac) uZodiac.textContent = AppState.user.bazi?.zodiac || '-';
+  if (uShio) uShio.textContent = AppState.user.bazi?.shio || '-';
+  if (uElement) uElement.textContent = AppState.user.bazi?.element || AppState.user.metrics?.element || '-';
+
+  // Populate Latest Aura Scan Data
+  if (uGem) uGem.textContent = AppState.user.metrics.selectedGem?.name || 'Natural Aceh Jadeite';
+  if (uScore) uScore.textContent = `${AppState.user.metrics.alignmentScore || 96}%`;
+  if (uVit) uVit.textContent = `${AppState.user.metrics.vitality || 91}%`;
+  if (uBal) uBal.textContent = AppState.user.metrics.energyBalance || 'Optimal';
+
+  // Populate Face Thumbnails if available
+  const faceBefore = document.getElementById('faceBeforeImg');
+  const faceAfter = document.getElementById('faceAfterImg');
+
+  if (faceBefore && faceBefore.src && faceBefore.style.display !== 'none') {
+    if (uBeforeThumb) {
+      uBeforeThumb.src = faceBefore.src;
+      uBeforeThumb.style.display = 'block';
+    }
+    if (faceAfter && faceAfter.src && faceAfter.style.display !== 'none' && uAfterThumb) {
+      uAfterThumb.src = faceAfter.src;
+      uAfterThumb.style.display = 'block';
+    }
+    if (uFacePair) uFacePair.style.display = 'flex';
+    if (uNoScanMsg) uNoScanMsg.style.display = 'none';
+  } else {
+    if (uFacePair) uFacePair.style.display = 'none';
+    if (uNoScanMsg) uNoScanMsg.style.display = 'block';
+  }
+
+  modal.style.display = 'flex';
+  modal.classList.add('open');
+  playChimeReverb();
+}
+window.openUserAccountModal = openUserAccountModal;
+
+function closeUserAccountModal() {
+  const modal = document.getElementById('userAccountModal');
+  if (modal) {
+    modal.style.display = 'none';
+    modal.classList.remove('open');
+  }
+}
+window.closeUserAccountModal = closeUserAccountModal;
 
 /**
  * Log out user — clears localStorage and resets AppState.

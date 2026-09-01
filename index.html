@@ -161,7 +161,7 @@
   <!-- Official Google Identity Services SDK -->
   <script src="https://accounts.google.com/gsi/client" async defer></script>
 
-  <link rel="stylesheet" href="style.css?v=37">
+  <link rel="stylesheet" href="style.css?v=38">
 </head>
 <body class="theme-quiet-luxury">
   <!-- User Profile Bar (shown after login, persisted across sessions) -->
@@ -183,19 +183,26 @@
     <!-- 1. Header Navigation (Clean & Minimalist - Gambar 1) -->
     <header class="top-nav">
       <div class="nav-brand">
-        <!-- Official FW JADE Animated Logo -->
-        <div class="fwjade-official-logo">
-          <div class="fwj-diamond-container">
-            <div class="fwj-diamond top"></div>
-            <div class="fwj-diamond bottom"></div>
-            <div class="fwj-diamond-glow"></div>
+        <!-- Official FW JADE Animated Logo (Clickable to Return Home) -->
+        <a href="#" onclick="closeScannerFlowToHome(); return false;" class="nav-brand-link" title="FW JADE — Kembali ke Beranda">
+          <div class="fwjade-official-logo">
+            <div class="fwj-diamond-container">
+              <div class="fwj-diamond top"></div>
+              <div class="fwj-diamond bottom"></div>
+              <div class="fwj-diamond-glow"></div>
+            </div>
+            <div class="fwj-swoosh"></div>
+            <div class="fwj-text-group">
+              <div class="fwj-text-main">FW<span class="fwj-j">J</span>ADE</div>
+            </div>
           </div>
-          <div class="fwj-swoosh"></div>
-          <div class="fwj-text-group">
-            <div class="fwj-text-main">FW<span class="fwj-j">J</span>ADE</div>
-          </div>
-        </div>
+        </a>
+      </div>
       <div class="nav-controls">
+        <!-- User Account / Data Panel Button -->
+        <button class="nav-pill-btn" id="btnUserAccountNav" onclick="openUserAccountModal()" title="Profil & Data Akun Saya" aria-label="Buka Profil dan Data Akun">
+          <i class="fa-solid fa-user-circle text-emerald"></i> <span id="navAccountLabel" class="desk-only-text">Akun</span>
+        </button>
         <!-- Dual Theme Toggle (Terang / Gelap - Sangat Ramah Orang Tua) -->
         <button class="nav-pill-btn nav-theme-toggle" id="themeToggleBtn" onclick="toggleTheme()" title="Ganti Tema (Terang / Gelap)" aria-label="Ganti Tema Terang atau Gelap">
           <i class="fa-solid fa-sun text-gold" id="themeIcon"></i>
@@ -419,6 +426,9 @@
            ========================================================================= -->
       <section class="section-card section-identity-form step-card-box" id="secIdentityForm" style="display: none;">
         <div class="step-card-header-bar">
+          <button type="button" class="btn-back-home-pill" onclick="closeScannerFlowToHome()" title="Kembali ke Beranda">
+            <i class="fa-solid fa-arrow-left"></i> <span>Beranda</span>
+          </button>
           <div class="step-badge-indicator">1. PENYELARASAN JIWA • Data Kelahiran &amp; Bazi</div>
           <button type="button" class="step-close-btn" onclick="closeScannerFlowToHome()" title="Tutup &amp; Kembali ke Beranda">&times;</button>
         </div>
@@ -525,6 +535,9 @@
            ========================================================================= -->
       <section class="section-card section-scanner step-card-box" id="secScanner" style="display: none;">
         <div class="step-card-header-bar">
+          <button type="button" class="btn-back-home-pill" onclick="closeScannerFlowToHome()" title="Kembali ke Beranda">
+            <i class="fa-solid fa-arrow-left"></i> <span>Beranda</span>
+          </button>
           <div class="step-badge-indicator">2. SCAN WAJAH • Mulai analisa wajah &amp; aura</div>
           <button type="button" class="step-close-btn" onclick="closeScannerFlowToHome()" title="Batalkan &amp; Kembali ke Beranda">&times;</button>
         </div>
@@ -593,7 +606,10 @@
            ========================================================================= -->
       <section class="section-card section-aura-results step-card-box" id="secAuraResults" style="display: none;">
         <div class="step-card-header-bar">
-          <div class="step-badge-indicator">2. HASIL AURA • Ringkasan aura Anda</div>
+          <button type="button" class="btn-back-home-pill" onclick="closeScannerFlowToHome()" title="Kembali ke Beranda">
+            <i class="fa-solid fa-arrow-left"></i> <span>Beranda</span>
+          </button>
+          <div class="step-badge-indicator"><i class="fa-solid fa-sparkles text-gold"></i> 3. HASIL AURA &amp; REKOMENDASI GIOK</div>
           <button type="button" class="step-close-btn" onclick="closeScannerFlowToHome()" title="Kembali ke Beranda"><i class="fa-solid fa-house" style="font-size: 0.95rem;"></i></button>
         </div>
         
@@ -1887,6 +1903,95 @@
               </tr>
             </tbody>
           </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 11: USER ACCOUNT & AURA SANCTUARY DATA PANEL -->
+  <div class="luxury-modal modal-wide" id="userAccountModal" style="display: none;">
+    <div class="modal-backdrop" id="userAccountBackdrop" onclick="closeUserAccountModal()"></div>
+    <div class="modal-card user-account-card">
+      <div class="modal-header">
+        <div class="modal-header-left">
+          <h3 class="modal-title"><i class="fa-solid fa-id-card-clip text-emerald"></i> Data Kolektor &amp; Profil Aura</h3>
+          <span class="user-tier-badge" id="uModalTierBadge"><i class="fa-solid fa-certificate"></i> Verified Member</span>
+        </div>
+        <button class="modal-close-btn" onclick="closeUserAccountModal()" title="Tutup">&times;</button>
+      </div>
+      <div class="modal-body">
+        
+        <!-- User Identity Header Banner -->
+        <div class="user-identity-profile-banner">
+          <div class="user-profile-avatar-wrap">
+            <img id="uModalAvatarImg" class="u-modal-avatar" src="" alt="Avatar" style="display: none;">
+            <div id="uModalAvatarInit" class="u-modal-avatar-init">U</div>
+          </div>
+          <div class="user-profile-meta">
+            <h4 class="u-profile-name" id="uModalName">Kolektor FW JADE</h4>
+            <div class="u-profile-email" id="uModalEmail">Belum terhubung akun Google</div>
+            <div class="u-profile-status" id="uModalStatus"><i class="fa-solid fa-circle-check text-emerald"></i> Sesi Aktif di Perangkat Ini</div>
+          </div>
+        </div>
+
+        <!-- 3 Pillars of Saved User Aura & Bazi Data -->
+        <div class="user-data-grid-pillars">
+          <!-- Pillar 1: Bazi & Cosmic Profile -->
+          <div class="user-data-box">
+            <div class="u-box-head">
+              <i class="fa-solid fa-compass text-gold"></i> <span>Profil Astrologi Bazi</span>
+            </div>
+            <div class="u-bazi-data-rows">
+              <div class="u-row-item"><span>Tanggal Lahir:</span> <strong id="uModalDob">-</strong></div>
+              <div class="u-row-item"><span>Zodiak Barat:</span> <strong id="uModalZodiac" class="text-cyan">-</strong></div>
+              <div class="u-row-item"><span>Shio Tionghoa:</span> <strong id="uModalShio" class="text-gold">-</strong></div>
+              <div class="u-row-item"><span>Elemen Bazi:</span> <strong id="uModalElement" class="text-emerald">-</strong></div>
+            </div>
+          </div>
+
+          <!-- Pillar 2: Latest Aura & Biometric Scan -->
+          <div class="user-data-box">
+            <div class="u-box-head">
+              <i class="fa-solid fa-sparkles text-emerald"></i> <span>Hasil Pindai Terakhir</span>
+            </div>
+            <div class="u-bazi-data-rows">
+              <div class="u-row-item"><span>Batu Penjaga:</span> <strong id="uModalGemstone" class="text-emerald">Natural Aceh Jadeite</strong></div>
+              <div class="u-row-item"><span>Skor Keselarasan:</span> <strong id="uModalScore" class="text-gold">96%</strong></div>
+              <div class="u-row-item"><span>Vitalitas Wajah:</span> <strong id="uModalVitality" class="text-cyan">91%</strong></div>
+              <div class="u-row-item"><span>Keseimbangan:</span> <strong id="uModalBalance">Optimal</strong></div>
+            </div>
+          </div>
+
+          <!-- Pillar 3: Face Before & After Preview Thumbnail -->
+          <div class="user-data-box u-box-face-preview">
+            <div class="u-box-head">
+              <i class="fa-solid fa-camera-rotate text-cyan"></i> <span>Wajah &amp; Transformasi Aura</span>
+            </div>
+            <div class="u-face-thumb-pair" id="uModalFaceThumbPair" style="display: none;">
+              <div class="u-face-slot">
+                <img id="uModalBeforeThumb" src="" alt="Wajah Asli" class="u-thumb-img">
+                <span class="u-thumb-lbl">Foto Asli</span>
+              </div>
+              <div class="u-face-slot">
+                <img id="uModalAfterThumb" src="" alt="Transformasi" class="u-thumb-img">
+                <span class="u-thumb-lbl">Aura AI</span>
+              </div>
+            </div>
+            <div id="uModalNoScanMsg" class="u-no-scan-note">Lakukan pindai kamera untuk melihat perbandingan wajah asli &amp; aura AI Anda.</div>
+          </div>
+        </div>
+
+        <!-- User Quick Actions & Account Management -->
+        <div class="user-modal-actions-toolbar">
+          <button type="button" class="luxury-btn btn-primary btn-sm" onclick="closeUserAccountModal(); startScannerFlow();">
+            <i class="fa-solid fa-camera"></i> <span>Mulai Pindai Wajah</span>
+          </button>
+          <a href="https://wa.me/62811619173" target="_blank" class="luxury-btn btn-secondary btn-sm" id="btnUserModalWA">
+            <i class="fa-brands fa-whatsapp"></i> <span>Chat WhatsApp CS</span>
+          </a>
+          <button type="button" class="luxury-btn btn-danger-soft btn-sm" onclick="logoutUser(); closeUserAccountModal();">
+            <i class="fa-solid fa-right-from-bracket"></i> <span>Ganti / Keluar Akun</span>
+          </button>
         </div>
 
       </div>

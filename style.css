@@ -7560,5 +7560,325 @@ body.theme-imperial-light .text-emerald { color: #059669 !important; }
 body.theme-imperial-light .text-gold { color: #B45309 !important; }
 body.theme-imperial-light .text-cyan { color: #0284C7 !important; }
 
+/* ==========================================================
+   NAVIGATION & USER DATA MODAL (MODAL 11) STYLING
+   ========================================================== */
+
+/* Clickable Brand Logo */
+.nav-brand-link {
+  text-decoration: none !important;
+  color: inherit !important;
+  display: inline-block !important;
+  cursor: pointer !important;
+  transition: transform 0.25s ease !important;
+}
+.nav-brand-link:hover {
+  transform: scale(1.02) !important;
+}
+.nav-brand-link:active {
+  transform: scale(0.98) !important;
+}
+
+/* Back to Home Pill Button in Step Header Bars */
+.btn-back-home-pill {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 7px !important;
+  background: rgba(43, 224, 133, 0.08) !important;
+  border: 1px solid rgba(43, 224, 133, 0.3) !important;
+  color: var(--color-aurora-jade, #2BE085) !important;
+  padding: 6px 14px !important;
+  border-radius: var(--radius-full, 50px) !important;
+  font-size: 0.78rem !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  transition: all 0.25s ease !important;
+  font-family: var(--font-body, 'Inter', sans-serif) !important;
+}
+.btn-back-home-pill:hover {
+  background: rgba(43, 224, 133, 0.18) !important;
+  border-color: #2BE085 !important;
+  transform: translateX(-2px) !important;
+}
+
+body.theme-imperial-light .btn-back-home-pill {
+  background: #FFFFFF !important;
+  border: 1px solid rgba(5, 150, 105, 0.35) !important;
+  color: #059669 !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03) !important;
+}
+body.theme-imperial-light .btn-back-home-pill:hover {
+  background: #F4F1EA !important;
+  border-color: #059669 !important;
+}
+
+/* User Profile Floating Click Area */
+.user-bar-click-area {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+.user-bar-click-area:hover .user-bar-name {
+  color: var(--color-aurora-jade, #2BE085);
+}
+body.theme-imperial-light .user-bar-click-area:hover .user-bar-name {
+  color: #059669 !important;
+}
+
+/* ── MODAL 11: USER ACCOUNT & AURA SANCTUARY DATA CARD ────── */
+.user-account-card {
+  max-width: 680px !important;
+  width: 100% !important;
+  background: #080F0E !important;
+  border: 1.5px solid rgba(216, 195, 144, 0.35) !important;
+  border-radius: 24px !important;
+}
+
+.user-tier-badge {
+  background: rgba(43, 224, 133, 0.12);
+  border: 1px solid rgba(43, 224, 133, 0.35);
+  color: #2BE085;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 20px;
+  letter-spacing: 0.05em;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.user-identity-profile-banner {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: rgba(43, 224, 133, 0.05);
+  border: 1px solid rgba(43, 224, 133, 0.2);
+  border-radius: 18px;
+  padding: 16px 20px;
+  margin-bottom: 20px;
+}
+
+.user-profile-avatar-wrap {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: 2px solid var(--color-aurora-jade, #2BE085);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #10B981, #059669);
+  flex-shrink: 0;
+  box-shadow: 0 0 15px rgba(43, 224, 133, 0.25);
+}
+
+.u-modal-avatar {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.u-modal-avatar-init {
+  color: #FFFFFF;
+  font-size: 1.4rem;
+  font-weight: 700;
+  font-family: var(--font-body);
+}
+
+.user-profile-meta {
+  flex: 1;
+  text-align: left;
+}
+
+.u-profile-name {
+  font-family: var(--font-serif, 'Cormorant Garamond', serif);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #FFFFFF;
+  margin-bottom: 2px;
+}
+
+.u-profile-email {
+  font-size: 0.82rem;
+  color: var(--color-aurora-jade, #2BE085);
+  margin-bottom: 4px;
+}
+
+.u-profile-status {
+  font-size: 0.74rem;
+  color: var(--text-dim, rgba(255, 255, 255, 0.6));
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* 3 Pillars Data Grid */
+.user-data-grid-pillars {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.user-data-box {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 14px;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+}
+
+.u-box-head {
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: var(--color-gold, #FFC857);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  margin-bottom: 10px;
+}
+
+.u-bazi-data-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  font-size: 0.78rem;
+}
+
+.u-row-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-dim, rgba(255,255,255,0.6));
+}
+
+.u-row-item strong {
+  color: #FFFFFF;
+  text-align: right;
+}
+
+/* Face Preview Thumbnails */
+.u-face-thumb-pair {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+  margin-top: auto;
+  padding: 6px 0;
+}
+
+.u-face-slot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.u-thumb-img {
+  width: 58px;
+  height: 58px;
+  border-radius: 10px;
+  object-fit: cover;
+  border: 1.5px solid #2BE085;
+}
+
+.u-thumb-lbl {
+  font-size: 0.65rem;
+  color: var(--color-aurora-jade, #2BE085);
+  font-weight: 600;
+}
+
+.u-no-scan-note {
+  font-size: 0.74rem;
+  color: var(--text-dim, rgba(255,255,255,0.45));
+  text-align: center;
+  padding: 14px 6px;
+  line-height: 1.4;
+}
+
+/* User Modal Action Buttons Toolbar */
+.user-modal-actions-toolbar {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding-top: 10px;
+}
+
+.btn-danger-soft {
+  background: rgba(239, 68, 68, 0.1) !important;
+  border: 1px solid rgba(239, 68, 68, 0.35) !important;
+  color: #EF4444 !important;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+.btn-danger-soft:hover {
+  background: rgba(239, 68, 68, 0.22) !important;
+  border-color: #EF4444 !important;
+  color: #FFFFFF !important;
+}
+
+/* ── Light Mode Overrides for User Account Modal ───────────── */
+body.theme-imperial-light .user-account-card {
+  background: #FFFFFF !important;
+  border: 1.5px solid rgba(216, 195, 144, 0.5) !important;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08) !important;
+}
+
+body.theme-imperial-light .user-identity-profile-banner {
+  background: #FAF8F2 !important;
+  border: 1px solid rgba(216, 195, 144, 0.4) !important;
+}
+
+body.theme-imperial-light .u-profile-name {
+  color: #0A1C16 !important;
+}
+
+body.theme-imperial-light .u-profile-email {
+  color: #059669 !important;
+  font-weight: 600 !important;
+}
+
+body.theme-imperial-light .u-profile-status {
+  color: #4A655A !important;
+}
+
+body.theme-imperial-light .user-data-box {
+  background: #FAF8F2 !important;
+  border: 1px solid rgba(216, 195, 144, 0.35) !important;
+}
+
+body.theme-imperial-light .u-box-head {
+  color: #8C6D23 !important;
+  border-bottom-color: rgba(216, 195, 144, 0.3) !important;
+}
+
+body.theme-imperial-light .u-row-item {
+  color: #4A655A !important;
+}
+
+body.theme-imperial-light .u-row-item strong {
+  color: #0A1C16 !important;
+}
+
+body.theme-imperial-light .u-no-scan-note {
+  color: #6B8077 !important;
+}
+
+@media (max-width: 680px) {
+  .user-data-grid-pillars {
+    grid-template-columns: 1fr;
+  }
+}
+
 
 
