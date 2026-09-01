@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Master Admin Portal - FW JADE</title>
+  <meta name="robots" content="noindex, nofollow, noarchive">
+  <link rel="icon" href="/favicon.ico">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Cormorant+Garamond:wght@500;600&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#070a0e;--bg2:#0d1117;--card:#111820;--border:rgba(255,255,255,0.08);--emerald:#2BE085;--gold:#FFC857;--red:#ff6b6b;--text:rgba(255,255,255,0.9);--muted:rgba(255,255,255,0.4)}
+    body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:14px;min-height:100vh}
+    #authGate{display:flex;align-items:center;justify-content:center;min-height:100vh;flex-direction:column;gap:16px;padding:24px;text-align:center}
+    #authGate h2{font-size:1.2rem;color:var(--red)}
+    #authGate p{color:var(--muted);font-size:0.85rem}
+    #authGate a{color:var(--emerald);text-decoration:underline}
+    #adminShell{display:none}
+    .admin-topbar{display:flex;align-items:center;gap:14px;padding:14px 24px;background:var(--bg2);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;flex-wrap:wrap}
+    .admin-logo{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:600;color:var(--emerald);letter-spacing:0.06em}
+    .admin-logo span{color:var(--gold)}
+    .admin-badge{font-size:0.68rem;background:rgba(43,224,133,0.12);border:1px solid rgba(43,224,133,0.3);color:var(--emerald);padding:3px 10px;border-radius:20px;letter-spacing:0.1em;text-transform:uppercase}
+    .admin-user-info{display:flex;align-items:center;gap:8px;margin-left:auto}
+    .admin-avatar{width:30px;height:30px;border-radius:50%;border:2px solid var(--emerald);object-fit:cover}
+    .admin-user-name{font-size:0.82rem;font-weight:600}
+    .admin-user-email{font-size:0.7rem;color:var(--muted)}
+    .btn-logout{margin-left:12px;background:rgba(255,107,107,0.1);border:1px solid rgba(255,107,107,0.3);color:var(--red);padding:5px 14px;border-radius:20px;cursor:pointer;font-size:0.75rem;transition:background 0.2s}
+    .btn-logout:hover{background:rgba(255,107,107,0.2)}
+    .admin-content{padding:24px;max-width:1200px;margin:0 auto}
+    .page-title{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:600;margin-bottom:4px}
+    .page-subtitle{color:var(--muted);font-size:0.8rem;margin-bottom:24px}
+    .stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-bottom:24px}
+    .stat-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px 20px}
+    .stat-label{font-size:0.7rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:6px}
+    .stat-value{font-size:1.4rem;font-weight:700}
+    .stat-value.emerald{color:var(--emerald)}.stat-value.gold{color:var(--gold)}
+    .toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;align-items:center}
+    .search-input{flex:1;min-width:220px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:9px 14px;color:var(--text);font-size:0.85rem;outline:none;transition:border-color 0.2s}
+    .search-input:focus{border-color:rgba(43,224,133,0.4)}
+    .search-input::placeholder{color:var(--muted)}
+    .btn-action{display:inline-flex;align-items:center;gap:7px;padding:9px 18px;border-radius:10px;border:none;cursor:pointer;font-size:0.82rem;font-weight:600;transition:opacity 0.2s,transform 0.15s;font-family:'Inter',sans-serif}
+    .btn-action:active{transform:scale(0.97)}
+    .btn-action.primary{background:var(--emerald);color:#070a0e}
+    .btn-action.secondary{background:var(--card);border:1px solid var(--border);color:var(--text)}
+    .btn-action.gold{background:var(--gold);color:#070a0e}
+    .table-wrap{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;overflow-x:auto}
+    table{width:100%;border-collapse:collapse;min-width:600px}
+    thead tr{background:rgba(255,255,255,0.03)}
+    th{padding:12px 14px;text-align:left;font-size:0.72rem;font-weight:600;color:var(--gold);letter-spacing:0.1em;text-transform:uppercase;border-bottom:1px solid var(--border)}
+    td{padding:13px 14px;font-size:0.82rem;border-bottom:1px solid rgba(255,255,255,0.04);vertical-align:top}
+    tr:last-child td{border-bottom:none}
+    tr:hover td{background:rgba(255,255,255,0.02)}
+    .text-emerald{color:var(--emerald)}.text-gold{color:var(--gold)}.text-dim{color:var(--muted)}.text-xs{font-size:0.72rem}.text-center{text-align:center;padding:32px}
+    .btn-wa{display:inline-flex;align-items:center;gap:5px;background:#25D366;color:#fff;border:none;border-radius:8px;padding:6px 12px;font-size:0.75rem;font-weight:600;text-decoration:none;cursor:pointer;transition:opacity 0.2s}
+    .btn-wa:hover{opacity:0.85}
+    .empty-state{padding:48px;text-align:center;color:var(--muted)}
+    .empty-state i{font-size:2rem;margin-bottom:10px;opacity:0.4;display:block}
+    @media(max-width:600px){.admin-content{padding:14px}.stat-grid{grid-template-columns:1fr 1fr}th,td{padding:10px 10px;font-size:0.75rem}}
+  </style>
+</head>
+<body>
+
+<div id="authGate">
+  <i class="fa-solid fa-lock" style="font-size:2.4rem;color:rgba(255,107,107,0.6);margin-bottom:8px;"></i>
+  <h2>Akses Ditolak</h2>
+  <p>Halaman ini hanya untuk Master Administrator FW JADE.</p>
+  <p>Silakan login dengan akun Google admin dari halaman utama.</p>
+  <p style="margin-top:4px;font-size:0.75rem;color:rgba(255,255,255,0.25);">Mengalihkan dalam 3 detik...</p>
+  <a href="/">&larr; Kembali ke Beranda</a>
+</div>
+
+<div id="adminShell">
+  <div class="admin-topbar">
+    <div class="admin-logo">FW <span>JADE</span></div>
+    <div class="admin-badge"><i class="fa-solid fa-shield-halved"></i> Admin Portal</div>
+    <div class="admin-user-info">
+      <img id="adminAvatar" class="admin-avatar" src="" alt="Admin" style="display:none;">
+      <div>
+        <div class="admin-user-name" id="adminName">-</div>
+        <div class="admin-user-email" id="adminEmail">-</div>
+      </div>
+      <button class="btn-logout" onclick="adminLogout()"><i class="fa-solid fa-right-from-bracket"></i> Keluar</button>
+    </div>
+  </div>
+  <div class="admin-content">
+    <div class="page-title"><i class="fa-solid fa-users text-emerald"></i> Master Leads Portal</div>
+    <div class="page-subtitle">Database prospek pelanggan AURA AI Scanner — real-time dari Cloudflare Edge KV</div>
+    <div class="stat-grid">
+      <div class="stat-card"><div class="stat-label">Total Prospek / Leads</div><div class="stat-value emerald" id="statTotal">-</div></div>
+      <div class="stat-card"><div class="stat-label">Potensi Omset</div><div class="stat-value gold" id="statRevenue">-</div></div>
+      <div class="stat-card"><div class="stat-label">Status Akses</div><div class="stat-value" style="font-size:1rem;">Master Admin <i class="fa-solid fa-circle-check text-emerald"></i></div></div>
+      <div class="stat-card"><div class="stat-label">Data Terakhir Dimuat</div><div class="stat-value text-xs" style="font-size:0.9rem;" id="statLastLoad">-</div></div>
+    </div>
+    <div class="toolbar">
+      <input type="search" class="search-input" id="searchInput" placeholder="Cari nama, WhatsApp, atau batu..." oninput="filterTable()">
+      <button class="btn-action secondary" onclick="loadLeads()"><i class="fa-solid fa-rotate"></i> Refresh</button>
+      <button class="btn-action gold" onclick="exportCSV()"><i class="fa-solid fa-file-csv"></i> Unduh CSV / Excel</button>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Waktu</th><th>Nama Pelanggan</th><th>Tgl Lahir / Bazi</th><th>No. WhatsApp</th><th>Batu Rekomendasi</th><th>Aksi CS</th></tr></thead>
+        <tbody id="leadsTableBody"><tr><td colspan="6" class="text-center"><i class="fa-solid fa-spinner fa-spin text-emerald"></i> Memuat data...</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+  var allLeads = [];
+  function verifyAdminAccess() {
+    try {
+      var raw = sessionStorage.getItem('fw_jade_admin_token');
+      if (!raw) return null;
+      var token = JSON.parse(raw);
+      if (!token.email || token.email.toLowerCase() !== 'fwjade.com@gmail.com') return null;
+      if ((Date.now() - token.grantedAt) > 8 * 60 * 60 * 1000) { sessionStorage.removeItem('fw_jade_admin_token'); return null; }
+      return token;
+    } catch(e) { return null; }
+  }
+  function init() {
+    var token = verifyAdminAccess();
+    if (!token) {
+      document.getElementById('authGate').style.display = 'flex';
+      document.getElementById('adminShell').style.display = 'none';
+      setTimeout(function() { window.location.href = '/'; }, 3000);
+      return;
+    }
+    document.getElementById('authGate').style.display = 'none';
+    document.getElementById('adminShell').style.display = 'block';
+    document.getElementById('adminName').textContent = token.name || 'FW JADE Admin';
+    document.getElementById('adminEmail').textContent = token.email;
+    var avatar = document.getElementById('adminAvatar');
+    if (token.picture) { avatar.src = token.picture; avatar.style.display = 'block'; }
+    loadLeads();
+  }
+  async function loadLeads() {
+    var tbody = document.getElementById('leadsTableBody');
+    var statTotal = document.getElementById('statTotal');
+    var statRevenue = document.getElementById('statRevenue');
+    var statLastLoad = document.getElementById('statLastLoad');
+    tbody.innerHTML = '<tr><td colspan="6" class="text-center"><i class="fa-solid fa-spinner fa-spin text-emerald"></i> Memuat database prospek dari Cloudflare Edge...</td></tr>';
+    try {
+      var token = verifyAdminAccess();
+      if (!token) { adminLogout(); return; }
+      var res = await fetch('/api/leads?admin=' + encodeURIComponent(token.email), {
+        headers: { 'Authorization': 'Bearer ' + (token.credential || '') }
+      });
+      if (res.ok) {
+        var data = await res.json();
+        if (data.success && data.leads) {
+          allLeads = data.leads;
+          renderTable(allLeads);
+          statTotal.textContent = (data.totalLeads || allLeads.length) + ' Orang';
+          var totalRev = allLeads.reduce(function(acc,cur) { return acc + (parseInt((cur.price||'0').replace(/[^0-9]/g,''))||1850000); }, 0);
+          statRevenue.textContent = 'Rp ' + totalRev.toLocaleString('id-ID');
+          statLastLoad.textContent = new Date().toLocaleString('id-ID');
+          return;
+        }
+      }
+    } catch(e) { console.warn('Admin fetch failed:', e); }
+    if (allLeads.length > 0) { renderTable(allLeads); } else { tbody.innerHTML = '<tr><td colspan="6" class="empty-state"><i class="fa-solid fa-database"></i><br>Tidak bisa memuat data. Periksa koneksi atau API endpoint.</td></tr>'; }
+    statLastLoad.textContent = 'Gagal - ' + new Date().toLocaleString('id-ID');
+  }
+  function renderTable(leads) {
+    var tbody = document.getElementById('leadsTableBody');
+    if (!leads || leads.length === 0) { tbody.innerHTML = '<tr><td colspan="6" class="empty-state"><i class="fa-solid fa-ghost"></i>Belum ada data prospek yang masuk.</td></tr>'; return; }
+    tbody.innerHTML = leads.map(function(l) {
+      var cleanPhone = (l.phone||'').replace(/[^0-9]/g,'');
+      var waMsg = encodeURIComponent('Halo Bapak/Ibu ' + l.name + ', kami dari FW JADE Medan Giok. Berdasarkan hasil pembacaan aura & Bazi Anda (' + (l.gemstone||'Natural Aceh Jadeite') + '), apakah ada yang bisa kami bantu mengenai pemilihan perhiasan giok alami Anda?');
+      var waUrl = 'https://wa.me/' + cleanPhone + '?text=' + waMsg;
+      return '<tr><td><span class="text-dim text-xs">' + (l.timestamp||'-') + '</span></td><td><strong>' + (l.name||'-') + '</strong>' + (l.email&&l.email!=='-'?'<br><small class="text-dim">'+l.email+'</small>':'') + '</td><td><span class="text-gold">' + (l.dob||'-') + '</span><br><small class="text-emerald">' + (l.zodiac||'') + ' - ' + (l.shio||'') + '</small></td><td><strong>' + (l.phone||'-') + '</strong></td><td><strong class="text-emerald">' + (l.gemstone||'Natural Aceh Jadeite') + '</strong><br><small class="text-gold">' + (l.price||'Rp 1.850.000') + '</small></td><td><a href="' + waUrl + '" target="_blank" class="btn-wa"><i class="fa-brands fa-whatsapp"></i> Chat CS</a></td></tr>';
+    }).join('');
+  }
+  function filterTable() {
+    var q = document.getElementById('searchInput').value.toLowerCase();
+    if (!q) { renderTable(allLeads); return; }
+    var filtered = allLeads.filter(function(l) { return (l.name&&l.name.toLowerCase().includes(q))||(l.phone&&l.phone.includes(q))||(l.gemstone&&l.gemstone.toLowerCase().includes(q))||(l.email&&l.email.toLowerCase().includes(q)); });
+    renderTable(filtered);
+  }
+  function exportCSV() {
+    if (!allLeads||allLeads.length===0) { alert('Belum ada data.'); return; }
+    var csv = 'Waktu,Nama,Tgl Lahir,Zodiak,Shio,Elemen,WhatsApp,Email,Batu,Harga\n';
+    allLeads.forEach(function(l) { csv += ['"'+(l.timestamp||'')+'"','"'+(l.name||'')+'"','"'+(l.dob||'')+'"','"'+(l.zodiac||'')+'"','"'+(l.shio||'')+'"','"'+(l.element||'')+'"','"'+(l.phone||'')+'"','"'+(l.email||'')+'"','"'+(l.gemstone||'')+'"','"'+(l.price||'')+'"'].join(',') + '\n'; });
+    var a = document.createElement('a'); a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv); a.download = 'fwjade_leads_' + new Date().toISOString().slice(0,10) + '.csv'; a.click();
+  }
+  function adminLogout() { sessionStorage.removeItem('fw_jade_admin_token'); window.location.href = '/'; }
+  init();
+</script>
+</body>
+</html>

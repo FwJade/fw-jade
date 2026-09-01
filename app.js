@@ -381,13 +381,24 @@ function handleGoogleCredentialResponse(response) {
     // Update profile UI bar
     updateUserProfileUI();
 
-    // Check if Master Admin
+    // Check if Master Admin — redirect to dedicated /admin page
     if (payload.email && payload.email.toLowerCase() === 'fwjade.com@gmail.com') {
       AppState.user.isAdmin = true;
-      alert(`Selamat Datang, Master Administrator FW JADE (${payload.email})! Akses penuh diaktifkan.`);
-      openAdminModal();
+      // Store admin session token for /admin.html to verify
+      try {
+        sessionStorage.setItem('fw_jade_admin_token', JSON.stringify({
+          email: payload.email,
+          name: payload.name,
+          picture: payload.picture,
+          credential: response.credential, // raw JWT for verification
+          grantedAt: Date.now()
+        }));
+      } catch (e) {}
+      playChimeReverb();
+      // Redirect to dedicated admin backend page
+      setTimeout(() => { window.location.href = '/admin.html'; }, 600);
     } else {
-      // Sound & Notification
+      // Sound & Notification for regular users
       playChimeReverb();
       if (typeof confetti === 'function') {
         confetti({ particleCount: 40, spread: 60, origin: { y: 0.7 } });
@@ -649,6 +660,8 @@ function startScannerFlow() {
   if (secForm) {
     secForm.style.display = 'block';
     secForm.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    // Pre-fill if user already logged in (fix: form should reflect session)
+    prefillFormIfLoggedIn();
   } else {
     const secScanner = document.getElementById('secScanner');
     if (secScanner) {
@@ -658,6 +671,61 @@ function startScannerFlow() {
     startWebcam();
   }
 }
+
+/**
+ * If a user session is already active (from localStorage restore or Google auth),
+ * pre-fill the identity form and replace the Google sign-in button with a
+ * "Selamat datang" card so the user doesn't feel like a stranger.
+ */
+function prefillFormIfLoggedIn() {
+  const isLoggedIn = AppState.user.isGoogleAuth || AppState.user.isRegistered;
+  const userName = AppState.user.name;
+  const userEmail = AppState.user.email;
+  const userPicture = AppState.user.picture;
+
+  // Pre-fill text fields regardless of login state if data available
+  const inputName = document.getElementById('inputUserName');
+  const inputEmail = document.getElementById('inputUserEmail');
+  const inputPhone = document.getElementById('inputUserPhone');
+
+  if (inputName && userName && userName !== 'Kolektor Yang Terhormat') {
+    inputName.value = userName;
+  }
+  if (inputEmail && userEmail) {
+    inputEmail.value = userEmail;
+  }
+  // Pre-fill phone from AppState if available
+  if (inputPhone && AppState.user.phone) {
+    inputPhone.value = AppState.user.phone;
+  }
+
+  if (!isLoggedIn) return; // below logic only for authenticated users
+
+  // Hide the Google One-Tap button — user is already authenticated
+  const googleCard = document.querySelector('.google-quick-auth-card');
+  if (googleCard) {
+    const avatarHtml = userPicture
+      ? `<img src="${userPicture}" referrerpolicy="no-referrer" style="width:36px;height:36px;border-radius:50%;border:2px solid #2BE085;object-fit:cover;" alt="Avatar"/>`
+      : `<div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#2BE085,#059669);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:1rem;">${(userName||'U').charAt(0).toUpperCase()}</div>`;
+
+    googleCard.innerHTML = `
+      <div style="display:flex;align-items:center;gap:12px;background:rgba(43,224,133,0.07);border:1px solid rgba(43,224,133,0.3);border-radius:14px;padding:12px 16px;">
+        ${avatarHtml}
+        <div style="flex:1;">
+          <div style="font-size:0.72rem;color:rgba(255,255,255,0.5);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:2px;">Sesi Aktif</div>
+          <div style="font-size:0.92rem;color:#fff;font-weight:600;">${userName || 'Pengguna'}</div>
+          ${userEmail ? `<div style="font-size:0.72rem;color:rgba(43,224,133,0.8);">${userEmail}</div>` : ''}
+        </div>
+        <i class="fa-solid fa-circle-check" style="color:#2BE085;font-size:1.2rem;"></i>
+      </div>
+      <div style="text-align:center;font-size:0.68rem;color:rgba(255,255,255,0.35);margin-top:6px;letter-spacing:0.08em;">
+        Anda sudah masuk. <button onclick="logoutUser()" style="background:none;border:none;color:rgba(255,100,100,0.7);cursor:pointer;font-size:0.68rem;text-decoration:underline;padding:0;">Ganti akun</button>
+      </div>
+    `;
+  }
+}
+window.prefillFormIfLoggedIn = prefillFormIfLoggedIn;
+
 
 async function startWebcam() {
   const video = document.getElementById('webcamFeed');
