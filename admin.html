@@ -20,6 +20,10 @@
     .admin-topbar{display:flex;align-items:center;gap:14px;padding:14px 24px;background:var(--bg2);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;flex-wrap:wrap}
     .admin-logo{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:600;color:var(--emerald);letter-spacing:0.06em}
     .admin-logo span{color:var(--gold)}
+    .admin-logo-link{text-decoration:none;display:inline-flex;align-items:center;cursor:pointer;transition:transform 0.2s}
+    .admin-logo-link:hover{transform:scale(1.03)}
+    .btn-to-landing{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.06);border:1px solid var(--border);color:var(--text);padding:6px 14px;border-radius:20px;text-decoration:none;font-size:0.75rem;font-weight:500;transition:all 0.2s;margin-left:4px}
+    .btn-to-landing:hover{background:rgba(43,224,133,0.15);border-color:var(--emerald);color:var(--emerald)}
     .admin-badge{font-size:0.68rem;background:rgba(43,224,133,0.12);border:1px solid rgba(43,224,133,0.3);color:var(--emerald);padding:3px 10px;border-radius:20px;letter-spacing:0.1em;text-transform:uppercase}
     .admin-user-info{display:flex;align-items:center;gap:8px;margin-left:auto}
     .admin-avatar{width:30px;height:30px;border-radius:50%;border:2px solid var(--emerald);object-fit:cover}
@@ -72,8 +76,11 @@
 
 <div id="adminShell">
   <div class="admin-topbar">
-    <div class="admin-logo">FW <span>JADE</span></div>
+    <a href="/" class="admin-logo-link" title="FW JADE — Kembali ke Landing Page">
+      <div class="admin-logo">FW <span>JADE</span></div>
+    </a>
     <div class="admin-badge"><i class="fa-solid fa-shield-halved"></i> Admin Portal</div>
+    <a href="/" class="btn-to-landing" title="Buka Website Publik Landing Page"><i class="fa-solid fa-house"></i> <span>Website Utama</span></a>
     <div class="admin-user-info">
       <img id="adminAvatar" class="admin-avatar" src="" alt="Admin" style="display:none;">
       <div>
