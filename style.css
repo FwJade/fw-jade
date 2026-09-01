@@ -7030,22 +7030,70 @@ body.style-explorer .view-explorer-secondary {
 }
 
 /* ==========================================================
-   IMPERIAL JADE LIGHT LUXURY THEME (body.theme-imperial-light)
-   Clean, bright, warm ivory aesthetic for elderly & high-end clientele
+   ACTIVE SESSION CARD (Responsive Light & Dark Mode)
    ========================================================== */
 
-body.theme-imperial-light {
-  background: #FAF8F5 !important;
-  color: #122820 !important;
+.active-session-box {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: rgba(43, 224, 133, 0.08);
+  border: 1px solid rgba(43, 224, 133, 0.35);
+  border-radius: 16px;
+  padding: 14px 18px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-body.theme-imperial-light .fullscreen-crystal-backdrop {
-  opacity: 0.12 !important;
-  filter: brightness(1.6) saturate(0.8) !important;
+.active-session-info {
+  flex: 1;
+  text-align: left;
 }
 
-body.theme-imperial-light .ambient-glow {
-  opacity: 0.25 !important;
+.active-session-tag {
+  font-size: 0.72rem;
+  color: var(--color-gold, #FFC857);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 2px;
+  font-weight: 700;
+}
+
+.active-session-name {
+  font-size: 0.96rem;
+  color: #ffffff;
+  font-weight: 700;
+  font-family: var(--font-body, 'Inter', sans-serif);
+}
+
+.active-session-email {
+  font-size: 0.78rem;
+  color: var(--color-aurora-jade, #2BE085);
+  margin-top: 1px;
+}
+
+.active-session-check {
+  color: #2BE085;
+  font-size: 1.4rem;
+}
+
+.active-session-switch-wrap {
+  text-align: center;
+  font-size: 0.74rem;
+  color: var(--text-dim, rgba(255,255,255,0.5));
+  margin-top: 8px;
+  letter-spacing: 0.04em;
+}
+
+.btn-switch-account {
+  background: none;
+  border: none;
+  color: #EF4444;
+  cursor: pointer;
+  font-size: 0.74rem;
+  text-decoration: underline;
+  padding: 0 4px;
+  font-weight: 600;
 }
 
 /* ==========================================================
@@ -7053,35 +7101,44 @@ body.theme-imperial-light .ambient-glow {
    Masterclass High-Jewellery Salon Aesthetic for Senior Collectors
    ========================================================== */
 
+/* ── 0. Base Background & Atmosphere ────────────────────────── */
 body.theme-imperial-light {
-  background: #FAF8F5 !important;
-  color: #10261F !important;
+  background: radial-gradient(circle at 50% 10%, #FFFFFF 0%, #FAF8F2 45%, #F2EDE2 100%) !important;
+  color: #0E221B !important;
 }
 
+/* Hide muddy bleached dark rocks in light mode for pure silk aesthetic */
 body.theme-imperial-light .fullscreen-crystal-backdrop {
-  opacity: 0.22 !important;
-  filter: brightness(1.25) saturate(0.85) contrast(0.95) !important;
+  display: none !important;
 }
 
 body.theme-imperial-light .ambient-glow {
-  opacity: 0.18 !important;
+  opacity: 0.12 !important;
 }
 
 body.theme-imperial-light #particleCanvas {
-  opacity: 0.25 !important;
+  opacity: 0.2 !important;
 }
 
 /* ── 1. Top Navigation in Light Mode ────────────────────────── */
+.top-nav {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  width: 100% !important;
+  max-width: 1200px !important;
+  margin: 0 auto 20px auto !important;
+  padding: 12px 20px !important;
+  box-sizing: border-box !important;
+}
+
 body.theme-imperial-light .top-nav {
-  background: rgba(255, 255, 255, 0.92) !important;
+  background: rgba(255, 255, 255, 0.88) !important;
   border: 1px solid rgba(216, 195, 144, 0.4) !important;
-  border-radius: 50px !important;
-  padding: 10px 22px !important;
-  margin: 10px auto 24px auto !important;
-  max-width: 1140px !important;
+  border-radius: 40px !important;
   backdrop-filter: blur(16px) !important;
   -webkit-backdrop-filter: blur(16px) !important;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.02) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04) !important;
 }
 
 body.theme-imperial-light .fwj-text-main {
@@ -7095,7 +7152,7 @@ body.theme-imperial-light .fwj-j {
 body.theme-imperial-light .nav-pill-btn {
   background: #FFFFFF !important;
   border: 1px solid rgba(216, 195, 144, 0.45) !important;
-  color: #10261F !important;
+  color: #0E221B !important;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03) !important;
 }
 
@@ -7113,23 +7170,31 @@ body.theme-imperial-light .nav-theme-toggle {
 
 /* ── 2. Hero Section in Light Mode ──────────────────────────── */
 body.theme-imperial-light .hero-aurora-glow-mist {
-  background: radial-gradient(circle, rgba(216, 195, 144, 0.35) 0%, rgba(43, 224, 133, 0.15) 45%, transparent 70%) !important;
+  background: radial-gradient(circle, rgba(216, 195, 144, 0.4) 0%, rgba(5, 150, 105, 0.12) 50%, transparent 75%) !important;
 }
 
-body.theme-imperial-light .hero-sacred-title {
-  background: linear-gradient(135deg, #0A1C16 0%, #17382E 50%, #946C18 100%) !important;
+body.theme-imperial-light .hero-brand-title {
+  background: linear-gradient(135deg, #0A1C16 0%, #163B30 50%, #946C18 100%) !important;
   -webkit-background-clip: text !important;
   -webkit-text-fill-color: transparent !important;
   filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.06)) !important;
 }
 
-body.theme-imperial-light .hero-sacred-subtitle {
+body.theme-imperial-light .hero-by-fwjade-text {
   color: #8C6D23 !important;
-  letter-spacing: 0.25em !important;
+  letter-spacing: 3px !important;
+  font-weight: 700 !important;
 }
 
-body.theme-imperial-light .hero-h1-large,
-body.theme-imperial-light .hero-main-heading {
+body.theme-imperial-light .sacred-star-divider .divider-gem-star {
+  color: #8C6D23 !important;
+}
+
+body.theme-imperial-light .sacred-star-divider .divider-taper {
+  background: linear-gradient(90deg, transparent, rgba(216, 195, 144, 0.6), transparent) !important;
+}
+
+body.theme-imperial-light .hero-sacred-headline {
   color: #0B1E17 !important;
   font-weight: 700 !important;
 }
@@ -7139,51 +7204,70 @@ body.theme-imperial-light .hero-sacred-description {
   font-weight: 500 !important;
 }
 
-body.theme-imperial-light .hero-assurance-strip,
-body.theme-imperial-light .hero-assurance-strip span {
-  color: #4A655A !important;
-}
-
-body.theme-imperial-light .assurance-badge-luxury {
+body.theme-imperial-light .hero-heritage-badge {
   background: #FFFFFF !important;
-  border: 1px solid rgba(216, 195, 144, 0.55) !important;
-  color: #8C6D23 !important;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03) !important;
+  border: 1px solid rgba(216, 195, 144, 0.6) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
 }
 
-/* Hero Oracle Capsule (Big CTA Button) */
-body.theme-imperial-light .hero-oracle-capsule {
+body.theme-imperial-light .heritage-sparkle {
+  color: #059669 !important;
+}
+
+body.theme-imperial-light .heritage-text {
+  color: #8C6D23 !important;
+  font-weight: 700 !important;
+}
+
+/* Hero Grand Scan CTA Button in Light Mode */
+body.theme-imperial-light .btn-hero-grand-scan {
   background: #FFFFFF !important;
   border: 2px solid #059669 !important;
-  box-shadow: 0 10px 30px rgba(5, 150, 105, 0.18), 0 0 0 1px rgba(216, 195, 144, 0.4) !important;
+  box-shadow: 0 10px 30px rgba(5, 150, 105, 0.16), 0 0 0 1px rgba(216, 195, 144, 0.4) !important;
 }
 
-body.theme-imperial-light .hero-oracle-capsule:hover {
+body.theme-imperial-light .btn-hero-grand-scan:hover {
   box-shadow: 0 14px 40px rgba(5, 150, 105, 0.28), 0 0 0 2px #059669 !important;
   transform: translateY(-2px) !important;
 }
 
-body.theme-imperial-light .hero-oracle-capsule .oracle-title {
+body.theme-imperial-light .cta-headline {
   color: #0B1E17 !important;
 }
 
-body.theme-imperial-light .hero-oracle-capsule .oracle-sub {
+body.theme-imperial-light .cta-sub {
   color: #059669 !important;
   font-weight: 600 !important;
 }
 
-body.theme-imperial-light .hero-oracle-capsule .oracle-arrow-circle {
+body.theme-imperial-light .cta-scanner-portal-icon {
+  border-color: #059669 !important;
+  color: #059669 !important;
+}
+
+body.theme-imperial-light .cta-arrow-circle {
   background: linear-gradient(135deg, #10B981, #059669) !important;
   color: #FFFFFF !important;
 }
 
-body.theme-imperial-light .hero-sage-capsule {
+body.theme-imperial-light .hero-trust-strip,
+body.theme-imperial-light .hero-trust-strip span {
+  color: #4A655A !important;
+}
+
+body.theme-imperial-light .trust-link-gold {
+  color: #8C6D23 !important;
+  font-weight: 600 !important;
+}
+
+body.theme-imperial-light .btn-hero-ask-oracle {
   background: #FFFFFF !important;
   border: 1px solid rgba(5, 150, 105, 0.35) !important;
+  color: #0B1E17 !important;
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04) !important;
 }
 
-body.theme-imperial-light .hero-sage-capsule .sage-text {
+body.theme-imperial-light .btn-hero-ask-oracle span {
   color: #0B1E17 !important;
   font-weight: 600 !important;
 }
@@ -7191,10 +7275,10 @@ body.theme-imperial-light .hero-sage-capsule .sage-text {
 /* ── 3. Step Cards & Identity Form in Light Mode ─────────────── */
 body.theme-imperial-light .step-card-box,
 body.theme-imperial-light .section-card {
-  background: rgba(255, 255, 255, 0.96) !important;
-  border: 1px solid rgba(216, 195, 144, 0.45) !important;
-  box-shadow: 0 14px 45px rgba(0, 0, 0, 0.06), 0 2px 6px rgba(0, 0, 0, 0.02) !important;
-  color: #10261F !important;
+  background: rgba(255, 255, 255, 0.97) !important;
+  border: 1px solid rgba(216, 195, 144, 0.5) !important;
+  box-shadow: 0 16px 50px rgba(0, 0, 0, 0.06), 0 2px 8px rgba(0, 0, 0, 0.02) !important;
+  color: #0E221B !important;
 }
 
 body.theme-imperial-light .step-main-title,
@@ -7228,7 +7312,7 @@ body.theme-imperial-light .step-close-btn {
   background: #F4F1EA !important;
   border: 1px solid rgba(216, 195, 144, 0.45) !important;
   color: #5A746B !important;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
 }
 
 body.theme-imperial-light .step-close-btn:hover {
@@ -7237,11 +7321,38 @@ body.theme-imperial-light .step-close-btn:hover {
   color: #DC2626 !important;
 }
 
-/* Google Quick Auth Card in Light Mode */
+/* Active Session Card in Light Mode */
 body.theme-imperial-light .google-quick-auth-card {
   background: #F9F7F2 !important;
   border: 1px solid rgba(216, 195, 144, 0.45) !important;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03) !important;
+}
+
+body.theme-imperial-light .active-session-box {
+  background: #FFFFFF !important;
+  border: 1.5px solid #059669 !important;
+  box-shadow: 0 4px 14px rgba(5, 150, 105, 0.1) !important;
+}
+
+body.theme-imperial-light .active-session-tag {
+  color: #8C6D23 !important;
+}
+
+body.theme-imperial-light .active-session-name {
+  color: #0A1C16 !important;
+}
+
+body.theme-imperial-light .active-session-email {
+  color: #059669 !important;
+  font-weight: 600 !important;
+}
+
+body.theme-imperial-light .active-session-switch-wrap {
+  color: #5A746B !important;
+}
+
+body.theme-imperial-light .btn-switch-account {
+  color: #DC2626 !important;
 }
 
 body.theme-imperial-light .divider-or-text {
@@ -7275,7 +7386,7 @@ body.theme-imperial-light .luxury-text-input::placeholder {
 
 body.theme-imperial-light .form-label {
   color: #0A1C16 !important;
-  font-weight: 600 !important;
+  font-weight: 700 !important;
 }
 
 body.theme-imperial-light .bazi-preview-badge {
@@ -7291,7 +7402,7 @@ body.theme-imperial-light .b-lbl {
 body.theme-imperial-light .form-privacy-assurance {
   background: rgba(5, 150, 105, 0.08) !important;
   border: 1px solid rgba(5, 150, 105, 0.3) !important;
-  color: #10261F !important;
+  color: #0E221B !important;
 }
 
 body.theme-imperial-light .form-privacy-assurance strong {
@@ -7300,7 +7411,7 @@ body.theme-imperial-light .form-privacy-assurance strong {
 
 body.theme-imperial-light .form-privacy-assurance a {
   color: #047857 !important;
-  font-weight: 600 !important;
+  font-weight: 700 !important;
 }
 
 /* ── 4. Aura Results & Science HUD in Light Mode ─────────────── */
@@ -7312,9 +7423,9 @@ body.theme-imperial-light .q-card,
 body.theme-imperial-light .almanac-card,
 body.theme-imperial-light .modal-card {
   background: #FFFFFF !important;
-  border: 1px solid rgba(216, 195, 144, 0.4) !important;
+  border: 1px solid rgba(216, 195, 144, 0.45) !important;
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05) !important;
-  color: #10261F !important;
+  color: #0E221B !important;
 }
 
 body.theme-imperial-light .element-name {

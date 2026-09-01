@@ -754,17 +754,17 @@ function prefillFormIfLoggedIn() {
       : `<div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#2BE085,#059669);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:1rem;">${(userName||'U').charAt(0).toUpperCase()}</div>`;
 
     googleCard.innerHTML = `
-      <div style="display:flex;align-items:center;gap:12px;background:rgba(43,224,133,0.07);border:1px solid rgba(43,224,133,0.3);border-radius:14px;padding:12px 16px;">
+      <div class="active-session-box">
         ${avatarHtml}
-        <div style="flex:1;">
-          <div style="font-size:0.72rem;color:rgba(255,255,255,0.5);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:2px;">Sesi Aktif</div>
-          <div style="font-size:0.92rem;color:#fff;font-weight:600;">${userName || 'Pengguna'}</div>
-          ${userEmail ? `<div style="font-size:0.72rem;color:rgba(43,224,133,0.8);">${userEmail}</div>` : ''}
+        <div class="active-session-info">
+          <div class="active-session-tag">Sesi Aktif</div>
+          <div class="active-session-name">${userName || 'Pengguna'}</div>
+          ${userEmail ? `<div class="active-session-email">${userEmail}</div>` : ''}
         </div>
-        <i class="fa-solid fa-circle-check" style="color:#2BE085;font-size:1.2rem;"></i>
+        <i class="fa-solid fa-circle-check active-session-check"></i>
       </div>
-      <div style="text-align:center;font-size:0.68rem;color:rgba(255,255,255,0.35);margin-top:6px;letter-spacing:0.08em;">
-        Anda sudah masuk. <button onclick="logoutUser()" style="background:none;border:none;color:rgba(255,100,100,0.7);cursor:pointer;font-size:0.68rem;text-decoration:underline;padding:0;">Ganti akun</button>
+      <div class="active-session-switch-wrap">
+        <span>Anda sudah masuk.</span> <button type="button" onclick="logoutUser()" class="btn-switch-account">Ganti akun</button>
       </div>
     `;
   }
