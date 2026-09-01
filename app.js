@@ -182,6 +182,7 @@ const IN_SCOPE_KEYWORDS = [
 // 2. INITIALIZATION
 // ==========================================
 document.addEventListener('DOMContentLoaded', () => {
+  initThemeEngine();    // ← Dual Theme System (Terang / Gelap)
   initParticleBackground();
   initDualMode();       // ← Dual Mode System
   bindEventHandlers();
@@ -477,6 +478,51 @@ function logoutUser() {
 }
 window.logoutUser = logoutUser;
 
+/**
+ * THEME ENGINE: Imperial Jade (Light Luxury) vs Obsidian Gold (Dark Luxury)
+ * Optimized for readability, senior collectors & high-contrast clarity.
+ */
+function initThemeEngine() {
+  const savedTheme = localStorage.getItem('fw_jade_theme') || 'dark';
+  setTheme(savedTheme);
+}
+
+function toggleTheme() {
+  const isLight = document.body.classList.contains('theme-imperial-light');
+  const newTheme = isLight ? 'dark' : 'light';
+  setTheme(newTheme);
+  try {
+    localStorage.setItem('fw_jade_theme', newTheme);
+  } catch (e) {}
+  playChimeReverb();
+}
+window.toggleTheme = toggleTheme;
+
+function setTheme(mode) {
+  const themeIcon = document.getElementById('themeIcon');
+  const themeText = document.getElementById('themeText');
+  const drawerThemeText = document.getElementById('drawerThemeText');
+  const drawerThemeIcon = document.getElementById('drawerThemeIcon');
+
+  if (mode === 'light') {
+    document.body.classList.add('theme-imperial-light');
+    document.body.classList.remove('theme-quiet-luxury');
+    if (themeIcon) themeIcon.className = 'fa-solid fa-moon text-emerald';
+    if (themeText) themeText.textContent = AppState.lang === 'en' ? 'Dark Mode' : 'Mode Gelap';
+    if (drawerThemeText) drawerThemeText.textContent = 'Ganti ke Mode Gelap (Obsidian)';
+    if (drawerThemeIcon) drawerThemeIcon.className = 'fa-solid fa-moon';
+  } else {
+    document.body.classList.remove('theme-imperial-light');
+    document.body.classList.add('theme-quiet-luxury');
+    if (themeIcon) themeIcon.className = 'fa-solid fa-sun text-gold';
+    if (themeText) themeText.textContent = AppState.lang === 'en' ? 'Light Mode' : 'Mode Terang';
+    if (drawerThemeText) drawerThemeText.textContent = 'Ganti ke Mode Terang (Imperial Jade)';
+    if (drawerThemeIcon) drawerThemeIcon.className = 'fa-solid fa-sun';
+  }
+}
+window.setTheme = setTheme;
+
+
 // ==========================================
 // 5. PRE-SCAN IDENTITY FORM & BAZI ASTROLOGICAL CALCULATOR
 // ==========================================
@@ -565,18 +611,17 @@ function calculateLiveBazi() {
 
 async function submitIdentityForm() {
   const name = document.getElementById('inputUserName')?.value.trim();
-  const phone = document.getElementById('inputUserPhone')?.value.trim();
   const email = document.getElementById('inputUserEmail')?.value.trim();
   const bazi = calculateLiveBazi();
 
-  if (!name || !phone || !bazi) {
-    alert('Mohon lengkapi Nama, Tanggal Lahir, dan Nomor WhatsApp Anda.');
+  if (!name || !bazi) {
+    alert('Mohon lengkapi Nama Lengkap dan Tanggal Lahir Anda untuk penyelarasan Bazi.');
     return;
   }
 
-  // Save to App State
+  // Save to App State (phone is optional, user connects on WhatsApp at closing)
   AppState.user.name = name;
-  AppState.user.phone = phone.startsWith('+') ? phone : `+62${phone.replace(/^0+/, '')}`;
+  AppState.user.phone = AppState.user.phone || '-';
   AppState.user.email = email || '-';
   AppState.user.dob = bazi.dobStr;
   AppState.user.bazi = bazi;

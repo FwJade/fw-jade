@@ -161,7 +161,7 @@
   <!-- Official Google Identity Services SDK -->
   <script src="https://accounts.google.com/gsi/client" async defer></script>
 
-  <link rel="stylesheet" href="style.css?v=34">
+  <link rel="stylesheet" href="style.css?v=35">
 </head>
 <body class="theme-quiet-luxury">
   <!-- User Profile Bar (shown after login, persisted across sessions) -->
@@ -195,8 +195,12 @@
             <div class="fwj-text-main">FW<span class="fwj-j">J</span>ADE</div>
           </div>
         </div>
-      </div>
       <div class="nav-controls">
+        <!-- Dual Theme Toggle (Terang / Gelap - Sangat Ramah Orang Tua) -->
+        <button class="nav-pill-btn nav-theme-toggle" id="themeToggleBtn" onclick="toggleTheme()" title="Ganti Tema (Terang / Gelap)" aria-label="Ganti Tema Terang atau Gelap">
+          <i class="fa-solid fa-sun text-gold" id="themeIcon"></i>
+          <span id="themeText" class="desk-only-text">Terang</span>
+        </button>
         <a href="about.html" class="nav-pill-btn nav-link-btn desk-only-nav" title="Kisah FW JADE Sejak 2009">
           <i class="fa-solid fa-book-open"></i> <span>Tentang Kami</span>
         </a>
@@ -451,13 +455,13 @@
 
             <div class="form-group-row">
               <div class="form-field-col">
-                <label class="form-label"><i class="fa-solid fa-user text-emerald"></i> Nama Lengkap / Panggilan <span class="req-star">*</span></label>
+                <label class="form-label" for="inputUserName"><i class="fa-solid fa-user text-emerald"></i> Nama Lengkap / Panggilan <span class="req-star">*</span></label>
                 <input type="text" id="inputUserName" class="luxury-text-input" placeholder="Contoh: Faisal Paisan" required autocomplete="name">
               </div>
             </div>
 
             <div class="form-group-row dob-row">
-              <label class="form-label full-width"><i class="fa-solid fa-calendar-day text-gold"></i> Tanggal Lahir (Untuk Bazi, Shio &amp; Zodiak) <span class="req-star">*</span></label>
+              <label class="form-label full-width"><i class="fa-solid fa-calendar-day text-gold"></i> Tanggal Lahir (Kalkulasi Bazi, Shio &amp; 5 Elemen) <span class="req-star">*</span></label>
               <div class="dob-selectors-grid">
                 <select id="inputDobDay" class="luxury-select" required title="Hari Lahir">
                   <option value="">Hari</option>
@@ -488,37 +492,26 @@
             <!-- Instant Live Bazi Cosmic Badge Preview -->
             <div class="bazi-preview-badge" id="baziLiveBadge" style="display: none;">
               <div class="bazi-badge-inner">
-                <div class="bazi-item"><span class="b-lbl">Zodiak Barat:</span> <strong id="valBaziZodiac" class="text-cyan">-</strong></div>
-                <div class="bazi-item"><span class="b-lbl">Shio Tionghoa:</span> <strong id="valBaziShio" class="text-gold">-</strong></div>
+                <div class="bazi-item"><span class="b-lbl">Zodiak:</span> <strong id="valBaziZodiac" class="text-cyan">-</strong></div>
+                <div class="bazi-item"><span class="b-lbl">Shio:</span> <strong id="valBaziShio" class="text-gold">-</strong></div>
                 <div class="bazi-item"><span class="b-lbl">Elemen Bazi:</span> <strong id="valBaziElement" class="text-emerald">-</strong></div>
               </div>
             </div>
 
-            <div class="form-group-row">
+            <div class="form-group-row email-field-group">
               <div class="form-field-col">
-                <label class="form-label"><i class="fa-brands fa-whatsapp text-emerald"></i> Nomor WhatsApp Aktif <span class="req-star">*</span></label>
-                <div class="phone-input-wrap">
-                  <span class="phone-prefix">+62</span>
-                  <input type="tel" id="inputUserPhone" class="luxury-text-input" placeholder="811-619-173" required autocomplete="tel">
-                </div>
-                <span class="form-hint">Sertifikat Digital &amp; Kartu Aura Anda akan dikirimkan ke nomor ini.</span>
-              </div>
-            </div>
-
-            <div class="form-group-row">
-              <div class="form-field-col">
-                <label class="form-label"><i class="fa-solid fa-envelope text-gold"></i> Email (Opsional)</label>
+                <label class="form-label" for="inputUserEmail"><i class="fa-solid fa-envelope text-gold"></i> Email Pribadi <span class="opt-tag">(Opsional)</span></label>
                 <input type="email" id="inputUserEmail" class="luxury-text-input" placeholder="nama@gmail.com" autocomplete="email">
               </div>
             </div>
 
-            <div class="form-submit-row">
-              <button type="submit" class="luxury-btn btn-scan-action-primary" id="btnSubmitIdentity">
+            <div class="form-submit-row centered-cta-row">
+              <button type="submit" class="luxury-btn btn-scan-action-primary centered-scan-btn" id="btnSubmitIdentity">
                 <span>Lanjutkan ke Kamera &amp; Pindai Biometrik</span> <i class="fa-solid fa-arrow-right"></i>
               </button>
             </div>
 
-            <div class="form-privacy-assurance">
+            <div class="form-privacy-assurance text-center">
               <i class="fa-solid fa-shield-halved text-emerald"></i>
               <span><strong>Privasi Terjamin:</strong> Titik wajah diproses 100% lokal di browser Anda (Client-Side Edge AI). Foto Anda tidak pernah disimpan di server kami. <a href="privacy.html" target="_blank">Kebijakan Privasi</a>.</span>
             </div>
@@ -1270,6 +1263,14 @@
               <i class="fa-solid fa-chevron-right drawer-chevron"></i>
             </a>
 
+            <button class="drawer-nav-item drawer-action-item" onclick="toggleTheme(); closeSidebarDrawer();" type="button">
+              <div class="drawer-item-icon gold-bg"><i class="fa-solid fa-circle-half-stroke" id="drawerThemeIcon"></i></div>
+              <div class="drawer-item-text">
+                <span class="drawer-item-title">Tema Tampilan</span>
+                <span class="drawer-item-desc" id="drawerThemeText">Mode Terang / Gelap</span>
+              </div>
+              <span class="drawer-badge" id="drawerThemeBadge">Tema</span>
+            </button>
             <button class="drawer-nav-item drawer-action-item" onclick="toggleLanguageFromDrawer()" type="button">
               <div class="drawer-item-icon cyan-bg"><i class="fa-solid fa-globe"></i></div>
               <div class="drawer-item-text">

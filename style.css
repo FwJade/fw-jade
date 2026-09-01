@@ -6925,3 +6925,332 @@ body.style-explorer .view-explorer-secondary {
   to   { opacity: 1; transform: translateY(0); }
 }
 
+/* ==========================================================
+   REFINED CTA BUTTON & LUXURY FORM STYLING
+   ========================================================== */
+
+.form-submit-row {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  width: 100% !important;
+  margin-top: 14px !important;
+  text-align: center !important;
+}
+
+.btn-scan-action-primary.centered-scan-btn,
+.btn-scan-action-primary {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 12px !important;
+  width: 100% !important;
+  max-width: 440px !important;
+  min-height: 52px !important;
+  padding: 14px 28px !important;
+  margin: 0 auto !important;
+  background: linear-gradient(135deg, #10B981 0%, #059669 50%, #047857 100%) !important;
+  color: #ffffff !important;
+  font-family: var(--font-body, 'Inter', sans-serif) !important;
+  font-size: 0.96rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.03em !important;
+  border-radius: 50px !important;
+  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+  box-shadow: 0 8px 25px rgba(16, 185, 129, 0.35), 0 0 15px rgba(43, 224, 133, 0.2) !important;
+  cursor: pointer !important;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2) !important;
+}
+
+.btn-scan-action-primary:hover {
+  transform: translateY(-2px) scale(1.01) !important;
+  box-shadow: 0 12px 35px rgba(16, 185, 129, 0.5), 0 0 25px rgba(43, 224, 133, 0.4) !important;
+  background: linear-gradient(135deg, #34D399 0%, #10B981 50%, #059669 100%) !important;
+}
+
+.btn-scan-action-primary:active {
+  transform: translateY(1px) scale(0.99) !important;
+}
+
+/* Luxury Input Field Refinements */
+.luxury-text-input, .luxury-select {
+  background: rgba(14, 24, 21, 0.65) !important;
+  border: 1px solid rgba(216, 195, 144, 0.25) !important;
+  border-radius: 12px !important;
+  padding: 13px 18px !important;
+  color: #ffffff !important;
+  font-size: 0.95rem !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+  transition: all 0.25s ease !important;
+}
+
+.luxury-text-input:focus, .luxury-select:focus {
+  background: rgba(18, 32, 28, 0.85) !important;
+  border-color: #2BE085 !important;
+  box-shadow: 0 0 16px rgba(43, 224, 133, 0.25), inset 0 0 8px rgba(43, 224, 133, 0.05) !important;
+}
+
+.luxury-text-input::placeholder {
+  color: rgba(255, 255, 255, 0.35) !important;
+}
+
+.opt-tag {
+  font-size: 0.72rem;
+  color: rgba(255, 255, 255, 0.45);
+  font-weight: 400;
+  margin-left: 4px;
+}
+
+.form-privacy-assurance.text-center {
+  text-align: center !important;
+  justify-content: center !important;
+  display: flex !important;
+  gap: 8px !important;
+  align-items: center !important;
+  margin-top: 14px !important;
+}
+
+/* Navigation Theme Toggle Button */
+.nav-theme-toggle {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  cursor: pointer !important;
+  border: 1px solid rgba(255, 200, 87, 0.3) !important;
+  background: rgba(255, 200, 87, 0.08) !important;
+  transition: all 0.25s ease !important;
+}
+
+.nav-theme-toggle:hover {
+  background: rgba(255, 200, 87, 0.18) !important;
+  border-color: rgba(255, 200, 87, 0.5) !important;
+  transform: translateY(-1px) !important;
+}
+
+/* ==========================================================
+   IMPERIAL JADE LIGHT LUXURY THEME (body.theme-imperial-light)
+   Clean, bright, warm ivory aesthetic for elderly & high-end clientele
+   ========================================================== */
+
+body.theme-imperial-light {
+  background: #FAF8F5 !important;
+  color: #122820 !important;
+}
+
+body.theme-imperial-light .fullscreen-crystal-backdrop {
+  opacity: 0.12 !important;
+  filter: brightness(1.6) saturate(0.8) !important;
+}
+
+body.theme-imperial-light .ambient-glow {
+  opacity: 0.25 !important;
+}
+
+body.theme-imperial-light #particleCanvas {
+  opacity: 0.35 !important;
+}
+
+/* Top Navigation in Light Mode */
+body.theme-imperial-light .top-nav {
+  background: rgba(255, 255, 255, 0.88) !important;
+  border-bottom: 1px solid rgba(216, 195, 144, 0.35) !important;
+  backdrop-filter: blur(16px) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04) !important;
+}
+
+body.theme-imperial-light .nav-pill-btn {
+  background: rgba(245, 242, 235, 0.9) !important;
+  border: 1px solid rgba(216, 195, 144, 0.35) !important;
+  color: #122820 !important;
+}
+
+body.theme-imperial-light .nav-pill-btn:hover {
+  background: #ffffff !important;
+  border-color: #059669 !important;
+  color: #059669 !important;
+}
+
+body.theme-imperial-light .fwj-text-main {
+  color: #122820 !important;
+}
+
+/* Cards & Containers in Light Mode */
+body.theme-imperial-light .step-card-box,
+body.theme-imperial-light .section-card,
+body.theme-imperial-light .aura-summary-card,
+body.theme-imperial-light .q-card,
+body.theme-imperial-light .science-fir-hud-card,
+body.theme-imperial-light .lab-spec-card,
+body.theme-imperial-light .almanac-card,
+body.theme-imperial-light .modal-card,
+body.theme-imperial-light .drawer-panel,
+body.theme-imperial-light .dermatology-health-card {
+  background: rgba(255, 255, 255, 0.94) !important;
+  border: 1px solid rgba(216, 195, 144, 0.38) !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05), 0 1px 4px rgba(0, 0, 0, 0.02) !important;
+  color: #122820 !important;
+}
+
+body.theme-imperial-light .section-title,
+body.theme-imperial-light .step-main-title,
+body.theme-imperial-light .element-name,
+body.theme-imperial-light .hero-sacred-title,
+body.theme-imperial-light h1,
+body.theme-imperial-light h2,
+body.theme-imperial-light h3,
+body.theme-imperial-light h4 {
+  color: #0D221A !important;
+}
+
+body.theme-imperial-light .step-main-subtitle,
+body.theme-imperial-light .form-hint,
+body.theme-imperial-light p,
+body.theme-imperial-light .element-label,
+body.theme-imperial-light .score-caption,
+body.theme-imperial-light .m-label {
+  color: #38554B !important;
+}
+
+/* Form Inputs in Light Mode */
+body.theme-imperial-light .luxury-text-input,
+body.theme-imperial-light .luxury-select {
+  background: #FFFFFF !important;
+  border: 1px solid rgba(180, 150, 90, 0.35) !important;
+  color: #0D221A !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03) !important;
+}
+
+body.theme-imperial-light .luxury-text-input:focus,
+body.theme-imperial-light .luxury-select:focus {
+  background: #FFFFFF !important;
+  border-color: #059669 !important;
+  box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.15) !important;
+}
+
+body.theme-imperial-light .luxury-text-input::placeholder {
+  color: #8C9E97 !important;
+}
+
+body.theme-imperial-light .form-label {
+  color: #0D221A !important;
+  font-weight: 600 !important;
+}
+
+body.theme-imperial-light .opt-tag {
+  color: #6B8077 !important;
+}
+
+/* Badges & Metrics in Light Mode */
+body.theme-imperial-light .step-badge-indicator {
+  background: rgba(5, 150, 105, 0.08) !important;
+  color: #059669 !important;
+  border: 1px solid rgba(5, 150, 105, 0.25) !important;
+}
+
+body.theme-imperial-light .form-header-badge {
+  background: rgba(216, 195, 144, 0.2) !important;
+  border: 1px solid rgba(216, 195, 144, 0.45) !important;
+  color: #926A18 !important;
+}
+
+body.theme-imperial-light .bazi-preview-badge {
+  background: rgba(5, 150, 105, 0.06) !important;
+  border: 1px dashed rgba(5, 150, 105, 0.35) !important;
+  color: #0D221A !important;
+}
+
+body.theme-imperial-light .b-lbl {
+  color: #5A746B !important;
+}
+
+body.theme-imperial-light .text-emerald {
+  color: #059669 !important;
+}
+
+body.theme-imperial-light .text-gold {
+  color: #B45309 !important;
+}
+
+body.theme-imperial-light .text-cyan {
+  color: #0284C7 !important;
+}
+
+/* User Profile Floating Bar in Light Mode */
+body.theme-imperial-light .user-profile-bar {
+  background: rgba(255, 255, 255, 0.95) !important;
+  border: 1px solid rgba(5, 150, 105, 0.3) !important;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08) !important;
+}
+
+body.theme-imperial-light .user-bar-name {
+  color: #0D221A !important;
+}
+
+/* Compare Panel in Light Mode */
+body.theme-imperial-light .face-compare-panel {
+  background: rgba(5, 150, 105, 0.04) !important;
+  border: 1px solid rgba(5, 150, 105, 0.2) !important;
+}
+
+body.theme-imperial-light .face-compare-label {
+  color: #0D221A !important;
+}
+
+/* Lens Tabs in Light Mode */
+body.theme-imperial-light .lens-tab-btn {
+  background: rgba(245, 242, 235, 0.9) !important;
+  color: #38554B !important;
+  border: 1px solid rgba(216, 195, 144, 0.3) !important;
+}
+
+body.theme-imperial-light .lens-tab-btn.active {
+  background: #ffffff !important;
+  color: #059669 !important;
+  border-color: #059669 !important;
+  box-shadow: 0 2px 8px rgba(5, 150, 105, 0.15) !important;
+}
+
+/* Footer / Drawer / Modals in Light Mode */
+body.theme-imperial-light .drawer-panel {
+  background: #FAF8F5 !important;
+}
+
+body.theme-imperial-light .drawer-header {
+  border-bottom: 1px solid rgba(216, 195, 144, 0.35) !important;
+}
+
+body.theme-imperial-light .drawer-nav-item {
+  background: #ffffff !important;
+  border: 1px solid rgba(216, 195, 144, 0.25) !important;
+  color: #0D221A !important;
+}
+
+body.theme-imperial-light .drawer-item-title {
+  color: #0D221A !important;
+}
+
+body.theme-imperial-light .drawer-item-desc {
+  color: #5A746B !important;
+}
+
+body.theme-imperial-light .drawer-legal-chip {
+  background: #ffffff !important;
+  border: 1px solid rgba(216, 195, 144, 0.3) !important;
+  color: #38554B !important;
+}
+
+body.theme-imperial-light .drawer-legal-chip:hover {
+  border-color: #059669 !important;
+  color: #059669 !important;
+}
+
+body.theme-imperial-light .app-footer,
+body.theme-imperial-light .site-footer {
+  background: rgba(255, 255, 255, 0.85) !important;
+  border-top: 1px solid rgba(216, 195, 144, 0.3) !important;
+  color: #5A746B !important;
+}
+
+
