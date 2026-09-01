@@ -161,9 +161,12 @@
   <!-- Official Google Identity Services SDK -->
   <script src="https://accounts.google.com/gsi/client" async defer></script>
 
-  <link rel="stylesheet" href="style.css?v=33">
+  <link rel="stylesheet" href="style.css?v=34">
 </head>
 <body class="theme-quiet-luxury">
+  <!-- User Profile Bar (shown after login, persisted across sessions) -->
+  <div id="userProfileBar" class="user-profile-bar"></div>
+
   <!-- 0. Fullscreen Immersive Raw Crystal Backdrop -->
   <div class="fullscreen-crystal-backdrop"></div>
 
@@ -578,6 +581,12 @@
           </div>
           <div class="progress-percentage-txt" id="scanProgressPercent">0%</div>
 
+          <!-- BUG 2 FIX: Live snapshot preview — shows the face that was captured and sent to AI -->
+          <div class="snapshot-preview-wrap" id="snapshotPreviewWrap" style="display:block; margin-top:12px; text-align:center;">
+            <p class="snapshot-preview-label" style="font-size:0.7rem; color: var(--clr-emerald); letter-spacing:0.12em; margin-bottom:6px; opacity:0.8;"><i class="fa-solid fa-camera-rotate"></i> FOTO WAJAH YANG DIANALISA</p>
+            <img id="snapshotCapturePreview" alt="Foto wajah yang dianalisa" style="display:none; width:90px; height:90px; border-radius:50%; object-fit:cover; border:2px solid var(--clr-emerald); box-shadow:0 0 16px rgba(43,224,133,0.4); margin:0 auto;" />
+          </div>
+
         </div>
 
         <div class="step-indicator-connector">
@@ -595,6 +604,28 @@
           <button type="button" class="step-close-btn" onclick="closeScannerFlowToHome()" title="Kembali ke Beranda"><i class="fa-solid fa-house" style="font-size: 0.95rem;"></i></button>
         </div>
         
+        <!-- BUG 2 & 3 FIX: Before / After Face Comparison Panel -->
+        <div id="faceComparePanel" class="face-compare-panel" style="display:none; flex-direction:row; gap:14px; margin-bottom:20px; align-items:flex-start; justify-content:center; flex-wrap:wrap;">
+          <!-- BEFORE -->
+          <div class="face-compare-slot">
+            <div class="face-compare-label"><i class="fa-solid fa-camera text-emerald"></i>&nbsp;Wajah Asli Anda</div>
+            <img id="faceBeforeImg" alt="Foto wajah asli yang dianalisa AI" style="display:none; width:130px; height:130px; border-radius:12px; object-fit:cover; border:2px solid var(--clr-emerald); box-shadow:0 0 20px rgba(43,224,133,0.35);" />
+            <div style="font-size:0.65rem; color:var(--clr-emerald); opacity:0.75; margin-top:5px; text-align:center; letter-spacing:0.08em;">Tertangkap kamera</div>
+          </div>
+          <!-- SEPARATOR -->
+          <div class="face-compare-arrow" style="display:flex; align-items:center; padding-top:40px;"><i class="fa-solid fa-wand-magic-sparkles" style="color:var(--clr-gold); font-size:1.4rem;"></i></div>
+          <!-- AFTER -->
+          <div class="face-compare-slot">
+            <div class="face-compare-label"><i class="fa-solid fa-sparkles text-gold"></i>&nbsp;Transformasi Aura AI</div>
+            <div id="faceAfterSpinner" style="display:none; width:130px; height:130px; border-radius:12px; background:rgba(43,224,133,0.07); border:2px dashed rgba(43,224,133,0.35); align-items:center; justify-content:center; flex-direction:column; gap:8px;">
+              <i class="fa-solid fa-circle-notch fa-spin" style="color:var(--clr-gold); font-size:1.6rem;"></i>
+              <span style="font-size:0.6rem; color:var(--clr-gold); text-align:center; padding:0 8px;">Generating...</span>
+            </div>
+            <img id="faceAfterImg" alt="Transformasi wajah dengan aura batu" style="display:none; width:130px; height:130px; border-radius:12px; object-fit:cover; border:2px solid var(--clr-gold); box-shadow:0 0 20px rgba(255,200,87,0.4);" />
+            <div id="faceAfterStatus" style="font-size:0.65rem; color:var(--clr-gold); opacity:0.75; margin-top:5px; text-align:center; letter-spacing:0.08em;"></div>
+          </div>
+        </div>
+
         <div class="results-header-row">
           <h2 class="section-title" id="txtAuraResultHeading">Hasil Aura Anda</h2>
           <div class="narrator-badge">

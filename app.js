@@ -188,6 +188,8 @@ document.addEventListener('DOMContentLoaded', () => {
   initSpeechRecognition();
   AppState.user.metrics.selectedGem = GemstoneDatabase[0];
   updateScienceAndAstroMetrics(GemstoneDatabase[0]);
+  // Restore user session from localStorage (anti-logout on refresh)
+  restoreUserSession();
 });
 
 // ==========================================
@@ -356,12 +358,28 @@ function handleGoogleCredentialResponse(response) {
     AppState.user.email = payload.email;
     AppState.user.picture = payload.picture;
     AppState.user.isGoogleAuth = true;
+    AppState.user.isRegistered = true;
+
+    // ✅ Persist to localStorage so session survives refresh
+    try {
+      localStorage.setItem('fw_jade_user', JSON.stringify({
+        name: payload.name,
+        email: payload.email,
+        picture: payload.picture,
+        isGoogleAuth: true,
+        isRegistered: true,
+        savedAt: Date.now()
+      }));
+    } catch (lsErr) { /* storage full or private browsing */ }
 
     // Auto-fill Input fields if currently visible
     const inputName = document.getElementById('inputUserName');
     const inputEmail = document.getElementById('inputUserEmail');
     if (inputName) inputName.value = payload.name;
     if (inputEmail) inputEmail.value = payload.email;
+
+    // Update profile UI bar
+    updateUserProfileUI();
 
     // Check if Master Admin
     if (payload.email && payload.email.toLowerCase() === 'fwjade.com@gmail.com') {
@@ -380,6 +398,73 @@ function handleGoogleCredentialResponse(response) {
   }
 }
 window.handleGoogleCredentialResponse = handleGoogleCredentialResponse;
+
+/**
+ * Restore user session from localStorage on page load.
+ * Prevents "logged out" feel after refresh.
+ */
+function restoreUserSession() {
+  try {
+    const saved = localStorage.getItem('fw_jade_user');
+    if (!saved) return;
+    const userData = JSON.parse(saved);
+    // Expire session after 30 days
+    if (userData.savedAt && (Date.now() - userData.savedAt) > 30 * 24 * 60 * 60 * 1000) {
+      localStorage.removeItem('fw_jade_user');
+      return;
+    }
+    AppState.user.name = userData.name || AppState.user.name;
+    AppState.user.email = userData.email || null;
+    AppState.user.picture = userData.picture || null;
+    AppState.user.isGoogleAuth = userData.isGoogleAuth || false;
+    AppState.user.isRegistered = userData.isRegistered || false;
+    updateUserProfileUI();
+    console.log('[AURA AI] Session restored for:', userData.name);
+  } catch (e) {
+    console.warn('[AURA AI] Could not restore session:', e);
+  }
+}
+
+/**
+ * Updates the floating user profile bar at the top of the page.
+ * Shows name + avatar if logged in, otherwise shows login prompt.
+ */
+function updateUserProfileUI() {
+  const bar = document.getElementById('userProfileBar');
+  if (!bar) return;
+  const name = AppState.user.name;
+  const picture = AppState.user.picture;
+  const isAuth = AppState.user.isGoogleAuth || AppState.user.isRegistered;
+  if (isAuth && name) {
+    const initial = name.charAt(0).toUpperCase();
+    const avatarHtml = picture
+      ? `<img src="${picture}" alt="${name}" class="user-bar-avatar" referrerpolicy="no-referrer" />`
+      : `<div class="user-bar-avatar user-bar-initial">${initial}</div>`;
+    bar.innerHTML = `
+      ${avatarHtml}
+      <span class="user-bar-name">${name}</span>
+      <button class="user-bar-logout" onclick="logoutUser()" title="Keluar"><i class="fa-solid fa-right-from-bracket"></i></button>
+    `;
+    bar.classList.add('visible');
+  } else {
+    bar.classList.remove('visible');
+  }
+}
+
+/**
+ * Log out user — clears localStorage and resets AppState.
+ */
+function logoutUser() {
+  localStorage.removeItem('fw_jade_user');
+  AppState.user.name = 'Kolektor Yang Terhormat';
+  AppState.user.email = null;
+  AppState.user.picture = null;
+  AppState.user.isGoogleAuth = false;
+  AppState.user.isRegistered = false;
+  updateUserProfileUI();
+  playChimeReverb();
+}
+window.logoutUser = logoutUser;
 
 // ==========================================
 // 5. PRE-SCAN IDENTITY FORM & BAZI ASTROLOGICAL CALCULATOR
@@ -734,7 +819,27 @@ function drawScannerHudAnimation() {
 
 function captureWebcamSnapshot() {
   const video = document.getElementById('webcamFeed');
-  if (!video || video.videoWidth === 0) return null;
+
+  // BUG 4 FIX: Generate a valid minimal black JPEG base64 as placeholder
+  // so vision API never receives empty string (which causes HTTP 400)
+  function generatePlaceholderBase64() {
+    const c = document.createElement('canvas');
+    c.width = 64; c.height = 64;
+    const cx = c.getContext('2d');
+    cx.fillStyle = '#1a1a1a';
+    cx.fillRect(0, 0, 64, 64);
+    cx.fillStyle = 'rgba(43,224,133,0.5)';
+    cx.font = '10px sans-serif';
+    cx.fillText('NO CAM', 8, 36);
+    return c.toDataURL('image/jpeg', 0.5);
+  }
+
+  if (!video || video.videoWidth === 0) {
+    console.warn('[AURA AI] Webcam not ready, using placeholder image for vision API');
+    const placeholder = generatePlaceholderBase64();
+    AppState.user.lastSnapshotBase64 = placeholder;
+    return placeholder;
+  }
 
   const canvas = document.createElement('canvas');
   canvas.width = 480;
@@ -749,6 +854,19 @@ function captureWebcamSnapshot() {
   ctx.drawImage(video, startX, startY, minDim, minDim, 0, 0, 480, 480);
   const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
   AppState.user.lastSnapshotBase64 = dataUrl;
+
+  // BUG 2 FIX: Show live snapshot preview in scanner section immediately after capture
+  const previewEl = document.getElementById('snapshotCapturePreview');
+  if (previewEl) {
+    previewEl.src = dataUrl;
+    previewEl.style.display = 'block';
+    // Animate it in
+    previewEl.style.opacity = '0';
+    requestAnimationFrame(() => {
+      previewEl.style.transition = 'opacity 0.5s ease';
+      previewEl.style.opacity = '1';
+    });
+  }
   return dataUrl;
 }
 
@@ -784,8 +902,20 @@ function animateScannerProgression() {
         });
       }
 
-      // Capture snapshot & Call Cloudflare Workers AI Vision Model
-      const snapshot = captureWebcamSnapshot();
+      // BUG 4 FIX: Retry snapshot capture up to 3 times with 500ms delay
+      // to ensure video stream has fully loaded before capturing
+      let snapshot = captureWebcamSnapshot();
+      const video = document.getElementById('webcamFeed');
+      if (!snapshot || (video && video.videoWidth === 0)) {
+        // Wait for video to be truly ready
+        await new Promise(resolve => setTimeout(resolve, 500));
+        snapshot = captureWebcamSnapshot();
+      }
+      if (!snapshot || (video && video.videoWidth === 0)) {
+        await new Promise(resolve => setTimeout(resolve, 800));
+        snapshot = captureWebcamSnapshot();
+      }
+      console.log('[AURA AI] Snapshot captured, size:', snapshot ? snapshot.length : 0);
       await processAiVisionScan(snapshot);
     }
   }, 60);
@@ -794,6 +924,19 @@ function animateScannerProgression() {
 async function processAiVisionScan(snapshotBase64) {
   let matchedGem = GemstoneDatabase[0];
   let customGreeting = null;
+
+  // BUG 2 FIX: Display the captured face in the before panel immediately
+  const beforeImg = document.getElementById('faceBeforeImg');
+  if (beforeImg && snapshotBase64) {
+    beforeImg.src = snapshotBase64;
+    beforeImg.style.display = 'block';
+  }
+  const beforePanel = document.getElementById('faceComparePanel');
+  if (beforePanel && snapshotBase64) {
+    beforePanel.style.display = 'flex';
+  }
+  const afterStatus = document.getElementById('faceAfterStatus');
+  if (afterStatus) afterStatus.textContent = 'Menganalisa wajah...';
 
   try {
     const res = await fetch('/api/vision', {
@@ -815,6 +958,7 @@ async function processAiVisionScan(snapshotBase64) {
         AppState.user.metrics.energyBalance = a.energyBalance || 'Optimal';
         AppState.user.metrics.fortuneLevel = a.fortuneLevel || 'Tinggi';
         AppState.user.metrics.energyReco = a.energyReco || 'Menjaga stabilitas & fokus';
+        console.log('[AURA AI] Vision analysis received, model:', data.model, '| element:', a.element);
 
         // Match Gemstone
         if (a.recommendedGemId) {
@@ -842,10 +986,85 @@ async function processAiVisionScan(snapshotBase64) {
     console.warn('AI Vision Scan Edge Fetch error, using graceful fallback:', e);
   }
 
+  const gemForTransform = matchedGem;
+
   setTimeout(() => {
-    // Direct Instant Reveal (Pilihan A: No blocker popup for maximum conversion)
-    revealFullResults(matchedGem, customGreeting);
+    // Direct Instant Reveal
+    revealFullResults(gemForTransform, customGreeting);
+
+    // BUG 3 FIX: Call /api/image for img2img transformation (after-image)
+    // This runs in background and updates the after panel when ready
+    if (snapshotBase64 && snapshotBase64.length > 500) {
+      callImageTransformation(snapshotBase64, gemForTransform);
+    } else {
+      // No real webcam capture — still generate a text-prompt image
+      callImageTransformation(null, gemForTransform);
+    }
   }, 400);
+}
+
+/**
+ * BUG 3 FIX: Call /api/image to generate the img2img transformed "after" image.
+ * Shows a loading spinner while generating, then displays the result.
+ */
+async function callImageTransformation(snapshotBase64, gemObj) {
+  const afterImg = document.getElementById('faceAfterImg');
+  const afterStatus = document.getElementById('faceAfterStatus');
+  const afterSpinner = document.getElementById('faceAfterSpinner');
+  const beforePanel = document.getElementById('faceComparePanel');
+
+  if (beforePanel) beforePanel.style.display = 'flex';
+  if (afterSpinner) afterSpinner.style.display = 'flex';
+  if (afterImg) afterImg.style.display = 'none';
+  if (afterStatus) afterStatus.textContent = 'Membuat transformasi aura...';
+
+  try {
+    const reqBody = {
+      gemName: gemObj.name || 'Natural Aceh Jadeite',
+      gemColor: gemObj.color || 'Emerald Green',
+      promptAdd: `${gemObj.element_id || 'Wood'} element aura, luxury editorial portrait`
+    };
+    // Only include image if real webcam capture happened
+    if (snapshotBase64 && snapshotBase64.length > 5000) {
+      reqBody.imageBase64 = snapshotBase64;
+    }
+
+    const res = await fetch('/api/image', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(reqBody)
+    });
+
+    if (res.ok) {
+      const data = await res.json();
+      if (data.success && data.imageUrl) {
+        if (afterSpinner) afterSpinner.style.display = 'none';
+        if (afterStatus) afterStatus.textContent = 'Transformasi Aura Selesai';
+        if (afterImg) {
+          afterImg.src = data.imageUrl;
+          afterImg.style.display = 'block';
+          afterImg.style.opacity = '0';
+          afterImg.onload = () => {
+            afterImg.style.transition = 'opacity 0.8s ease';
+            afterImg.style.opacity = '1';
+            // Celebration for image loaded
+            if (typeof confetti === 'function') {
+              confetti({ particleCount: 30, spread: 50, origin: { y: 0.5 }, colors: ['#2BE085', '#FFC857'] });
+            }
+            playChimeReverb();
+          };
+        }
+        console.log('[AURA AI] Image transformation complete, model used:', data.prompt ? 'img2img' : 'text2img');
+      }
+    } else {
+      if (afterSpinner) afterSpinner.style.display = 'none';
+      if (afterStatus) afterStatus.textContent = 'Transformasi tidak tersedia saat ini';
+    }
+  } catch (e) {
+    console.warn('[AURA AI] Image transformation error:', e);
+    if (afterSpinner) afterSpinner.style.display = 'none';
+    if (afterStatus) afterStatus.textContent = '';
+  }
 }
 
 function revealFullResults(gemObj, customGreeting) {
@@ -1871,7 +2090,14 @@ function bindEventHandlers() {
   });
 
   const btnAuthGoogle = document.getElementById('btnAuthGoogle');
-  if (btnAuthGoogle) btnAuthGoogle.addEventListener('click', () => simulateLogin('Google'));
+  if (btnAuthGoogle) btnAuthGoogle.addEventListener('click', () => {
+    // Try real GIS prompt first, then fall back to simulateLogin
+    if (window.google && window.google.accounts && window.google.accounts.id) {
+      window.google.accounts.id.prompt();
+    } else {
+      simulateLogin('Google');
+    }
+  });
 
   const btnAuthEmail = document.getElementById('btnAuthEmail');
   if (btnAuthEmail) btnAuthEmail.addEventListener('click', () => simulateLogin('Email'));
@@ -1893,18 +2119,27 @@ function simulateLogin(provider) {
   AppState.user.isRegistered = true;
   document.getElementById('authModal').classList.remove('open');
   
+  // Persist basic session to localStorage (non-Google login)
+  if (!AppState.user.isGoogleAuth) {
+    const displayName = AppState.user.name || 'Kolektor AURA AI';
+    try {
+      localStorage.setItem('fw_jade_user', JSON.stringify({
+        name: displayName,
+        email: AppState.user.email || null,
+        picture: null,
+        isGoogleAuth: false,
+        isRegistered: true,
+        savedAt: Date.now()
+      }));
+    } catch (e) {}
+    updateUserProfileUI();
+  }
+  
   // Simulate saving to DB
   saveReadingToDatabase(AppState.tempReading);
   
   // Resume the flow
   revealFullResults(AppState.tempReading);
-
-  // Optional: Prompt for WebAuthn (Passkeys) after 3 seconds
-  setTimeout(() => {
-    if (confirm("Master Aura merekomendasikan: Aktifkan Face ID / Windows Hello untuk masuk instan di masa depan tanpa sandi? (WebAuthn Passkeys)")) {
-      alert("Simulasi: Kredensial Passkey didaftarkan pada perangkat ini.");
-    }
-  }, 5000);
 }
 
 function saveReadingToDatabase(gemObj) {

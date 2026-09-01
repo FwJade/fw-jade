@@ -6826,3 +6826,102 @@ body.style-explorer .view-explorer-secondary {
 }
 
 
+/* ==========================================================
+   NEW COMPONENTS — Face Compare Panel & User Profile Bar
+   Added for: Real Face Analysis, Before/After, Auth Persist
+   ========================================================== */
+
+/* --- Floating User Profile Bar (top-right, shown after login) --- */
+.user-profile-bar {
+  position: fixed;
+  top: 12px;
+  right: 14px;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 10px 5px 6px;
+  background: rgba(10, 14, 20, 0.88);
+  border: 1px solid rgba(43, 224, 133, 0.25);
+  border-radius: 30px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 4px 18px rgba(0,0,0,0.45), 0 0 12px rgba(43,224,133,0.08);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-8px);
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+.user-profile-bar.visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+.user-bar-avatar {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(43, 224, 133, 0.6);
+  object-fit: cover;
+  flex-shrink: 0;
+}
+.user-bar-initial {
+  background: linear-gradient(135deg, #2BE085, #059669);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.user-bar-name {
+  font-family: var(--font-serif, 'Cormorant Garamond', serif);
+  font-size: 0.72rem;
+  color: rgba(255,255,255,0.92);
+  letter-spacing: 0.04em;
+  max-width: 130px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.user-bar-logout {
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.4);
+  cursor: pointer;
+  padding: 2px 4px;
+  font-size: 0.72rem;
+  transition: color 0.2s;
+  line-height: 1;
+}
+.user-bar-logout:hover { color: #ff6b6b; }
+
+/* --- Before / After Face Comparison Panel --- */
+.face-compare-panel {
+  padding: 14px 10px;
+  background: rgba(43, 224, 133, 0.03);
+  border: 1px solid rgba(43, 224, 133, 0.12);
+  border-radius: 16px;
+  margin: 0 0 20px 0;
+  animation: fadeInUp 0.5s ease;
+}
+.face-compare-slot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+}
+.face-compare-label {
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  opacity: 0.85;
+  margin-bottom: 8px;
+  text-align: center;
+}
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
