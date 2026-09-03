@@ -55,14 +55,40 @@
     td{padding:13px 14px;font-size:0.82rem;border-bottom:1px solid rgba(255,255,255,0.04);vertical-align:top}
     tr:last-child td{border-bottom:none}
     tr:hover td{background:rgba(255,255,255,0.02)}
-    .text-emerald{color:var(--emerald)}.text-gold{color:var(--gold)}.text-dim{color:var(--muted)}.text-xs{font-size:0.72rem}.text-center{text-align:center;padding:32px}
     .btn-wa{display:inline-flex;align-items:center;gap:5px;background:#25D366;color:#fff;border:none;border-radius:8px;padding:6px 12px;font-size:0.75rem;font-weight:600;text-decoration:none;cursor:pointer;transition:opacity 0.2s}
     .btn-wa:hover{opacity:0.85}
-    .btn-del{display:inline-flex;align-items:center;gap:4px;background:rgba(255,107,107,0.12);border:1px solid rgba(255,107,107,0.3);color:var(--red);border-radius:8px;padding:6px 10px;font-size:0.75rem;font-weight:600;cursor:pointer;transition:background 0.2s;margin-left:6px}
+    .btn-edit{display:inline-flex;align-items:center;gap:4px;background:rgba(255,200,87,0.14);border:1px solid rgba(255,200,87,0.35);color:var(--gold);border-radius:8px;padding:6px 10px;font-size:0.75rem;font-weight:600;cursor:pointer;transition:background 0.2s;margin-left:4px}
+    .btn-edit:hover{background:rgba(255,200,87,0.25)}
+    .btn-del{display:inline-flex;align-items:center;gap:4px;background:rgba(255,107,107,0.12);border:1px solid rgba(255,107,107,0.3);color:var(--red);border-radius:8px;padding:6px 10px;font-size:0.75rem;font-weight:600;cursor:pointer;transition:background 0.2s;margin-left:4px}
     .btn-del:hover{background:rgba(255,107,107,0.25)}
     .lead-avatar{width:26px;height:26px;border-radius:50%;object-fit:cover;border:1px solid rgba(255,255,255,0.2);display:inline-block;vertical-align:middle;margin-right:6px}
     .lead-source-tag{font-size:0.65rem;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);padding:1px 6px;border-radius:10px;color:var(--muted);display:inline-block;margin-top:2px}
     .lead-source-tag.google{border-color:rgba(66,133,244,0.4);color:#6ba4ff;background:rgba(66,133,244,0.1)}
+    
+    .status-badge{font-size:0.68rem;padding:2px 8px;border-radius:12px;font-weight:600;display:inline-block;margin-top:3px}
+    .status-new{background:rgba(43,224,133,0.15);color:var(--emerald);border:1px solid rgba(43,224,133,0.3)}
+    .status-chat{background:rgba(37,211,102,0.15);color:#25D366;border:1px solid rgba(37,211,102,0.3)}
+    .status-nego{background:rgba(255,200,87,0.15);color:var(--gold);border:1px solid rgba(255,200,87,0.3)}
+    .status-closing{background:rgba(0,210,255,0.15);color:#00D2FF;border:1px solid rgba(0,210,255,0.3)}
+    .status-vip{background:linear-gradient(135deg,rgba(255,200,87,0.25),rgba(43,224,133,0.25));color:#FFE699;border:1px solid rgba(255,200,87,0.5)}
+    
+    .phone-pending-btn{background:none;border:1px dashed rgba(255,200,87,0.4);color:var(--gold);padding:3px 8px;border-radius:6px;font-size:0.7rem;cursor:pointer;display:inline-flex;align-items:center;gap:4px;transition:all 0.2s}
+    .phone-pending-btn:hover{background:rgba(255,200,87,0.12);border-color:var(--gold)}
+    
+    /* Modal Styling */
+    .lead-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.75);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;z-index:999;padding:16px}
+    .lead-modal-card{background:#0e1715;border:1px solid rgba(215,182,90,0.3);border-radius:16px;max-width:520px;width:100%;padding:24px;box-shadow:0 20px 50px rgba(0,0,0,0.8);max-height:90vh;overflow-y:auto}
+    .modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;border-bottom:1px solid rgba(255,255,255,0.08);padding-bottom:12px}
+    .modal-title{font-family:'Cormorant Garamond',serif;font-size:1.35rem;font-weight:600;color:var(--gold)}
+    .modal-close-btn{background:none;border:none;color:var(--muted);font-size:1.2rem;cursor:pointer;transition:color 0.2s}
+    .modal-close-btn:hover{color:#fff}
+    .form-group{margin-bottom:14px}
+    .form-label{display:block;font-size:0.75rem;color:var(--muted);margin-bottom:5px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em}
+    .form-input,.form-select,.form-textarea{width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.12);border-radius:8px;padding:9px 12px;color:var(--text);font-size:0.85rem;font-family:'Inter',sans-serif;outline:none;transition:border-color 0.2s}
+    .form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--emerald)}
+    .form-textarea{resize:vertical;min-height:70px}
+    .modal-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:20px;padding-top:14px;border-top:1px solid rgba(255,255,255,0.08)}
+    
     .empty-state{padding:48px;text-align:center;color:var(--muted)}
     .empty-state i{font-size:2rem;margin-bottom:10px;opacity:0.4;display:block}
     @media(max-width:600px){.admin-content{padding:14px}.stat-grid{grid-template-columns:1fr 1fr}th,td{padding:10px 10px;font-size:0.75rem}}
@@ -111,10 +137,81 @@
     </div>
     <div class="table-wrap">
       <table>
-        <thead><tr><th>Waktu</th><th>Nama Pelanggan</th><th>Tgl Lahir / Bazi</th><th>Kontak / Sumber</th><th>Batu Rekomendasi</th><th>Aksi Admin</th></tr></thead>
+        <thead><tr><th>Waktu</th><th>Nama Pelanggan</th><th>Tgl Lahir / Bazi</th><th>Kontak &amp; No. WhatsApp</th><th>Batu Rekomendasi</th><th>Aksi Admin</th></tr></thead>
         <tbody id="leadsTableBody"><tr><td colspan="6" class="text-center"><i class="fa-solid fa-spinner fa-spin text-emerald"></i> Memuat data...</td></tr></tbody>
       </table>
     </div>
+  </div>
+</div>
+
+<!-- =========================================================================
+     MODAL EDIT PROSPEK & UPDATE NO. WHATSAPP (Admin Management)
+     ========================================================================= -->
+<div id="leadEditModal" class="lead-modal-overlay" style="display: none;">
+  <div class="lead-modal-card">
+    <div class="modal-header">
+      <div class="modal-title"><i class="fa-solid fa-pen-to-square text-gold"></i> Edit Data Prospek &amp; WhatsApp</div>
+      <button type="button" class="modal-close-btn" onclick="closeEditLeadModal()">&times;</button>
+    </div>
+    <form id="editLeadForm" onsubmit="event.preventDefault(); saveLeadEdit();">
+      <input type="hidden" id="editLeadId">
+      
+      <div class="form-group">
+        <label class="form-label">Nama Pelanggan</label>
+        <input type="text" id="editLeadName" class="form-input" required>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Email Akun (Google)</label>
+        <input type="email" id="editLeadEmail" class="form-input" placeholder="nama@gmail.com">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label"><i class="fa-brands fa-whatsapp text-emerald"></i> Nomor WhatsApp Pelanggan</label>
+        <input type="text" id="editLeadPhone" class="form-input" placeholder="Contoh: 0811619173 atau +62811619173">
+        <small style="color: var(--muted); font-size: 0.7rem; display: block; margin-top: 3px;">
+          *Diisi saat pelanggan menghubungi WhatsApp galeri secara sukarela.
+        </small>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+        <div class="form-group">
+          <label class="form-label">Tanggal Lahir (DOB)</label>
+          <input type="text" id="editLeadDob" class="form-input" placeholder="YYYY-MM-DD">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Status Prospek</label>
+          <select id="editLeadStatus" class="form-select">
+            <option value="Prospek Baru">Prospek Baru</option>
+            <option value="Sudah Chat WA">Sudah Chat WA</option>
+            <option value="Negosiasi">Negosiasi</option>
+            <option value="Closing / Lunas">Closing / Lunas</option>
+            <option value="VIP Repeat Order">VIP Repeat Order</option>
+          </select>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+        <div class="form-group">
+          <label class="form-label">Batu Rekomendasi</label>
+          <input type="text" id="editLeadGemstone" class="form-input" placeholder="Natural Aceh Jadeite">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Estimasi Nilai / Harga</label>
+          <input type="text" id="editLeadPrice" class="form-input" placeholder="Rp 1.850.000">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Catatan Admin / Detail Obrolan</label>
+        <textarea id="editLeadNotes" class="form-textarea" placeholder="Contoh: User chat via WA tertarik Bangle Giok Burma Grade A, sudah minta video serat..."></textarea>
+      </div>
+
+      <div class="modal-actions">
+        <button type="button" class="btn-action secondary" onclick="closeEditLeadModal()">Batal</button>
+        <button type="submit" class="btn-action primary"><i class="fa-solid fa-floppy-disk"></i> Simpan &amp; Sinkron</button>
+      </div>
+    </form>
   </div>
 </div>
 
@@ -178,27 +275,29 @@
     } catch(e) {}
     if (!Array.isArray(localLeads)) localLeads = [];
 
-    // Merge Server & Local Vault (Deduplicate by email or id)
+    // Merge Server & Local Vault (Deduplicate by id or email)
     var mergedMap = new Map();
     serverLeads.forEach(function(l) {
-      var key = (l.email && l.email !== '-') ? l.email.toLowerCase() : l.id;
-      mergedMap.set(key, l);
+      var key = l.id || ((l.email && l.email !== '-') ? l.email.toLowerCase() : null);
+      if (key) mergedMap.set(key, l);
     });
 
     localLeads.forEach(function(l) {
-      var key = (l.email && l.email !== '-') ? l.email.toLowerCase() : l.id;
-      if (!mergedMap.has(key)) {
-        mergedMap.set(key, l);
-        // Push missing local lead to server asynchronously
-        fetch('/api/leads', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(l)
-        }).catch(function() {});
-      } else {
-        // Merge enriched fields if available
-        var existing = mergedMap.get(key);
-        mergedMap.set(key, Object.assign({}, existing, l));
+      var key = l.id || ((l.email && l.email !== '-') ? l.email.toLowerCase() : null);
+      if (key) {
+        if (!mergedMap.has(key)) {
+          mergedMap.set(key, l);
+          // Push missing local lead to server asynchronously
+          fetch('/api/leads', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(l)
+          }).catch(function() {});
+        } else {
+          // Merge enriched fields if available
+          var existing = mergedMap.get(key);
+          mergedMap.set(key, Object.assign({}, existing, l));
+        }
       }
     });
 
@@ -218,6 +317,16 @@
     statLastLoad.textContent = new Date().toLocaleString('id-ID');
   }
 
+  function getStatusClass(status) {
+    if (!status) return 'status-new';
+    var s = status.toLowerCase();
+    if (s.includes('chat')) return 'status-chat';
+    if (s.includes('nego')) return 'status-nego';
+    if (s.includes('closing') || s.includes('lunas')) return 'status-closing';
+    if (s.includes('vip')) return 'status-vip';
+    return 'status-new';
+  }
+
   function renderTable(leads) {
     var tbody = document.getElementById('leadsTableBody');
     if (!leads || leads.length === 0) {
@@ -226,26 +335,111 @@
     }
     tbody.innerHTML = leads.map(function(l) {
       var cleanPhone = (l.phone || '').replace(/[^0-9]/g, '');
+      var hasValidPhone = cleanPhone && cleanPhone.length >= 8 && l.phone !== '-';
+      
       var waMsg = encodeURIComponent('Halo Bapak/Ibu ' + l.name + ', kami dari FW JADE Medan Giok. Berdasarkan hasil analisa aura & Bazi Anda (' + (l.gemstone || 'Natural Aceh Jadeite') + '), apakah ada yang bisa kami bantu mengenai pemilihan perhiasan giok alami Anda?');
-      var waUrl = cleanPhone ? 'https://wa.me/' + cleanPhone + '?text=' + waMsg : 'https://wa.me/62811619173';
+      var waUrl = hasValidPhone ? 'https://wa.me/' + cleanPhone + '?text=' + waMsg : 'https://wa.me/62811619173';
       
       var isGoogle = l.source && l.source.toLowerCase().includes('google');
       var sourceBadge = '<span class="lead-source-tag' + (isGoogle ? ' google' : '') + '"><i class="' + (isGoogle ? 'fa-brands fa-google' : 'fa-solid fa-user-pen') + '"></i> ' + (l.source || 'Registrasi') + '</span>';
       
       var avatarImg = l.picture ? '<img src="' + l.picture + '" class="lead-avatar" alt="Avatar">' : '';
+      var statusBadge = '<span class="status-badge ' + getStatusClass(l.status) + '">' + (l.status || 'Prospek Baru') + '</span>';
+
+      var contactCell = '';
+      if (hasValidPhone) {
+        contactCell = '<strong>' + l.phone + '</strong><br>' + sourceBadge + '<br>' + statusBadge;
+      } else {
+        contactCell = '<button type="button" class="phone-pending-btn" onclick="openEditLeadModal(\'' + l.id + '\')" title="Klik untuk menginput No. WhatsApp saat pelanggan chat"><i class="fa-brands fa-whatsapp"></i> + Input No. WA</button><br>' + sourceBadge + '<br>' + statusBadge;
+      }
+
+      var notesSnippet = l.notes ? '<br><small class="text-dim" style="font-style:italic;" title="' + l.notes.replace(/"/g, '&quot;') + '">📝 ' + (l.notes.length > 28 ? l.notes.substring(0, 28) + '...' : l.notes) + '</small>' : '';
 
       return '<tr>' +
         '<td><span class="text-dim text-xs">' + (l.timestamp || '-') + '</span></td>' +
-        '<td>' + avatarImg + '<strong>' + (l.name || '-') + '</strong>' + (l.email && l.email !== '-' ? '<br><small class="text-dim">' + l.email + '</small>' : '') + '</td>' +
+        '<td>' + avatarImg + '<strong>' + (l.name || '-') + '</strong>' + (l.email && l.email !== '-' ? '<br><small class="text-dim">' + l.email + '</small>' : '') + notesSnippet + '</td>' +
         '<td><span class="text-gold">' + (l.dob || '-') + '</span><br><small class="text-emerald">' + (l.zodiac || '') + (l.shio ? ' - ' + l.shio : '') + '</small></td>' +
-        '<td><strong>' + (l.phone && l.phone !== '-' ? l.phone : '<span class="text-dim">Google SSO</span>') + '</strong><br>' + sourceBadge + '</td>' +
+        '<td>' + contactCell + '</td>' +
         '<td><strong class="text-emerald">' + (l.gemstone || 'Natural Aceh Jadeite') + '</strong><br><small class="text-gold">' + (l.price || 'Rp 1.850.000') + '</small></td>' +
         '<td>' +
-          '<a href="' + waUrl + '" target="_blank" class="btn-wa"><i class="fa-brands fa-whatsapp"></i> Chat CS</a>' +
+          (hasValidPhone ? '<a href="' + waUrl + '" target="_blank" class="btn-wa" title="Chat Pelanggan"><i class="fa-brands fa-whatsapp"></i> Chat</a>' : '') +
+          '<button type="button" class="btn-edit" onclick="openEditLeadModal(\'' + l.id + '\')" title="Edit Data & No. WA"><i class="fa-solid fa-pen-to-square"></i> Edit</button>' +
           '<button type="button" class="btn-del" onclick="deleteLead(\'' + l.id + '\')" title="Hapus prospek"><i class="fa-solid fa-trash-can"></i></button>' +
         '</td>' +
       '</tr>';
     }).join('');
+  }
+
+  function openEditLeadModal(leadId) {
+    var lead = allLeads.find(function(l) { return l.id === leadId; });
+    if (!lead) return;
+
+    document.getElementById('editLeadId').value = lead.id || '';
+    document.getElementById('editLeadName').value = lead.name || '';
+    document.getElementById('editLeadEmail').value = lead.email && lead.email !== '-' ? lead.email : '';
+    document.getElementById('editLeadPhone').value = lead.phone && lead.phone !== '-' ? lead.phone : '';
+    document.getElementById('editLeadDob').value = lead.dob && lead.dob !== '-' ? lead.dob : '';
+    document.getElementById('editLeadStatus').value = lead.status || 'Prospek Baru';
+    document.getElementById('editLeadGemstone').value = lead.gemstone || 'Natural Aceh Jadeite';
+    document.getElementById('editLeadPrice').value = lead.price || 'Rp 1.850.000';
+    document.getElementById('editLeadNotes').value = lead.notes || '';
+
+    document.getElementById('leadEditModal').style.display = 'flex';
+  }
+
+  function closeEditLeadModal() {
+    document.getElementById('leadEditModal').style.display = 'none';
+  }
+
+  async function saveLeadEdit() {
+    var id = document.getElementById('editLeadId').value;
+    var name = document.getElementById('editLeadName').value.trim();
+    var email = document.getElementById('editLeadEmail').value.trim();
+    var phone = document.getElementById('editLeadPhone').value.trim();
+    var dob = document.getElementById('editLeadDob').value.trim();
+    var status = document.getElementById('editLeadStatus').value;
+    var gemstone = document.getElementById('editLeadGemstone').value.trim();
+    var price = document.getElementById('editLeadPrice').value.trim();
+    var notes = document.getElementById('editLeadNotes').value.trim();
+
+    var existingIdx = allLeads.findIndex(function(l) { return l.id === id; });
+    var updatedLead = Object.assign({}, (existingIdx >= 0 ? allLeads[existingIdx] : {}), {
+      id: id,
+      name: name,
+      email: email || '-',
+      phone: phone || '-',
+      dob: dob || '-',
+      status: status,
+      gemstone: gemstone || 'Natural Aceh Jadeite',
+      price: price || 'Rp 1.850.000',
+      notes: notes
+    });
+
+    if (existingIdx >= 0) {
+      allLeads[existingIdx] = updatedLead;
+    } else {
+      allLeads.unshift(updatedLead);
+    }
+
+    try {
+      localStorage.setItem('fwjade_global_leads_vault', JSON.stringify(allLeads));
+    } catch(e) {}
+
+    renderTable(allLeads);
+    closeEditLeadModal();
+
+    // Post update to Cloudflare API
+    try {
+      await fetch('/api/leads', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updatedLead)
+      });
+    } catch(e) {
+      console.warn('Backend update error:', e);
+    }
+
+    loadLeads();
   }
 
   async function deleteLead(leadId) {
@@ -274,16 +468,18 @@
       return (l.name && l.name.toLowerCase().includes(q)) ||
         (l.phone && l.phone.includes(q)) ||
         (l.gemstone && l.gemstone.toLowerCase().includes(q)) ||
-        (l.email && l.email.toLowerCase().includes(q));
+        (l.email && l.email.toLowerCase().includes(q)) ||
+        (l.notes && l.notes.toLowerCase().includes(q)) ||
+        (l.status && l.status.toLowerCase().includes(q));
     });
     renderTable(filtered);
   }
 
   function exportCSV() {
     if (!allLeads || allLeads.length === 0) { alert('Belum ada data.'); return; }
-    var csv = 'Waktu,Nama,Email,Tgl Lahir,Zodiak,Shio,Elemen,WhatsApp,Sumber,Batu,Harga\n';
+    var csv = 'Waktu,Nama,Email,Tgl Lahir,Zodiak,Shio,Elemen,WhatsApp,Status,Catatan,Batu,Harga\n';
     allLeads.forEach(function(l) {
-      csv += ['"' + (l.timestamp || '') + '"', '"' + (l.name || '') + '"', '"' + (l.email || '') + '"', '"' + (l.dob || '') + '"', '"' + (l.zodiac || '') + '"', '"' + (l.shio || '') + '"', '"' + (l.element || '') + '"', '"' + (l.phone || '') + '"', '"' + (l.source || '') + '"', '"' + (l.gemstone || '') + '"', '"' + (l.price || '') + '"'].join(',') + '\n';
+      csv += ['"' + (l.timestamp || '') + '"', '"' + (l.name || '') + '"', '"' + (l.email || '') + '"', '"' + (l.dob || '') + '"', '"' + (l.zodiac || '') + '"', '"' + (l.shio || '') + '"', '"' + (l.element || '') + '"', '"' + (l.phone || '') + '"', '"' + (l.status || '') + '"', '"' + (l.notes || '').replace(/"/g, '""') + '"', '"' + (l.gemstone || '') + '"', '"' + (l.price || '') + '"'].join(',') + '\n';
     });
     var a = document.createElement('a');
     a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);

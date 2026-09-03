@@ -138,4 +138,14 @@
      * Panel Admin kini menggabungkan data dari Cloudflare Edge API dengan Local Master Vault (`fwjade_global_leads_vault`).
      * Menampilkan avatar Google pengguna, label sumber (`Google One-Tap / SSO` vs `Form Penyelarasan`), nomor telepon/email, Bazi, serta tombol aksi **Chat CS** dan **Hapus Prospek** (`DELETE /api/leads`).
      * Menjamin seluruh akun Google yang pernah login langsung terbaca di tabel admin secara real-time dan permanen.
+* **2026-09-03 (Bagian 10):** **Admin Custom WhatsApp Management, Status Lifecycle & Lead Edit Modal**:
+  1. **Filosofi Non-Intrusif WhatsApp**:
+     * Pengguna tidak dipaksa mengisi nomor WhatsApp di depan. Pengguna bebas menghubungi WhatsApp Concierge Galeri atas inisiatif mereka sendiri.
+     * Saat pengguna menghubungi WhatsApp admin, admin kini dapat langsung memasukkan / memperbarui nomor WhatsApp pelanggan dari panel admin.
+  2. **Modal Edit Prospek & Update No. WA (`admin.html`)**:
+     * Menambahkan modal edit lengkap: Pengeditan Nama, Email, Nomor WhatsApp, Tanggal Lahir (Bazi), Status Prospek (Prospek Baru, Sudah Chat WA, Negosiasi, Closing / Lunas, VIP), Batu Rekomendasi, Estimasi Harga, dan Catatan Obrolan Admin.
+     * Tombol cepat `[+ Input No. WA]` pada baris kontak prospek yang belum memiliki nomor telepon.
+  3. **Penyempurnaan Endpoint Backend (`functions/api/leads.js`)**:
+     * Mendukung update per-ID untuk memperbarui nomor telepon, status, dan catatan admin secara persisten di Cloudflare Edge & Master Vault.
+
 

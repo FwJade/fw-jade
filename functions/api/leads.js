@@ -81,29 +81,34 @@ export async function onRequest(context) {
 
       let leadsList = await getStoredLeads();
 
-      // Check if existing lead exists with same email
+      // Check if existing lead exists with same id, email or phone
       let existingIdx = -1;
-      if (cleanEmail) {
+      if (body.id) {
+        existingIdx = leadsList.findIndex(l => l.id === body.id);
+      }
+      if (existingIdx === -1 && cleanEmail) {
         existingIdx = leadsList.findIndex(l => l.email && l.email.toLowerCase() === cleanEmail);
-      } else if (phone && phone !== '-') {
+      } else if (existingIdx === -1 && phone && phone !== '-') {
         existingIdx = leadsList.findIndex(l => l.phone && l.phone === phone.trim());
       }
 
       const leadRecord = {
-        id: existingIdx >= 0 ? leadsList[existingIdx].id : 'lead-' + Date.now(),
-        timestamp: new Date().toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' }),
+        id: existingIdx >= 0 ? leadsList[existingIdx].id : (body.id || 'lead-' + Date.now()),
+        timestamp: (existingIdx >= 0 && leadsList[existingIdx].timestamp) ? leadsList[existingIdx].timestamp : new Date().toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' }),
+        updatedAt: new Date().toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' }),
         name: cleanName,
         dob: dob && dob !== '-' ? dob : (existingIdx >= 0 ? leadsList[existingIdx].dob : '-'),
         zodiac: zodiac && zodiac !== '-' ? zodiac : (existingIdx >= 0 ? leadsList[existingIdx].zodiac : '-'),
         shio: shio && shio !== '-' ? shio : (existingIdx >= 0 ? leadsList[existingIdx].shio : '-'),
         element: element && element !== '-' ? element : (existingIdx >= 0 ? leadsList[existingIdx].element : 'WOOD'),
-        phone: phone && phone !== '-' ? phone.trim() : (existingIdx >= 0 ? leadsList[existingIdx].phone : '-'),
+        phone: phone && phone !== '-' ? phone.trim() : (existingIdx >= 0 ? (leadsList[existingIdx].phone || '-') : '-'),
         email: cleanEmail || (existingIdx >= 0 ? leadsList[existingIdx].email : '-'),
         gemstone: gemstone || (existingIdx >= 0 ? leadsList[existingIdx].gemstone : 'Natural Aceh Jadeite'),
         price: price || (existingIdx >= 0 ? leadsList[existingIdx].price : 'Rp 1.850.000'),
         picture: picture || (existingIdx >= 0 ? leadsList[existingIdx].picture : ''),
-        source: source || 'Website Registration',
-        status: 'Prospek Aktif'
+        notes: body.notes || (existingIdx >= 0 ? (leadsList[existingIdx].notes || '') : ''),
+        source: source || (existingIdx >= 0 ? (leadsList[existingIdx].source || 'Website') : 'Website'),
+        status: body.status || (existingIdx >= 0 ? (leadsList[existingIdx].status || 'Prospek Baru') : 'Prospek Baru')
       };
 
       if (existingIdx >= 0) {
