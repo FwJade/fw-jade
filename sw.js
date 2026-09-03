@@ -1,4 +1,4 @@
-const CACHE_NAME = "aurora-vip-v34";
+const CACHE_NAME = "aurora-vip-v35";
 const urlsToCache = [
   "/",
   "/index.html",

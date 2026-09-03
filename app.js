@@ -854,7 +854,7 @@ function closeScannerFlowToHome() {
   // Restore Hero section cleanly
   const secHero = document.getElementById('secHero');
   if (secHero) {
-    secHero.style.display = 'block';
+    secHero.style.setProperty('display', 'flex', 'important');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 }
@@ -866,25 +866,26 @@ function startScannerFlow() {
   // 1. Strictly hide the Hero section completely to eliminate any redundancy
   const secHero = document.getElementById('secHero');
   if (secHero) {
-    secHero.style.display = 'none';
+    secHero.style.setProperty('display', 'none', 'important');
   }
 
   // 2. Open Step 1 (Identity & Bazi Form) with full focus
   const secForm = document.getElementById('secIdentityForm');
   if (secForm) {
-    secForm.style.display = 'block';
+    secForm.style.setProperty('display', 'block', 'important');
     window.scrollTo({ top: 0, behavior: 'smooth' });
     // Pre-fill if user already logged in (reflect session)
     prefillFormIfLoggedIn();
   } else {
     const secScanner = document.getElementById('secScanner');
     if (secScanner) {
-      secScanner.style.display = 'block';
+      secScanner.style.setProperty('display', 'block', 'important');
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
     startWebcam();
   }
 }
+window.startScannerFlow = startScannerFlow;
 
 /**
  * If a user session is already active (from localStorage restore or Google auth),
