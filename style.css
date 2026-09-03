@@ -3587,16 +3587,19 @@ body.style-explorer .view-explorer-secondary {
 }
 
 /* ── Step 2 Luxury Scanner Centered Architecture ───────────────────────── */
-.step-scanner-wrapper {
+.step-scanner-wrapper,
+.identity-form-wrapper {
   text-align: center;
-  max-width: 540px;
+  max-width: 580px;
   margin: 0 auto;
   padding: 10px 0 20px;
 }
 
-.scanner-kicker-badge {
+.scanner-kicker-badge,
+.form-header-badge {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
   font-size: 0.72rem;
   font-weight: 700;
@@ -3607,7 +3610,7 @@ body.style-explorer .view-explorer-secondary {
   border: 1px solid rgba(255, 200, 87, 0.25);
   border-radius: var(--radius-full);
   padding: 5px 16px;
-  margin-bottom: 14px;
+  margin: 0 auto 14px auto;
 }
 
 .step-main-title {
@@ -7474,7 +7477,7 @@ body.theme-imperial-light #particleCanvas {
   opacity: 0.25 !important;
 }
 
-/* ── 1. Top Navigation in Light Mode ────────────────────────── */
+/* ── 1. Top Navigation Bar (Haute Horlogerie Luxury Glass) ───── */
 .top-nav {
   display: flex !important;
   align-items: center !important;
@@ -7482,7 +7485,13 @@ body.theme-imperial-light #particleCanvas {
   width: 100% !important;
   max-width: 1200px !important;
   margin: 0 auto 20px auto !important;
-  padding: 12px 20px !important;
+  padding: 10px 22px !important;
+  background: rgba(8, 20, 16, 0.65) !important;
+  border: 1px solid rgba(216, 195, 144, 0.22) !important;
+  border-radius: 40px !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35) !important;
   box-sizing: border-box !important;
 }
 
@@ -7811,7 +7820,8 @@ body.theme-imperial-light .step-main-subtitle {
   color: #4A635B !important;
 }
 
-body.theme-imperial-light .scanner-kicker-badge {
+body.theme-imperial-light .scanner-kicker-badge,
+body.theme-imperial-light .form-header-badge {
   background: rgba(180, 83, 9, 0.08) !important;
   border-color: rgba(180, 83, 9, 0.3) !important;
   color: #B45309 !important;
