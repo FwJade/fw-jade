@@ -145,7 +145,19 @@
   2. **Modal Edit Prospek & Update No. WA (`admin.html`)**:
      * Menambahkan modal edit lengkap: Pengeditan Nama, Email, Nomor WhatsApp, Tanggal Lahir (Bazi), Status Prospek (Prospek Baru, Sudah Chat WA, Negosiasi, Closing / Lunas, VIP), Batu Rekomendasi, Estimasi Harga, dan Catatan Obrolan Admin.
      * Tombol cepat `[+ Input No. WA]` pada baris kontak prospek yang belum memiliki nomor telepon.
-  3. **Penyempurnaan Endpoint Backend (`functions/api/leads.js`)**:
-     * Mendukung update per-ID untuk memperbarui nomor telepon, status, dan catatan admin secara persisten di Cloudflare Edge & Master Vault.
+* **2026-09-03 (Bagian 11):** **Enterprise Reactive Auto-Save, Bazi State Persistence & Service Worker Cache Purge**:
+  1. **Akar Masalah Data Tanggal Lahir Tidak Tersimpan**:
+     * Sebelumnya saat pengguna memilih Hari, Bulan, Tahun di dropdown Step 1, data hanya tersimpan sementara di memori JavaScript `AppState.user` dan TIDAK disimpan ke `localStorage`. Saat halaman di-refresh, data hilang.
+     * Tidak ada event listener otomatis pada input teks Nama, Email, dan Telepon.
+  2. **Implementasi Reactive Persistence Engine (`syncAndPersistUserIdentity`)**:
+     * Setiap kali ada interaksi pada dropdown tanggal lahir (`inputDobDay`, `inputDobMonth`, `inputDobYear`) atau pengetikan pada Nama, Email, Telepon (`input`, `change`, `blur`), sistem langsung secara reaktif:
+       * Mengkalkulasi Bazi, Zodiak Barat, Shio Tionghoa, dan Elemen Wu Xing.
+       * Menyimpan seluruh status identitas ke `localStorage.setItem('fw_jade_user', ...)` secara permanen.
+       * Menyelaraskan data secara instan ke Master Leads Vault dan Backend API.
+  3. **Auto-Load & State Restoration**:
+     * Saat halaman dibuka atau di-refresh, fungsi `restoreUserSession()` dan `populateIdentityFormData()` langsung mem-parsing tanggal lahir, mengisi seluruh dropdown dan kolom input, menampilkan badge Bazi, dan memperbarui bar profil navigasi secara otomatis.
+  4. **Pembaruan Service Worker (`sw.js`) & Cache-Bust v50**:
+     * Meng-upgrade cache Service Worker ke `aurora-vip-v50` dengan pembersihan cache lama secara otomatis saat aktivasi, sehingga peramban pengguna tidak lagi terkunci pada aset statis versi lama.
+
 
 

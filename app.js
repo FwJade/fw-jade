@@ -579,6 +579,77 @@ function updateFormLoginState() {
 window.updateFormLoginState = updateFormLoginState;
 
 /**
+ * UNIFIED ENTERPRISE IDENTITY & BAZI PERSISTENCE ENGINE
+ * Auto-captures, persists to localStorage, updates AppState, and syncs with Master Vault & Edge API.
+ */
+function syncAndPersistUserIdentity(source = 'auto') {
+  try {
+    const inputName = document.getElementById('inputUserName')?.value?.trim();
+    const inputEmail = document.getElementById('inputUserEmail')?.value?.trim();
+    const inputPhone = document.getElementById('inputUserPhone')?.value?.trim();
+    const inputDay = document.getElementById('inputDobDay')?.value;
+    const inputMonth = document.getElementById('inputDobMonth')?.value;
+    const inputYear = document.getElementById('inputDobYear')?.value;
+
+    if (inputName && inputName !== 'Kolektor Yang Terhormat') AppState.user.name = inputName;
+    if (inputEmail && inputEmail !== '-') AppState.user.email = inputEmail;
+    if (inputPhone && inputPhone !== '-') AppState.user.phone = inputPhone;
+    if (inputDay) AppState.user.dobDay = inputDay;
+    if (inputMonth) AppState.user.dobMonth = inputMonth;
+    if (inputYear) AppState.user.dobYear = inputYear;
+
+    // Calculate Bazi if day, month, year exist
+    const bazi = calculateLiveBazi();
+    if (bazi) {
+      AppState.user.dob = bazi.dobStr;
+      AppState.user.bazi = bazi;
+      if (bazi.rawElement) AppState.user.metrics.element = bazi.rawElement;
+    }
+
+    // Persist to localStorage
+    const savedPayload = {
+      name: AppState.user.name,
+      email: AppState.user.email,
+      phone: AppState.user.phone,
+      picture: AppState.user.picture,
+      dobDay: AppState.user.dobDay,
+      dobMonth: AppState.user.dobMonth,
+      dobYear: AppState.user.dobYear,
+      dob: AppState.user.dob,
+      bazi: AppState.user.bazi,
+      isGoogleAuth: AppState.user.isGoogleAuth || false,
+      isRegistered: AppState.user.isRegistered || false,
+      savedAt: Date.now()
+    };
+    localStorage.setItem('fw_jade_user', JSON.stringify(savedPayload));
+
+    // Update UI components
+    updateUserProfileUI();
+    updateFormLoginState();
+
+    // Auto-sync with Leads Vault if user has name, email, or dob
+    if ((AppState.user.name && AppState.user.name !== 'Kolektor Yang Terhormat') || (AppState.user.email && AppState.user.email !== '-') || AppState.user.dob) {
+      saveLeadToVaultAndApi({
+        name: AppState.user.name,
+        email: AppState.user.email || '-',
+        phone: AppState.user.phone || '-',
+        picture: AppState.user.picture || '',
+        dob: AppState.user.dob || (AppState.user.dobDay && AppState.user.dobMonth && AppState.user.dobYear ? `${AppState.user.dobDay}/${AppState.user.dobMonth}/${AppState.user.dobYear}` : '-'),
+        zodiac: AppState.user.bazi?.zodiac || '-',
+        shio: AppState.user.bazi?.shio || '-',
+        element: AppState.user.bazi?.rawElement || 'WOOD',
+        gemstone: 'Natural Aceh Jadeite',
+        price: 'Rp 1.850.000',
+        source: source === 'google' ? 'Google One-Tap / SSO' : (source === 'form_submit' ? 'Form Penyelarasan Step 1' : 'Form Auto-Save')
+      });
+    }
+  } catch (err) {
+    console.warn('[AURA AI] syncAndPersistUserIdentity error:', err);
+  }
+}
+window.syncAndPersistUserIdentity = syncAndPersistUserIdentity;
+
+/**
  * Restore user session from localStorage on page load.
  * Prevents "logged out" feel after refresh.
  */
@@ -594,6 +665,7 @@ function restoreUserSession() {
     }
     AppState.user.name = userData.name || AppState.user.name;
     AppState.user.email = userData.email || null;
+    AppState.user.phone = userData.phone || null;
     AppState.user.picture = userData.picture || null;
     AppState.user.dobDay = userData.dobDay || null;
     AppState.user.dobMonth = userData.dobMonth || null;
@@ -865,23 +937,33 @@ function initIdentityFormSelectors() {
       opt.value = y;
       opt.textContent = `${y}`;
       yearSel.appendChild(opt);
+  if (yearSel && yearSel.options.length <= 1) {
+    const curYear = new Date().getFullYear();
+    for (let y = curYear; y >= 1940; y--) {
+      const opt = document.createElement('option');
+      opt.value = y;
+      opt.textContent = `${y}`;
+      yearSel.appendChild(opt);
     }
   }
 
-  // Listeners for live Bazi badge update
+  // Reactive listeners for instant auto-save and Bazi calculation
   ['inputDobDay', 'inputDobMonth', 'inputDobYear'].forEach(id => {
     const el = document.getElementById(id);
-    if (el) el.addEventListener('change', () => {
-      const bazi = calculateLiveBazi();
-      if (bazi) {
-        AppState.user.dobDay = document.getElementById('inputDobDay')?.value;
-        AppState.user.dobMonth = document.getElementById('inputDobMonth')?.value;
-        AppState.user.dobYear = document.getElementById('inputDobYear')?.value;
-        AppState.user.dob = bazi.dobStr;
-        AppState.user.bazi = bazi;
-        AppState.user.metrics.element = bazi.rawElement;
-      }
-    });
+    if (el) {
+      el.addEventListener('change', () => {
+        syncAndPersistUserIdentity('dob_dropdown');
+      });
+    }
+  });
+
+  ['inputUserName', 'inputUserEmail', 'inputUserPhone'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.addEventListener('input', () => syncAndPersistUserIdentity('input_typing'));
+      el.addEventListener('change', () => syncAndPersistUserIdentity('input_change'));
+      el.addEventListener('blur', () => syncAndPersistUserIdentity('input_blur'));
+    }
   });
 
   // Auto-fill from stored profile if available
@@ -943,7 +1025,6 @@ function calculateLiveBazi() {
 
 async function submitIdentityForm() {
   const name = document.getElementById('inputUserName')?.value.trim();
-  const email = document.getElementById('inputUserEmail')?.value.trim();
   const d = document.getElementById('inputDobDay')?.value;
   const m = document.getElementById('inputDobMonth')?.value;
   const y = document.getElementById('inputDobYear')?.value;
@@ -954,48 +1035,9 @@ async function submitIdentityForm() {
     return;
   }
 
-  // Save to App State (phone is optional, user connects on WhatsApp at closing)
-  AppState.user.name = name;
-  AppState.user.phone = AppState.user.phone || '-';
-  AppState.user.email = email || '-';
-  AppState.user.dobDay = d;
-  AppState.user.dobMonth = m;
-  AppState.user.dobYear = y;
-  AppState.user.dob = bazi.dobStr;
-  AppState.user.bazi = bazi;
-  AppState.user.metrics.element = bazi.rawElement;
+  // Save and sync everything
   AppState.user.isRegistered = true;
-
-  // Persist full profile to localStorage
-  try {
-    const existing = JSON.parse(localStorage.getItem('fw_jade_user') || '{}');
-    localStorage.setItem('fw_jade_user', JSON.stringify({
-      ...existing,
-      name: name,
-      email: email || existing.email || null,
-      dobDay: d,
-      dobMonth: m,
-      dobYear: y,
-      dob: bazi.dobStr,
-      bazi: bazi,
-      isRegistered: true,
-      savedAt: Date.now()
-    }));
-  } catch (e) {}
-
-  // Save & Sync to Master Leads Vault (Local & Edge Cloudflare)
-  saveLeadToVaultAndApi({
-    name: AppState.user.name,
-    email: AppState.user.email || '-',
-    dob: AppState.user.dob || `${d}/${m}/${y}`,
-    zodiac: bazi.zodiac,
-    shio: bazi.shio,
-    element: bazi.rawElement,
-    phone: AppState.user.phone || '-',
-    gemstone: 'Natural Aceh Jadeite',
-    price: 'Rp 1.850.000',
-    source: 'Form Penyelarasan Step 1'
-  });
+  syncAndPersistUserIdentity('form_submit');
 
   // Smooth transition to Camera Scanner
   const secForm = document.getElementById('secIdentityForm');
@@ -1087,9 +1129,29 @@ window.startScannerFlow = startScannerFlow;
 function populateIdentityFormData() {
   const userName = AppState.user.name;
   const userEmail = AppState.user.email;
-  const userDobDay = AppState.user.dobDay;
-  const userDobMonth = AppState.user.dobMonth;
-  const userDobYear = AppState.user.dobYear;
+  const userPhone = AppState.user.phone;
+  let userDobDay = AppState.user.dobDay;
+  let userDobMonth = AppState.user.dobMonth;
+  let userDobYear = AppState.user.dobYear;
+
+  // If dobDay is missing but dob string exists
+  if ((!userDobDay || !userDobMonth || !userDobYear) && AppState.user.dob && AppState.user.dob !== '-') {
+    const parts = AppState.user.dob.includes('/') ? AppState.user.dob.split('/') : AppState.user.dob.split('-');
+    if (parts.length === 3) {
+      if (parts[0].length === 4) {
+        userDobYear = parts[0];
+        userDobMonth = parseInt(parts[1], 10).toString();
+        userDobDay = parseInt(parts[2], 10).toString();
+      } else {
+        userDobDay = parseInt(parts[0], 10).toString();
+        userDobMonth = parseInt(parts[1], 10).toString();
+        userDobYear = parts[2];
+      }
+      AppState.user.dobDay = userDobDay;
+      AppState.user.dobMonth = userDobMonth;
+      AppState.user.dobYear = userDobYear;
+    }
+  }
 
   const inputName = document.getElementById('inputUserName');
   const inputEmail = document.getElementById('inputUserEmail');
@@ -1104,8 +1166,8 @@ function populateIdentityFormData() {
   if (inputEmail && userEmail && userEmail !== '-') {
     inputEmail.value = userEmail;
   }
-  if (inputPhone && AppState.user.phone && AppState.user.phone !== '-') {
-    inputPhone.value = AppState.user.phone;
+  if (inputPhone && userPhone && userPhone !== '-') {
+    inputPhone.value = userPhone;
   }
 
   if (inputDobDay && userDobDay) {

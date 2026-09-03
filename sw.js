@@ -1,14 +1,10 @@
-const CACHE_NAME = "aurora-vip-v36";
+const CACHE_NAME = "aurora-vip-v50";
 const urlsToCache = [
   "/",
   "/index.html",
-  "/style.css",
-  "/app.js",
-  "/config.js",
-  "/hero-bg-crystals.jpg",
-  "/hero-bg-crystals-mobile.jpg",
-  "/hero-bg-crystals-light.jpg",
-  "/hero-bg-crystals-light-mobile.jpg"
+  "/style.css?v=50",
+  "/app.js?v=50",
+  "/config.js?v=50"
 ];
 
 self.addEventListener("install", event => {
@@ -16,7 +12,7 @@ self.addEventListener("install", event => {
   event.waitUntil(
     caches.open(CACHE_NAME).then(cache => {
       return cache.addAll(urlsToCache);
-    })
+    }).catch(() => {})
   );
 });
 
@@ -26,6 +22,7 @@ self.addEventListener("activate", event => {
       return Promise.all(
         cacheNames.map(cacheName => {
           if (cacheName !== CACHE_NAME) {
+            console.log('[SW] Purging outdated cache:', cacheName);
             return caches.delete(cacheName);
           }
         })
@@ -37,6 +34,9 @@ self.addEventListener("activate", event => {
 // Network-First Strategy with Cache Fallback for PWA
 self.addEventListener("fetch", event => {
   if (event.request.method !== "GET") return;
+
+  // Never cache API calls
+  if (event.request.url.includes('/api/')) return;
 
   event.respondWith(
     fetch(event.request)
