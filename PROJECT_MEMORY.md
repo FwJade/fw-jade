@@ -165,7 +165,14 @@
      * Setiap kali agent mengeksekusi `git push origin main`, GitHub secara otomatis mentrigger build worker Cloudflare Pages untuk mengompilasi dan mendistribusikan kode terbaru ke seluruh node edge CDN Cloudflare global secara real-time.
   3. **Pengukuhan Memori Permanen**:
      * Aturan ini telah dikunci secara permanen di [`RULES.md`](file:///d:/fw%20jade/RULES.md) dan [`PROJECT_MEMORY.md`](file:///d:/fw%20jade/PROJECT_MEMORY.md) sebagai pedoman operasional baku.
-
-
-
-
+* **2026-09-03 (Bagian 13):** **Scanner Screen UI/UX Decluttering, 1-Line Checkpoint Pills & Verified Enterprise Trust Badges**:
+   1. **Header Hierarchy & Typography Decluttering**:
+      * Merapikan susunan teks atas Scanner Wajah agar tidak terlihat padat / berserakan (*over-text*).
+      * Mengoptimalkan step badge (`2. SCAN WAJAH & AURA`), merampingkan kicker badge Mian Xiang, menyempurnakan font serif judul utama, dan memadatkan deskripsi instruksi pemindaian 12 Istana Wajah.
+      * Mengurangi margin vertikal agar transisi ke lensa oval kamera mengalir mulus, elegan, dan simetris.
+   2. **Single-Row Checkpoint Pills**:
+      * Menata 3 item panduan pemindaian (`Pencahayaan cukup`, `Wajah hadap depan`, `Tanpa filter`) menjadi **1 baris horizontal rapi (single-line)** dengan ukuran font dan pill yang proporsional (*compact pill*).
+      * Menghindari pemotongan atau perpindahan ke baris ke-2 di berbagai ukuran layar (*mobile & desktop*).
+   3. **Verified Security & Biometrics Trust Ecosystem**:
+      * Menambahkan bar lencana kepatuhan & otentikasi di bawah tombol kamera: Standar PADG Bank Indonesia, Sertifikasi Biometrik Global ISO/IEC 30107-3, On-Device AI Neural Mesh 100% Privat, dan Enkripsi SSL Edge 256-Bit.
+      * Menyertakan tautan langsung ke Pusat Keamanan & Integritas Data (`security.html`) untuk memperkuat kepercayaan dan kredibilitas pengguna.
