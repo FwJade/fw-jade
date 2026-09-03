@@ -49,30 +49,43 @@
     .btn-action.secondary{background:var(--card);border:1px solid var(--border);color:var(--text)}
     .btn-action.gold{background:var(--gold);color:#070a0e}
     .table-wrap{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;overflow-x:auto}
-    table{width:100%;border-collapse:collapse;min-width:600px}
+    table{width:100%;border-collapse:collapse;min-width:860px}
     thead tr{background:rgba(255,255,255,0.03)}
-    th{padding:12px 14px;text-align:left;font-size:0.72rem;font-weight:600;color:var(--gold);letter-spacing:0.1em;text-transform:uppercase;border-bottom:1px solid var(--border)}
-    td{padding:13px 14px;font-size:0.82rem;border-bottom:1px solid rgba(255,255,255,0.04);vertical-align:top}
+    th{padding:12px 14px;text-align:left;font-size:0.7rem;font-weight:600;color:var(--gold);letter-spacing:0.08em;text-transform:uppercase;border-bottom:1px solid var(--border);white-space:nowrap}
+    td{padding:12px 14px;font-size:0.82rem;border-bottom:1px solid rgba(255,255,255,0.04);vertical-align:middle}
     tr:last-child td{border-bottom:none}
     tr:hover td{background:rgba(255,255,255,0.02)}
-    .btn-wa{display:inline-flex;align-items:center;gap:5px;background:#25D366;color:#fff;border:none;border-radius:8px;padding:6px 12px;font-size:0.75rem;font-weight:600;text-decoration:none;cursor:pointer;transition:opacity 0.2s}
-    .btn-wa:hover{opacity:0.85}
-    .btn-edit{display:inline-flex;align-items:center;gap:4px;background:rgba(255,200,87,0.14);border:1px solid rgba(255,200,87,0.35);color:var(--gold);border-radius:8px;padding:6px 10px;font-size:0.75rem;font-weight:600;cursor:pointer;transition:background 0.2s;margin-left:4px}
-    .btn-edit:hover{background:rgba(255,200,87,0.25)}
-    .btn-del{display:inline-flex;align-items:center;gap:4px;background:rgba(255,107,107,0.12);border:1px solid rgba(255,107,107,0.3);color:var(--red);border-radius:8px;padding:6px 10px;font-size:0.75rem;font-weight:600;cursor:pointer;transition:background 0.2s;margin-left:4px}
-    .btn-del:hover{background:rgba(255,107,107,0.25)}
-    .lead-avatar{width:26px;height:26px;border-radius:50%;object-fit:cover;border:1px solid rgba(255,255,255,0.2);display:inline-block;vertical-align:middle;margin-right:6px}
-    .lead-source-tag{font-size:0.65rem;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);padding:1px 6px;border-radius:10px;color:var(--muted);display:inline-block;margin-top:2px}
+    
+    /* Action Buttons (Non-wrapping, sleek flex) */
+    .action-btn-group{display:inline-flex;align-items:center;gap:6px;white-space:nowrap;flex-wrap:nowrap}
+    .btn-detail-luxury{display:inline-flex;align-items:center;gap:5px;background:rgba(0,210,255,0.12);border:1px solid rgba(0,210,255,0.35);color:#00D2FF;border-radius:8px;padding:6px 12px;font-size:0.75rem;font-weight:600;cursor:pointer;transition:all 0.2s;text-decoration:none}
+    .btn-detail-luxury:hover{background:rgba(0,210,255,0.25);border-color:#00D2FF}
+    .btn-icon-square{width:30px;height:30px;display:inline-flex;align-items:center;justify-content:center;border-radius:8px;font-size:0.8rem;cursor:pointer;border:1px solid transparent;transition:all 0.2s;text-decoration:none}
+    .btn-wa-icon{background:rgba(37,211,102,0.15);border-color:rgba(37,211,102,0.35);color:#25D366}
+    .btn-wa-icon:hover{background:#25D366;color:#fff}
+    .btn-edit-icon{background:rgba(255,200,87,0.12);border-color:rgba(255,200,87,0.35);color:var(--gold)}
+    .btn-edit-icon:hover{background:var(--gold);color:#070a0e}
+    .btn-del-icon{background:rgba(255,107,107,0.1);border-color:rgba(255,107,107,0.3);color:var(--red)}
+    .btn-del-icon:hover{background:var(--red);color:#fff}
+
+    .lead-avatar-badge{width:32px;height:32px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;color:var(--emerald);background:rgba(43,224,133,0.15);border:1px solid rgba(43,224,133,0.3);flex-shrink:0}
+    .lead-avatar-img{width:32px;height:32px;border-radius:50%;object-fit:cover;border:1px solid rgba(43,224,133,0.4);flex-shrink:0}
+    
+    .badge-row{display:flex;align-items:center;gap:5px;flex-wrap:wrap;margin-top:4px}
+    .lead-source-tag{font-size:0.65rem;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);padding:1px 6px;border-radius:6px;color:var(--muted);display:inline-flex;align-items:center;gap:3px}
     .lead-source-tag.google{border-color:rgba(66,133,244,0.4);color:#6ba4ff;background:rgba(66,133,244,0.1)}
     
-    .status-badge{font-size:0.68rem;padding:2px 8px;border-radius:12px;font-weight:600;display:inline-block;margin-top:3px}
+    .status-badge{font-size:0.68rem;padding:2px 7px;border-radius:6px;font-weight:600;display:inline-block}
     .status-new{background:rgba(43,224,133,0.15);color:var(--emerald);border:1px solid rgba(43,224,133,0.3)}
     .status-chat{background:rgba(37,211,102,0.15);color:#25D366;border:1px solid rgba(37,211,102,0.3)}
     .status-nego{background:rgba(255,200,87,0.15);color:var(--gold);border:1px solid rgba(255,200,87,0.3)}
     .status-closing{background:rgba(0,210,255,0.15);color:#00D2FF;border:1px solid rgba(0,210,255,0.3)}
     .status-vip{background:linear-gradient(135deg,rgba(255,200,87,0.25),rgba(43,224,133,0.25));color:#FFE699;border:1px solid rgba(255,200,87,0.5)}
     
-    .phone-pending-btn{background:none;border:1px dashed rgba(255,200,87,0.4);color:var(--gold);padding:3px 8px;border-radius:6px;font-size:0.7rem;cursor:pointer;display:inline-flex;align-items:center;gap:4px;transition:all 0.2s}
+    .visit-badge{font-size:0.65rem;background:rgba(255,200,87,0.12);border:1px solid rgba(255,200,87,0.3);color:var(--gold);padding:1px 6px;border-radius:6px;font-weight:600;display:inline-flex;align-items:center;gap:3px}
+    .visit-badge.hot{background:linear-gradient(135deg,rgba(255,107,107,0.2),rgba(255,200,87,0.2));border-color:rgba(255,107,107,0.5);color:#ff9e9e}
+    
+    .phone-pending-btn{background:none;border:1px dashed rgba(255,200,87,0.4);color:var(--gold);padding:3px 8px;border-radius:6px;font-size:0.72rem;cursor:pointer;display:inline-flex;align-items:center;gap:4px;transition:all 0.2s}
     .phone-pending-btn:hover{background:rgba(255,200,87,0.12);border-color:var(--gold)}
     
     /* Modal Styling */
@@ -90,11 +103,6 @@
     .form-textarea{resize:vertical;min-height:70px}
     .modal-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:20px;padding-top:14px;border-top:1px solid rgba(255,255,255,0.08)}
     
-    .btn-detail{display:inline-flex;align-items:center;gap:4px;background:rgba(0,210,255,0.14);border:1px solid rgba(0,210,255,0.35);color:#00D2FF;border-radius:8px;padding:6px 10px;font-size:0.75rem;font-weight:600;cursor:pointer;transition:background 0.2s;margin-left:4px}
-    .btn-detail:hover{background:rgba(0,210,255,0.25)}
-    .visit-badge{font-size:0.68rem;background:rgba(255,200,87,0.12);border:1px solid rgba(255,200,87,0.3);color:var(--gold);padding:2px 7px;border-radius:10px;font-weight:600;display:inline-flex;align-items:center;gap:3px;margin-top:3px}
-    .visit-badge.hot{background:linear-gradient(135deg,rgba(255,107,107,0.2),rgba(255,200,87,0.2));border-color:rgba(255,107,107,0.5);color:#ff9e9e}
-    
     /* Customer 360 Timeline */
     .timeline-wrap{margin-top:14px;border-left:2px solid rgba(43,224,133,0.3);padding-left:14px;max-height:220px;overflow-y:auto}
     .timeline-item{position:relative;margin-bottom:12px}
@@ -107,6 +115,10 @@
     .detail-row:last-child{border-bottom:none}
     .detail-label{color:var(--muted)}
     .detail-val{font-weight:600}
+    
+    .empty-state{padding:48px;text-align:center;color:var(--muted)}
+    .empty-state i{font-size:2rem;margin-bottom:10px;opacity:0.4;display:block}
+    @media(max-width:600px){.admin-content{padding:14px}.stat-grid{grid-template-columns:1fr 1fr}th,td{padding:10px 10px;font-size:0.75rem}}
     
     .empty-state{padding:48px;text-align:center;color:var(--muted)}
     .empty-state i{font-size:2rem;margin-bottom:10px;opacity:0.4;display:block}
@@ -379,6 +391,24 @@
     return 'status-new';
   }
 
+  function formatLeadDate(str) {
+    if (!str || str === '-') return '-';
+    try {
+      var cleanStr = str.replace(/\./g, ':');
+      var d = new Date(cleanStr);
+      if (!isNaN(d.getTime())) {
+        var day = ('0' + d.getDate()).slice(-2);
+        var months = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+        var month = months[d.getMonth()];
+        var year = d.getFullYear();
+        var hours = ('0' + d.getHours()).slice(-2);
+        var mins = ('0' + d.getMinutes()).slice(-2);
+        return day + ' ' + month + ' ' + year + ', ' + hours + ':' + mins;
+      }
+    } catch(e) {}
+    return str;
+  }
+
   function renderTable(leads) {
     var tbody = document.getElementById('leadsTableBody');
     if (!leads || leads.length === 0) {
@@ -389,39 +419,44 @@
       var cleanPhone = (l.phone || '').replace(/[^0-9]/g, '');
       var hasValidPhone = cleanPhone && cleanPhone.length >= 8 && l.phone !== '-';
       
-      var waMsg = encodeURIComponent('Halo Bapak/Ibu ' + l.name + ', kami dari FW JADE Medan Giok. Berdasarkan hasil analisa aura & Bazi Anda (' + (l.gemstone || 'Natural Aceh Jadeite') + '), apakah ada yang bisa kami bantu mengenai pemilihan perhiasan giok alami Anda?');
+      var waMsg = encodeURIComponent('Halo Bapak/Ibu ' + (l.name || 'Kolektor') + ', kami dari FW JADE Medan Giok. Berdasarkan hasil analisa Bazi & rekomendasi (' + (l.gemstone || 'Natural Aceh Jadeite') + '), apakah ada yang bisa kami bantu?');
       var waUrl = hasValidPhone ? 'https://wa.me/' + cleanPhone + '?text=' + waMsg : 'https://wa.me/62811619173';
       
       var isGoogle = l.source && l.source.toLowerCase().includes('google');
-      var sourceBadge = '<span class="lead-source-tag' + (isGoogle ? ' google' : '') + '"><i class="' + (isGoogle ? 'fa-brands fa-google' : 'fa-solid fa-user-pen') + '"></i> ' + (l.source || 'Registrasi') + '</span>';
+      var sourceBadge = '<span class="lead-source-tag' + (isGoogle ? ' google' : '') + '"><i class="' + (isGoogle ? 'fa-brands fa-google' : 'fa-solid fa-user-pen') + '"></i> ' + (isGoogle ? 'Google' : 'Form') + '</span>';
       
-      var avatarImg = l.picture ? '<img src="' + l.picture + '" class="lead-avatar" alt="Avatar">' : '';
+      var avatarHtml = l.picture ? '<img src="' + l.picture + '" class="lead-avatar-img" alt="Avatar">' : '<div class="lead-avatar-badge">' + (l.name ? l.name.charAt(0).toUpperCase() : 'U') + '</div>';
       var statusBadge = '<span class="status-badge ' + getStatusClass(l.status) + '">' + (l.status || 'Prospek Baru') + '</span>';
 
       var visits = l.totalVisits || 1;
-      var visitBadge = '<span class="visit-badge ' + (visits > 2 ? 'hot' : '') + '"><i class="fa-solid fa-fire"></i> ' + visits + 'x Sesi</span>';
+      var visitBadge = '<span class="visit-badge ' + (visits > 1 ? 'hot' : '') + '"><i class="fa-solid fa-fire"></i> ' + visits + 'x</span>';
 
-      var contactCell = '';
-      if (hasValidPhone) {
-        contactCell = '<strong>' + l.phone + '</strong><br>' + sourceBadge + '<br>' + statusBadge + ' ' + visitBadge;
-      } else {
-        contactCell = '<button type="button" class="phone-pending-btn" onclick="openEditLeadModal(\'' + l.id + '\')" title="Klik untuk menginput No. WhatsApp saat pelanggan chat"><i class="fa-brands fa-whatsapp"></i> + Input No. WA</button><br>' + sourceBadge + '<br>' + statusBadge + ' ' + visitBadge;
-      }
+      var contactTop = hasValidPhone ? '<strong style="color:var(--text);font-size:0.85rem;">' + l.phone + '</strong>' : '<button type="button" class="phone-pending-btn" onclick="openEditLeadModal(\'' + l.id + '\')" title="Klik untuk menginput No. WhatsApp"><i class="fa-brands fa-whatsapp"></i> + No. WA</button>';
 
-      var notesSnippet = l.notes ? '<br><small class="text-dim" style="font-style:italic;" title="' + l.notes.replace(/"/g, '&quot;') + '">📝 ' + (l.notes.length > 25 ? l.notes.substring(0, 25) + '...' : l.notes) + '</small>' : '';
+      var notesSnippet = l.notes ? '<div style="font-size:0.7rem;color:var(--gold);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:180px;" title="' + l.notes.replace(/"/g, '&quot;') + '">📝 ' + l.notes + '</div>' : '';
+
+      var lastSeenFormatted = formatLeadDate(l.lastSeen || l.timestamp);
+      var firstSeenFormatted = formatLeadDate(l.firstSeen || l.timestamp);
+      var isMultiSession = (l.totalVisits && l.totalVisits > 1) || (l.firstSeen && l.lastSeen && l.firstSeen !== l.lastSeen);
 
       return '<tr>' +
-        '<td><strong class="text-emerald" style="font-size:0.8rem;">' + (l.lastSeen || l.timestamp || '-') + '</strong><br><small class="text-dim">Awal: ' + (l.firstSeen || l.timestamp || '-') + '</small></td>' +
-        '<td>' + avatarImg + '<strong>' + (l.name || '-') + '</strong>' + (l.email && l.email !== '-' ? '<br><small class="text-dim">' + l.email + '</small>' : '') + notesSnippet + '</td>' +
-        '<td><span class="text-gold">' + (l.dob || '-') + '</span><br><small class="text-emerald">' + (l.zodiac || '') + (l.shio ? ' - ' + l.shio : '') + '</small></td>' +
-        '<td>' + contactCell + '</td>' +
-        '<td><strong class="text-emerald">' + (l.gemstone || 'Natural Aceh Jadeite') + '</strong><br><small class="text-gold">' + (l.price || 'Rp 1.850.000') + '</small></td>' +
-        '<td>' +
-          '<button type="button" class="btn-detail" onclick="openLeadDetailModal(\'' + l.id + '\')" title="Buka Detail Customer 360 & Riwayat"><i class="fa-solid fa-eye"></i> Detail</button>' +
-          (hasValidPhone ? '<a href="' + waUrl + '" target="_blank" class="btn-wa" title="Chat Pelanggan"><i class="fa-brands fa-whatsapp"></i> Chat</a>' : '') +
-          '<button type="button" class="btn-edit" onclick="openEditLeadModal(\'' + l.id + '\')" title="Edit Data & No. WA"><i class="fa-solid fa-pen-to-square"></i></button>' +
-          '<button type="button" class="btn-del" onclick="deleteLead(\'' + l.id + '\')" title="Hapus prospek"><i class="fa-solid fa-trash-can"></i></button>' +
-        '</td>' +
+        '<td><div style="font-weight:600;color:var(--emerald);font-size:0.8rem;white-space:nowrap;"><i class="fa-regular fa-clock" style="opacity:0.6;margin-right:4px;"></i>' + lastSeenFormatted + '</div>' +
+        (isMultiSession ? '<div style="font-size:0.68rem;color:var(--muted);margin-top:3px;white-space:nowrap;">Awal: ' + firstSeenFormatted + '</div>' : '') + '</td>' +
+        
+        '<td><div style="display:flex;align-items:center;gap:10px;">' + avatarHtml + '<div style="min-width:0;"><div style="font-weight:600;font-size:0.85rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + (l.name || '-') + '</div><div style="font-size:0.72rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + (l.email && l.email !== '-' ? l.email : 'Tanpa Email') + '</div>' + notesSnippet + '</div></div></td>' +
+        
+        '<td><div style="font-weight:600;color:var(--gold);font-size:0.8rem;white-space:nowrap;">' + (l.dob || '-') + '</div><div style="font-size:0.72rem;color:var(--emerald);margin-top:2px;white-space:nowrap;">' + (l.zodiac || '') + (l.shio ? ' · ' + l.shio.replace(/ \(.*\)/, '') : '') + '</div></td>' +
+        
+        '<td><div>' + contactTop + '</div><div class="badge-row">' + statusBadge + visitBadge + sourceBadge + '</div></td>' +
+        
+        '<td><div style="font-weight:600;color:var(--emerald);font-size:0.82rem;white-space:nowrap;">' + (l.gemstone || 'Natural Aceh Jadeite') + '</div><div style="font-weight:600;color:var(--gold);font-size:0.75rem;margin-top:2px;">' + (l.price || 'Rp 1.850.000') + '</div></td>' +
+        
+        '<td><div class="action-btn-group">' +
+          '<button type="button" class="btn-detail-luxury" onclick="openLeadDetailModal(\'' + l.id + '\')" title="Lihat Detail Customer 360 & Riwayat"><i class="fa-solid fa-eye"></i> Detail</button>' +
+          (hasValidPhone ? '<a href="' + waUrl + '" target="_blank" class="btn-icon-square btn-wa-icon" title="Chat WhatsApp Pelanggan"><i class="fa-brands fa-whatsapp"></i></a>' : '') +
+          '<button type="button" class="btn-icon-square btn-edit-icon" onclick="openEditLeadModal(\'' + l.id + '\')" title="Edit Data & No. WhatsApp"><i class="fa-solid fa-pen-to-square"></i></button>' +
+          '<button type="button" class="btn-icon-square btn-del-icon" onclick="deleteLead(\'' + l.id + '\')" title="Hapus Prospek"><i class="fa-solid fa-trash-can"></i></button>' +
+        '</div></td>' +
       '</tr>';
     }).join('');
   }
