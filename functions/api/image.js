@@ -1,8 +1,8 @@
 /**
  * Cloudflare Pages Function: /api/image
- * Royal Imperial Transformation & Gemstone Manifestation
- * Powered by Cloudflare Workers AI Inpainting (@cf/runwayml/stable-diffusion-v1-5-inpainting)
- * with SOTA fallback (@cf/black-forest-labs/flux-1-schnell)
+ * Transforms user photo into the 2035 Haute Future Executive Portrait (Image 2)
+ * Ensures user is ALWAYS dressed in ultra-luxury attire (Tom Ford bespoke suit / Royal Haute Couture),
+ * wearing FW JADE imperial jewelry & Rolex watch in an executive penthouse boardroom.
  */
 
 export async function onRequestPost(context) {
@@ -11,17 +11,23 @@ export async function onRequestPost(context) {
     const body = await request.json();
     const {
       imageBase64,
-      gemName = 'Natural Aceh Jadeite',
-      gemColor = 'Imperial Emerald Green',
-      gender = 'female',
+      gemName = 'FW JADE Imperial Green Jadeite',
+      gemColor = 'Vibrant Emerald Green',
+      gender = 'male',
       element = 'WOOD'
     } = body;
 
     const accountId = env.CLOUDFLARE_ACCOUNT_ID || '291e6764f7f2db2c4ea3142d31e71045';
     const apiToken = env.CLOUDFLARE_API_TOKEN;
 
-    const royalRole = gender === 'male' ? 'Imperial Prince of Prosperity' : 'Imperial Princess of Royal Grace';
-    const royalPrompt = `Ultra-luxury royal portrait of an elite ${royalRole} wearing magnificent high-jewellery ${gemName} pendant with radiant 18K gold and diamond pave, glowing ${gemColor} ethereal chi aura, ancient dynasty royal silk brocade robe, imperial palace grand hall, cinematic dramatic lighting, 8k resolution, photorealistic masterpiece`;
+    const isMale = gender === 'male';
+    const attire = isMale
+      ? 'bespoke tailored black Tom Ford executive three-piece suit, crisp white dress shirt, luxury gold Rolex Day-Date wristwatch, magnificent FW JADE imperial green jadeite pendant on 18K gold chain'
+      : 'haute couture royal emerald-green silk blazer and evening dress, luxury diamond and FW JADE imperial green jadeite necklace and earrings, high-jewellery timepiece';
+
+    const setting = 'seated in a high-backed luxury dark leather executive director armchair, modern high-rise penthouse office, floor-to-ceiling glass windows with panoramic illuminated city skyscrapers and twilight skyline background, cinematic editorial lighting, sharp focus, 8k resolution, ultra-realistic portrait photography, masterpiece';
+
+    const futureExecutivePrompt = `Award-winning luxury magazine cover portrait of a highly successful wealthy 35-year-old ${isMale ? 'male tech founder CEO and billionaire investor' : 'female venture capitalist director and wealthy heiress'}, authentic face, elegant groomed hairstyle, confident charismatic posture, wearing ${attire}, ${setting}`;
 
     let generatedImageUrl = null;
     let engineUsed = 'none';
@@ -48,31 +54,28 @@ export async function onRequestPost(context) {
             },
             body: JSON.stringify({
               image: imgArray,
-              mask: imgArray, // Triton accepts image bytes as base mask
-              prompt: royalPrompt,
-              strength: 0.75,
-              guidance: 8.0,
-              num_steps: 15
+              mask: imgArray,
+              prompt: futureExecutivePrompt,
+              strength: 0.85,
+              guidance: 8.5,
+              num_steps: 20
             })
           }
         );
 
         if (inpaintRes.status === 200) {
-          const imgBuf = await inpaintRes.arrayBuffer();
-          const uint8 = new Uint8Array(imgBuf);
-          let binary = '';
-          for (let i = 0; i < uint8.length; i++) {
-            binary += String.fromCharCode(uint8[i]);
-          }
-          generatedImageUrl = `data:image/png;base64,${btoa(binary)}`;
+          const buffer = await inpaintRes.arrayBuffer();
+          const binary = String.fromCharCode(...new Uint8Array(buffer));
+          const b64 = btoa(binary);
+          generatedImageUrl = `data:image/png;base64,${b64}`;
           engineUsed = '@cf/runwayml/stable-diffusion-v1-5-inpainting';
         }
       } catch (inpaintErr) {
-        console.warn('Inpainting error, falling back to FLUX.1:', inpaintErr);
+        console.warn('Cloudflare inpainting failed, falling back to FLUX:', inpaintErr);
       }
     }
 
-    // 2. SECONDARY: Cloudflare Workers AI FLUX.1 Schnell SOTA
+    // 2. FALLBACK: Cloudflare FLUX.1 Schnell
     if (!generatedImageUrl && accountId && apiToken) {
       try {
         const fluxRes = await fetch(
@@ -84,13 +87,13 @@ export async function onRequestPost(context) {
               'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-              prompt: royalPrompt,
-              num_steps: 4
+              prompt: futureExecutivePrompt,
+              steps: 4
             })
           }
         );
 
-        if (fluxRes.ok) {
+        if (fluxRes.status === 200) {
           const fluxData = await fluxRes.json();
           if (fluxData.result && fluxData.result.image) {
             generatedImageUrl = `data:image/jpeg;base64,${fluxData.result.image}`;
@@ -98,11 +101,11 @@ export async function onRequestPost(context) {
           }
         }
       } catch (fluxErr) {
-        console.warn('FLUX.1 error, falling back:', fluxErr);
+        console.warn('FLUX.1 Schnell failed:', fluxErr);
       }
     }
 
-    // 3. TERTIARY: Cloudflare SDXL Lightning SOTA (<2s)
+    // 3. Fallback: SDXL Lightning
     if (!generatedImageUrl && accountId && apiToken) {
       try {
         const sdxlRes = await fetch(
@@ -114,31 +117,30 @@ export async function onRequestPost(context) {
               'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-              prompt: royalPrompt
+              prompt: futureExecutivePrompt,
+              num_steps: 4
             })
           }
         );
 
         if (sdxlRes.status === 200) {
-          const sdxlBuf = await sdxlRes.arrayBuffer();
-          const uint8 = new Uint8Array(sdxlBuf);
-          let binary = '';
-          for (let i = 0; i < uint8.length; i++) {
-            binary += String.fromCharCode(uint8[i]);
-          }
-          generatedImageUrl = `data:image/png;base64,${btoa(binary)}`;
+          const buffer = await sdxlRes.arrayBuffer();
+          const binary = String.fromCharCode(...new Uint8Array(buffer));
+          const b64 = btoa(binary);
+          generatedImageUrl = `data:image/png;base64,${b64}`;
           engineUsed = '@cf/bytedance/stable-diffusion-xl-lightning';
         }
       } catch (sdxlErr) {
-        console.warn('SDXL Lightning error:', sdxlErr);
+        console.warn('SDXL Lightning failed:', sdxlErr);
       }
     }
 
+    // If all fail, return graceful null
     return new Response(JSON.stringify({
-      success: true,
+      success: !!generatedImageUrl,
       imageUrl: generatedImageUrl,
       engine: engineUsed,
-      prompt: royalPrompt
+      gender: gender
     }), {
       status: 200,
       headers: {
@@ -147,10 +149,10 @@ export async function onRequestPost(context) {
       }
     });
 
-  } catch (error) {
+  } catch (err) {
     return new Response(JSON.stringify({
       success: false,
-      error: error.message || 'Gagal menghasilkan visual manifestasi bangsawan'
+      error: err.message || 'Gagal menghasilkan transformasi foto'
     }), {
       status: 500,
       headers: {

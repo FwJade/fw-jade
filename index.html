@@ -560,8 +560,14 @@
             <canvas id="scannerHudCanvas"></canvas>
             
             <div class="circular-hud-overlay">
-              <div class="hud-circle-ring"></div>
+              <div class="hud-circle-ring" id="hudCircleRing"></div>
               <div class="hud-circle-laser" id="hudLaserLine"></div>
+            </div>
+
+            <!-- Real-Time Face Distance & Position Guidance Pill -->
+            <div class="camera-guidance-pill" id="cameraGuidancePill">
+              <i class="fa-solid fa-expand" id="guidanceIcon"></i>
+              <span id="guidanceText">Arahkan wajah ke lingkaran</span>
             </div>
 
             <!-- Fallback State when camera inactive -->
@@ -627,27 +633,382 @@
           <button type="button" class="step-close-btn" onclick="closeScannerFlowToHome()" title="Kembali ke Beranda"><i class="fa-solid fa-house" style="font-size: 0.95rem;"></i></button>
         </div>
         
-        <!-- BUG 2 & 3 FIX: Before / After Face Comparison Panel -->
-        <div id="faceComparePanel" class="face-compare-panel" style="display:none; flex-direction:row; gap:14px; margin-bottom:20px; align-items:flex-start; justify-content:center; flex-wrap:wrap;">
-          <!-- BEFORE -->
-          <div class="face-compare-slot">
-            <div class="face-compare-label"><i class="fa-solid fa-camera text-emerald"></i>&nbsp;Wajah Asli Anda</div>
-            <img id="faceBeforeImg" alt="Foto wajah asli yang dianalisa AI" style="display:none; width:130px; height:130px; border-radius:12px; object-fit:cover; border:2px solid var(--clr-emerald); box-shadow:0 0 20px rgba(43,224,133,0.35);" />
-            <div style="font-size:0.65rem; color:var(--clr-emerald); opacity:0.75; margin-top:5px; text-align:center; letter-spacing:0.08em;">Tertangkap kamera</div>
-          </div>
-          <!-- SEPARATOR -->
-          <div class="face-compare-arrow" style="display:flex; align-items:center; padding-top:40px;"><i class="fa-solid fa-wand-magic-sparkles" style="color:var(--clr-gold); font-size:1.4rem;"></i></div>
-          <!-- AFTER -->
-          <div class="face-compare-slot">
-            <div class="face-compare-label"><i class="fa-solid fa-sparkles text-gold"></i>&nbsp;Transformasi Aura AI</div>
-            <div id="faceAfterSpinner" style="display:none; width:130px; height:130px; border-radius:12px; background:rgba(43,224,133,0.07); border:2px dashed rgba(43,224,133,0.35); align-items:center; justify-content:center; flex-direction:column; gap:8px;">
-              <i class="fa-solid fa-circle-notch fa-spin" style="color:var(--clr-gold); font-size:1.6rem;"></i>
-              <span style="font-size:0.6rem; color:var(--clr-gold); text-align:center; padding:0 8px;">Generating...</span>
+        <!-- =========================================================================
+             GRAND 2035 FUTURE VISION DOSSIER & POSTER (REFERENSI GAMBAR 2)
+             ========================================================================= -->
+        <div class="future-vision-poster-wrapper" id="futureVisionPoster">
+          <!-- Poster Top Brand Bar -->
+          <div class="poster-grand-header">
+            <div class="poster-brand-logo">
+              <span class="poster-fwj">FW JADE</span>
+              <span class="poster-sub">AURA AI • WEALTH &amp; FUTURE ORACLE</span>
             </div>
-            <img id="faceAfterImg" alt="Transformasi wajah dengan aura batu" style="display:none; width:130px; height:130px; border-radius:12px; object-fit:cover; border:2px solid var(--clr-gold); box-shadow:0 0 20px rgba(255,200,87,0.4);" />
-            <div id="faceAfterStatus" style="font-size:0.65rem; color:var(--clr-gold); opacity:0.75; margin-top:5px; text-align:center; letter-spacing:0.08em;"></div>
+            <div class="poster-headline-group">
+              <h1 class="poster-main-title">PROYEKSI AURA &amp; KEHIDUPAN MASA DEPAN</h1>
+              <p class="poster-subtitle">TRANSFORMASI MENJADI VERSI TERBAIK DIRI ANDA • BERDASARKAN ANALISIS AURA, ENERGI &amp; POTENSI DIRI</p>
+            </div>
+            <div class="poster-badge-right">
+              <span class="poster-year-pill" id="posterPeakYearBadge"><i class="fa-solid fa-crown text-gold"></i> TAHUN 2035</span>
+            </div>
+          </div>
+
+          <!-- Top 3-Column Pillar: Identitas Energi | Hero Executive Portrait | Posisi & Peran -->
+          <div class="poster-top-triptych">
+            <!-- Left Card: Identitas & 6 Radar Aura -->
+            <div class="poster-card poster-card-left">
+              <div class="p-card-header">
+                <i class="fa-solid fa-fingerprint text-emerald"></i> <span>IDENTITAS ENERGI</span>
+              </div>
+              <div class="p-meta-list">
+                <div class="p-meta-row"><span>Energi Dominan:</span> <strong id="pvDominantElement" class="text-emerald">Wood (Kayu)</strong></div>
+                <div class="p-meta-row"><span>Elemen Pendukung:</span> <strong id="pvSupportingElement" class="text-cyan">Water (Air)</strong></div>
+                <div class="p-meta-row"><span>Gender &amp; Usia:</span> <strong id="pvDemographics" class="text-gold">Pria • 31 Thn</strong></div>
+                <div class="p-meta-row"><span>Karakter Inti:</span> <strong id="pvCorePersona">Visioner &amp; Pemimpin</strong></div>
+                <div class="p-meta-row"><span>Jalur Hidup:</span> <strong id="pvLifePath">Executive Leadership</strong></div>
+                <div class="p-meta-row"><span>Misi Jiwa:</span> <span id="pvSoulMission" class="text-soft-gold">Membangun, Memimpin, Menginspirasi &amp; Menciptakan Warisan Abadi</span></div>
+              </div>
+
+              <!-- 6 Metrics Radar Progress Bars (Gambar 2) -->
+              <div class="p-radar-section">
+                <div class="p-radar-title"><i class="fa-solid fa-chart-simple text-gold"></i> RINGKASAN 6 POTENSI AURA</div>
+                <div class="p-bar-row">
+                  <div class="p-bar-label"><span>Karisma</span><strong id="pvRadarKarisma">92%</strong></div>
+                  <div class="p-track"><div class="p-fill" id="pvFillKarisma" style="width: 92%;"></div></div>
+                </div>
+                <div class="p-bar-row">
+                  <div class="p-bar-label"><span>Inteligensi</span><strong id="pvRadarInteligensi">89%</strong></div>
+                  <div class="p-track"><div class="p-fill" id="pvFillInteligensi" style="width: 89%;"></div></div>
+                </div>
+                <div class="p-bar-row">
+                  <div class="p-bar-label"><span>Kepemimpinan</span><strong id="pvRadarKepemimpinan">94%</strong></div>
+                  <div class="p-track"><div class="p-fill" id="pvFillKepemimpinan" style="width: 94%;"></div></div>
+                </div>
+                <div class="p-bar-row">
+                  <div class="p-bar-label"><span>Kreativitas</span><strong id="pvRadarKreativitas">88%</strong></div>
+                  <div class="p-track"><div class="p-fill" id="pvFillKreativitas" style="width: 88%;"></div></div>
+                </div>
+                <div class="p-bar-row">
+                  <div class="p-bar-label"><span>Spiritualitas</span><strong id="pvRadarSpiritual">85%</strong></div>
+                  <div class="p-track"><div class="p-fill" id="pvFillSpiritual" style="width: 85%;"></div></div>
+                </div>
+                <div class="p-bar-row">
+                  <div class="p-bar-label"><span>Daya Tarik</span><strong id="pvRadarDayaTarik">93%</strong></div>
+                  <div class="p-track"><div class="p-fill" id="pvFillDayaTarik" style="width: 93%;"></div></div>
+                </div>
+              </div>
+
+              <div class="p-quote-box">
+                <p>"Disiplin Hari Ini Menciptakan Kebebasan Esok Hari"</p>
+                <span>— FW JADE</span>
+              </div>
+            </div>
+
+            <!-- Center Column: Masterpiece Future Executive Portrait -->
+            <div class="poster-hero-center">
+              <div class="p-portrait-frame">
+                <div id="pvSpinner" class="p-portrait-spinner" style="display: none;">
+                  <i class="fa-solid fa-circle-notch fa-spin"></i>
+                  <span>Merender Wujud Puncak 2035...</span>
+                </div>
+                <img id="pvHeroPortrait" class="p-portrait-img" src="assets/future_ceo_male_executive.jpg" alt="Manifestasi Eksekutif Masa Depan Anda" />
+                <div class="p-portrait-overlay-glow"></div>
+                
+                <!-- Floating Mini Badge: Wajah Asli User Verified -->
+                <div class="p-verified-face-badge">
+                  <img id="pvOriginalThumbnail" class="p-thumb-face" src="" alt="Wajah Asli" style="display: none;" />
+                  <div>
+                    <span class="p-vb-status"><i class="fa-solid fa-circle-check text-emerald"></i> WAJAH ASLI TERVERIFIKASI</span>
+                    <span class="p-vb-sub">Identitas Biometrik Terkunci 100%</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Banner Below Portrait (Gambar 2) -->
+              <div class="p-future-ribbon">
+                <span class="p-ribbon-sub">VERSI DIRI ANDA DI MASA DEPAN</span>
+                <h2 class="p-ribbon-year" id="pvRibbonYear">TAHUN 2035</h2>
+                <p class="p-ribbon-desc">VERSI ANDA YANG TELAH MENCAPAI PUNCAK POTENSI KEHIDUPAN, KEKAYAAN, DAN KEBAHAGIAAN</p>
+              </div>
+            </div>
+
+            <!-- Right Card: Posisi & Peran & Status Kehidupan -->
+            <div class="poster-card poster-card-right">
+              <div class="p-card-header">
+                <i class="fa-solid fa-briefcase text-gold"></i> <span>POSISI &amp; PERAN</span>
+              </div>
+              <div class="p-role-hero">
+                <h3 id="pvFutureRoleTitle">FOUNDER &amp; CEO</h3>
+                <span class="p-role-sub" id="pvFutureRoleSub">BISNIS TEKNOLOGI &amp; INVESTOR</span>
+              </div>
+
+              <div class="p-role-stats-grid">
+                <div class="p-role-stat-item">
+                  <i class="fa-solid fa-building-circle-check text-gold"></i>
+                  <div>
+                    <span class="p-rs-k">Perusahaan Dimiliki:</span>
+                    <strong class="p-rs-v" id="pvCompaniesCount">3 Perusahaan Aktif</strong>
+                  </div>
+                </div>
+                <div class="p-role-stat-item">
+                  <i class="fa-solid fa-users text-cyan"></i>
+                  <div>
+                    <span class="p-rs-k">Tim yang Dipimpin:</span>
+                    <strong class="p-rs-v" id="pvTeamCount">50+ Profesional</strong>
+                  </div>
+                </div>
+                <div class="p-role-stat-item">
+                  <i class="fa-solid fa-money-bill-trend-up text-emerald"></i>
+                  <div>
+                    <span class="p-rs-k">Pendapatan Tahunan:</span>
+                    <strong class="p-rs-v text-emerald" id="pvAnnualIncome">+/- Rp 15 Miliar</strong>
+                  </div>
+                </div>
+                <div class="p-role-stat-item">
+                  <i class="fa-solid fa-earth-americas text-gold"></i>
+                  <div>
+                    <span class="p-rs-k">Pengaruh:</span>
+                    <strong class="p-rs-v" id="pvInfluenceLevel">Nasional &amp; Internasional</strong>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Status Kehidupan 4 Pilar -->
+              <div class="p-life-status-wrap">
+                <div class="p-radar-title"><i class="fa-solid fa-heart-pulse text-emerald"></i> STATUS KEHIDUPAN MASA DEPAN</div>
+                <div class="p-status-grid">
+                  <div class="p-status-box">
+                    <i class="fa-solid fa-vault text-gold"></i>
+                    <span class="p-sb-k">FINANSIAL</span>
+                    <strong class="p-sb-v text-emerald" id="pvFinansialStatus">SANGAT STABIL</strong>
+                  </div>
+                  <div class="p-status-box">
+                    <i class="fa-solid fa-handshake-angle text-cyan"></i>
+                    <span class="p-sb-k">SOSIAL</span>
+                    <strong class="p-sb-v text-gold" id="pvSosialStatus">BERPENGARUH</strong>
+                  </div>
+                  <div class="p-status-box">
+                    <i class="fa-solid fa-yin-yang text-emerald"></i>
+                    <span class="p-sb-k">SPIRITUAL</span>
+                    <strong class="p-sb-v text-cyan" id="pvSpiritualStatus">SEIMBANG</strong>
+                  </div>
+                  <div class="p-status-box">
+                    <i class="fa-solid fa-spa text-pink"></i>
+                    <span class="p-sb-k">KESEHATAN</span>
+                    <strong class="p-sb-v text-emerald" id="pvKesehatanStatus">OPTIMAL</strong>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Middle Section: 8 Infrastruktur Aset Masa Depan (Gambar 2 Grid) -->
+          <div class="poster-assets-section">
+            <div class="p-section-heading">
+              <span class="p-sh-num">8 ASET KEMAKMURAN MASA DEPAN</span>
+              <h3 class="p-sh-title">INFRASTRUKTUR ASET, GAYA HIDUP &amp; PORTOFOLIO KELAS ATAS</h3>
+            </div>
+
+            <div class="p-assets-grid-8">
+              <!-- Asset 1: Jam Tangan -->
+              <div class="p-asset-item">
+                <div class="p-ai-num">1. JAM TANGAN</div>
+                <div class="p-ai-thumb"><img src="assets/luxury_future_assets.jpg" alt="Rolex Day-Date 40 Everose Gold" style="object-position: 0% 0%;" /></div>
+                <h4 class="p-ai-name" id="pAsset1Name">ROLEX DAY-DATE 40 EVEROSE GOLD</h4>
+                <div class="p-ai-price" id="pAsset1Price">Rp 1.150.000.000</div>
+                <p class="p-ai-desc">Simbol Status, Prestise, &amp; Kepemimpinan Eksekutif Puncak</p>
+              </div>
+
+              <!-- Asset 2: Setelan Premium -->
+              <div class="p-asset-item">
+                <div class="p-ai-num">2. SETELAN PREMIUM</div>
+                <div class="p-ai-thumb"><img src="assets/luxury_future_assets.jpg" alt="Tom Ford Bespoke Classic Suit" style="object-position: 15% 75%;" /></div>
+                <h4 class="p-ai-name" id="pAsset2Name">TOM FORD CLASSIC BESPOKE SUIT</h4>
+                <div class="p-ai-price">Rp 80.000.000 - 150.000.000</div>
+                <p class="p-ai-desc">Material Super 150's Wool, Kesan Elegan, Berwibawa &amp; Karismatik</p>
+              </div>
+
+              <!-- Asset 3: Mobil Utama -->
+              <div class="p-asset-item">
+                <div class="p-ai-num">3. MOBIL UTAMA</div>
+                <div class="p-ai-thumb"><img src="assets/luxury_future_assets.jpg" alt="Rolls-Royce Cullinan Black Badge" style="object-position: 50% 75%;" /></div>
+                <h4 class="p-ai-name" id="pAsset3Name">ROLLS-ROYCE CULLINAN BLACK BADGE</h4>
+                <div class="p-ai-price">Rp 12.000.000.000</div>
+                <p class="p-ai-desc">Simbol Kesuksesan, Kebebasan Finansial &amp; Perlindungan Maksimal</p>
+              </div>
+
+              <!-- Asset 4: Rumah Utama -->
+              <div class="p-asset-item">
+                <div class="p-ai-num">4. RUMAH UTAMA</div>
+                <div class="p-ai-thumb"><img src="assets/luxury_future_assets.jpg" alt="Modern Luxury Villa Bali" style="object-position: 50% 70%;" /></div>
+                <h4 class="p-ai-name">MODERN LUXURY VILLA BALI</h4>
+                <div class="p-ai-price">Rp 20.000.000.000</div>
+                <p class="p-ai-desc">Pantai Indah Bali • 1.500 m² • Infinity Pool, Home Theater &amp; Gym</p>
+              </div>
+
+              <!-- Asset 5: Kantor / Bisnis -->
+              <div class="p-asset-item">
+                <div class="p-ai-num">5. KANTOR / BISNIS</div>
+                <div class="p-ai-thumb"><img src="assets/luxury_future_assets.jpg" alt="Kantor Pusat Perusahaan Jakarta" style="object-position: 60% 30%;" /></div>
+                <h4 class="p-ai-name">KANTOR PUSAT PERUSAHAAN</h4>
+                <div class="p-ai-price">1.200 m² • 50+ Karyawan</div>
+                <p class="p-ai-desc">SCBD Jakarta Selatan • Industri Solusi Digital &amp; Portofolio Bisnis</p>
+              </div>
+
+              <!-- Asset 6: Investasi Properti -->
+              <div class="p-asset-item">
+                <div class="p-ai-num">6. INVESTASI PROPERTI</div>
+                <div class="p-ai-thumb"><img src="assets/luxury_future_assets.jpg" alt="Portofolio Properti Komersial" style="object-position: 50% 20%;" /></div>
+                <h4 class="p-ai-name">PORTOFOLIO PROPERTI KOMERSIAL</h4>
+                <div class="p-ai-price">Rp 25.000.000.000</div>
+                <p class="p-ai-desc">5 Unit Apartemen Mewah, 2 Villa Resort &amp; 3 Ruko Komersial</p>
+              </div>
+
+              <!-- Asset 7: Gaya Hidup -->
+              <div class="p-asset-item">
+                <div class="p-ai-num">7. GAYA HIDUP</div>
+                <div class="p-ai-thumb"><img src="assets/luxury_future_assets.jpg" alt="Private Yacht & Luxury Travel" style="object-position: 85% 75%;" /></div>
+                <h4 class="p-ai-name">PRIVATE YACHT &amp; LUXURY TRAVEL</h4>
+                <div class="p-ai-price">Destinasi: Eropa, Dubai, Maldives</div>
+                <p class="p-ai-desc">Hobi: Golfing, Yacht Cruising, Art Collecting &amp; Filantropi</p>
+              </div>
+
+              <!-- Asset 8: Koleksi Mahakarya Giok FW JADE -->
+              <div class="p-asset-item">
+                <div class="p-ai-num">8. KOLEKSI PUSAKA</div>
+                <div class="p-ai-thumb"><img src="assets/luxury_future_assets.jpg" alt="FW JADE Imperial High-Jewellery" style="object-position: 30% 85%;" /></div>
+                <h4 class="p-ai-name">MAHAKARYA GIOK FW JADE MEDAN</h4>
+                <div class="p-ai-price">Pusaka Warisan Tak Ternilai</div>
+                <p class="p-ai-desc">Pendant Imperial Jadeite Grade A, Jam Tangan Mewah &amp; Aset Heritage</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom Section: Proyeksi Kekayaan & Roadmap Menuju Masa Depan (Gambar 2) -->
+          <div class="poster-wealth-roadmap-section">
+            <div class="poster-wealth-grid">
+              <!-- Left: Proyeksi Kekayaan Bersih -->
+              <div class="p-wealth-box">
+                <div class="p-wb-title">PROYEKSI KEKAYAAN BERSIH • 2035</div>
+                <div class="p-wb-amount" id="pvNetWorthProjected">Rp 85.000.000.000+</div>
+                
+                <div class="p-donut-dist-row">
+                  <div class="p-dist-col"><strong class="text-emerald">40%</strong> <span>BISNIS</span></div>
+                  <div class="p-dist-col"><strong class="text-gold">30%</strong> <span>PROPERTI</span></div>
+                  <div class="p-dist-col"><strong class="text-cyan">20%</strong> <span>SAHAM</span></div>
+                  <div class="p-dist-col"><strong class="text-pink">10%</strong> <span>ASET LAIN</span></div>
+                </div>
+              </div>
+
+              <!-- Center: Grafik Pertumbuhan 10 Tahun (Bar Visualizer) -->
+              <div class="p-wealth-box">
+                <div class="p-wb-title">PROYEKSI PERTUMBUHAN KEKAYAAN (ESTIMASI 10 TAHUN)</div>
+                <div class="p-growth-bars-chart">
+                  <div class="p-gb-col">
+                    <span class="p-gb-val">5M</span>
+                    <div class="p-gb-bar" style="height: 12%;"></div>
+                    <span class="p-gb-yr">2025</span>
+                  </div>
+                  <div class="p-gb-col">
+                    <span class="p-gb-val">15M</span>
+                    <div class="p-gb-bar" style="height: 25%;"></div>
+                    <span class="p-gb-yr">2027</span>
+                  </div>
+                  <div class="p-gb-col">
+                    <span class="p-gb-val">25M</span>
+                    <div class="p-gb-bar" style="height: 40%;"></div>
+                    <span class="p-gb-yr">2029</span>
+                  </div>
+                  <div class="p-gb-col">
+                    <span class="p-gb-val">40M</span>
+                    <div class="p-gb-bar" style="height: 58%;"></div>
+                    <span class="p-gb-yr">2031</span>
+                  </div>
+                  <div class="p-gb-col">
+                    <span class="p-gb-val">60M</span>
+                    <div class="p-gb-bar" style="height: 78%;"></div>
+                    <span class="p-gb-yr">2033</span>
+                  </div>
+                  <div class="p-gb-col peak">
+                    <span class="p-gb-val text-gold">85M+</span>
+                    <div class="p-gb-bar peak" style="height: 100%;"></div>
+                    <span class="p-gb-yr text-gold">2035</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Right: Tujuan & Warisan -->
+              <div class="p-wealth-box">
+                <div class="p-wb-title">TUJUAN &amp; WARISAN UTAMA</div>
+                <div class="p-legacy-list">
+                  <div class="p-ll-item"><i class="fa-solid fa-crown text-gold"></i> <span>Membangun ekosistem bisnis teknologi yang berdaya tahan tinggi</span></div>
+                  <div class="p-ll-item"><i class="fa-solid fa-handshake text-emerald"></i> <span>Menciptakan lapangan kerja bagi ribuan generasi muda</span></div>
+                  <div class="p-ll-item"><i class="fa-solid fa-graduation-cap text-cyan"></i> <span>Mendirikan foundation sosial dan beasiswa pendidikan</span></div>
+                  <div class="p-ll-item"><i class="fa-solid fa-monument text-gold"></i> <span>Meninggalkan warisan positif dan nama baik yang abadi</span></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Roadmap Menuju Masa Depan 4 Tahap (Gambar 2 Bottom) -->
+            <div class="poster-roadmap-wrap">
+              <div class="p-roadmap-heading"><i class="fa-solid fa-route text-gold"></i> ROADMAP STRATEGIS MENUJU TAHUN 2035</div>
+              <div class="p-roadmap-grid-4">
+                <div class="p-rm-card">
+                  <div class="p-rm-step">TAHAP 1 (2024 - 2025)</div>
+                  <ul>
+                    <li>Menguasai Skill &amp; Ilmu Strategis Baru</li>
+                    <li>Membangun Personal Brand &amp; Kredibilitas</li>
+                    <li>Merintis Bisnis &amp; Portofolio Pertama</li>
+                    <li>Menabung &amp; Memperkuat Fondasi Kas</li>
+                  </ul>
+                </div>
+                <div class="p-rm-card">
+                  <div class="p-rm-step">TAHAP 2 (2026 - 2028)</div>
+                  <ul>
+                    <li>Scale Up Bisnis Menjadi Profitabel</li>
+                    <li>Membentuk Tim Eksekutif Solid</li>
+                    <li>Diversifikasi Multi-Stream Income</li>
+                    <li>Investasi Properti Pertama</li>
+                  </ul>
+                </div>
+                <div class="p-rm-card">
+                  <div class="p-rm-step">TAHAP 3 (2029 - 2031)</div>
+                  <ul>
+                    <li>Ekspansi Bisnis ke Pasar Internasional</li>
+                    <li>Membangun Akumulasi Aset Skala Besar</li>
+                    <li>Meningkatkan Pengaruh &amp; Jejaring Elit</li>
+                    <li>Mencapai Kebebasan Finansial Total</li>
+                  </ul>
+                </div>
+                <div class="p-rm-card peak-card">
+                  <div class="p-rm-step text-gold">TAHAP 4 (2032 - 2035)</div>
+                  <ul>
+                    <li>Menjadi Pemimpin Industri &amp; Tokoh Elit</li>
+                    <li>Mencapai Puncak Kekayaan Puluhan Miliar</li>
+                    <li>Membantu &amp; Menginspirasi Banyak Orang</li>
+                    <li>Mewariskan Kesejahteraan bagi Keluarga</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- Poster Quote Banner -->
+            <div class="poster-bottom-quote-banner">
+              <p>"MASA DEPAN ADALAH MILIK MEREKA YANG MENYIAPKANNYA HARI INI"</p>
+              <span>— FW JADE MEDAN —</span>
+            </div>
+
+            <!-- Action Buttons: Download Poster & Chat Advisor -->
+            <div class="poster-actions-bar">
+              <button type="button" class="luxury-btn btn-download-poster" onclick="window.print()">
+                <i class="fa-solid fa-download"></i> <span>Simpan Poster Masa Depan (Cetak / PDF)</span>
+              </button>
+              <button type="button" class="luxury-btn btn-ask-ai-future" onclick="document.getElementById('secManifestation').scrollIntoView({behavior: 'smooth'})">
+                <i class="fa-solid fa-comments"></i> <span>Tanya Strategi Sukses ke Master Aura AI</span>
+              </button>
+            </div>
           </div>
         </div>
+
 
         <div class="results-header-row">
           <h2 class="section-title" id="txtAuraResultHeading">Hasil Aura Anda</h2>

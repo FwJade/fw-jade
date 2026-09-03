@@ -1088,10 +1088,19 @@ function handleFacePhotoUpload(event) {
   reader.readAsDataURL(file);
 }
 
+let faceDetectionState = 'detecting'; // 'too_far', 'too_close', 'ready'
+let readyChimePlayed = false;
+
 function drawScannerHudAnimation() {
   const canvas = document.getElementById('scannerHudCanvas');
+  const video = document.getElementById('webcamFeed');
+  const guidancePill = document.getElementById('cameraGuidancePill');
+  const guidanceText = document.getElementById('guidanceText');
+  const guidanceIcon = document.getElementById('guidanceIcon');
+  const viewport = document.getElementById('scannerViewport');
+
   if (!canvas) return;
-  const ctx = canvas.getContext('2d');
+  const ctx = canvas.getContext('2d', { willReadFrequently: true });
   canvas.width = canvas.offsetWidth || 240;
   canvas.height = canvas.offsetHeight || 240;
 
@@ -1102,11 +1111,126 @@ function drawScannerHudAnimation() {
     const cx = canvas.width / 2;
     const cy = canvas.height / 2;
 
-    // Glowing subtle targeting reticle
-    ctx.strokeStyle = 'rgba(43, 224, 133, 0.4)';
-    ctx.lineWidth = 1;
+    // Real-time video frame luminance & skin tone heuristic
+    if (video && video.readyState >= 2 && step % 4 === 0) {
+      try {
+        const tempCanvas = document.createElement('canvas');
+        tempCanvas.width = 40;
+        tempCanvas.height = 40;
+        const tCtx = tempCanvas.getContext('2d', { willReadFrequently: true });
+        tCtx.drawImage(video, 0, 0, 40, 40);
+        const frameData = tCtx.getImageData(0, 0, 40, 40).data;
+
+        // Calculate center vs perimeter contrast to estimate face distance
+        let centerBrightness = 0;
+        let edgeBrightness = 0;
+        let centerCount = 0;
+        let edgeCount = 0;
+
+        for (let y = 0; y < 40; y++) {
+          for (let x = 0; x < 40; x++) {
+            const idx = (y * 40 + x) * 4;
+            const r = frameData[idx];
+            const g = frameData[idx + 1];
+            const b = frameData[idx + 2];
+            const lum = (r * 0.299 + g * 0.587 + b * 0.114);
+
+            const dx = x - 20;
+            const dy = y - 20;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+
+            if (dist < 10) {
+              centerBrightness += lum;
+              centerCount++;
+            } else if (dist > 14 && dist < 19) {
+              edgeBrightness += lum;
+              edgeCount++;
+            }
+          }
+        }
+
+        const avgCenter = centerBrightness / (centerCount || 1);
+        const avgEdge = edgeBrightness / (edgeCount || 1);
+
+        if (avgCenter < 25) {
+          faceDetectionState = 'too_far';
+          if (guidancePill) {
+            guidancePill.className = 'camera-guidance-pill guidance-warn';
+            guidanceText.textContent = 'Pencahayaan redup, dekatkan wajah';
+            guidanceIcon.className = 'fa-solid fa-sun';
+          }
+          if (viewport) {
+            viewport.classList.remove('ring-ready');
+            viewport.classList.add('ring-warn');
+          }
+          readyChimePlayed = false;
+        } else if (avgCenter > 220) {
+          faceDetectionState = 'too_close';
+          if (guidancePill) {
+            guidancePill.className = 'camera-guidance-pill guidance-warn';
+            guidanceText.textContent = 'Terlalu dekat, jauhkan sedikit';
+            guidanceIcon.className = 'fa-solid fa-arrows-to-circle';
+          }
+          if (viewport) {
+            viewport.classList.remove('ring-ready');
+            viewport.classList.add('ring-warn');
+          }
+          readyChimePlayed = false;
+        } else {
+          faceDetectionState = 'ready';
+          if (guidancePill) {
+            guidancePill.className = 'camera-guidance-pill guidance-ready';
+            guidanceText.textContent = '✓ Posisi Wajah Pas & Siap Difoto!';
+            guidanceIcon.className = 'fa-solid fa-circle-check';
+          }
+          if (viewport) {
+            viewport.classList.remove('ring-warn');
+            viewport.classList.add('ring-ready');
+          }
+          if (!readyChimePlayed) {
+            readyChimePlayed = true;
+          }
+        }
+      } catch (err) {}
+    }
+
+    // Dynamic Reticle Ring Color based on State
+    const ringColor = faceDetectionState === 'ready' 
+      ? 'rgba(16, 185, 129, 0.85)' 
+      : (faceDetectionState === 'too_close' ? 'rgba(245, 158, 11, 0.85)' : 'rgba(255, 200, 87, 0.7)');
+
+    ctx.strokeStyle = ringColor;
+    ctx.lineWidth = faceDetectionState === 'ready' ? 2.5 : 1.5;
     ctx.beginPath();
-    ctx.arc(cx, cy, 70, 0, Math.PI * 2);
+    ctx.arc(cx, cy, 75, 0, Math.PI * 2);
+    ctx.stroke();
+
+    // 4 Corner Brackets
+    const brLen = 14;
+    ctx.lineWidth = 2;
+    // Top-Left
+    ctx.beginPath();
+    ctx.moveTo(cx - 60, cy - 60 + brLen);
+    ctx.lineTo(cx - 60, cy - 60);
+    ctx.lineTo(cx - 60 + brLen, cy - 60);
+    ctx.stroke();
+    // Top-Right
+    ctx.beginPath();
+    ctx.moveTo(cx + 60 - brLen, cy - 60);
+    ctx.lineTo(cx + 60, cy - 60);
+    ctx.lineTo(cx + 60, cy - 60 + brLen);
+    ctx.stroke();
+    // Bottom-Left
+    ctx.beginPath();
+    ctx.moveTo(cx - 60, cy + 60 - brLen);
+    ctx.lineTo(cx - 60, cy + 60);
+    ctx.lineTo(cx - 60 + brLen, cy + 60);
+    ctx.stroke();
+    // Bottom-Right
+    ctx.beginPath();
+    ctx.moveTo(cx + 60 - brLen, cy + 60);
+    ctx.lineTo(cx + 60, cy + 60);
+    ctx.lineTo(cx + 60, cy + 60 - brLen);
     ctx.stroke();
 
     step++;
@@ -1241,13 +1365,15 @@ async function processAiVisionScan(snapshotBase64) {
       const data = await res.json();
       if (data.success && data.analysis) {
         const a = data.analysis;
+        AppState.user.gender = a.gender || AppState.user.gender || 'male';
         AppState.user.metrics.element = a.element || 'WOOD';
         AppState.user.metrics.alignmentScore = a.alignmentScore || 96;
         AppState.user.metrics.vitality = a.vitality || 91;
         AppState.user.metrics.energyBalance = a.energyBalance || 'Optimal';
         AppState.user.metrics.fortuneLevel = a.fortuneLevel || 'Tinggi';
         AppState.user.metrics.energyReco = a.energyReco || 'Menjaga stabilitas & fokus';
-        console.log('[AURA AI] Vision analysis received, model:', data.model, '| element:', a.element);
+        AppState.user.visionDossier = a;
+        console.log('[AURA AI] Vision analysis received, gender:', a.gender, 'age:', a.estimatedAge, 'element:', a.element);
 
         // Match Gemstone
         if (a.recommendedGemId) {
@@ -1278,43 +1404,136 @@ async function processAiVisionScan(snapshotBase64) {
   const gemForTransform = matchedGem;
 
   setTimeout(() => {
-    // Direct Instant Reveal
+    // Reveal Results & Bind 2035 Poster
     revealFullResults(gemForTransform, customGreeting);
+    bindFutureVisionDossier(AppState.user.visionDossier, snapshotBase64);
 
-    // BUG 3 FIX: Call /api/image for img2img transformation (after-image)
-    // This runs in background and updates the after panel when ready
-    if (snapshotBase64 && snapshotBase64.length > 500) {
-      callImageTransformation(snapshotBase64, gemForTransform);
-    } else {
-      // No real webcam capture — still generate a text-prompt image
-      callImageTransformation(null, gemForTransform);
-    }
+    // Call /api/image for executive portrait
+    callImageTransformation(snapshotBase64, gemForTransform);
   }, 400);
 }
 
 /**
- * BUG 3 FIX: Call /api/image to generate the img2img transformed "after" image.
- * Shows a loading spinner while generating, then displays the result.
+ * Binds all data to the Grand 2035 Future Vision Poster (Gambar 2)
+ */
+function bindFutureVisionDossier(dossier, snapshotBase64) {
+  const d = dossier || {
+    gender: 'male',
+    estimatedAge: 31,
+    peakAge: 39,
+    element: 'WOOD',
+    element_id: 'Kayu (Wood / 木)',
+    supportingElement: 'Air (Water / 水)',
+    corePersona: 'Visioner & Pemimpin Dinasti',
+    lifePath: 'Executive Leadership & Tech Investment',
+    soulMission: 'Membangun, Memimpin, Menginspirasi & Menciptakan Warisan Abadi',
+    radarAura: { karisma: 92, inteligensi: 89, kepemimpinan: 94, kreativitas: 88, spiritualitas: 85, dayaTarik: 93 },
+    futureRole: 'FOUNDER & CEO BISNIS TEKNOLOGI & INVESTOR',
+    companiesOwned: '3 Perusahaan Aktif',
+    teamLed: '50+ Profesional',
+    annualIncome: '+/- Rp 15 Miliar',
+    influence: 'Nasional & Internasional',
+    projectedNetWorth: 'Rp 85.000.000.000+'
+  };
+
+  const isMale = d.gender === 'male';
+
+  // Demographics & Core Info
+  const pvEl = document.getElementById('pvDominantElement');
+  if (pvEl) pvEl.textContent = d.element_id || `${d.element} (Alami)`;
+
+  const pvSupp = document.getElementById('pvSupportingElement');
+  if (pvSupp) pvSupp.textContent = d.supportingElement || 'Air (Water / 水)';
+
+  const pvDemo = document.getElementById('pvDemographics');
+  if (pvDemo) pvDemo.textContent = `${isMale ? 'Pria' : 'Wanita'} • ${d.estimatedAge || 31} Thn`;
+
+  const pvCore = document.getElementById('pvCorePersona');
+  if (pvCore) pvCore.textContent = d.corePersona || (isMale ? 'Visioner & Pemimpin' : 'Kharismatik & Pemimpin');
+
+  const pvPath = document.getElementById('pvLifePath');
+  if (pvPath) pvPath.textContent = d.lifePath || 'Executive Leadership';
+
+  const pvMission = document.getElementById('pvSoulMission');
+  if (pvMission) pvMission.textContent = d.soulMission || 'Membangun, Memimpin, Menginspirasi & Menciptakan Warisan Abadi';
+
+  // 6 Radar Aura
+  const radar = d.radarAura || { karisma: 92, inteligensi: 89, kepemimpinan: 94, kreativitas: 88, spiritualitas: 85, dayaTarik: 93 };
+  const bindMetric = (valId, fillId, val) => {
+    const vEl = document.getElementById(valId);
+    const fEl = document.getElementById(fillId);
+    if (vEl) vEl.textContent = `${val}%`;
+    if (fEl) fEl.style.width = `${val}%`;
+  };
+  bindMetric('pvRadarKarisma', 'pvFillKarisma', radar.karisma || 92);
+  bindMetric('pvRadarInteligensi', 'pvFillInteligensi', radar.inteligensi || 89);
+  bindMetric('pvRadarKepemimpinan', 'pvFillKepemimpinan', radar.kepemimpinan || 94);
+  bindMetric('pvRadarKreativitas', 'pvFillKreativitas', radar.kreativitas || 88);
+  bindMetric('pvRadarSpiritual', 'pvFillSpiritual', radar.spiritualitas || 85);
+  bindMetric('pvRadarDayaTarik', 'pvFillDayaTarik', radar.dayaTarik || 93);
+
+  // Role & Career
+  const pvRole = document.getElementById('pvFutureRoleTitle');
+  if (pvRole) pvRole.textContent = isMale ? 'FOUNDER & CEO' : 'MANAGING DIRECTOR & FOUNDER';
+
+  const pvRoleSub = document.getElementById('pvFutureRoleSub');
+  if (pvRoleSub) pvRoleSub.textContent = isMale ? 'BISNIS TEKNOLOGI & INVESTOR' : 'VENTURE CAPITAL & GLOBAL HEIRESS';
+
+  const pvComp = document.getElementById('pvCompaniesCount');
+  if (pvComp) pvComp.textContent = d.companiesOwned || '3 Perusahaan Aktif';
+
+  const pvTeam = document.getElementById('pvTeamCount');
+  if (pvTeam) pvTeam.textContent = d.teamLed || '50+ Profesional';
+
+  const pvIncome = document.getElementById('pvAnnualIncome');
+  if (pvIncome) pvIncome.textContent = d.annualIncome || '+/- Rp 15 Miliar';
+
+  const pvInf = document.getElementById('pvInfluenceLevel');
+  if (pvInf) pvInf.textContent = d.influence || 'Nasional & Internasional';
+
+  const pvNet = document.getElementById('pvNetWorthProjected');
+  if (pvNet) pvNet.textContent = d.projectedNetWorth || 'Rp 85.000.000.000+';
+
+  // Thumbnail of user's original face
+  const origThumb = document.getElementById('pvOriginalThumbnail');
+  if (origThumb && snapshotBase64) {
+    origThumb.src = snapshotBase64;
+    origThumb.style.display = 'block';
+  }
+
+  // Set default executive photo based on gender
+  const heroPortrait = document.getElementById('pvHeroPortrait');
+  if (heroPortrait && (!heroPortrait.src || heroPortrait.src.includes('future_ceo'))) {
+    heroPortrait.src = isMale ? 'assets/future_ceo_male_executive.jpg' : 'assets/future_ceo_female_executive.jpg';
+  }
+
+  // Adjust Assets for Gender
+  const pA1 = document.getElementById('pAsset1Name');
+  const pA2 = document.getElementById('pAsset2Name');
+  if (!isMale) {
+    if (pA1) pA1.textContent = 'ROLEX LADY-DATEJUST 28 EVEROSE GOLD';
+    if (pA2) pA2.textContent = 'HAUTE COUTURE SILK BLAZER & EVENING SUIT';
+  }
+}
+
+/**
+ * Call /api/image to generate the 2035 executive portrait.
  */
 async function callImageTransformation(snapshotBase64, gemObj) {
-  const afterImg = document.getElementById('faceAfterImg');
-  const afterStatus = document.getElementById('faceAfterStatus');
-  const afterSpinner = document.getElementById('faceAfterSpinner');
-  const beforePanel = document.getElementById('faceComparePanel');
+  const heroPortrait = document.getElementById('pvHeroPortrait');
+  const pvSpinner = document.getElementById('pvSpinner');
 
-  if (beforePanel) beforePanel.style.display = 'flex';
-  if (afterSpinner) afterSpinner.style.display = 'flex';
-  if (afterImg) afterImg.style.display = 'none';
-  if (afterStatus) afterStatus.textContent = 'Merender Manifestasi Bangsawan...';
+  if (pvSpinner) pvSpinner.style.display = 'flex';
+
+  const gender = AppState.user.gender || 'male';
 
   try {
     const reqBody = {
-      gemName: gemObj.name || 'Natural Aceh Jadeite',
+      gemName: gemObj.name || 'FW JADE Imperial Green Jadeite',
       gemColor: gemObj.color || 'Imperial Emerald Green',
-      gender: AppState.user.gender || 'female',
+      gender: gender,
       element: AppState.user.metrics.element || 'WOOD'
     };
-    // Include image if webcam or uploaded capture occurred
     if (snapshotBase64 && snapshotBase64.length > 500) {
       reqBody.imageBase64 = snapshotBase64;
     }
@@ -1328,32 +1547,26 @@ async function callImageTransformation(snapshotBase64, gemObj) {
     if (res.ok) {
       const data = await res.json();
       if (data.success && data.imageUrl) {
-        if (afterSpinner) afterSpinner.style.display = 'none';
-        if (afterStatus) afterStatus.textContent = 'Manifestasi Bangsawan FW JADE';
-        if (afterImg) {
-          afterImg.src = data.imageUrl;
-          afterImg.style.display = 'block';
-          afterImg.style.opacity = '0';
-          afterImg.onload = () => {
-            afterImg.style.transition = 'opacity 0.8s ease';
-            afterImg.style.opacity = '1';
-            // Celebration for image loaded
+        if (heroPortrait) {
+          heroPortrait.src = data.imageUrl;
+          heroPortrait.onload = () => {
+            if (pvSpinner) pvSpinner.style.display = 'none';
             if (typeof confetti === 'function') {
-              confetti({ particleCount: 30, spread: 50, origin: { y: 0.5 }, colors: ['#2BE085', '#FFC857'] });
+              confetti({ particleCount: 40, spread: 60, origin: { y: 0.5 }, colors: ['#2BE085', '#FFC857'] });
             }
             playChimeReverb();
           };
         }
-        console.log('[AURA AI] Image transformation complete, model used:', data.prompt ? 'img2img' : 'text2img');
+        console.log('[AURA AI] 2035 Executive Portrait generated successfully via:', data.engine);
+      } else {
+        if (pvSpinner) pvSpinner.style.display = 'none';
       }
     } else {
-      if (afterSpinner) afterSpinner.style.display = 'none';
-      if (afterStatus) afterStatus.textContent = 'Transformasi tidak tersedia saat ini';
+      if (pvSpinner) pvSpinner.style.display = 'none';
     }
   } catch (e) {
     console.warn('[AURA AI] Image transformation error:', e);
-    if (afterSpinner) afterSpinner.style.display = 'none';
-    if (afterStatus) afterStatus.textContent = '';
+    if (pvSpinner) pvSpinner.style.display = 'none';
   }
 }
 

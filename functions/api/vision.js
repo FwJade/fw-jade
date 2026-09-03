@@ -1,7 +1,7 @@
 /**
  * Cloudflare Pages Function: /api/vision
  * Powered by Cloudflare Workers AI (@cf/meta/llama-3.2-11b-vision-instruct)
- * Multimodal Face & Aura Biometric Scanner (Mian Xiang 12 Palaces, Vitality, Chi & Gemstone Matcher)
+ * Multimodal Face, Age, Gender & Future Wealth Oracle (Mian Xiang & 2035 Dossier)
  */
 
 export async function onRequestPost(context) {
@@ -17,23 +17,71 @@ export async function onRequestPost(context) {
       });
     }
 
-    // Clean base64 string if it contains data URL prefix
     const cleanBase64 = imageBase64.replace(/^data:image\/(png|jpeg|jpg|webp);base64,/, '');
-
     const accountId = env.CLOUDFLARE_ACCOUNT_ID || '291e6764f7f2db2c4ea3142d31e71045';
     const apiToken = env.CLOUDFLARE_API_TOKEN;
 
-    const prompt = `Anda adalah Master Aura Vision AI Pakar Mian Xiang (Fisiognomi Wajah Tionghoa Kuno), Aura Chi Dinasti, dan Gemologi AURA AI by FW JADE Medan.
-Analisis foto wajah pengguna ini secara mendalam berdasarkan fitur nyata wajahnya (Dahi, Hidung, Mata/Pipi, Dagu).
+    const prompt = `Anda adalah Master Aura Vision AI & Grand Physiognomy Oracle AURA AI by FW JADE Medan.
+Analisis foto wajah pengguna ini secara mendalam dan akurat.
+Deteksi gender pengguna (pria atau wanita) dan estimasi usianya saat ini.
 Berikan output HANYA format JSON valid berikut (tanpa markdown backtick atau pengantar):
 {
-  "element": "WOOD",
+  "gender": "male" | "female",
+  "gender_label": "Pria" | "Wanita",
+  "estimatedAge": 30,
+  "peakAge": 38,
+  "element": "WOOD" | "FIRE" | "WATER" | "EARTH" | "METAL",
   "element_id": "Kayu (Wood / 木)",
+  "supportingElement": "Air (Water / 水)",
+  "corePersona": "Visioner & Pemimpin Dinasti",
+  "lifePath": "Executive Leadership & Tech Investment",
+  "soulMission": "Membangun, Memimpin, Menginspirasi & Menciptakan Warisan Kekayaan Abadi",
   "alignmentScore": 96,
   "vitality": 93,
-  "energyBalance": "Optimal & Harmonis",
-  "fortuneLevel": "Puncak Kemakmuran",
-  "energyReco": "Saran pemeliharaan energi dan chi hoki",
+  "radarAura": {
+    "karisma": 92,
+    "inteligensi": 89,
+    "kepemimpinan": 94,
+    "kreativitas": 88,
+    "spiritualitas": 85,
+    "dayaTarik": 93
+  },
+  "futureRole": "FOUNDER & CEO BISNIS TEKNOLOGI & INVESTOR",
+  "companiesOwned": "3 Perusahaan Aktif",
+  "teamLed": "50+ Profesional",
+  "annualIncome": "+/- Rp 15 Miliar",
+  "influence": "Nasional & Internasional",
+  "lifeStatus": {
+    "finansial": "SANGAT STABIL",
+    "sosial": "BERPENGARUH TINGGI",
+    "spiritual": "HARMONIS SEIMBANG",
+    "kesehatan": "OPTIMAL & BERSERI"
+  },
+  "projectedNetWorth": "Rp 85.000.000.000+",
+  "wealthDistribution": {
+    "bisnis": 40,
+    "properti": 30,
+    "saham": 20,
+    "asetLainnya": 10
+  },
+  "roadmapStages": [
+    {
+      "phase": "Tahap 1 (2024 - 2025)",
+      "milestones": ["Menguasai Skill & Ilmu Strategis Baru", "Membangun Personal Brand & Kredibilitas", "Merintis Bisnis & Portofolio Pertama", "Menabung & Memperkuat Fondasi Kas"]
+    },
+    {
+      "phase": "Tahap 2 (2026 - 2028)",
+      "milestones": ["Scale Up Bisnis Menjadi Profitabel", "Membentuk Tim Eksekutif Solid", "Diversifikasi Multi-Stream Income", "Investasi Properti Strategis Pertama"]
+    },
+    {
+      "phase": "Tahap 3 (2029 - 2031)",
+      "milestones": ["Ekspansi Bisnis ke Pasar Internasional", "Membangun Akumulasi Aset Skala Besar", "Meningkatkan Pengaruh & Jejaring Elit", "Mencapai Kebebasan Finansial Total"]
+    },
+    {
+      "phase": "Tahap 4 (2032 - 2035)",
+      "milestones": ["Menjadi Leader & Patron di Industri Utama", "Mencapai Puncak Kekayaan Ratusan Miliar", "Membangun Yayasan Filantropi & Edukasi", "Meninggalkan Warisan Abadi Bagi Generasi"]
+    }
+  ],
   "recommendedGemId": "giok-aceh",
   "mianXiangAnalysis": {
     "forehead": "Analisis dahi/istana karier dan kepemimpinan berdasarkan foto nyata",
@@ -41,7 +89,7 @@ Berikan output HANYA format JSON valid berikut (tanpa markdown backtick atau pen
     "eyesCheek": "Analisis mata & pipi/istana vitalitas dan kharisma berdasarkan foto nyata",
     "chin": "Analisis dagu/istana perisai dan keteguhan batin berdasarkan foto nyata"
   },
-  "whisperGreeting": "Sapaan pembacaan aura bangsawan personal yang hangat dan mendalam dalam bahasa Indonesia"
+  "whisperGreeting": "Sapaan pembacaan masa depan personal yang megah dan berwibawa dalam bahasa Indonesia"
 }`;
 
     let visionResult = null;
@@ -53,7 +101,7 @@ Berikan output HANYA format JSON valid berikut (tanpa markdown backtick atau pen
         const aiOutput = await env.AI.run('@cf/meta/llama-3.2-11b-vision-instruct', {
           image: cleanBase64,
           prompt: prompt,
-          max_tokens: 1000
+          max_tokens: 1200
         });
         const rawText = aiOutput.response || aiOutput.description || '';
         const jsonMatch = rawText.match(/\{[\s\S]*\}/);
@@ -79,7 +127,7 @@ Berikan output HANYA format JSON valid berikut (tanpa markdown backtick atau pen
             body: JSON.stringify({
               image: cleanBase64,
               prompt: prompt,
-              max_tokens: 1000
+              max_tokens: 1200
             })
           }
         );
@@ -91,26 +139,6 @@ Berikan output HANYA format JSON valid berikut (tanpa markdown backtick atau pen
           if (jsonMatch) {
             visionResult = JSON.parse(jsonMatch[0]);
             usedModel = '@cf/meta/llama-3.2-11b-vision-instruct (HTTP API)';
-          } else if (rawText && rawText.length > 50) {
-            // Intelligent fallback parser if LLM answered in prose
-            visionResult = {
-              element: 'WOOD',
-              element_id: 'Kayu (Wood / 木)',
-              alignmentScore: 96,
-              vitality: 93,
-              energyBalance: 'Optimal & Harmonis',
-              fortuneLevel: 'Puncak Kemakmuran',
-              energyReco: 'Pelihara energi positif dan kenakan giok penyeimbang untuk stabilitas aura.',
-              recommendedGemId: 'giok-aceh',
-              mianXiangAnalysis: {
-                forehead: 'Garis dahi menunjukkan fokus visi strategis dan wibawa kepemimpinan yang sedang menanjak.',
-                nose: 'Batang dan cuping hidung memancarkan chi kemakmuran dan kapasitas rezeki yang kuat.',
-                eyesCheek: 'Pancaran mata dan rona pipi mencerminkan vitalitas sehat dan intuisi spiritual yang tajam.',
-                chin: 'Struktur dagu memperlihatkan keteguhan pendirian dan benteng perlindungan alami yang kokoh.'
-              },
-              whisperGreeting: rawText.slice(0, 300)
-            };
-            usedModel = '@cf/meta/llama-3.2-11b-vision-instruct (prose parsed)';
           }
         }
       } catch (cfErr) {
@@ -118,78 +146,73 @@ Berikan output HANYA format JSON valid berikut (tanpa markdown backtick atau pen
       }
     }
 
-    // 2. SECONDARY: Google Gemini Vision Fallback
-    const geminiKey = env.GEMINI_API_KEY || env.VITE_GEMINI_API_KEY;
-    if (!visionResult && geminiKey) {
-      try {
-        const geminiRes = await fetch(
-          `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${geminiKey}`,
-          {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              contents: [
-                {
-                  parts: [
-                    { text: prompt },
-                    {
-                      inlineData: {
-                        mimeType: 'image/jpeg',
-                        data: cleanBase64
-                      }
-                    }
-                  ]
-                }
-              ],
-              generationConfig: {
-                responseMimeType: 'application/json',
-                temperature: 0.2
-              }
-            })
-          }
-        );
-
-        if (geminiRes.ok) {
-          const gData = await geminiRes.json();
-          const rawText = gData.candidates?.[0]?.content?.parts?.[0]?.text;
-          if (rawText) {
-            visionResult = JSON.parse(rawText);
-            usedModel = 'gemini-2.0-flash';
-          }
-        }
-      } catch (gemErr) {
-        console.warn('Gemini Vision fallback error:', gemErr);
-      }
-    }
-
-    // 3. Dynamic Seed Fallback (Only if both Cloudflare & Gemini are unreachable)
+    // 2. Intelligent Default Dossier Fallback
     if (!visionResult) {
-      const elements = [
-        { el: 'WOOD', name: 'Kayu (Wood / 木)', gem: 'giok-aceh', reco: 'Menjaga pertumbuhan, relaksasi pikiran, dan stabilitas rezeki' },
-        { el: 'WATER', name: 'Air & Bumi (Water / 水)', gem: 'black-jade', reco: 'Detoksifikasi sirkulasi darah dan perlindungan perisai aura' },
-        { el: 'EARTH', name: 'Bumi & Logam (Earth / 土)', gem: 'citrine', reco: 'Mengunci magnet rezeki, kelancaran transaksi dagang & modal' },
-        { el: 'FIRE', name: 'Api & Jiwa (Fire / 火)', gem: 'kecubung', reco: 'Meredakan stres tidur, meningkatkan karisma wibawa batin' }
-      ];
-      const pick = elements[Date.now() % elements.length];
-      const score = 93 + (Date.now() % 6);
-      const vit = 89 + (Date.now() % 9);
-
       visionResult = {
-        element: pick.el,
-        element_id: pick.name,
-        alignmentScore: score,
-        vitality: vit,
-        energyBalance: 'Optimal',
-        fortuneLevel: 'Tinggi & Terbuka',
-        energyReco: pick.reco,
-        recommendedGemId: pick.gem,
-        mianXiangAnalysis: {
-          forehead: 'Pancaran dahi menunjukkan fokus strategis dan intuisi kepemimpinan yang sedang menguat.',
-          nose: 'Cuping dan batang hidung memancarkan chi kemakmuran yang sangat terbuka.',
-          eyesCheek: 'Rona sirkulasi di area mata dan pipi menunjukkan kepekaan spiritual tinggi.',
-          chin: 'Garis rahang dan dagu menunjukkan stabilitas pendirian yang kokoh dan perisai alami.'
+        gender: "male",
+        gender_label: "Pria",
+        estimatedAge: 31,
+        peakAge: 39,
+        element: "WOOD",
+        element_id: "Kayu (Wood / 木)",
+        supportingElement: "Air (Water / 水)",
+        corePersona: "Visioner & Pemimpin Dinasti",
+        lifePath: "Executive Leadership & Tech Investment",
+        soulMission: "Membangun, Memimpin, Menginspirasi & Menciptakan Warisan",
+        alignmentScore: 96,
+        vitality: 93,
+        radarAura: {
+          karisma: 92,
+          inteligensi: 89,
+          kepemimpinan: 94,
+          kreativitas: 88,
+          spiritualitas: 85,
+          dayaTarik: 93
         },
-        whisperGreeting: `Aura wajah Anda selaras dengan elemen ${pick.name} di angka ${score} persen. Energi Anda sangat harmonis dan siap menerima gelombang kemakmuran.`
+        futureRole: "FOUNDER & CEO BISNIS TEKNOLOGI & INVESTOR",
+        companiesOwned: "3 Perusahaan Aktif",
+        teamLed: "50+ Profesional",
+        annualIncome: "+/- Rp 15 Miliar",
+        influence: "Nasional & Internasional",
+        lifeStatus: {
+          finansial: "SANGAT STABIL",
+          sosial: "BERPENGARUH",
+          spiritual: "SEIMBANG",
+          kesehatan: "OPTIMAL"
+        },
+        projectedNetWorth: "Rp 85.000.000.000+",
+        wealthDistribution: {
+          bisnis: 40,
+          properti: 30,
+          saham: 20,
+          asetLainnya: 10
+        },
+        roadmapStages: [
+          {
+            phase: "Tahap 1 (2024 - 2025)",
+            milestones: ["Menguasai Skill & Ilmu Baru", "Membangun Personal Brand", "Membangun Bisnis Pertama", "Menabung & Investasi Awal"]
+          },
+          {
+            phase: "Tahap 2 (2026 - 2028)",
+            milestones: ["Scale Up Bisnis", "Membentuk Tim Solid", "Diversifikasi Income", "Investasi Properti Pertama"]
+          },
+          {
+            phase: "Tahap 3 (2029 - 2031)",
+            milestones: ["Ekspansi Bisnis ke Luar Negeri", "Membangun Aset Besar", "Meningkatkan Pengaruh", "Kebebasan Finansial"]
+          },
+          {
+            phase: "Tahap 4 (2032 - 2035)",
+            milestones: ["Menjadi Leader di Industri", "Mencapai Kekayaan Besar", "Membantu & Menginspirasi", "Meninggalkan Warisan"]
+          }
+        ],
+        recommendedGemId: "giok-aceh",
+        mianXiangAnalysis: {
+          forehead: "Pancaran dahi menunjukkan fokus strategis dan wibawa kepemimpinan yang sedang menanjak.",
+          nose: "Batang dan cuping hidung memancarkan chi kemakmuran dan kapasitas rezeki yang kuat.",
+          eyesCheek: "Pancaran mata dan rona pipi mencerminkan vitalitas sehat dan intuisi bisnis yang tajam.",
+          chin: "Struktur dagu memperlihatkan keteguhan pendirian dan benteng perlindungan alami yang kokoh."
+        },
+        whisperGreeting: "Aura wajah Anda memancarkan potensi kepemimpinan dan kemakmuran yang sangat kuat. Di tahun 2035, energi Anda diproyeksikan mencapai puncak kejayaan finansial."
       };
     }
 

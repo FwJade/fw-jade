@@ -50,7 +50,28 @@
      * Mengubah tata letak menjadi 100% simetris tengah (*Center-Aligned Haute Horlogerie*) dengan badge biometrik emas, lingkaran kamera live berbingkai zamrud dan laser reticle dinamis.
      * Menyediakan **1 Tombol Shutter Tunggal**: *"Ambil Foto & Analisa Wajah"* dan opsi alternatif *"Unggah Foto Wajah dari Galeri"*.
      * Memperbaiki bug progress bar: nilai 0% saat awal, dan hanya berjalan dinamis saat pemindaian foto berlangsung dengan 4 tahap panduan teks real-time (*Memindai Istana Wajah* -> *Membaca Titik Dahi & Rezeki* -> *Menyelaraskan Elemen Bazi & Giok* -> *Merender Manifestasi Bangsawan*).
-  5. **Integrasi Kunci API Ollama Cloud**: Memasang kunci API Ollama Cloud (`OLLAMA_API_KEY`) ke `.env` & `.env.example`, menguji dan memvalidasi akses gratis model `nemotron-3-nano:30b`, `gemma4:31b`, `gpt-oss:20b`, dan `gpt-oss:120b`.
+* **2026-09-03 (Bagian 3):** **Peluncuran Grand 2035 Future Vision Dossier & Real-Time Face Guidance Ring**:
+  1. **Panduan Biometrik Wajah Real-Time (*Real-Time Face Guidance Ring*)**:
+     * Menambahkan sistem deteksi pencahayaan & jarak wajah otomatis pada canvas HUD kamera.
+     * Mengeliminasi kebingungan pengguna: saat wajah terlalu jauh/gelap muncul ring kuning (*"Pencahayaan redup, dekatkan wajah"*), saat terlalu dekat muncul ring oranye (*"Terlalu dekat, jauhkan sedikit"*), dan saat posisi pas di tengah frame seketika menyala **HIJAU ZAMRUD BERSINAR (*EMERALD READY GLOW*)** dengan status *"✓ Posisi Wajah Pas & Siap Difoto!"*.
+  2. **Ekstraksi Demografi & Persona Masa Depan (`/api/vision`)**:
+     * AI Vision secara otomatis mendeteksi gender (`Pria` atau `Wanita`) dan estimasi umur saat ini, memproyeksikan usia puncak kemakmuran di Tahun 2035.
+     * Menghasilkan dossier lengkap: 6 Radar Aura (Karisma, Inteligensi, Kepemimpinan, Kreativitas, Spiritualitas, Daya Tarik), Peran Masa Depan (*Founder & CEO*), jumlah perusahaan, tim, pendapatan tahunan, dan 4 status kehidupan (Finansial, Sosial, Spiritual, Kesehatan).
+  3. **Transformasi Pria & Wanita Konglomerat Dunia (`/api/image`)**:
+     * Mengeliminasi foto telanjang dada santai di rumah.
+     * **Untuk Pria:** AI merender potret eksekutif miliarder mengenakan setelan jas tailored hitam *Tom Ford*, dasi sutra, jam tangan emas *Rolex Day-Date 40*, dan liontin giok pusaka *FW JADE Imperial Green*, duduk di kursi kulit direktur penthouse gedung pencakar langit malam hari.
+     * **Untuk Wanita:** AI merender gaun sutra dan blazer *Haute Couture*, perhiasan kalung giok dan anting berlian FW JADE di private boardroom mewah.
+  4. **Peluncuran Grand Poster Vertikal 2035 (Referensi Gambar 2)**:
+     * Mengganti perbandingan foto mini dengan **Poster Panjang Format Dossier Masa Depan (Tahun 2035)**:
+       * Header Grand Brand FW JADE AURA AI & Badge Tahun 2035.
+       * Triptych 3 Kolom: Identitas Energi & 6 Radar Aura (Kiri), Foto Hero Eksekutif Penthouse (Tengah), Posisi & Peran serta Status Kehidupan (Kanan).
+       * Grid 8 Infrastruktur Aset Masa Depan: Rolex Day-Date, Jas Tom Ford, Rolls-Royce Cullinan Black Badge, Modern Luxury Villa Bali, Kantor Pusat SCBD, Portofolio Properti, Private Yacht & Travel, Koleksi Giok Pusaka FW JADE.
+       * Proyeksi Kekayaan Bersih 2035: Rp 85.000.000.000+ (Alokasi: Bisnis 40%, Properti 30%, Saham 20%, Lainnya 10%) & Grafik Pertumbuhan 10 Tahun (Bar Chart 2025: 5M s/d 2035: 85M+).
+       * Roadmap Strategis 4 Tahap Menuju 2035 (Tahap 1 Fondasi s/d Tahap 4 Puncak Kekayaan & Warisan).
+       * Tombol Simpan/Cetak Poster Resolusi Tinggi & Konsultasi Langsung ke Master Aura AI.
+  5. **Perbaikan Total Header Bar Mobile**:
+     * Menata ulang `.step-card-header-bar` di mobile: tombol `← Beranda` di kiri, nomor step ringkas di tengah, dan tombol silang di kanan tanpa tabrakan.
+     * Mengamankan profil Google di navbar agar tidak menabrak tombol menu di layar kecil.
 
 
 
