@@ -401,6 +401,21 @@ function applyGoogleProfile(payload, rawCredential = null) {
       playChimeReverb();
       setTimeout(() => { window.location.href = '/admin.html'; }, 600);
     } else {
+      // Auto-capture Google SSO User into Leads Master Vault immediately!
+      saveLeadToVaultAndApi({
+        name: name || payload.name || 'Pengguna Google',
+        email: email,
+        picture: picture || payload.picture || '',
+        dob: AppState.user.dob || '-',
+        zodiac: AppState.user.bazi?.zodiac || '-',
+        shio: AppState.user.bazi?.shio || '-',
+        element: AppState.user.bazi?.rawElement || 'WOOD',
+        phone: AppState.user.phone || '-',
+        gemstone: 'Natural Aceh Jadeite',
+        price: 'Rp 1.850.000',
+        source: 'Google One-Tap / SSO'
+      });
+
       // Sound & Notification for regular users
       playChimeReverb();
       if (typeof confetti === 'function') {
@@ -412,6 +427,61 @@ function applyGoogleProfile(payload, rawCredential = null) {
   }
 }
 window.applyGoogleProfile = applyGoogleProfile;
+
+function saveLeadToVaultAndApi(leadData) {
+  try {
+    // 1. Persistent Client-Side Vault
+    const rawVault = localStorage.getItem('fwjade_global_leads_vault');
+    let vault = [];
+    try { if (rawVault) vault = JSON.parse(rawVault); } catch (e) {}
+    if (!Array.isArray(vault)) vault = [];
+
+    const cleanEmail = leadData.email && leadData.email !== '-' ? leadData.email.trim().toLowerCase() : null;
+    let existingIdx = -1;
+    if (cleanEmail) {
+      existingIdx = vault.findIndex(l => l.email && l.email.toLowerCase() === cleanEmail);
+    } else if (leadData.name) {
+      existingIdx = vault.findIndex(l => l.name && l.name.toLowerCase() === leadData.name.toLowerCase());
+    }
+
+    const leadRecord = {
+      id: existingIdx >= 0 ? vault[existingIdx].id : 'lead-' + Date.now(),
+      timestamp: new Date().toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' }),
+      name: leadData.name || 'Pengguna FW JADE',
+      email: cleanEmail || (existingIdx >= 0 ? vault[existingIdx].email : '-'),
+      dob: leadData.dob && leadData.dob !== '-' ? leadData.dob : (existingIdx >= 0 ? vault[existingIdx].dob : '-'),
+      zodiac: leadData.zodiac && leadData.zodiac !== '-' ? leadData.zodiac : (existingIdx >= 0 ? vault[existingIdx].zodiac : '-'),
+      shio: leadData.shio && leadData.shio !== '-' ? leadData.shio : (existingIdx >= 0 ? vault[existingIdx].shio : '-'),
+      element: leadData.element && leadData.element !== '-' ? leadData.element : (existingIdx >= 0 ? vault[existingIdx].element : 'WOOD'),
+      phone: leadData.phone && leadData.phone !== '-' ? leadData.phone : (existingIdx >= 0 ? vault[existingIdx].phone : '-'),
+      gemstone: leadData.gemstone || (existingIdx >= 0 ? vault[existingIdx].gemstone : 'Natural Aceh Jadeite'),
+      price: leadData.price || (existingIdx >= 0 ? vault[existingIdx].price : 'Rp 1.850.000'),
+      picture: leadData.picture || (existingIdx >= 0 ? vault[existingIdx].picture : ''),
+      source: leadData.source || 'Website Registration'
+    };
+
+    if (existingIdx >= 0) {
+      vault[existingIdx] = { ...vault[existingIdx], ...leadRecord };
+    } else {
+      vault.unshift(leadRecord);
+    }
+    localStorage.setItem('fwjade_global_leads_vault', JSON.stringify(vault));
+
+    // 2. Post to Backend Edge API
+    fetch('/api/leads', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(leadRecord)
+    }).then(res => res.json()).then(resData => {
+      console.log('[AURA AI] Lead successfully synced to Master Vault:', resData);
+    }).catch(err => {
+      console.warn('[AURA AI] Backend sync warning, lead cached locally:', err);
+    });
+  } catch (err) {
+    console.warn('[AURA AI] saveLeadToVaultAndApi error:', err);
+  }
+}
+window.saveLeadToVaultAndApi = saveLeadToVaultAndApi;
 
 function handleGoogleCredentialResponse(response) {
   try {
@@ -913,24 +983,19 @@ async function submitIdentityForm() {
     }));
   } catch (e) {}
 
-  // Post to Cloudflare Leads Endpoint asynchronously
-  try {
-    fetch('/api/leads', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        name: AppState.user.name,
-        dob: AppState.user.dob,
-        zodiac: bazi.zodiac,
-        shio: bazi.shio,
-        element: bazi.rawElement,
-        phone: AppState.user.phone,
-        email: AppState.user.email,
-        gemstone: 'Natural Aceh Jadeite',
-        price: 'Rp 1.850.000'
-      })
-    }).catch(e => console.warn('Lead submit error:', e));
-  } catch (e) {}
+  // Save & Sync to Master Leads Vault (Local & Edge Cloudflare)
+  saveLeadToVaultAndApi({
+    name: AppState.user.name,
+    email: AppState.user.email || '-',
+    dob: AppState.user.dob || `${d}/${m}/${y}`,
+    zodiac: bazi.zodiac,
+    shio: bazi.shio,
+    element: bazi.rawElement,
+    phone: AppState.user.phone || '-',
+    gemstone: 'Natural Aceh Jadeite',
+    price: 'Rp 1.850.000',
+    source: 'Form Penyelarasan Step 1'
+  });
 
   // Smooth transition to Camera Scanner
   const secForm = document.getElementById('secIdentityForm');

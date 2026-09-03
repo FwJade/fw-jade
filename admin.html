@@ -58,6 +58,11 @@
     .text-emerald{color:var(--emerald)}.text-gold{color:var(--gold)}.text-dim{color:var(--muted)}.text-xs{font-size:0.72rem}.text-center{text-align:center;padding:32px}
     .btn-wa{display:inline-flex;align-items:center;gap:5px;background:#25D366;color:#fff;border:none;border-radius:8px;padding:6px 12px;font-size:0.75rem;font-weight:600;text-decoration:none;cursor:pointer;transition:opacity 0.2s}
     .btn-wa:hover{opacity:0.85}
+    .btn-del{display:inline-flex;align-items:center;gap:4px;background:rgba(255,107,107,0.12);border:1px solid rgba(255,107,107,0.3);color:var(--red);border-radius:8px;padding:6px 10px;font-size:0.75rem;font-weight:600;cursor:pointer;transition:background 0.2s;margin-left:6px}
+    .btn-del:hover{background:rgba(255,107,107,0.25)}
+    .lead-avatar{width:26px;height:26px;border-radius:50%;object-fit:cover;border:1px solid rgba(255,255,255,0.2);display:inline-block;vertical-align:middle;margin-right:6px}
+    .lead-source-tag{font-size:0.65rem;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);padding:1px 6px;border-radius:10px;color:var(--muted);display:inline-block;margin-top:2px}
+    .lead-source-tag.google{border-color:rgba(66,133,244,0.4);color:#6ba4ff;background:rgba(66,133,244,0.1)}
     .empty-state{padding:48px;text-align:center;color:var(--muted)}
     .empty-state i{font-size:2rem;margin-bottom:10px;opacity:0.4;display:block}
     @media(max-width:600px){.admin-content{padding:14px}.stat-grid{grid-template-columns:1fr 1fr}th,td{padding:10px 10px;font-size:0.75rem}}
@@ -92,7 +97,7 @@
   </div>
   <div class="admin-content">
     <div class="page-title"><i class="fa-solid fa-users text-emerald"></i> Master Leads Portal</div>
-    <div class="page-subtitle">Database prospek pelanggan AURA AI Scanner — real-time dari Cloudflare Edge KV</div>
+    <div class="page-subtitle">Database prospek pelanggan AURA AI Scanner — tersinkronisasi multi-akun real-time</div>
     <div class="stat-grid">
       <div class="stat-card"><div class="stat-label">Total Prospek / Leads</div><div class="stat-value emerald" id="statTotal">-</div></div>
       <div class="stat-card"><div class="stat-label">Potensi Omset</div><div class="stat-value gold" id="statRevenue">-</div></div>
@@ -100,13 +105,13 @@
       <div class="stat-card"><div class="stat-label">Data Terakhir Dimuat</div><div class="stat-value text-xs" style="font-size:0.9rem;" id="statLastLoad">-</div></div>
     </div>
     <div class="toolbar">
-      <input type="search" class="search-input" id="searchInput" placeholder="Cari nama, WhatsApp, atau batu..." oninput="filterTable()">
-      <button class="btn-action secondary" onclick="loadLeads()"><i class="fa-solid fa-rotate"></i> Refresh</button>
+      <input type="search" class="search-input" id="searchInput" placeholder="Cari nama, email, WhatsApp, atau batu..." oninput="filterTable()">
+      <button class="btn-action secondary" onclick="loadLeads()"><i class="fa-solid fa-rotate"></i> Refresh &amp; Sinkron</button>
       <button class="btn-action gold" onclick="exportCSV()"><i class="fa-solid fa-file-csv"></i> Unduh CSV / Excel</button>
     </div>
     <div class="table-wrap">
       <table>
-        <thead><tr><th>Waktu</th><th>Nama Pelanggan</th><th>Tgl Lahir / Bazi</th><th>No. WhatsApp</th><th>Batu Rekomendasi</th><th>Aksi CS</th></tr></thead>
+        <thead><tr><th>Waktu</th><th>Nama Pelanggan</th><th>Tgl Lahir / Bazi</th><th>Kontak / Sumber</th><th>Batu Rekomendasi</th><th>Aksi Admin</th></tr></thead>
         <tbody id="leadsTableBody"><tr><td colspan="6" class="text-center"><i class="fa-solid fa-spinner fa-spin text-emerald"></i> Memuat data...</td></tr></tbody>
       </table>
     </div>
@@ -141,57 +146,155 @@
     if (token.picture) { avatar.src = token.picture; avatar.style.display = 'block'; }
     loadLeads();
   }
+
   async function loadLeads() {
     var tbody = document.getElementById('leadsTableBody');
     var statTotal = document.getElementById('statTotal');
     var statRevenue = document.getElementById('statRevenue');
     var statLastLoad = document.getElementById('statLastLoad');
-    tbody.innerHTML = '<tr><td colspan="6" class="text-center"><i class="fa-solid fa-spinner fa-spin text-emerald"></i> Memuat database prospek dari Cloudflare Edge...</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="6" class="text-center"><i class="fa-solid fa-spinner fa-spin text-emerald"></i> Memuat database prospek dari Cloudflare Edge &amp; Master Vault...</td></tr>';
+    
+    var token = verifyAdminAccess();
+    if (!token) { adminLogout(); return; }
+
+    var serverLeads = [];
     try {
-      var token = verifyAdminAccess();
-      if (!token) { adminLogout(); return; }
       var res = await fetch('/api/leads?admin=' + encodeURIComponent(token.email), {
         headers: { 'Authorization': 'Bearer ' + (token.credential || '') }
       });
       if (res.ok) {
         var data = await res.json();
         if (data.success && data.leads) {
-          allLeads = data.leads;
-          renderTable(allLeads);
-          statTotal.textContent = (data.totalLeads || allLeads.length) + ' Orang';
-          var totalRev = allLeads.reduce(function(acc,cur) { return acc + (parseInt((cur.price||'0').replace(/[^0-9]/g,''))||1850000); }, 0);
-          statRevenue.textContent = 'Rp ' + totalRev.toLocaleString('id-ID');
-          statLastLoad.textContent = new Date().toLocaleString('id-ID');
-          return;
+          serverLeads = data.leads;
         }
       }
-    } catch(e) { console.warn('Admin fetch failed:', e); }
-    if (allLeads.length > 0) { renderTable(allLeads); } else { tbody.innerHTML = '<tr><td colspan="6" class="empty-state"><i class="fa-solid fa-database"></i><br>Tidak bisa memuat data. Periksa koneksi atau API endpoint.</td></tr>'; }
-    statLastLoad.textContent = 'Gagal - ' + new Date().toLocaleString('id-ID');
+    } catch(e) { console.warn('Server fetch error:', e); }
+
+    // Read client-side vault from localStorage
+    var localLeads = [];
+    try {
+      var rawLocal = localStorage.getItem('fwjade_global_leads_vault');
+      if (rawLocal) localLeads = JSON.parse(rawLocal);
+    } catch(e) {}
+    if (!Array.isArray(localLeads)) localLeads = [];
+
+    // Merge Server & Local Vault (Deduplicate by email or id)
+    var mergedMap = new Map();
+    serverLeads.forEach(function(l) {
+      var key = (l.email && l.email !== '-') ? l.email.toLowerCase() : l.id;
+      mergedMap.set(key, l);
+    });
+
+    localLeads.forEach(function(l) {
+      var key = (l.email && l.email !== '-') ? l.email.toLowerCase() : l.id;
+      if (!mergedMap.has(key)) {
+        mergedMap.set(key, l);
+        // Push missing local lead to server asynchronously
+        fetch('/api/leads', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(l)
+        }).catch(function() {});
+      } else {
+        // Merge enriched fields if available
+        var existing = mergedMap.get(key);
+        mergedMap.set(key, Object.assign({}, existing, l));
+      }
+    });
+
+    allLeads = Array.from(mergedMap.values());
+
+    // Update local storage cache
+    try {
+      localStorage.setItem('fwjade_global_leads_vault', JSON.stringify(allLeads));
+    } catch(e) {}
+
+    renderTable(allLeads);
+    statTotal.textContent = allLeads.length + ' Orang';
+    var totalRev = allLeads.reduce(function(acc, cur) {
+      return acc + (parseInt((cur.price || '0').replace(/[^0-9]/g, '')) || 1850000);
+    }, 0);
+    statRevenue.textContent = 'Rp ' + totalRev.toLocaleString('id-ID');
+    statLastLoad.textContent = new Date().toLocaleString('id-ID');
   }
+
   function renderTable(leads) {
     var tbody = document.getElementById('leadsTableBody');
-    if (!leads || leads.length === 0) { tbody.innerHTML = '<tr><td colspan="6" class="empty-state"><i class="fa-solid fa-ghost"></i>Belum ada data prospek yang masuk.</td></tr>'; return; }
+    if (!leads || leads.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="6" class="empty-state"><i class="fa-solid fa-ghost"></i>Belum ada data prospek yang masuk.</td></tr>';
+      return;
+    }
     tbody.innerHTML = leads.map(function(l) {
-      var cleanPhone = (l.phone||'').replace(/[^0-9]/g,'');
-      var waMsg = encodeURIComponent('Halo Bapak/Ibu ' + l.name + ', kami dari FW JADE Medan Giok. Berdasarkan hasil pembacaan aura & Bazi Anda (' + (l.gemstone||'Natural Aceh Jadeite') + '), apakah ada yang bisa kami bantu mengenai pemilihan perhiasan giok alami Anda?');
-      var waUrl = 'https://wa.me/' + cleanPhone + '?text=' + waMsg;
-      return '<tr><td><span class="text-dim text-xs">' + (l.timestamp||'-') + '</span></td><td><strong>' + (l.name||'-') + '</strong>' + (l.email&&l.email!=='-'?'<br><small class="text-dim">'+l.email+'</small>':'') + '</td><td><span class="text-gold">' + (l.dob||'-') + '</span><br><small class="text-emerald">' + (l.zodiac||'') + ' - ' + (l.shio||'') + '</small></td><td><strong>' + (l.phone||'-') + '</strong></td><td><strong class="text-emerald">' + (l.gemstone||'Natural Aceh Jadeite') + '</strong><br><small class="text-gold">' + (l.price||'Rp 1.850.000') + '</small></td><td><a href="' + waUrl + '" target="_blank" class="btn-wa"><i class="fa-brands fa-whatsapp"></i> Chat CS</a></td></tr>';
+      var cleanPhone = (l.phone || '').replace(/[^0-9]/g, '');
+      var waMsg = encodeURIComponent('Halo Bapak/Ibu ' + l.name + ', kami dari FW JADE Medan Giok. Berdasarkan hasil analisa aura & Bazi Anda (' + (l.gemstone || 'Natural Aceh Jadeite') + '), apakah ada yang bisa kami bantu mengenai pemilihan perhiasan giok alami Anda?');
+      var waUrl = cleanPhone ? 'https://wa.me/' + cleanPhone + '?text=' + waMsg : 'https://wa.me/62811619173';
+      
+      var isGoogle = l.source && l.source.toLowerCase().includes('google');
+      var sourceBadge = '<span class="lead-source-tag' + (isGoogle ? ' google' : '') + '"><i class="' + (isGoogle ? 'fa-brands fa-google' : 'fa-solid fa-user-pen') + '"></i> ' + (l.source || 'Registrasi') + '</span>';
+      
+      var avatarImg = l.picture ? '<img src="' + l.picture + '" class="lead-avatar" alt="Avatar">' : '';
+
+      return '<tr>' +
+        '<td><span class="text-dim text-xs">' + (l.timestamp || '-') + '</span></td>' +
+        '<td>' + avatarImg + '<strong>' + (l.name || '-') + '</strong>' + (l.email && l.email !== '-' ? '<br><small class="text-dim">' + l.email + '</small>' : '') + '</td>' +
+        '<td><span class="text-gold">' + (l.dob || '-') + '</span><br><small class="text-emerald">' + (l.zodiac || '') + (l.shio ? ' - ' + l.shio : '') + '</small></td>' +
+        '<td><strong>' + (l.phone && l.phone !== '-' ? l.phone : '<span class="text-dim">Google SSO</span>') + '</strong><br>' + sourceBadge + '</td>' +
+        '<td><strong class="text-emerald">' + (l.gemstone || 'Natural Aceh Jadeite') + '</strong><br><small class="text-gold">' + (l.price || 'Rp 1.850.000') + '</small></td>' +
+        '<td>' +
+          '<a href="' + waUrl + '" target="_blank" class="btn-wa"><i class="fa-brands fa-whatsapp"></i> Chat CS</a>' +
+          '<button type="button" class="btn-del" onclick="deleteLead(\'' + l.id + '\')" title="Hapus prospek"><i class="fa-solid fa-trash-can"></i></button>' +
+        '</td>' +
+      '</tr>';
     }).join('');
   }
+
+  async function deleteLead(leadId) {
+    if (!confirm('Apakah Anda yakin ingin menghapus data prospek ini dari database?')) return;
+    var token = verifyAdminAccess();
+    if (!token) return;
+
+    allLeads = allLeads.filter(function(l) { return l.id !== leadId; });
+    try {
+      localStorage.setItem('fwjade_global_leads_vault', JSON.stringify(allLeads));
+    } catch(e) {}
+    renderTable(allLeads);
+
+    try {
+      await fetch('/api/leads?admin=' + encodeURIComponent(token.email) + '&id=' + encodeURIComponent(leadId), {
+        method: 'DELETE'
+      });
+    } catch(e) {}
+    loadLeads();
+  }
+
   function filterTable() {
     var q = document.getElementById('searchInput').value.toLowerCase();
     if (!q) { renderTable(allLeads); return; }
-    var filtered = allLeads.filter(function(l) { return (l.name&&l.name.toLowerCase().includes(q))||(l.phone&&l.phone.includes(q))||(l.gemstone&&l.gemstone.toLowerCase().includes(q))||(l.email&&l.email.toLowerCase().includes(q)); });
+    var filtered = allLeads.filter(function(l) {
+      return (l.name && l.name.toLowerCase().includes(q)) ||
+        (l.phone && l.phone.includes(q)) ||
+        (l.gemstone && l.gemstone.toLowerCase().includes(q)) ||
+        (l.email && l.email.toLowerCase().includes(q));
+    });
     renderTable(filtered);
   }
+
   function exportCSV() {
-    if (!allLeads||allLeads.length===0) { alert('Belum ada data.'); return; }
-    var csv = 'Waktu,Nama,Tgl Lahir,Zodiak,Shio,Elemen,WhatsApp,Email,Batu,Harga\n';
-    allLeads.forEach(function(l) { csv += ['"'+(l.timestamp||'')+'"','"'+(l.name||'')+'"','"'+(l.dob||'')+'"','"'+(l.zodiac||'')+'"','"'+(l.shio||'')+'"','"'+(l.element||'')+'"','"'+(l.phone||'')+'"','"'+(l.email||'')+'"','"'+(l.gemstone||'')+'"','"'+(l.price||'')+'"'].join(',') + '\n'; });
-    var a = document.createElement('a'); a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv); a.download = 'fwjade_leads_' + new Date().toISOString().slice(0,10) + '.csv'; a.click();
+    if (!allLeads || allLeads.length === 0) { alert('Belum ada data.'); return; }
+    var csv = 'Waktu,Nama,Email,Tgl Lahir,Zodiak,Shio,Elemen,WhatsApp,Sumber,Batu,Harga\n';
+    allLeads.forEach(function(l) {
+      csv += ['"' + (l.timestamp || '') + '"', '"' + (l.name || '') + '"', '"' + (l.email || '') + '"', '"' + (l.dob || '') + '"', '"' + (l.zodiac || '') + '"', '"' + (l.shio || '') + '"', '"' + (l.element || '') + '"', '"' + (l.phone || '') + '"', '"' + (l.source || '') + '"', '"' + (l.gemstone || '') + '"', '"' + (l.price || '') + '"'].join(',') + '\n';
+    });
+    var a = document.createElement('a');
+    a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
+    a.download = 'fwjade_leads_' + new Date().toISOString().slice(0, 10) + '.csv';
+    a.click();
   }
-  function adminLogout() { sessionStorage.removeItem('fw_jade_admin_token'); window.location.href = '/'; }
+
+  function adminLogout() {
+    sessionStorage.removeItem('fw_jade_admin_token');
+    window.location.href = '/';
+  }
   init();
 </script>
 </body>

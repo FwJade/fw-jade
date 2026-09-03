@@ -32,47 +32,93 @@ export async function onRequest(context) {
       status: 204,
       headers: {
         'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+        'Access-Control-Allow-Methods': 'GET, POST, DELETE, OPTIONS',
         'Access-Control-Allow-Headers': 'Content-Type, Authorization'
       }
     });
   }
 
-  // POST: Simpan Lead Baru dari Form Pre-Scan
+  // Helper to load leads from KV or memory
+  async function getStoredLeads() {
+    if (env && env.LEADS_KV) {
+      try {
+        const kvData = await env.LEADS_KV.get('leads_db', 'json');
+        if (Array.isArray(kvData)) return kvData;
+      } catch (e) {
+        console.warn('KV read error:', e);
+      }
+    }
+    return globalLeadsMemory;
+  }
+
+  // Helper to save leads to KV or memory
+  async function saveStoredLeads(leads) {
+    globalLeadsMemory = leads;
+    if (env && env.LEADS_KV) {
+      try {
+        await env.LEADS_KV.put('leads_db', JSON.stringify(leads));
+      } catch (e) {
+        console.warn('KV write error:', e);
+      }
+    }
+  }
+
+  // POST: Simpan atau Sinkronkan Lead Baru (Google Login / Form Step 1)
   if (method === 'POST') {
     try {
       const body = await request.json();
-      const { name, dob, zodiac, shio, phone, email, element, gemstone, price } = body;
+      const { name, dob, zodiac, shio, phone, email, element, gemstone, price, picture, source } = body;
 
-      if (!name || !phone) {
-        return new Response(JSON.stringify({ success: false, error: 'Nama dan No. WhatsApp wajib diisi' }), {
+      if (!name && !email) {
+        return new Response(JSON.stringify({ success: false, error: 'Nama atau Email wajib diisi' }), {
           status: 400,
           headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }
         });
       }
 
-      const newLead = {
-        id: 'lead-' + Date.now(),
+      const cleanEmail = email && email !== '-' ? email.trim().toLowerCase() : null;
+      const cleanName = name ? name.trim() : (cleanEmail ? cleanEmail.split('@')[0] : 'Pengguna FW JADE');
+
+      let leadsList = await getStoredLeads();
+
+      // Check if existing lead exists with same email
+      let existingIdx = -1;
+      if (cleanEmail) {
+        existingIdx = leadsList.findIndex(l => l.email && l.email.toLowerCase() === cleanEmail);
+      } else if (phone && phone !== '-') {
+        existingIdx = leadsList.findIndex(l => l.phone && l.phone === phone.trim());
+      }
+
+      const leadRecord = {
+        id: existingIdx >= 0 ? leadsList[existingIdx].id : 'lead-' + Date.now(),
         timestamp: new Date().toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' }),
-        name: name.trim(),
-        dob: dob || '-',
-        zodiac: zodiac || '-',
-        shio: shio || '-',
-        element: element || 'WOOD',
-        phone: phone.trim(),
-        email: email ? email.trim() : '-',
-        gemstone: gemstone || 'Natural Aceh Jadeite',
-        price: price || 'Rp 1.850.000',
-        status: 'New'
+        name: cleanName,
+        dob: dob && dob !== '-' ? dob : (existingIdx >= 0 ? leadsList[existingIdx].dob : '-'),
+        zodiac: zodiac && zodiac !== '-' ? zodiac : (existingIdx >= 0 ? leadsList[existingIdx].zodiac : '-'),
+        shio: shio && shio !== '-' ? shio : (existingIdx >= 0 ? leadsList[existingIdx].shio : '-'),
+        element: element && element !== '-' ? element : (existingIdx >= 0 ? leadsList[existingIdx].element : 'WOOD'),
+        phone: phone && phone !== '-' ? phone.trim() : (existingIdx >= 0 ? leadsList[existingIdx].phone : '-'),
+        email: cleanEmail || (existingIdx >= 0 ? leadsList[existingIdx].email : '-'),
+        gemstone: gemstone || (existingIdx >= 0 ? leadsList[existingIdx].gemstone : 'Natural Aceh Jadeite'),
+        price: price || (existingIdx >= 0 ? leadsList[existingIdx].price : 'Rp 1.850.000'),
+        picture: picture || (existingIdx >= 0 ? leadsList[existingIdx].picture : ''),
+        source: source || 'Website Registration',
+        status: 'Prospek Aktif'
       };
 
-      // Add to memory
-      globalLeadsMemory.unshift(newLead);
+      if (existingIdx >= 0) {
+        leadsList[existingIdx] = { ...leadsList[existingIdx], ...leadRecord };
+      } else {
+        leadsList.unshift(leadRecord);
+      }
+
+      await saveStoredLeads(leadsList);
 
       return new Response(JSON.stringify({
         success: true,
-        message: 'Data spiritual Anda telah tersimpan dengan aman',
-        leadId: newLead.id
+        message: 'Data prospek berhasil dicatat di Master Vault',
+        leadId: leadRecord.id,
+        totalLeads: leadsList.length
       }), {
         status: 201,
         headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }
@@ -85,6 +131,32 @@ export async function onRequest(context) {
     }
   }
 
+  // DELETE: Hapus Lead Tertentu oleh Admin
+  if (method === 'DELETE') {
+    try {
+      const url = new URL(request.url);
+      const adminEmail = url.searchParams.get('admin');
+      const leadId = url.searchParams.get('id');
+
+      if (!adminEmail || adminEmail.toLowerCase() !== 'fwjade.com@gmail.com') {
+        return new Response(JSON.stringify({ success: false, error: 'Unauthorized' }), { status: 403, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' } });
+      }
+
+      let leadsList = await getStoredLeads();
+      if (leadId) {
+        leadsList = leadsList.filter(l => l.id !== leadId);
+        await saveStoredLeads(leadsList);
+      }
+
+      return new Response(JSON.stringify({ success: true, leads: leadsList, totalLeads: leadsList.length }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }
+      });
+    } catch (e) {
+      return new Response(JSON.stringify({ success: false, error: e.message }), { status: 500, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' } });
+    }
+  }
+
   // GET: Ambil Daftar Leads untuk Admin (fwjade.com@gmail.com)
   if (method === 'GET') {
     const url = new URL(request.url);
@@ -92,16 +164,20 @@ export async function onRequest(context) {
 
     // Admin Verification
     if (adminEmail && adminEmail.toLowerCase() === 'fwjade.com@gmail.com') {
-      // Calculate order frequency per phone number to track VIP (> 2x purchases)
-      const phoneCounts = {};
-      globalLeadsMemory.forEach(l => {
-        if (l.phone) {
-          phoneCounts[l.phone] = (phoneCounts[l.phone] || 0) + 1;
+      const leadsList = await getStoredLeads();
+
+      // Calculate order frequency per phone / email to track VIP
+      const identCounts = {};
+      leadsList.forEach(l => {
+        const key = (l.email && l.email !== '-') ? l.email : l.phone;
+        if (key && key !== '-') {
+          identCounts[key] = (identCounts[key] || 0) + 1;
         }
       });
 
-      const enrichedLeads = globalLeadsMemory.map(l => {
-        const count = phoneCounts[l.phone] || 1;
+      const enrichedLeads = leadsList.map(l => {
+        const key = (l.email && l.email !== '-') ? l.email : l.phone;
+        const count = (key && identCounts[key]) ? identCounts[key] : 1;
         return {
           ...l,
           ordersCount: count,
@@ -113,7 +189,7 @@ export async function onRequest(context) {
       return new Response(JSON.stringify({
         success: true,
         role: 'Master Admin',
-        totalLeads: globalLeadsMemory.length,
+        totalLeads: enrichedLeads.length,
         leads: enrichedLeads
       }), {
         status: 200,

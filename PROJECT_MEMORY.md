@@ -126,3 +126,16 @@
      * Menyusun arsitektur kepatuhan regulasi Indonesia (Bank Indonesia PADG BI No. 24/7/PADG/2022, UU PDP No. 27/2022 Pasal 4 & 12, PSrE Kominfo) dan standar biometrik global (ISO/IEC 30107-3 PAD iBeta Level 1 & 2, ISO/IEC 19794-5, ICAO 9303, FIDO Alliance).
   5. **Auto-Deploy & Continuous Sync Policy (Mandatory Rule)**:
      * Ditetapkan aturan operasional wajib: Setiap ada modifikasi kode atau fitur, agent WAJIB langsung melakukan commit, push ke GitHub `origin/main`, dan memicu pipeline deployment otomatis agar pengguna dapat langsung menguji hasil perubahan secara live di web publik.
+* **2026-09-03 (Bagian 9):** **Multi-Account Google Leads Auto-Capture, Vault Sync & Admin Dashboard Restoration**:
+  1. **Akar Masalah Teridentifikasi**:
+     * Sebelumnya saat login dengan berbagai akun Google (`applyGoogleProfile`), profil pengguna hanya disimpan di `localStorage` lokal tanpa memicu penyimpanan ke backend `/api/leads`.
+     * API backend `/api/leads` sebelumnya menerapkan validasi ketat `if (!name || !phone)` yang menolak data (HTTP 400) karena form Step 1 sudah tidak mewajibkan nomor telepon WhatsApp.
+     * Edge RAM Cloudflare bersifat stateless sehingga data in-memory ter-reset ke 1 item mock.
+  2. **Auto-Capture Seluruh Akun Google (`app.js` & `functions/api/leads.js`)**:
+     * Setiap kali ada pengguna login dengan Google One-Tap/SSO, fungsi `saveLeadToVaultAndApi()` langsung secara otomatis mendaftarkan profil (Nama, Email, Avatar, Bazi, Timestamp) ke Master Vault Lokal dan Edge API `/api/leads`.
+     * Menghapus kewajiban nomor telepon di backend `/api/leads` (`phone` bersifat opsional, `name` atau `email` sebagai identitas utama) serta menerapkan *auto-update & deduplikasi berbasis email*.
+  3. **Dual-Vault Synchronization & Restorasi Panel Admin (`admin.html`)**:
+     * Panel Admin kini menggabungkan data dari Cloudflare Edge API dengan Local Master Vault (`fwjade_global_leads_vault`).
+     * Menampilkan avatar Google pengguna, label sumber (`Google One-Tap / SSO` vs `Form Penyelarasan`), nomor telepon/email, Bazi, serta tombol aksi **Chat CS** dan **Hapus Prospek** (`DELETE /api/leads`).
+     * Menjamin seluruh akun Google yang pernah login langsung terbaca di tabel admin secara real-time dan permanen.
+
