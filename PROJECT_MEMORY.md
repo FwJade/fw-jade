@@ -156,8 +156,16 @@
        * Menyelaraskan data secara instan ke Master Leads Vault dan Backend API.
   3. **Auto-Load & State Restoration**:
      * Saat halaman dibuka atau di-refresh, fungsi `restoreUserSession()` dan `populateIdentityFormData()` langsung mem-parsing tanggal lahir, mengisi seluruh dropdown dan kolom input, menampilkan badge Bazi, dan memperbarui bar profil navigasi secara otomatis.
-  4. **Pembaruan Service Worker (`sw.js`) & Cache-Bust v50**:
-     * Meng-upgrade cache Service Worker ke `aurora-vip-v50` dengan pembersihan cache lama secara otomatis saat aktivasi, sehingga peramban pengguna tidak lagi terkunci pada aset statis versi lama.
+* **2026-09-03 (Bagian 12):** **Cloudflare Pages CI/CD Architecture & Serverless Pipeline Integration**:
+  1. **Struktur Penyimpanan & Eksekusi Server**:
+     * Seluruh infrastruktur server web `fwjade.com` berada di **Cloudflare Pages & Cloudflare Edge Functions** (`/functions/api/*`).
+     * Penyimpanan database prospek di sisi server menggunakan **Cloudflare Edge KV Storage (`LEADS_KV`)** dan di sisi klien menggunakan **Master Local Vault (`fwjade_global_leads_vault` & `fw_jade_user`)** dengan sinkronisasi reaktif dua arah.
+  2. **Mekanisme Otomatisasi Git & Cloudflare Pipeline**:
+     * Repository GitHub `https://github.com/FwJade/fw-jade` branch `main` terhubung langsung dengan webhook Cloudflare Pages.
+     * Setiap kali agent mengeksekusi `git push origin main`, GitHub secara otomatis mentrigger build worker Cloudflare Pages untuk mengompilasi dan mendistribusikan kode terbaru ke seluruh node edge CDN Cloudflare global secara real-time.
+  3. **Pengukuhan Memori Permanen**:
+     * Aturan ini telah dikunci secara permanen di [`RULES.md`](file:///d:/fw%20jade/RULES.md) dan [`PROJECT_MEMORY.md`](file:///d:/fw%20jade/PROJECT_MEMORY.md) sebagai pedoman operasional baku.
+
 
 
 
