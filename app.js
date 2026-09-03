@@ -1893,10 +1893,10 @@ function bindFutureVisionDossier(dossier, snapshotBase64) {
     origThumb.style.display = 'block';
   }
 
-  // Set default executive photo based on gender
+  // Display User's Authentic Real Face initially (No generic stock model)
   const heroPortrait = document.getElementById('pvHeroPortrait');
-  if (heroPortrait && (!heroPortrait.src || heroPortrait.src.includes('future_ceo'))) {
-    heroPortrait.src = isMale ? 'assets/future_ceo_male_executive.jpg' : 'assets/future_ceo_female_executive.jpg';
+  if (heroPortrait && snapshotBase64) {
+    heroPortrait.src = snapshotBase64;
   }
 
   // Adjust Assets for Gender
@@ -1909,13 +1909,17 @@ function bindFutureVisionDossier(dossier, snapshotBase64) {
 }
 
 /**
- * Call /api/image to generate the 2035 executive portrait.
+ * Call /api/image to generate the 2035 executive portrait powered by Leonardo.Ai Phoenix.
  */
 async function callImageTransformation(snapshotBase64, gemObj) {
   const heroPortrait = document.getElementById('pvHeroPortrait');
   const pvSpinner = document.getElementById('pvSpinner');
 
-  if (pvSpinner) pvSpinner.style.display = 'flex';
+  if (pvSpinner) {
+    pvSpinner.style.display = 'flex';
+    const spinnerText = pvSpinner.querySelector('.spinner-text');
+    if (spinnerText) spinnerText.textContent = 'Merender Potret Fotorealistis (Leonardo Phoenix AI)...';
+  }
 
   const gender = AppState.user.gender || 'male';
 

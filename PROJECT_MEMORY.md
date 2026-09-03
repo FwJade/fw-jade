@@ -177,15 +177,15 @@
       * Menambahkan bar lencana kepatuhan & otentikasi di bawah tombol kamera: Standar PADG Bank Indonesia, Sertifikasi Biometrik Global ISO/IEC 30107-3, On-Device AI Neural Mesh 100% Privat, dan Enkripsi SSL Edge 256-Bit.
       * Menyertakan tautan langsung ke Pusat Keamanan & Integritas Data (`security.html`) untuk memperkuat kepercayaan dan kredibilitas pengguna.
 * **2026-09-03 (Bagian 17):** **Cross-Device Companion Camera & Instant QR Handoff Engine**:
-* **2026-09-04 (Bagian 19):** **Companion Photo Viewport Rendering & Mutex Status Lock**:
-   1. **Face Photo Viewport Binding (`#capturedFaceImgPreview`)**:
-      * Menampilkan langsung foto hasil jepretan kamera HP ke dalam bingkai oval di layar PC saat proses analisa berjalan.
-      * Menyembunyikan elemen fallback video yang sebelumnya menampilkan teks placeholder terbalik ("PRISM Lens").
-   2. **Background FaceMesh Mutex Lock (`isBiometricScanningActive`)**:
-      * Mencegah loop MediaPipe webcam lokal PC menimpa status layar menjadi merah (*"Wajah Tidak Terdeteksi"*) saat foto dari HP sedang dianalisa.
-      * Mengunci status lencana menjadi hijau (*"Foto Wajah dari HP Terverifikasi"*) dan ring oval hijau (*ring-ready*).
-   3. **AI Vision Timeout Safeguard**:
-      * Membatasi request edge AI vision maksimal 3,5 detik agar progress bar tidak terhenti (*stuck*) di 100% dan langsung bertransisi mulus ke hasil analisa Step 3.
+* **2026-09-04 (Bagian 20):** **Authentic User Face Priority & Leonardo.Ai Phoenix 1.0 Integration**:
+   1. **Menghapus Fallback Model Kaukasia Statis**:
+      * Menghapus pemuatan otomatis gambar pria bule generic (`future_ceo_male_executive.jpg`).
+      * Layar Step 3 kini langsung menampilkan **Wajah Asli Pengguna** yang dipotret dari kamera HP sebagai gambar utama.
+   2. **Integrasi Model Fotorealistis Leonardo.Ai Phoenix 1.0 di Cloudflare Workers AI**:
+      * Memperbaiki token otentikasi di endpoint `/api/image` dengan fallback aman.
+      * Menggunakan model `@cf/leonardo/phoenix-1.0` dan `@cf/leonardo/lucid-origin` yang terkenal akan keaslian tekstur kulit, pori-pori alami, dan pencahayaan studio sinematik Hasselblad (menghilangkan efek kartun/plastik airbrushed).
+      * Menyesuaikan prompt agar mencerminkan fitur pria/wanita Asia Indonesia dengan setelan jas mewah dan liontin giok FW JADE.
+
 
 
 
