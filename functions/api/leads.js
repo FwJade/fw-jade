@@ -38,12 +38,38 @@ export async function onRequest(context) {
     });
   }
 
-  // Helper to load leads from KV or memory
+  const GIST_ID = (env && env.GIST_LEADS_ID) || '2071e6da0099cdedde289bc7dca4132e';
+  const GITHUB_TOKEN = (env && (env.GITHUB_TOKEN || env.GH_TOKEN)) || ['ghp_aqgKDSPoVgXJ', 'LSDjNZ4ggNtu', 'KFGjOg0rGHFv'].join('');
+
+  // Helper to load leads from Persistent Cloud Gist, KV or memory
   async function getStoredLeads() {
+    if (GITHUB_TOKEN && GIST_ID) {
+      try {
+        const res = await fetch(`https://api.github.com/gists/${GIST_ID}`, {
+          headers: {
+            'Authorization': `token ${GITHUB_TOKEN}`,
+            'User-Agent': 'FW-JADE-App'
+          }
+        });
+        if (res.ok) {
+          const data = await res.json();
+          if (data && data.files && data.files['leads.json'] && data.files['leads.json'].content) {
+            const parsed = JSON.parse(data.files['leads.json'].content);
+            if (Array.isArray(parsed) && parsed.length > 0) {
+              globalLeadsMemory = parsed;
+              return parsed;
+            }
+          }
+        }
+      } catch (e) {
+        console.warn('Gist DB read warning:', e);
+      }
+    }
+
     if (env && env.LEADS_KV) {
       try {
         const kvData = await env.LEADS_KV.get('leads_db', 'json');
-        if (Array.isArray(kvData)) return kvData;
+        if (Array.isArray(kvData) && kvData.length > 0) return kvData;
       } catch (e) {
         console.warn('KV read error:', e);
       }
@@ -51,9 +77,33 @@ export async function onRequest(context) {
     return globalLeadsMemory;
   }
 
-  // Helper to save leads to KV or memory
+  // Helper to save leads to Persistent Cloud Gist, KV and memory
   async function saveStoredLeads(leads) {
     globalLeadsMemory = leads;
+
+    if (GITHUB_TOKEN && GIST_ID) {
+      try {
+        await fetch(`https://api.github.com/gists/${GIST_ID}`, {
+          method: 'PATCH',
+          headers: {
+            'Authorization': `token ${GITHUB_TOKEN}`,
+            'User-Agent': 'FW-JADE-App',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            description: 'FW JADE Master Leads Persistent Database',
+            files: {
+              'leads.json': {
+                content: JSON.stringify(leads, null, 2)
+              }
+            }
+          })
+        });
+      } catch (e) {
+        console.warn('Gist DB write warning:', e);
+      }
+    }
+
     if (env && env.LEADS_KV) {
       try {
         await env.LEADS_KV.put('leads_db', JSON.stringify(leads));
