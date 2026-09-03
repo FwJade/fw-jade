@@ -79,6 +79,13 @@
   2. **Elevasi Top Navbar Floating Glass Bar (`.top-nav`)**:
      * Mengintegrasikan estetika *Haute Horlogerie Luxury Glass Bar* (`background: rgba(8, 20, 16, 0.65); border: 1px solid rgba(216, 195, 144, 0.22); border-radius: 40px; backdrop-filter: blur(16px); box-shadow: 0 8px 32px rgba(0,0,0,0.35);`) pada tema gelap.
      * Mengeliminasi kesan tombol mengambang terpisah tanpa bingkai, menyatukan logo brand di kiri dan tombol kontrol di kanan dalam 1 bar kapsul kristal mewah yang simetris dengan lebar grid aplikasi.
+* **2026-09-03 (Bagian 5):** **Simetri Matematika 100% Header Bar & Eliminasi Tumpang Tindih Kamera Fallback**:
+  1. **3-Column Grid Simetris pada Header Bar (`.step-card-header-bar`)**:
+     * Mengubah layout flexbox yang sebelumnya terdorong asimetris oleh tombol `Beranda` (110px) vs tombol `Close` (36px) menjadi **3-Column True Grid** (`grid-template-columns: 1fr auto 1fr;`).
+     * Menjamin badge `2. SCAN WAJAH • MULAI ANALISA WAJAH & AURA` berada **100% tepat di tengah kartu (Center Axis Symmetrical)**, sejajar presisi dengan badge `BIOMETRIK MIAN XIANG & AURA CHI`, judul utama, dan lingkaran kamera di bawahnya.
+  2. **Proteksi Tumpang Tindih Guidance Pill (`#cameraGuidancePill`)**:
+     * Menyembunyikan pill petunjuk saat kamera dalam status fallback / belum diaktifkan (`display: none;`).
+     * Pill petunjuk hanya muncul secara dinamis saat video feed kamera aktif menyala.
 
 
 

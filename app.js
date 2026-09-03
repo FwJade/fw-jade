@@ -987,11 +987,13 @@ function resetScannerProgressUI() {
   const startBtn = document.getElementById('startCamBtn');
   const txtBtn = document.getElementById('txtStartCam');
 
+  const guidancePill = document.getElementById('cameraGuidancePill');
   if (pBar) pBar.style.width = '0%';
   if (pTxt) pTxt.textContent = '0%';
   if (pContainer) pContainer.style.display = 'none';
   if (stageTxt) stageTxt.textContent = 'Mempersiapkan pemindaian biometrik...';
   if (snapPreview) snapPreview.style.display = 'none';
+  if (guidancePill) guidancePill.style.display = 'none';
   if (startBtn) startBtn.disabled = false;
   if (txtBtn) txtBtn.textContent = isCameraStreaming ? 'Ambil Foto & Analisa Wajah' : 'Buka Kamera & Mulai';
 
@@ -1008,6 +1010,7 @@ async function startWebcam() {
   const fallback = document.getElementById('cameraFallback');
   const txtBtn = document.getElementById('txtStartCam');
   const startBtn = document.getElementById('startCamBtn');
+  const guidancePill = document.getElementById('cameraGuidancePill');
 
   resetScannerProgressUI();
 
@@ -1022,16 +1025,19 @@ async function startWebcam() {
       video.srcObject = stream;
       video.onloadedmetadata = () => {
         video.play();
+        if (guidancePill) guidancePill.style.display = 'inline-flex';
         drawScannerHudAnimation();
       };
     }
     if (fallback) fallback.style.display = 'none';
+    if (guidancePill) guidancePill.style.display = 'inline-flex';
     if (txtBtn) txtBtn.textContent = 'Ambil Foto & Analisa Wajah';
     if (startBtn) startBtn.disabled = false;
   } catch (err) {
     console.warn('[AURA AI] Camera access not granted or unavailable:', err);
     isCameraStreaming = false;
     if (fallback) fallback.style.display = 'flex';
+    if (guidancePill) guidancePill.style.display = 'none';
     if (txtBtn) txtBtn.textContent = 'Coba Buka Kamera Lagi';
   }
 }

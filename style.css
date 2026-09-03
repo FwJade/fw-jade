@@ -3568,12 +3568,17 @@ body.style-explorer .view-explorer-secondary {
   border: 1.5px solid var(--border-subtle);
   border-radius: 24px;
   padding: 32px 28px;
-  margin-bottom: 30px;
+  margin: 0 auto 30px auto;
+  max-width: 860px;
+  width: 100%;
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+  box-sizing: border-box;
 }
 
 .step-badge-indicator {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   font-family: var(--font-serif);
   font-size: 0.76rem;
   letter-spacing: 2px;
@@ -3582,8 +3587,9 @@ body.style-explorer .view-explorer-secondary {
   background: rgba(255, 200, 87, 0.08);
   border: 1px solid rgba(255, 200, 87, 0.25);
   border-radius: var(--radius-full);
-  padding: 4px 14px;
-  margin-bottom: 20px;
+  padding: 5px 16px;
+  margin: 0;
+  text-align: center;
 }
 
 /* ── Step 2 Luxury Scanner Centered Architecture ───────────────────────── */
@@ -5943,35 +5949,52 @@ body.style-explorer .view-explorer-secondary {
   letter-spacing: 1px;
 }
 
-/* Step Card Header Bar with Close/Home Button */
+/* Step Card Header Bar with Close/Home Button (100% Symmetric 3-Column Grid) */
 .step-card-header-bar {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  justify-content: space-between;
   width: 100%;
-  margin-bottom: 16px;
-  gap: 10px;
+  margin-bottom: 20px;
+  gap: 12px;
+}
+
+.step-card-header-bar .btn-back-home-pill {
+  justify-self: start;
+}
+
+.step-card-header-bar .step-badge-indicator {
+  justify-self: center;
+  margin: 0 auto;
+}
+
+.step-card-header-bar .step-close-btn {
+  justify-self: end;
 }
 
 @media (max-width: 640px) {
   .step-card-header-bar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    grid-template-columns: auto 1fr auto;
     gap: 8px;
+    margin-bottom: 14px;
   }
   .step-badge-indicator {
     font-size: 0.68rem !important;
     letter-spacing: 0.08em !important;
-    padding: 4px 10px !important;
+    padding: 4px 8px !important;
     white-space: nowrap !important;
     overflow: hidden !important;
     text-overflow: ellipsis !important;
-    max-width: 180px !important;
+    max-width: 100% !important;
+    justify-self: center !important;
   }
   .btn-back-home-pill {
     padding: 5px 10px !important;
     font-size: 0.72rem !important;
+    justify-self: start !important;
+  }
+  .step-card-header-bar .step-close-btn {
+    justify-self: end !important;
   }
   .user-profile-bar {
     top: 8px !important;
