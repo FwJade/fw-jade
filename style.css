@@ -3952,6 +3952,52 @@ body.style-explorer .view-explorer-secondary {
   line-height: 1.4;
 }
 
+.luxury-modal-overlay {
+  position: fixed !important;
+  inset: 0 !important;
+  background: rgba(0, 0, 0, 0.88) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  z-index: 999999 !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  animation: fadeInModal 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes fadeInModal {
+  from { opacity: 0; transform: scale(0.96); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.modal-close-icon {
+  position: absolute;
+  top: 16px;
+  right: 18px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: #D1D5DB;
+  font-size: 1.5rem;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  transition: all 0.2s ease;
+  z-index: 2;
+}
+
+.modal-close-icon:hover {
+  background: rgba(239, 68, 68, 0.25);
+  border-color: #EF4444;
+  color: #FFFFFF;
+  transform: scale(1.1);
+}
+
 .companion-qr-modal-card {
   max-width: 440px;
   width: 92%;
@@ -3962,6 +4008,7 @@ body.style-explorer .view-explorer-secondary {
   text-align: center;
   box-shadow: 0 25px 70px rgba(0, 0, 0, 0.9), 0 0 30px rgba(43, 224, 133, 0.15);
   position: relative;
+  z-index: 1;
 }
 
 .companion-badge-pill {
