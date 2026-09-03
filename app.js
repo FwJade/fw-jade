@@ -1383,41 +1383,47 @@ function drawScannerHudAnimation() {
 
     // Dynamic Reticle Ring Color based on real verified face state
     const ringColor = isHumanFaceVerified 
-      ? 'rgba(16, 185, 129, 0.9)' 
-      : 'rgba(239, 68, 68, 0.75)';
+      ? 'rgba(16, 185, 129, 0.95)' 
+      : 'rgba(239, 68, 68, 0.78)';
+
+    // Anthropometric Biometric Oval Reticle (Human Cranial Proportion ~1.36:1)
+    const ovalRx = Math.min(canvas.width * 0.33, 68);
+    const ovalRy = Math.min(canvas.height * 0.38, 102);
 
     ctx.strokeStyle = ringColor;
     ctx.lineWidth = isHumanFaceVerified ? 2.5 : 1.5;
     ctx.beginPath();
-    ctx.arc(cx, cy, 75, 0, Math.PI * 2);
+    ctx.ellipse(cx, cy, ovalRx, ovalRy, 0, 0, Math.PI * 2);
     ctx.stroke();
 
-    // 4 Corner Brackets
-    const brLen = 14;
+    // 4 Corner Brackets around Anthropometric Oval
+    const brLen = 16;
+    const boxW = ovalRx + 12;
+    const boxH = ovalRy + 12;
     ctx.lineWidth = 2;
     // Top-Left
     ctx.beginPath();
-    ctx.moveTo(cx - 60, cy - 60 + brLen);
-    ctx.lineTo(cx - 60, cy - 60);
-    ctx.lineTo(cx - 60 + brLen, cy - 60);
+    ctx.moveTo(cx - boxW, cy - boxH + brLen);
+    ctx.lineTo(cx - boxW, cy - boxH);
+    ctx.lineTo(cx - boxW + brLen, cy - boxH);
     ctx.stroke();
     // Top-Right
     ctx.beginPath();
-    ctx.moveTo(cx + 60 - brLen, cy - 60);
-    ctx.lineTo(cx + 60, cy - 60);
-    ctx.lineTo(cx + 60, cy - 60 + brLen);
+    ctx.moveTo(cx + boxW - brLen, cy - boxH);
+    ctx.lineTo(cx + boxW, cy - boxH);
+    ctx.lineTo(cx + boxW, cy - boxH + brLen);
     ctx.stroke();
     // Bottom-Left
     ctx.beginPath();
-    ctx.moveTo(cx - 60, cy + 60 - brLen);
-    ctx.lineTo(cx - 60, cy + 60);
-    ctx.lineTo(cx - 60 + brLen, cy + 60);
+    ctx.moveTo(cx - boxW, cy + boxH - brLen);
+    ctx.lineTo(cx - boxW, cy + boxH);
+    ctx.lineTo(cx - boxW + brLen, cy + boxH);
     ctx.stroke();
     // Bottom-Right
     ctx.beginPath();
-    ctx.moveTo(cx + 60 - brLen, cy + 60);
-    ctx.lineTo(cx + 60, cy + 60);
-    ctx.lineTo(cx + 60, cy + 60 - brLen);
+    ctx.moveTo(cx + boxW - brLen, cy + boxH);
+    ctx.lineTo(cx + boxW, cy + boxH);
+    ctx.lineTo(cx + boxW, cy + boxH - brLen);
     ctx.stroke();
 
     // Draw biometric 12-palaces landmark constellation when human face verified

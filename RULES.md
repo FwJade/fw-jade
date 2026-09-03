@@ -15,3 +15,8 @@ Setiap pembahasan batu harus mampu menyajikan sintesis dari berbagai pilar:
 ## 3. Disclaimers & Ethics
 * Penjelasan manfaat kesehatan dilengkapi catatan bahwa batu adalah terapi pendukung komplementer/tradisional, bukan pengganti medis klinis.
 * Penjelasan mistis dan feng shui disajikan secara edukatif, budaya, dan filosofis tanpa menyebarkan dogma fanatik negatif.
+
+## 4. Auto-Deploy & Continuous Sync Policy (Mandatory)
+* **Setiap ada perubahan kode atau fitur**, agent **WAJIB langsung melakukan commit, push ke repository GitHub, dan menjalankan deployment aktif** (Cloudflare Pages / Wrangler) agar pengguna dapat langsung melakukan pengujian live secara instan.
+* Tidak boleh menunda deployment setelah tugas selesai dikerjakan.
+

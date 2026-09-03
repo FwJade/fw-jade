@@ -111,3 +111,16 @@
        * **`Richkeyrick AI`**: Conversational Oracle & Knowledge Base Engine (`/api/chat`).
        * **`SkyNET AI Matrix`**: Haute Inpainting & Visual Manifestation Engine (`/api/image`).
        * **`HAINEO AI VISION`**: Biometric Face Mesh 468 & Mian Xiang Physiognomy Analyzer (`/api/vision`).
+* **2026-09-03 (Bagian 8):** **Anthropometric Oval Biometric Frame, Mobile Footer Restoration & Dofollow Pilar Backlink**:
+  1. **Redesign Frame Kamera Oval Antropometri (Rasio Kranial ~1.36:1)**:
+     * Mengganti frame kamera bulat lingkaran (1:1) dengan **Anthropometric Biometric Oval Frame** (220px &times; 300px di Desktop, 185px &times; 255px di Mobile dengan `border-radius: 110px / 150px`).
+     * Memperbarui visualisasi canvas reticle biometrik dari `ctx.arc()` (lingkaran) menjadi `ctx.ellipse()` (elips antropometrik wajah manusia), lengkap dengan 4 kurung siku sudut (*corner brackets*) yang presisi membingkai proporsi kranial wajah tanpa memotong dagu atau dahi.
+     * Menyelaraskan teks petunjuk menjadi *"Arahkan wajah ke bingkai oval"*.
+  2. **Restorasi Footer di Mobile (Compact Luxury Strip)**:
+     * Menghapus aturan `display: none !important` pada `.grand-luxury-footer` di layar mobile, menggantikannya dengan format *Compact Luxury Strip* yang simetris, rapi, dan tidak menabrak elemen UI lainnya.
+  3. **Aktivasi Backlink Dofollow Pilar Web `www.richkeyrick.com`**:
+     * Memperbarui trademark di seluruh halaman (`index.html`, sidebar drawer, `about.html`, `contact.html`, `terms.html`, `privacy.html`, `security.html`, `refund.html`, `cookies.html`, `disclaimer.html`):
+       `© 2026 FW JADE (fwjade.com). Seluruh Hak Cipta Dilindungi. Engineered by Richkeyrick.`
+     * Menautkan nama **`Richkeyrick`** langsung ke `https://www.richkeyrick.com` dengan atribut `target="_blank" rel="noopener"` (**Dofollow** tanpa `nofollow`) untuk mengalirkan otoritas SEO secara optimal sebagai web pilar terhubung.
+  4. **Penyusunan Peta Standar Kepercayaan Biometrik Resmi**:
+     * Menyusun arsitektur kepatuhan regulasi Indonesia (Bank Indonesia PADG BI No. 24/7/PADG/2022, UU PDP No. 27/2022 Pasal 4 & 12, PSrE Kominfo) dan standar biometrik global (ISO/IEC 30107-3 PAD iBeta Level 1 & 2, ISO/IEC 19794-5, ICAO 9303, FIDO Alliance).
