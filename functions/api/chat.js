@@ -213,7 +213,7 @@ export async function onRequestPost(context) {
 
     return new Response(JSON.stringify({
       success: true,
-      model: usedModel,
+      model: 'Richkeyrick AI (Conversational Oracle v3.3)',
       reply: replyText
     }), {
       status: 200,

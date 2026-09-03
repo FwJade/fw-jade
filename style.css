@@ -5997,14 +5997,12 @@ body.style-explorer .view-explorer-secondary {
     justify-self: end !important;
   }
   .user-profile-bar {
-    top: 8px !important;
-    right: 8px !important;
-    max-width: 145px !important;
-    padding: 3px 8px 3px 4px !important;
+    max-width: 120px !important;
+    padding: 3px 6px 3px 4px !important;
   }
   .user-bar-name {
-    max-width: 75px !important;
-    font-size: 0.65rem !important;
+    max-width: 55px !important;
+    font-size: 0.7rem !important;
   }
 }
 
@@ -7199,37 +7197,39 @@ body.style-explorer .view-explorer-secondary {
    Added for: Real Face Analysis, Before/After, Auth Persist
    ========================================================== */
 
-/* --- Floating User Profile Bar (top-right, shown after login) --- */
+/* --- Integrated User Profile Bar (Docked inside Top Nav Controls) --- */
 .user-profile-bar {
-  position: fixed;
-  top: 12px;
-  right: 14px;
-  z-index: 9999;
-  display: flex;
+  display: none;
   align-items: center;
   gap: 8px;
-  padding: 5px 10px 5px 6px;
-  background: rgba(10, 14, 20, 0.88);
-  border: 1px solid rgba(43, 224, 133, 0.25);
-  border-radius: 30px;
+  padding: 4px 12px 4px 6px;
+  background: rgba(8, 20, 16, 0.75);
+  border: 1px solid rgba(216, 195, 144, 0.35);
+  border-radius: var(--radius-full);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  box-shadow: 0 4px 18px rgba(0,0,0,0.45), 0 0 12px rgba(43,224,133,0.08);
-  opacity: 0;
-  pointer-events: none;
-  transform: translateY(-8px);
-  transition: opacity 0.35s ease, transform 0.35s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4), 0 0 10px rgba(43, 224, 133, 0.08);
+  cursor: pointer;
+  transition: all 0.25s ease;
 }
 .user-profile-bar.visible {
-  opacity: 1;
-  pointer-events: auto;
-  transform: translateY(0);
+  display: inline-flex;
+}
+.user-profile-bar:hover {
+  border-color: rgba(216, 195, 144, 0.6);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5), 0 0 15px rgba(43, 224, 133, 0.2);
+}
+.user-bar-click-area {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
 }
 .user-bar-avatar {
   width: 26px;
   height: 26px;
   border-radius: 50%;
-  border: 1.5px solid rgba(43, 224, 133, 0.6);
+  border: 1.5px solid rgba(216, 195, 144, 0.6);
   object-fit: cover;
   flex-shrink: 0;
 }
@@ -7243,11 +7243,12 @@ body.style-explorer .view-explorer-secondary {
   justify-content: center;
 }
 .user-bar-name {
-  font-family: var(--font-serif, 'Cormorant Garamond', serif);
-  font-size: 0.72rem;
-  color: rgba(255,255,255,0.92);
-  letter-spacing: 0.04em;
-  max-width: 130px;
+  font-family: var(--font-poppins, sans-serif);
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--text-soft);
+  letter-spacing: 0.02em;
+  max-width: 120px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -7255,14 +7256,34 @@ body.style-explorer .view-explorer-secondary {
 .user-bar-logout {
   background: none;
   border: none;
-  color: rgba(255,255,255,0.4);
+  color: var(--text-dim);
   cursor: pointer;
   padding: 2px 4px;
-  font-size: 0.72rem;
+  font-size: 0.75rem;
   transition: color 0.2s;
   line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 .user-bar-logout:hover { color: #ff6b6b; }
+
+/* Light theme integration */
+body.theme-imperial-light .user-profile-bar {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(5, 150, 105, 0.35);
+  box-shadow: 0 4px 15px rgba(5, 150, 105, 0.12);
+}
+body.theme-imperial-light .user-bar-name {
+  color: #064E3B;
+  font-weight: 600;
+}
+body.theme-imperial-light .user-bar-logout {
+  color: rgba(6, 78, 59, 0.6);
+}
+body.theme-imperial-light .user-bar-logout:hover {
+  color: #DC2626;
+}
 
 /* --- Before / After Face Comparison Panel --- */
 .face-compare-panel {

@@ -97,10 +97,17 @@
      * Menghapus thumbnail mini ganda di bawah tombol aksi untuk menjaga estetika tata letak kartu tetap bersih, simetris, dan proporsional.
   3. **Penyelesaian Kompatibilitas CSS (`background-clip`)**:
      * Menambahkan properti standar `background-clip: text` pada styling teks judul.
-
-
-
-
-
-
-
+* **2026-09-03 (Bagian 7):** **Unified Luxury Navbar, Persistent DOB Auto-Fill & Standar Rebranding 3 AI Resmi**:
+  1. **Integrasi Profil Navigasi Terpadu (*Unified 3-Zone Luxury Navbar*)**:
+     * Menghapus floating badge profil terisolasi yang sebelumnya menempel di pojok monitor (`position: fixed; top: 12px; right: 14px;`).
+     * Mengintegrasikan elemen profil `#userProfileBar` langsung ke dalam cluster utilitas kanan `.nav-controls` di dalam bar kapsul navigasi utama.
+     * Mengganti tombol generik `btnUserAccountNav` ("Akun") secara dinamis saat terotentikasi menjadi avatar Google/inisial + nama depan + tombol logout minimalis, menjaga proporsi simetris dan konsisten di seluruh ukuran layar.
+  2. **Persistensi State & Auto-Fill Tanggal Lahir (Bazi/Shio/5 Elemen)**:
+     * Menyimpan `dobDay`, `dobMonth`, `dobYear`, `dob`, dan objek `bazi` ke dalam `localStorage` (`fw_jade_user`).
+     * Mengotomatisasi pengisian dropdown Hari, Bulan, Tahun (`#inputDobDay`, `#inputDobMonth`, `#inputDobYear`) serta langsung memicu preview live badge Zodiak, Shio, dan Elemen Bazi saat user kembali atau membuka formulir (*Zero Re-entry*).
+  3. **Rebranding Penuh 3 Proprietary AI Engine (Kerahasiaan Perusahaan 100%)**:
+     * Mengeliminasi seluruh nama vendor komersial eksternal dari antarmuka publik, penafian, dan payload API response.
+     * Mengukuhkan 3 nama proprietary AI resmi:
+       * **`Richkeyrick AI`**: Conversational Oracle & Knowledge Base Engine (`/api/chat`).
+       * **`SkyNET AI Matrix`**: Haute Inpainting & Visual Manifestation Engine (`/api/image`).
+       * **`HAINEO AI VISION`**: Biometric Face Mesh 468 & Mian Xiang Physiognomy Analyzer (`/api/vision`).

@@ -139,7 +139,7 @@ export async function onRequestPost(context) {
     return new Response(JSON.stringify({
       success: !!generatedImageUrl,
       imageUrl: generatedImageUrl,
-      engine: engineUsed,
+      engine: 'SkyNET AI Matrix (Haute Inpainting Engine)',
       gender: gender
     }), {
       status: 200,

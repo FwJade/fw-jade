@@ -164,9 +164,6 @@
   <link rel="stylesheet" href="style.css?v=39">
 </head>
 <body class="theme-quiet-luxury">
-  <!-- User Profile Bar (shown after login, persisted across sessions) -->
-  <div id="userProfileBar" class="user-profile-bar"></div>
-
   <!-- 0. Fullscreen Immersive Raw Crystal Backdrop -->
   <div class="fullscreen-crystal-backdrop"></div>
 
@@ -199,10 +196,6 @@
         </a>
       </div>
       <div class="nav-controls">
-        <!-- User Account / Data Panel Button -->
-        <button class="nav-pill-btn" id="btnUserAccountNav" onclick="openUserAccountModal()" title="Profil & Data Akun Saya" aria-label="Buka Profil dan Data Akun">
-          <i class="fa-solid fa-user-circle text-emerald"></i> <span id="navAccountLabel" class="desk-only-text">Akun</span>
-        </button>
         <!-- Dual Theme Toggle (Terang / Gelap - Sangat Ramah Orang Tua) -->
         <button class="nav-pill-btn nav-theme-toggle" id="themeToggleBtn" onclick="toggleTheme()" title="Ganti Tema (Terang / Gelap)" aria-label="Ganti Tema Terang atau Gelap">
           <i class="fa-solid fa-sun text-gold" id="themeIcon"></i>
@@ -218,6 +211,11 @@
           <span class="lang-flag" id="langFlag">🇮🇩</span>
           <span class="lang-text" id="langText">ID</span>
         </button>
+        <!-- User Account / Profile Badge (Integrated within Nav Controls) -->
+        <button class="nav-pill-btn" id="btnUserAccountNav" onclick="openUserAccountModal()" title="Profil & Data Akun Saya" aria-label="Buka Profil dan Data Akun">
+          <i class="fa-solid fa-user-circle text-emerald"></i> <span id="navAccountLabel" class="desk-only-text">Akun</span>
+        </button>
+        <div id="userProfileBar" class="user-profile-bar" style="display: none;"></div>
         <button class="nav-pill-btn btn-mobile-menu-trigger" id="btnOpenMobileDrawer" onclick="openSidebarDrawer()" aria-label="Buka Menu Navigasi &amp; Protokol Legal" title="Menu &amp; Legal Trust">
           <i class="fa-solid fa-bars-staggered"></i>
         </button>
@@ -611,7 +609,7 @@
               </button>
             </div>
 
-            <p class="scan-time-note"><i class="fa-solid fa-shield-halved"></i> Biometrik diproses aman &amp; privat via Cloudflare AI (10–15 detik)</p>
+            <p class="scan-time-note"><i class="fa-solid fa-shield-halved text-emerald"></i> Biometrik diproses aman &amp; privat via HAINEO AI VISION (10–15 detik)</p>
           </div>
         </div>
       </section>

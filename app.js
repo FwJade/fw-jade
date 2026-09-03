@@ -360,21 +360,25 @@ function applyGoogleProfile(payload, rawCredential = null) {
 
     // Persist to localStorage so session survives refresh
     try {
+      const existingUser = JSON.parse(localStorage.getItem('fw_jade_user') || '{}');
       localStorage.setItem('fw_jade_user', JSON.stringify({
+        ...existingUser,
         name: name,
         email: email,
         picture: picture,
         isGoogleAuth: true,
         isRegistered: true,
+        dobDay: existingUser.dobDay || AppState.user.dobDay || null,
+        dobMonth: existingUser.dobMonth || AppState.user.dobMonth || null,
+        dobYear: existingUser.dobYear || AppState.user.dobYear || null,
+        dob: existingUser.dob || AppState.user.dob || null,
+        bazi: existingUser.bazi || AppState.user.bazi || null,
         savedAt: Date.now()
       }));
     } catch (lsErr) { /* storage full or private browsing */ }
 
     // Auto-fill Input fields if currently visible
-    const inputName = document.getElementById('inputUserName');
-    const inputEmail = document.getElementById('inputUserEmail');
-    if (inputName) inputName.value = name;
-    if (inputEmail) inputEmail.value = email || '';
+    populateIdentityFormData();
 
     // Update profile UI bar at top right corner
     updateUserProfileUI();
@@ -521,10 +525,19 @@ function restoreUserSession() {
     AppState.user.name = userData.name || AppState.user.name;
     AppState.user.email = userData.email || null;
     AppState.user.picture = userData.picture || null;
+    AppState.user.dobDay = userData.dobDay || null;
+    AppState.user.dobMonth = userData.dobMonth || null;
+    AppState.user.dobYear = userData.dobYear || null;
+    AppState.user.dob = userData.dob || null;
+    AppState.user.bazi = userData.bazi || null;
+    if (userData.bazi && userData.bazi.rawElement) {
+      AppState.user.metrics.element = userData.bazi.rawElement;
+    }
     AppState.user.isGoogleAuth = userData.isGoogleAuth || false;
     AppState.user.isRegistered = userData.isRegistered || false;
     updateUserProfileUI();
     updateFormLoginState();
+    populateIdentityFormData();
     console.log('[AURA AI] Session restored for:', userData.name);
   } catch (e) {
     console.warn('[AURA AI] Could not restore session:', e);
@@ -532,36 +545,42 @@ function restoreUserSession() {
 }
 
 /**
- * Updates the floating user profile bar at the top of the page.
- * Shows name + avatar if logged in, and clicking it opens the User Data Panel.
+ * Updates the integrated user profile bar inside the top navigation.
+ * Seamlessly transitions between generic Akun button and verified avatar badge.
  */
 function updateUserProfileUI() {
   const bar = document.getElementById('userProfileBar');
+  const btnUserAccountNav = document.getElementById('btnUserAccountNav');
   const navAccountLabel = document.getElementById('navAccountLabel');
   const name = AppState.user.name;
   const picture = AppState.user.picture;
-  const isAuth = AppState.user.isGoogleAuth || AppState.user.isRegistered;
+  const isAuth = AppState.user.isGoogleAuth || (AppState.user.isRegistered && name && name !== 'Kolektor Yang Terhormat');
 
   if (navAccountLabel) {
     navAccountLabel.textContent = (isAuth && name && name !== 'Kolektor Yang Terhormat') ? name.split(' ')[0] : 'Akun';
   }
 
-  if (!bar) return;
-  if (isAuth && name) {
-    const initial = name.charAt(0).toUpperCase();
-    const avatarHtml = picture
-      ? `<img src="${picture}" alt="${name}" class="user-bar-avatar" referrerpolicy="no-referrer" />`
-      : `<div class="user-bar-avatar user-bar-initial">${initial}</div>`;
-    bar.innerHTML = `
-      <div class="user-bar-click-area" onclick="openUserAccountModal()" title="Buka Panel Data Akun & Aura">
-        ${avatarHtml}
-        <span class="user-bar-name">${name}</span>
-      </div>
-      <button class="user-bar-logout" onclick="event.stopPropagation(); logoutUser();" title="Keluar"><i class="fa-solid fa-right-from-bracket"></i></button>
-    `;
-    bar.classList.add('visible');
-  } else {
-    bar.classList.remove('visible');
+  if (bar && btnUserAccountNav) {
+    if (isAuth && name && name !== 'Kolektor Yang Terhormat') {
+      const initial = name.charAt(0).toUpperCase();
+      const avatarHtml = picture
+        ? `<img src="${picture}" alt="${name}" class="user-bar-avatar" referrerpolicy="no-referrer" />`
+        : `<div class="user-bar-avatar user-bar-initial">${initial}</div>`;
+      bar.innerHTML = `
+        <div class="user-bar-click-area" onclick="openUserAccountModal()" title="Buka Panel Profil & Data Aura">
+          ${avatarHtml}
+          <span class="user-bar-name">${name.split(' ')[0]}</span>
+        </div>
+        <button class="user-bar-logout" onclick="event.stopPropagation(); logoutUser();" title="Keluar Akun"><i class="fa-solid fa-right-from-bracket"></i></button>
+      `;
+      bar.style.display = 'inline-flex';
+      bar.classList.add('visible');
+      btnUserAccountNav.style.display = 'none';
+    } else {
+      bar.style.display = 'none';
+      bar.classList.remove('visible');
+      btnUserAccountNav.style.display = 'inline-flex';
+    }
   }
 }
 
@@ -676,6 +695,11 @@ function logoutUser() {
   AppState.user.name = 'Kolektor Yang Terhormat';
   AppState.user.email = null;
   AppState.user.picture = null;
+  AppState.user.dobDay = null;
+  AppState.user.dobMonth = null;
+  AppState.user.dobYear = null;
+  AppState.user.dob = null;
+  AppState.user.bazi = null;
   AppState.user.isGoogleAuth = false;
   AppState.user.isRegistered = false;
 
@@ -683,9 +707,18 @@ function logoutUser() {
   const inputName = document.getElementById('inputUserName');
   const inputEmail = document.getElementById('inputUserEmail');
   const inputPhone = document.getElementById('inputUserPhone');
+  const inputDobDay = document.getElementById('inputDobDay');
+  const inputDobMonth = document.getElementById('inputDobMonth');
+  const inputDobYear = document.getElementById('inputDobYear');
+  const baziBadge = document.getElementById('baziLiveBadge');
+
   if (inputName) inputName.value = '';
   if (inputEmail) inputEmail.value = '';
   if (inputPhone) inputPhone.value = '';
+  if (inputDobDay) inputDobDay.value = '';
+  if (inputDobMonth) inputDobMonth.value = '';
+  if (inputDobYear) inputDobYear.value = '';
+  if (baziBadge) baziBadge.style.display = 'none';
 
   // Show full-width Google login button again & update UI
   updateFormLoginState();
@@ -768,8 +801,21 @@ function initIdentityFormSelectors() {
   // Listeners for live Bazi badge update
   ['inputDobDay', 'inputDobMonth', 'inputDobYear'].forEach(id => {
     const el = document.getElementById(id);
-    if (el) el.addEventListener('change', calculateLiveBazi);
+    if (el) el.addEventListener('change', () => {
+      const bazi = calculateLiveBazi();
+      if (bazi) {
+        AppState.user.dobDay = document.getElementById('inputDobDay')?.value;
+        AppState.user.dobMonth = document.getElementById('inputDobMonth')?.value;
+        AppState.user.dobYear = document.getElementById('inputDobYear')?.value;
+        AppState.user.dob = bazi.dobStr;
+        AppState.user.bazi = bazi;
+        AppState.user.metrics.element = bazi.rawElement;
+      }
+    });
   });
+
+  // Auto-fill from stored profile if available
+  populateIdentityFormData();
 }
 
 function calculateLiveBazi() {
@@ -828,6 +874,9 @@ function calculateLiveBazi() {
 async function submitIdentityForm() {
   const name = document.getElementById('inputUserName')?.value.trim();
   const email = document.getElementById('inputUserEmail')?.value.trim();
+  const d = document.getElementById('inputDobDay')?.value;
+  const m = document.getElementById('inputDobMonth')?.value;
+  const y = document.getElementById('inputDobYear')?.value;
   const bazi = calculateLiveBazi();
 
   if (!name || !bazi) {
@@ -839,9 +888,30 @@ async function submitIdentityForm() {
   AppState.user.name = name;
   AppState.user.phone = AppState.user.phone || '-';
   AppState.user.email = email || '-';
+  AppState.user.dobDay = d;
+  AppState.user.dobMonth = m;
+  AppState.user.dobYear = y;
   AppState.user.dob = bazi.dobStr;
   AppState.user.bazi = bazi;
   AppState.user.metrics.element = bazi.rawElement;
+  AppState.user.isRegistered = true;
+
+  // Persist full profile to localStorage
+  try {
+    const existing = JSON.parse(localStorage.getItem('fw_jade_user') || '{}');
+    localStorage.setItem('fw_jade_user', JSON.stringify({
+      ...existing,
+      name: name,
+      email: email || existing.email || null,
+      dobDay: d,
+      dobMonth: m,
+      dobYear: y,
+      dob: bazi.dobStr,
+      bazi: bazi,
+      isRegistered: true,
+      savedAt: Date.now()
+    }));
+  } catch (e) {}
 
   // Post to Cloudflare Leads Endpoint asynchronously
   try {
@@ -947,31 +1017,57 @@ function startScannerFlow() {
 window.startScannerFlow = startScannerFlow;
 
 /**
- * If a user session is already active (from localStorage restore or Google auth),
- * pre-fill the identity form and hide the Google sign-in block to eliminate redundancy.
+ * Populates form fields from AppState or stored user cache and triggers live calculation
  */
-function prefillFormIfLoggedIn() {
+function populateIdentityFormData() {
   const userName = AppState.user.name;
   const userEmail = AppState.user.email;
+  const userDobDay = AppState.user.dobDay;
+  const userDobMonth = AppState.user.dobMonth;
+  const userDobYear = AppState.user.dobYear;
 
-  // Pre-fill text fields regardless of login state if data available
   const inputName = document.getElementById('inputUserName');
   const inputEmail = document.getElementById('inputUserEmail');
   const inputPhone = document.getElementById('inputUserPhone');
+  const inputDobDay = document.getElementById('inputDobDay');
+  const inputDobMonth = document.getElementById('inputDobMonth');
+  const inputDobYear = document.getElementById('inputDobYear');
 
   if (inputName && userName && userName !== 'Kolektor Yang Terhormat') {
     inputName.value = userName;
   }
-  if (inputEmail && userEmail) {
+  if (inputEmail && userEmail && userEmail !== '-') {
     inputEmail.value = userEmail;
   }
-  // Pre-fill phone from AppState if available
-  if (inputPhone && AppState.user.phone) {
+  if (inputPhone && AppState.user.phone && AppState.user.phone !== '-') {
     inputPhone.value = AppState.user.phone;
   }
 
-  // Hide login card if user is already authenticated (prevents duplicate names/session cards)
+  if (inputDobDay && userDobDay) {
+    inputDobDay.value = userDobDay;
+  }
+  if (inputDobMonth && userDobMonth) {
+    inputDobMonth.value = userDobMonth;
+  }
+  if (inputDobYear && userDobYear) {
+    inputDobYear.value = userDobYear;
+  }
+
+  // If day, month, year are populated, calculate live Bazi immediately
+  if (inputDobDay && inputDobDay.value && inputDobMonth && inputDobMonth.value && inputDobYear && inputDobYear.value) {
+    calculateLiveBazi();
+  }
+
   updateFormLoginState();
+}
+window.populateIdentityFormData = populateIdentityFormData;
+
+/**
+ * If a user session is already active (from localStorage restore or Google auth),
+ * pre-fill the identity form and hide the Google sign-in block to eliminate redundancy.
+ */
+function prefillFormIfLoggedIn() {
+  populateIdentityFormData();
 }
 window.prefillFormIfLoggedIn = prefillFormIfLoggedIn;
 

@@ -218,7 +218,7 @@ Berikan output HANYA format JSON valid berikut (tanpa markdown backtick atau pen
 
     return new Response(JSON.stringify({
       success: true,
-      model: usedModel,
+      model: 'HAINEO AI VISION v4.2',
       analysis: visionResult
     }), {
       status: 200,
