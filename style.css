@@ -5613,17 +5613,96 @@ body.style-explorer .view-explorer-secondary {
   }
 }
 
-/* ── 27. GOOGLE IDENTITY SERVICES QUICK AUTH CARD ─────────────────────────── */
+/* ── 27. GOOGLE IDENTITY SERVICES & FULL-WIDTH LUXURY AUTH ─────────────────── */
+.google-auth-section,
 .google-quick-auth-card {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: stretch;
   gap: 12px;
-  background: rgba(0, 0, 0, 0.4);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: var(--radius-lg);
-  padding: 16px;
-  margin-bottom: 8px;
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin-bottom: 6px;
+  width: 100%;
+}
+
+.btn-google-luxury-full {
+  width: 100%;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: var(--radius-md);
+  padding: 12px 20px;
+  color: #ffffff;
+  font-family: var(--font-body, 'Inter', sans-serif);
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  box-sizing: border-box;
+}
+
+.btn-google-luxury-full:hover {
+  background: rgba(255, 255, 255, 0.09);
+  border-color: rgba(43, 224, 133, 0.6);
+  box-shadow: 0 6px 20px rgba(43, 224, 133, 0.2);
+  transform: translateY(-1px);
+}
+
+.btn-google-luxury-full:active {
+  transform: scale(0.99);
+}
+
+.google-svg-icon {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+}
+
+.btn-google-text {
+  flex-shrink: 0;
+}
+
+.btn-google-badge {
+  font-size: 0.68rem;
+  padding: 2px 8px;
+  border-radius: 12px;
+  background: rgba(43, 224, 133, 0.12);
+  border: 1px solid rgba(43, 224, 133, 0.35);
+  color: #2BE085;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-left: 4px;
+}
+
+.form-label-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.google-verified-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #2BE085;
+  background: rgba(43, 224, 133, 0.1);
+  border: 1px solid rgba(43, 224, 133, 0.3);
+  border-radius: 12px;
+  padding: 2px 8px;
+  letter-spacing: 0.02em;
+  animation: fadeIn 0.3s ease;
 }
 
 .g_id_signin {
@@ -5637,7 +5716,7 @@ body.style-explorer .view-explorer-secondary {
   text-align: center;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   line-height: 0.1em;
-  margin: 10px 0 4px;
+  margin: 12px 0 6px;
 }
 
 .divider-or-text span {
@@ -7528,11 +7607,38 @@ body.theme-imperial-light .step-close-btn:hover {
   color: #DC2626 !important;
 }
 
-/* Active Session Card in Light Mode */
+/* Google Full-Width Luxury Auth in Light Mode */
+body.theme-imperial-light .google-auth-section,
 body.theme-imperial-light .google-quick-auth-card {
-  background: #F9F7F2 !important;
-  border: 1px solid rgba(216, 195, 144, 0.45) !important;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03) !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+
+body.theme-imperial-light .btn-google-luxury-full {
+  background: #FFFFFF !important;
+  border: 1.5px solid rgba(216, 195, 144, 0.65) !important;
+  color: #0A1C16 !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05) !important;
+}
+
+body.theme-imperial-light .btn-google-luxury-full:hover {
+  background: #FDFBF7 !important;
+  border-color: #059669 !important;
+  box-shadow: 0 6px 18px rgba(5, 150, 105, 0.15) !important;
+}
+
+body.theme-imperial-light .btn-google-badge {
+  background: rgba(5, 150, 105, 0.08) !important;
+  border-color: rgba(5, 150, 105, 0.25) !important;
+  color: #059669 !important;
+}
+
+body.theme-imperial-light .google-verified-badge {
+  color: #059669 !important;
+  background: rgba(5, 150, 105, 0.08) !important;
+  border-color: rgba(5, 150, 105, 0.25) !important;
 }
 
 body.theme-imperial-light .active-session-box {

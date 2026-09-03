@@ -35,6 +35,12 @@
   6. **Ikon Permata Celestial**: Menajamkan garis emas kerajaan kontras tinggi (`#8C6D23`) dan faset giok zamrud (`#059669`) pada SVG emblem permata mode terang.
   7. **Latar Belakang Kristal Rubi & Giok Mode Terang**: Pembuatan dan pengintegrasian aset visual ultra-luxury resolusi tinggi (`hero-bg-crystals-light.jpg` dan `hero-bg-crystals-light-mobile.jpg`) pada `.fullscreen-crystal-backdrop` tema terang.
   8. **Presisi Grid Bazi & Zodiak**: Standardisasi layout 3-kolom simetris pada `.bazi-badge-inner` untuk Zodiak, Shio, dan Elemen Bazi.
+* **2026-09-03:** **Redesign Google Full-Width Luxury Auth & Eliminasi Redundansi Sesi Akun Form**:
+  1. **Tombol Google 100% Full-Width**: Menggantikan tombol GIS kurus/slim (320px pill) dengan tombol Luxury Full-Width (`.btn-google-luxury-full`) yang presisi 100% mengisi kolom formulir (setara dengan field nama dan tombol analisa), berestetika kaca gelap berbingkai emas/zamrud halus pada dark mode dan porselen mutiara premium pada light mode.
+  2. **Eliminasi Bingkai Kotak Kosong**: Menghilangkan border dan background kaku `.google-quick-auth-card` yang sebelumnya membuat tombol terlihat mengambang canggung di tengah ruang kosong ~280px.
+  3. **Eliminasi Duplikasi Nama & Sesi Pasca-Login**: Ketika user sudah login via Google, seluruh blok login Google otomatis disembunyikan 100% (`display: none`). User tidak lagi disajikan kartu sesi besar dengan avatar dan username ganda di tengah formulir (karena identitas sudah terpampang di bar profil sudut kanan atas).
+  4. **Badge Verifikasi Google Halus**: Menambahkan indikator minimalis `✓ Google Terhubung` di sebelah label Nama Lengkap tanpa memakan ruang vertikal.
+  5. **Dukungan Dual-Protocol Google Identity**: Mengintegrasikan `google.accounts.oauth2.initTokenClient` untuk pemicu 1-klik pada custom button dengan tetap menjaga kompatibilitas Google One-Tap (`g_id_onload`) dan verifikasi sesi Master Admin `fwjade.com@gmail.com`.
 
 
 

@@ -191,6 +191,11 @@ document.addEventListener('DOMContentLoaded', () => {
   updateScienceAndAstroMetrics(GemstoneDatabase[0]);
   // Restore user session from localStorage (anti-logout on refresh)
   restoreUserSession();
+  initGoogleAuthClient();
+});
+
+window.addEventListener('load', () => {
+  initGoogleAuthClient();
 });
 
 // ==========================================
@@ -337,6 +342,73 @@ const speakWithAuroraWhisper = speakWithAuraWhisper; // Backward-compatible alia
 // ==========================================
 // 5. OFFICIAL GOOGLE IDENTITY SERVICES (GIS) SSO
 // ==========================================
+function applyGoogleProfile(payload, rawCredential = null) {
+  try {
+    if (!payload) return;
+    const email = payload.email || null;
+    const name = payload.name || (email ? email.split('@')[0] : 'Kolektor FW JADE');
+    const picture = payload.picture || null;
+
+    console.log('[AURA AI] Google Identity Verified:', { name, email });
+
+    // Save to App State
+    AppState.user.name = name;
+    AppState.user.email = email;
+    AppState.user.picture = picture;
+    AppState.user.isGoogleAuth = true;
+    AppState.user.isRegistered = true;
+
+    // Persist to localStorage so session survives refresh
+    try {
+      localStorage.setItem('fw_jade_user', JSON.stringify({
+        name: name,
+        email: email,
+        picture: picture,
+        isGoogleAuth: true,
+        isRegistered: true,
+        savedAt: Date.now()
+      }));
+    } catch (lsErr) { /* storage full or private browsing */ }
+
+    // Auto-fill Input fields if currently visible
+    const inputName = document.getElementById('inputUserName');
+    const inputEmail = document.getElementById('inputUserEmail');
+    if (inputName) inputName.value = name;
+    if (inputEmail) inputEmail.value = email || '';
+
+    // Update profile UI bar at top right corner
+    updateUserProfileUI();
+
+    // Update Step 1 Form state: Hides Google Login section completely
+    updateFormLoginState();
+
+    // Check if Master Admin — redirect to dedicated /admin page
+    if (email && email.toLowerCase() === 'fwjade.com@gmail.com') {
+      AppState.user.isAdmin = true;
+      try {
+        sessionStorage.setItem('fw_jade_admin_token', JSON.stringify({
+          email: email,
+          name: name,
+          picture: picture,
+          credential: rawCredential || 'gis_oauth_token',
+          grantedAt: Date.now()
+        }));
+      } catch (e) {}
+      playChimeReverb();
+      setTimeout(() => { window.location.href = '/admin.html'; }, 600);
+    } else {
+      // Sound & Notification for regular users
+      playChimeReverb();
+      if (typeof confetti === 'function') {
+        confetti({ particleCount: 40, spread: 60, origin: { y: 0.7 } });
+      }
+    }
+  } catch (err) {
+    console.error('Error applying Google profile:', err);
+  }
+}
+window.applyGoogleProfile = applyGoogleProfile;
+
 function handleGoogleCredentialResponse(response) {
   try {
     if (!response || !response.credential) return;
@@ -351,65 +423,86 @@ function handleGoogleCredentialResponse(response) {
         .join('')
     );
     const payload = JSON.parse(jsonPayload);
-
-    console.log('Google Identity Verified:', payload);
-
-    // Save to App State
-    AppState.user.name = payload.name;
-    AppState.user.email = payload.email;
-    AppState.user.picture = payload.picture;
-    AppState.user.isGoogleAuth = true;
-    AppState.user.isRegistered = true;
-
-    // ✅ Persist to localStorage so session survives refresh
-    try {
-      localStorage.setItem('fw_jade_user', JSON.stringify({
-        name: payload.name,
-        email: payload.email,
-        picture: payload.picture,
-        isGoogleAuth: true,
-        isRegistered: true,
-        savedAt: Date.now()
-      }));
-    } catch (lsErr) { /* storage full or private browsing */ }
-
-    // Auto-fill Input fields if currently visible
-    const inputName = document.getElementById('inputUserName');
-    const inputEmail = document.getElementById('inputUserEmail');
-    if (inputName) inputName.value = payload.name;
-    if (inputEmail) inputEmail.value = payload.email;
-
-    // Update profile UI bar
-    updateUserProfileUI();
-
-    // Check if Master Admin — redirect to dedicated /admin page
-    if (payload.email && payload.email.toLowerCase() === 'fwjade.com@gmail.com') {
-      AppState.user.isAdmin = true;
-      // Store admin session token for /admin.html to verify
-      try {
-        sessionStorage.setItem('fw_jade_admin_token', JSON.stringify({
-          email: payload.email,
-          name: payload.name,
-          picture: payload.picture,
-          credential: response.credential, // raw JWT for verification
-          grantedAt: Date.now()
-        }));
-      } catch (e) {}
-      playChimeReverb();
-      // Redirect to dedicated admin backend page
-      setTimeout(() => { window.location.href = '/admin.html'; }, 600);
-    } else {
-      // Sound & Notification for regular users
-      playChimeReverb();
-      if (typeof confetti === 'function') {
-        confetti({ particleCount: 40, spread: 60, origin: { y: 0.7 } });
-      }
-    }
+    applyGoogleProfile(payload, response.credential);
   } catch (err) {
     console.error('Error decoding Google credential:', err);
   }
 }
 window.handleGoogleCredentialResponse = handleGoogleCredentialResponse;
+
+let googleTokenClient = null;
+
+function initGoogleAuthClient() {
+  if (window.google && google.accounts && google.accounts.oauth2) {
+    try {
+      googleTokenClient = google.accounts.oauth2.initTokenClient({
+        client_id: '734583908123-ugbaqutk7pr713hmmbk03nnk1kij2hor.apps.googleusercontent.com',
+        scope: 'https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email openid',
+        callback: async (tokenResponse) => {
+          if (tokenResponse && tokenResponse.access_token) {
+            try {
+              const res = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+                headers: { Authorization: `Bearer ${tokenResponse.access_token}` }
+              });
+              const profile = await res.json();
+              applyGoogleProfile(profile, tokenResponse.access_token);
+            } catch (fetchErr) {
+              console.error('Error fetching Google userinfo:', fetchErr);
+            }
+          }
+        }
+      });
+    } catch (e) {
+      console.warn('[AURA AI] Google Token Client init note:', e);
+    }
+  }
+}
+
+function triggerGoogleSSO() {
+  if (!googleTokenClient && window.google && google.accounts && google.accounts.oauth2) {
+    initGoogleAuthClient();
+  }
+
+  if (googleTokenClient) {
+    googleTokenClient.requestAccessToken({ prompt: '' });
+  } else if (window.google && google.accounts && google.accounts.id) {
+    try {
+      google.accounts.id.prompt();
+    } catch (e) {
+      console.warn('Google One Tap prompt error:', e);
+    }
+  } else {
+    setTimeout(() => {
+      if (window.google && google.accounts && google.accounts.oauth2) {
+        initGoogleAuthClient();
+        if (googleTokenClient) googleTokenClient.requestAccessToken();
+      }
+    }, 400);
+  }
+}
+window.triggerGoogleSSO = triggerGoogleSSO;
+
+function updateFormLoginState() {
+  const isAuth = AppState.user.isGoogleAuth || (AppState.user.isRegistered && AppState.user.name && AppState.user.name !== 'Kolektor Yang Terhormat');
+  const googleSection = document.getElementById('googleAuthSection') || document.querySelector('.google-quick-auth-card');
+  const verifiedBadge = document.getElementById('googleVerifiedBadge');
+
+  if (googleSection) {
+    if (isAuth) {
+      // ✅ Sembunyikan sepenuhnya kolom login saat sudah login
+      // Menghilangkan duplikasi nama & kartu besar di tengah formulir
+      googleSection.style.display = 'none';
+    } else {
+      // Tampilkan tombol Google 100% full-width saat belum login
+      googleSection.style.display = 'flex';
+    }
+  }
+
+  if (verifiedBadge) {
+    verifiedBadge.style.display = isAuth ? 'inline-flex' : 'none';
+  }
+}
+window.updateFormLoginState = updateFormLoginState;
 
 /**
  * Restore user session from localStorage on page load.
@@ -431,6 +524,7 @@ function restoreUserSession() {
     AppState.user.isGoogleAuth = userData.isGoogleAuth || false;
     AppState.user.isRegistered = userData.isRegistered || false;
     updateUserProfileUI();
+    updateFormLoginState();
     console.log('[AURA AI] Session restored for:', userData.name);
   } catch (e) {
     console.warn('[AURA AI] Could not restore session:', e);
@@ -578,6 +672,7 @@ window.closeUserAccountModal = closeUserAccountModal;
  */
 function logoutUser() {
   localStorage.removeItem('fw_jade_user');
+  sessionStorage.removeItem('fw_jade_admin_token');
   AppState.user.name = 'Kolektor Yang Terhormat';
   AppState.user.email = null;
   AppState.user.picture = null;
@@ -592,52 +687,8 @@ function logoutUser() {
   if (inputEmail) inputEmail.value = '';
   if (inputPhone) inputPhone.value = '';
 
-  // Restore Google Quick Auth Card in Step 1 Form
-  const googleCard = document.querySelector('.google-quick-auth-card');
-  if (googleCard) {
-    googleCard.innerHTML = `
-      <div id="g_id_onload"
-           data-client_id="734583908123-ugbaqutk7pr713hmmbk03nnk1kij2hor.apps.googleusercontent.com"
-           data-context="signin"
-           data-ux_mode="popup"
-           data-callback="handleGoogleCredentialResponse"
-           data-auto_prompt="false">
-      </div>
-      <div class="g_id_signin"
-           data-type="standard"
-           data-shape="pill"
-           data-theme="${document.body.classList.contains('theme-imperial-light') ? 'outline' : 'filled_black'}"
-           data-text="continue_with"
-           data-size="large"
-           data-logo_alignment="left"
-           data-width="320">
-      </div>
-      <div class="divider-or-text"><span>atau isi manual di bawah</span></div>
-    `;
-    if (window.google && google.accounts && google.accounts.id) {
-      try {
-        google.accounts.id.initialize({
-          client_id: '734583908123-ugbaqutk7pr713hmmbk03nnk1kij2hor.apps.googleusercontent.com',
-          callback: handleGoogleCredentialResponse
-        });
-        const signinDiv = googleCard.querySelector('.g_id_signin');
-        if (signinDiv) {
-          google.accounts.id.renderButton(signinDiv, {
-            type: 'standard',
-            shape: 'pill',
-            theme: document.body.classList.contains('theme-imperial-light') ? 'outline' : 'filled_black',
-            text: 'continue_with',
-            size: 'large',
-            logo_alignment: 'left',
-            width: 320
-          });
-        }
-      } catch (e) {
-        console.warn('GIS re-render error:', e);
-      }
-    }
-  }
-
+  // Show full-width Google login button again & update UI
+  updateFormLoginState();
   updateUserProfileUI();
   playChimeReverb();
 }
@@ -889,14 +940,11 @@ window.startScannerFlow = startScannerFlow;
 
 /**
  * If a user session is already active (from localStorage restore or Google auth),
- * pre-fill the identity form and replace the Google sign-in button with a
- * "Selamat datang" card so the user doesn't feel like a stranger.
+ * pre-fill the identity form and hide the Google sign-in block to eliminate redundancy.
  */
 function prefillFormIfLoggedIn() {
-  const isLoggedIn = AppState.user.isGoogleAuth || AppState.user.isRegistered;
   const userName = AppState.user.name;
   const userEmail = AppState.user.email;
-  const userPicture = AppState.user.picture;
 
   // Pre-fill text fields regardless of login state if data available
   const inputName = document.getElementById('inputUserName');
@@ -914,30 +962,8 @@ function prefillFormIfLoggedIn() {
     inputPhone.value = AppState.user.phone;
   }
 
-  if (!isLoggedIn) return; // below logic only for authenticated users
-
-  // Hide the Google One-Tap button — user is already authenticated
-  const googleCard = document.querySelector('.google-quick-auth-card');
-  if (googleCard) {
-    const avatarHtml = userPicture
-      ? `<img src="${userPicture}" referrerpolicy="no-referrer" style="width:36px;height:36px;border-radius:50%;border:2px solid #2BE085;object-fit:cover;" alt="Avatar"/>`
-      : `<div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#2BE085,#059669);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:1rem;">${(userName||'U').charAt(0).toUpperCase()}</div>`;
-
-    googleCard.innerHTML = `
-      <div class="active-session-box">
-        ${avatarHtml}
-        <div class="active-session-info">
-          <div class="active-session-tag">Sesi Aktif</div>
-          <div class="active-session-name">${userName || 'Pengguna'}</div>
-          ${userEmail ? `<div class="active-session-email">${userEmail}</div>` : ''}
-        </div>
-        <i class="fa-solid fa-circle-check active-session-check"></i>
-      </div>
-      <div class="active-session-switch-wrap">
-        <span>Anda sudah masuk.</span> <button type="button" onclick="logoutUser()" class="btn-switch-account">Ganti akun</button>
-      </div>
-    `;
-  }
+  // Hide login card if user is already authenticated (prevents duplicate names/session cards)
+  updateFormLoginState();
 }
 window.prefillFormIfLoggedIn = prefillFormIfLoggedIn;
 
