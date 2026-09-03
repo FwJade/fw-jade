@@ -4430,16 +4430,63 @@ async function transmitCompanionScanData(sessionId, photoBase64) {
     });
     console.log('[COMPANION] Scan data transmitted successfully to PC session:', sessionId);
 
-    // Show celebratory banner on mobile
+    // Stop mobile camera stream
+    if (AppState.camera && AppState.camera.stream) {
+      try {
+        AppState.camera.stream.getTracks().forEach(t => t.stop());
+        AppState.camera.stream = null;
+      } catch (e) {}
+    }
+
+    // Show celebratory banner and guidance on mobile
     const banner = document.getElementById('companionActiveBanner');
     if (banner) {
-      banner.innerHTML = '<i class="fa-solid fa-circle-check text-emerald"></i> <span><strong>✅ Berhasil Dikirim!</strong> Hasil analisa wajah &amp; aura Anda telah otomatis tampil di layar Laptop/PC Anda.</span>';
-      banner.style.background = 'rgba(16, 185, 129, 0.2)';
-      banner.style.borderColor = 'rgba(16, 185, 129, 0.6)';
+      banner.innerHTML = '<i class="fa-solid fa-circle-check text-emerald"></i> <span><strong>✅ Foto Berhasil Terkirim!</strong> Hasil analisa wajah &amp; aura Anda telah otomatis tampil di layar Laptop/PC Anda. Silakan lanjutkan di layar monitor Anda.</span>';
+      banner.style.background = 'rgba(16, 185, 129, 0.25)';
+      banner.style.borderColor = 'rgba(16, 185, 129, 0.7)';
     }
+
+    const txtBtn = document.getElementById('txtStartCam');
+    if (txtBtn) txtBtn.textContent = '✅ Terkirim ke Layar Laptop';
   } catch (err) {
     console.error('[COMPANION] Failed to transmit scan data:', err);
   }
+}
+
+function startCompanionMobileScanner(sessionId) {
+  // 1. Hide hero and all step forms strictly (NO login or data entry required on companion mobile!)
+  const secHero = document.getElementById('secHero');
+  const secIdentityForm = document.getElementById('secIdentityForm');
+  const secAuraResults = document.getElementById('secAuraResults');
+  const secDermatology = document.getElementById('secDermatology');
+  const secGemstone = document.getElementById('secGemstone');
+  const secManifestation = document.getElementById('secManifestation');
+  const secTrustViral = document.getElementById('secTrustViral');
+
+  if (secHero) secHero.style.setProperty('display', 'none', 'important');
+  if (secIdentityForm) secIdentityForm.style.setProperty('display', 'none', 'important');
+  if (secAuraResults) secAuraResults.style.setProperty('display', 'none', 'important');
+  if (secDermatology) secDermatology.style.setProperty('display', 'none', 'important');
+  if (secGemstone) secGemstone.style.setProperty('display', 'none', 'important');
+  if (secManifestation) secManifestation.style.setProperty('display', 'none', 'important');
+  if (secTrustViral) secTrustViral.style.setProperty('display', 'none', 'important');
+
+  // 2. Open Scanner Step directly
+  const secScanner = document.getElementById('secScanner');
+  if (secScanner) {
+    secScanner.style.setProperty('display', 'block', 'important');
+    secScanner.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  // 3. Show Companion Active Banner
+  const banner = document.getElementById('companionActiveBanner');
+  if (banner) {
+    banner.style.display = 'flex';
+    banner.innerHTML = '<i class="fa-solid fa-mobile-screen-button text-gold"></i> <span><strong>Kamera HP Terhubung:</strong> Arahkan wajah ke kamera depan dan klik tombol "Ambil Foto" di bawah. Hasil analisa akan langsung tampil di layar Laptop/PC Anda.</span>';
+  }
+
+  // 4. Auto-launch mobile camera directly
+  startWebcam();
 }
 
 function checkCompanionUrlHandoff() {
@@ -4455,14 +4502,10 @@ function checkCompanionUrlHandoff() {
       // 1. Notify Backend Edge that Mobile is Connected
       fetch(`/api/session-sync?action=connect&session=${session}`, { method: 'POST' }).catch(() => {});
 
-      // 2. Open Scanner Step directly
+      // 2. Directly open mobile camera scanner without asking for form or login!
       setTimeout(() => {
-        if (typeof startScannerFlow === 'function') {
-          startScannerFlow();
-        }
-        const banner = document.getElementById('companionActiveBanner');
-        if (banner) banner.style.display = 'flex';
-      }, 400);
+        startCompanionMobileScanner(session);
+      }, 150);
     }
   } catch (e) {
     console.warn('[COMPANION] URL check error:', e);
