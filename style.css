@@ -7095,14 +7095,81 @@ body.style-explorer .view-explorer-secondary {
   text-shadow: 0 0 10px rgba(255, 200, 87, 0.45);
 }
 
-body.theme-imperial-light .author-dofollow-link {
+.f-copy-box {
+  display: inline-flex;
+  align-items: center;
+}
+
+.f-copy-interactive {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  color: var(--text-muted, #9CA3AF);
+  font-size: 0.72rem;
+  line-height: 1.4;
+  transition: all 0.25s ease;
+}
+
+.f-copy-interactive:hover {
+  color: #FFFFFF;
+}
+
+.f-copy-title {
+  color: #9CA3AF;
+  transition: color 0.2s ease;
+}
+
+.f-copy-meta {
+  color: #78828A;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: color 0.2s ease;
+}
+
+.author-gold-brand {
+  color: var(--color-gold, #FFC857);
+  font-weight: 700;
+  transition: all 0.2s ease;
+}
+
+.f-copy-interactive:hover .author-gold-brand {
+  color: #FFE699;
+  text-shadow: 0 0 10px rgba(255, 200, 87, 0.5);
+}
+
+.f-ext-icon {
+  font-size: 0.58rem;
+  color: var(--color-gold, #FFC857);
+  opacity: 0.75;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.f-copy-interactive:hover .f-ext-icon {
+  opacity: 1;
+  transform: translate(1px, -1px);
+}
+
+body.theme-imperial-light .author-dofollow-link,
+body.theme-imperial-light .author-gold-brand,
+body.theme-imperial-light .f-ext-icon {
   color: #8C6D23 !important;
   font-weight: 700;
 }
 
-body.theme-imperial-light .author-dofollow-link:hover {
+body.theme-imperial-light .author-dofollow-link:hover,
+body.theme-imperial-light .f-copy-interactive:hover .author-gold-brand {
   color: #059669 !important;
   text-decoration: underline;
+}
+
+body.theme-imperial-light .f-copy-title {
+  color: #4A655A !important;
+}
+
+body.theme-imperial-light .f-copy-meta {
+  color: #637F74 !important;
 }
 
 /* ── 32. MASTER MOBILE HAUTE LUXURY GOLDEN RATIO & SANCTUARY OVERRIDES ── */
@@ -7121,8 +7188,8 @@ body.theme-imperial-light .author-dofollow-link:hover {
     width: 100% !important;
     z-index: 99 !important;
     margin-top: 0 !important;
-    padding: 7px 14px max(7px, env(safe-area-inset-bottom, 7px)) !important;
-    background: rgba(4, 9, 7, 0.92) !important;
+    padding: 6px 14px max(6px, env(safe-area-inset-bottom, 6px)) !important;
+    background: rgba(4, 9, 7, 0.94) !important;
     backdrop-filter: blur(16px) !important;
     -webkit-backdrop-filter: blur(16px) !important;
     border-top: 1px solid rgba(215, 182, 90, 0.22) !important;
@@ -7146,7 +7213,7 @@ body.theme-imperial-light .author-dofollow-link:hover {
   }
   .footer-bottom-bar {
     display: flex !important;
-    flex-direction: row !important;
+    flex-direction: column !important;
     align-items: center !important;
     justify-content: center !important;
     text-align: center !important;
@@ -7155,16 +7222,50 @@ body.theme-imperial-light .author-dofollow-link:hover {
     gap: 0 !important;
     width: 100% !important;
   }
-  .f-copy {
-    font-size: 0.67rem !important;
-    color: #9CA3AF !important;
+  .f-copy-box {
+    width: 100% !important;
+    display: flex !important;
+    justify-content: center !important;
     text-align: center !important;
+  }
+  .f-copy-interactive {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    gap: 1.5px !important;
+    width: 100% !important;
+    padding: 2px 0 !important;
+    text-decoration: none !important;
+  }
+  .f-copy-title {
+    font-size: 0.64rem !important;
+    color: #9CA3AF !important;
     line-height: 1.25 !important;
-    white-space: nowrap !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
+    letter-spacing: 0.01em !important;
+    white-space: normal !important;
+    text-align: center !important;
+  }
+  .f-copy-meta {
+    font-size: 0.61rem !important;
+    color: #78828A !important;
+    line-height: 1.25 !important;
     letter-spacing: 0.02em !important;
-    margin: 0 auto !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 4px !important;
+    text-align: center !important;
+  }
+  .f-copy-meta .author-gold-brand {
+    color: #D7B65A !important;
+    font-weight: 700 !important;
+  }
+  .f-ext-icon {
+    font-size: 0.52rem !important;
+    color: #D7B65A !important;
+    opacity: 0.8 !important;
   }
 
   /* 2. Top Navigation Controls Clean Up */

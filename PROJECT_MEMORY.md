@@ -176,11 +176,14 @@
    3. **Verified Security & Biometrics Trust Ecosystem**:
       * Menambahkan bar lencana kepatuhan & otentikasi di bawah tombol kamera: Standar PADG Bank Indonesia, Sertifikasi Biometrik Global ISO/IEC 30107-3, On-Device AI Neural Mesh 100% Privat, dan Enkripsi SSL Edge 256-Bit.
       * Menyertakan tautan langsung ke Pusat Keamanan & Integritas Data (`security.html`) untuk memperkuat kepercayaan dan kredibilitas pengguna.
-* **2026-09-03 (Bagian 15):** **Mobile View Minimalist Fixed Sticky Trademark Footer Overhaul**:
-   1. **Eliminasi Kesemakan Footer Mobile**:
-      * Menghapus tumpukan 7 link legal dan brand badge raksasa di layar mobile (`.footer-luxury-strip` & `.f-bottom-tags` di-hide pada layar mobile). Seluruh tautan legal tetap tersedia secara rapi dan komprehensif di Slide-Over Trust Drawer (`#luxurySidebarDrawer`).
-   2. **Fixed Sticky Trademark & Copyright Strip**:
-      * Menetapkan footer mobile sebagai bar tetap yang menempel rapi di bagian bawah layar (*fixed sticky bottom bar* dengan *backdrop-filter blur*, border tipis gold, dan ukuran font mikro yang elegan).
-      * Memberikan ruang bernapas maksimal (*airy sanctuary*) bagi elemen Hero di tampilan ponsel.
+* **2026-09-03 (Bagian 16):** **Mobile Fixed Footer 2-Line Anti-Clipping & High-Authority Dofollow SEO Architecture**:
+   1. **Anti-Clipping 2-Line Mobile Layout**:
+      * Menghapus pemotongan teks (*ellipsis/truncation*) pada footer mobile. Menata copyright dan engineering attribution menjadi **2 baris seimbang yang proporsional**:
+        * Baris 1: `© 2026 FW JADE (fwjade.com) • Seluruh Hak Cipta Dilindungi`
+        * Baris 2: `Engineered by Richkeyrick ↗` (dengan highlight emas dan ikon eksternal mikro).
+   2. **High-Authority SEO Dofollow Linkage**:
+      * Menyelaraskan seluruh tautan atribusi footer ke `https://www.richkeyrick.com` menggunakan `rel="dofollow"` dan `target="_blank"`, mengalirkan *PageRank & Link Equity* antar domain secara optimal untuk ranking SEO Google.
+      * Menjadikan seluruh area teks footer interaktif dengan tap target nyaman di perangkat mobile.
+
 
 
