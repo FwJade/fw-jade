@@ -937,13 +937,6 @@ function initIdentityFormSelectors() {
       opt.value = y;
       opt.textContent = `${y}`;
       yearSel.appendChild(opt);
-  if (yearSel && yearSel.options.length <= 1) {
-    const curYear = new Date().getFullYear();
-    for (let y = curYear; y >= 1940; y--) {
-      const opt = document.createElement('option');
-      opt.value = y;
-      opt.textContent = `${y}`;
-      yearSel.appendChild(opt);
     }
   }
 
