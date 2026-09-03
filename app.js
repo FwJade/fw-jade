@@ -444,24 +444,40 @@ function saveLeadToVaultAndApi(leadData) {
       existingIdx = vault.findIndex(l => l.name && l.name.toLowerCase() === leadData.name.toLowerCase());
     }
 
+    const nowStr = new Date().toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' });
+    const existingLead = existingIdx >= 0 ? vault[existingIdx] : null;
+
+    const existingActivities = (existingLead && Array.isArray(existingLead.activities)) ? existingLead.activities : [];
+    const newActivity = {
+      timestamp: nowStr,
+      event: leadData.event || (leadData.source || 'Akses Sistem'),
+      details: leadData.activityDetails || (leadData.dob && leadData.dob !== '-' ? `Penyelarasan Bazi: ${leadData.dob} (${leadData.zodiac || ''})` : `Aktivitas Pengguna via ${leadData.source || 'Website'}`)
+    };
+    const updatedActivities = [newActivity, ...existingActivities].slice(0, 30);
+
     const leadRecord = {
-      id: existingIdx >= 0 ? vault[existingIdx].id : 'lead-' + Date.now(),
-      timestamp: new Date().toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' }),
+      id: existingLead ? existingLead.id : 'lead-' + Date.now(),
+      timestamp: existingLead ? (existingLead.timestamp || existingLead.firstSeen || nowStr) : nowStr,
+      firstSeen: existingLead ? (existingLead.firstSeen || existingLead.timestamp || nowStr) : nowStr,
+      lastSeen: nowStr,
+      totalVisits: existingLead ? ((existingLead.totalVisits || 1) + 1) : 1,
       name: leadData.name || 'Pengguna FW JADE',
-      email: cleanEmail || (existingIdx >= 0 ? vault[existingIdx].email : '-'),
-      dob: leadData.dob && leadData.dob !== '-' ? leadData.dob : (existingIdx >= 0 ? vault[existingIdx].dob : '-'),
-      zodiac: leadData.zodiac && leadData.zodiac !== '-' ? leadData.zodiac : (existingIdx >= 0 ? vault[existingIdx].zodiac : '-'),
-      shio: leadData.shio && leadData.shio !== '-' ? leadData.shio : (existingIdx >= 0 ? vault[existingIdx].shio : '-'),
-      element: leadData.element && leadData.element !== '-' ? leadData.element : (existingIdx >= 0 ? vault[existingIdx].element : 'WOOD'),
-      phone: leadData.phone && leadData.phone !== '-' ? leadData.phone : (existingIdx >= 0 ? vault[existingIdx].phone : '-'),
-      gemstone: leadData.gemstone || (existingIdx >= 0 ? vault[existingIdx].gemstone : 'Natural Aceh Jadeite'),
-      price: leadData.price || (existingIdx >= 0 ? vault[existingIdx].price : 'Rp 1.850.000'),
-      picture: leadData.picture || (existingIdx >= 0 ? vault[existingIdx].picture : ''),
-      source: leadData.source || 'Website Registration'
+      email: cleanEmail || (existingLead ? existingLead.email : '-'),
+      dob: leadData.dob && leadData.dob !== '-' ? leadData.dob : (existingLead ? existingLead.dob : '-'),
+      zodiac: leadData.zodiac && leadData.zodiac !== '-' ? leadData.zodiac : (existingLead ? existingLead.zodiac : '-'),
+      shio: leadData.shio && leadData.shio !== '-' ? leadData.shio : (existingLead ? existingLead.shio : '-'),
+      element: leadData.element && leadData.element !== '-' ? leadData.element : (existingLead ? existingLead.element : 'WOOD'),
+      phone: leadData.phone && leadData.phone !== '-' ? leadData.phone : (existingLead ? existingLead.phone : '-'),
+      gemstone: leadData.gemstone || (existingLead ? existingLead.gemstone : 'Natural Aceh Jadeite'),
+      price: leadData.price || (existingLead ? existingLead.price : 'Rp 1.850.000'),
+      picture: leadData.picture || (existingLead ? existingLead.picture : ''),
+      source: leadData.source || 'Website Registration',
+      status: leadData.status || (existingLead ? existingLead.status : 'Prospek Baru'),
+      activities: updatedActivities
     };
 
     if (existingIdx >= 0) {
-      vault[existingIdx] = { ...vault[existingIdx], ...leadRecord };
+      vault[existingIdx] = leadRecord;
     } else {
       vault.unshift(leadRecord);
     }

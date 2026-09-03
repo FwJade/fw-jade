@@ -142,27 +142,43 @@ export async function onRequest(context) {
         existingIdx = leadsList.findIndex(l => l.phone && l.phone === phone.trim());
       }
 
+      const nowStr = new Date().toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' });
+      const existingRecord = existingIdx >= 0 ? leadsList[existingIdx] : null;
+
+      // Maintain session & activity history log (Industry Standard Audit Trail)
+      const existingActivities = (existingRecord && Array.isArray(existingRecord.activities)) ? existingRecord.activities : [];
+      const newActivity = {
+        timestamp: nowStr,
+        event: body.event || (source || 'Akses Sistem'),
+        details: body.activityDetails || (dob && dob !== '-' ? `Penyelarasan Bazi & Wajah (${zodiac || ''} - ${shio || ''})` : `Login & Interaksi Pengguna (${source || 'Web'})`)
+      };
+      const updatedActivities = [newActivity, ...existingActivities].slice(0, 30);
+
       const leadRecord = {
-        id: existingIdx >= 0 ? leadsList[existingIdx].id : (body.id || 'lead-' + Date.now()),
-        timestamp: (existingIdx >= 0 && leadsList[existingIdx].timestamp) ? leadsList[existingIdx].timestamp : new Date().toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' }),
-        updatedAt: new Date().toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' }),
+        id: existingRecord ? existingRecord.id : (body.id || 'lead-' + Date.now()),
+        timestamp: existingRecord ? (existingRecord.timestamp || existingRecord.firstSeen || nowStr) : nowStr,
+        firstSeen: existingRecord ? (existingRecord.firstSeen || existingRecord.timestamp || nowStr) : nowStr,
+        lastSeen: nowStr,
+        totalVisits: existingRecord ? ((existingRecord.totalVisits || 1) + 1) : 1,
+        updatedAt: nowStr,
         name: cleanName,
-        dob: dob && dob !== '-' ? dob : (existingIdx >= 0 ? leadsList[existingIdx].dob : '-'),
-        zodiac: zodiac && zodiac !== '-' ? zodiac : (existingIdx >= 0 ? leadsList[existingIdx].zodiac : '-'),
-        shio: shio && shio !== '-' ? shio : (existingIdx >= 0 ? leadsList[existingIdx].shio : '-'),
-        element: element && element !== '-' ? element : (existingIdx >= 0 ? leadsList[existingIdx].element : 'WOOD'),
-        phone: phone && phone !== '-' ? phone.trim() : (existingIdx >= 0 ? (leadsList[existingIdx].phone || '-') : '-'),
-        email: cleanEmail || (existingIdx >= 0 ? leadsList[existingIdx].email : '-'),
-        gemstone: gemstone || (existingIdx >= 0 ? leadsList[existingIdx].gemstone : 'Natural Aceh Jadeite'),
-        price: price || (existingIdx >= 0 ? leadsList[existingIdx].price : 'Rp 1.850.000'),
-        picture: picture || (existingIdx >= 0 ? leadsList[existingIdx].picture : ''),
-        notes: body.notes || (existingIdx >= 0 ? (leadsList[existingIdx].notes || '') : ''),
-        source: source || (existingIdx >= 0 ? (leadsList[existingIdx].source || 'Website') : 'Website'),
-        status: body.status || (existingIdx >= 0 ? (leadsList[existingIdx].status || 'Prospek Baru') : 'Prospek Baru')
+        dob: dob && dob !== '-' ? dob : (existingRecord ? existingRecord.dob : '-'),
+        zodiac: zodiac && zodiac !== '-' ? zodiac : (existingRecord ? existingRecord.zodiac : '-'),
+        shio: shio && shio !== '-' ? shio : (existingRecord ? existingRecord.shio : '-'),
+        element: element && element !== '-' ? element : (existingRecord ? existingRecord.element : 'WOOD'),
+        phone: phone && phone !== '-' ? phone.trim() : (existingRecord ? (existingRecord.phone || '-') : '-'),
+        email: cleanEmail || (existingRecord ? existingRecord.email : '-'),
+        gemstone: gemstone || (existingRecord ? existingRecord.gemstone : 'Natural Aceh Jadeite'),
+        price: price || (existingRecord ? existingRecord.price : 'Rp 1.850.000'),
+        picture: picture || (existingRecord ? existingRecord.picture : ''),
+        notes: body.notes !== undefined ? body.notes : (existingRecord ? (existingRecord.notes || '') : ''),
+        source: source || (existingRecord ? (existingRecord.source || 'Website') : 'Website'),
+        status: body.status || (existingRecord ? (existingRecord.status || 'Prospek Baru') : 'Prospek Baru'),
+        activities: updatedActivities
       };
 
       if (existingIdx >= 0) {
-        leadsList[existingIdx] = { ...leadsList[existingIdx], ...leadRecord };
+        leadsList[existingIdx] = leadRecord;
       } else {
         leadsList.unshift(leadRecord);
       }

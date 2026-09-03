@@ -90,6 +90,24 @@
     .form-textarea{resize:vertical;min-height:70px}
     .modal-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:20px;padding-top:14px;border-top:1px solid rgba(255,255,255,0.08)}
     
+    .btn-detail{display:inline-flex;align-items:center;gap:4px;background:rgba(0,210,255,0.14);border:1px solid rgba(0,210,255,0.35);color:#00D2FF;border-radius:8px;padding:6px 10px;font-size:0.75rem;font-weight:600;cursor:pointer;transition:background 0.2s;margin-left:4px}
+    .btn-detail:hover{background:rgba(0,210,255,0.25)}
+    .visit-badge{font-size:0.68rem;background:rgba(255,200,87,0.12);border:1px solid rgba(255,200,87,0.3);color:var(--gold);padding:2px 7px;border-radius:10px;font-weight:600;display:inline-flex;align-items:center;gap:3px;margin-top:3px}
+    .visit-badge.hot{background:linear-gradient(135deg,rgba(255,107,107,0.2),rgba(255,200,87,0.2));border-color:rgba(255,107,107,0.5);color:#ff9e9e}
+    
+    /* Customer 360 Timeline */
+    .timeline-wrap{margin-top:14px;border-left:2px solid rgba(43,224,133,0.3);padding-left:14px;max-height:220px;overflow-y:auto}
+    .timeline-item{position:relative;margin-bottom:12px}
+    .timeline-item::before{content:'';position:absolute;left:-19px;top:4px;width:8px;height:8px;border-radius:50%;background:var(--emerald);box-shadow:0 0 8px var(--emerald)}
+    .timeline-time{font-size:0.7rem;color:var(--muted)}
+    .timeline-event{font-size:0.78rem;font-weight:600;color:var(--text)}
+    .timeline-detail{font-size:0.72rem;color:rgba(255,255,255,0.7);margin-top:2px}
+    .detail-grid-box{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:12px;margin-bottom:12px}
+    .detail-row{display:flex;justify-content:space-between;padding:4px 0;font-size:0.78rem;border-bottom:1px dashed rgba(255,255,255,0.06)}
+    .detail-row:last-child{border-bottom:none}
+    .detail-label{color:var(--muted)}
+    .detail-val{font-weight:600}
+    
     .empty-state{padding:48px;text-align:center;color:var(--muted)}
     .empty-state i{font-size:2rem;margin-bottom:10px;opacity:0.4;display:block}
     @media(max-width:600px){.admin-content{padding:14px}.stat-grid{grid-template-columns:1fr 1fr}th,td{padding:10px 10px;font-size:0.75rem}}
@@ -124,23 +142,53 @@
   </div>
   <div class="admin-content">
     <div class="page-title"><i class="fa-solid fa-users text-emerald"></i> Master Leads Portal</div>
-    <div class="page-subtitle">Database prospek pelanggan AURA AI Scanner — tersinkronisasi multi-akun real-time</div>
+    <div class="page-subtitle">Database prospek pelanggan &amp; Audit Trail Customer 360° — Standar Produksi Enterprise</div>
     <div class="stat-grid">
-      <div class="stat-card"><div class="stat-label">Total Prospek / Leads</div><div class="stat-value emerald" id="statTotal">-</div></div>
+      <div class="stat-card"><div class="stat-label">Total Pelanggan Unik</div><div class="stat-value emerald" id="statTotal">-</div></div>
       <div class="stat-card"><div class="stat-label">Potensi Omset</div><div class="stat-value gold" id="statRevenue">-</div></div>
       <div class="stat-card"><div class="stat-label">Status Akses</div><div class="stat-value" style="font-size:1rem;">Master Admin <i class="fa-solid fa-circle-check text-emerald"></i></div></div>
       <div class="stat-card"><div class="stat-label">Data Terakhir Dimuat</div><div class="stat-value text-xs" style="font-size:0.9rem;" id="statLastLoad">-</div></div>
     </div>
     <div class="toolbar">
       <input type="search" class="search-input" id="searchInput" placeholder="Cari nama, email, WhatsApp, atau batu..." oninput="filterTable()">
+      <select id="sortSelect" class="form-select" style="max-width: 220px; padding: 9px 12px;" onchange="filterTable()">
+        <option value="latest">Urutkan: Sesi Terbaru</option>
+        <option value="visits">Urutkan: Paling Sering Akses (VIP)</option>
+        <option value="revenue">Urutkan: Potensi Omset</option>
+        <option value="name">Urutkan: Nama (A-Z)</option>
+      </select>
       <button class="btn-action secondary" onclick="loadLeads()"><i class="fa-solid fa-rotate"></i> Refresh &amp; Sinkron</button>
       <button class="btn-action gold" onclick="exportCSV()"><i class="fa-solid fa-file-csv"></i> Unduh CSV / Excel</button>
     </div>
     <div class="table-wrap">
       <table>
-        <thead><tr><th>Waktu</th><th>Nama Pelanggan</th><th>Tgl Lahir / Bazi</th><th>Kontak &amp; No. WhatsApp</th><th>Batu Rekomendasi</th><th>Aksi Admin</th></tr></thead>
+        <thead><tr><th>Sesi Terakhir / Pertama</th><th>Nama Pelanggan</th><th>Tgl Lahir / Bazi</th><th>Kontak &amp; Frekuensi</th><th>Batu Rekomendasi</th><th>Aksi Admin</th></tr></thead>
         <tbody id="leadsTableBody"><tr><td colspan="6" class="text-center"><i class="fa-solid fa-spinner fa-spin text-emerald"></i> Memuat data...</td></tr></tbody>
       </table>
+    </div>
+  </div>
+</div>
+
+<!-- =========================================================================
+     MODAL CUSTOMER 360° DETAIL & AUDIT TRAIL TIMELINE (Industry Standard)
+     ========================================================================= -->
+<div id="leadDetailModal" class="lead-modal-overlay" style="display: none;">
+  <div class="lead-modal-card" style="max-width: 600px;">
+    <div class="modal-header">
+      <div class="modal-title"><i class="fa-solid fa-id-card text-emerald"></i> Detail Pelanggan 360° &amp; Riwayat</div>
+      <button type="button" class="modal-close-btn" onclick="closeLeadDetailModal()">&times;</button>
+    </div>
+    
+    <div id="detailModalBody">
+      <!-- Injected Dynamically -->
+    </div>
+
+    <div class="modal-actions" style="justify-content: space-between;">
+      <button type="button" class="btn-action secondary" onclick="closeLeadDetailModal()">Tutup</button>
+      <div style="display: flex; gap: 8px;">
+        <button type="button" class="btn-action gold" id="btnDetailEditTrigger"><i class="fa-solid fa-pen-to-square"></i> Edit Data</button>
+        <a id="btnDetailWaTrigger" href="#" target="_blank" class="btn-wa" style="padding: 9px 16px; border-radius: 10px;"><i class="fa-brands fa-whatsapp"></i> Chat WhatsApp CS</a>
+      </div>
     </div>
   </div>
 </div>
@@ -276,15 +324,15 @@
     } catch(e) {}
     if (!Array.isArray(localLeads)) localLeads = [];
 
-    // Merge Server & Local Vault (Deduplicate by id or email)
+    // Merge Server & Local Vault (Group by unique Email or ID)
     var mergedMap = new Map();
     serverLeads.forEach(function(l) {
-      var key = l.id || ((l.email && l.email !== '-') ? l.email.toLowerCase() : null);
+      var key = (l.email && l.email !== '-') ? l.email.toLowerCase() : l.id;
       if (key) mergedMap.set(key, l);
     });
 
     localLeads.forEach(function(l) {
-      var key = l.id || ((l.email && l.email !== '-') ? l.email.toLowerCase() : null);
+      var key = (l.email && l.email !== '-') ? l.email.toLowerCase() : l.id;
       if (key) {
         if (!mergedMap.has(key)) {
           mergedMap.set(key, l);
@@ -297,7 +345,10 @@
         } else {
           // Merge enriched fields if available
           var existing = mergedMap.get(key);
-          mergedMap.set(key, Object.assign({}, existing, l));
+          mergedMap.set(key, Object.assign({}, existing, l, {
+            totalVisits: Math.max(existing.totalVisits || 1, l.totalVisits || 1),
+            activities: (existing.activities && existing.activities.length > 0) ? existing.activities : (l.activities || [])
+          }));
         }
       }
     });
@@ -309,7 +360,7 @@
       localStorage.setItem('fwjade_global_leads_vault', JSON.stringify(allLeads));
     } catch(e) {}
 
-    renderTable(allLeads);
+    filterTable();
     statTotal.textContent = allLeads.length + ' Orang';
     var totalRev = allLeads.reduce(function(acc, cur) {
       return acc + (parseInt((cur.price || '0').replace(/[^0-9]/g, '')) || 1850000);
@@ -331,7 +382,7 @@
   function renderTable(leads) {
     var tbody = document.getElementById('leadsTableBody');
     if (!leads || leads.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="6" class="empty-state"><i class="fa-solid fa-ghost"></i>Belum ada data prospek yang masuk.</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="6" class="empty-state"><i class="fa-solid fa-ghost"></i>Belum ada data prospek yang cocok.</td></tr>';
       return;
     }
     tbody.innerHTML = leads.map(function(l) {
@@ -347,28 +398,101 @@
       var avatarImg = l.picture ? '<img src="' + l.picture + '" class="lead-avatar" alt="Avatar">' : '';
       var statusBadge = '<span class="status-badge ' + getStatusClass(l.status) + '">' + (l.status || 'Prospek Baru') + '</span>';
 
+      var visits = l.totalVisits || 1;
+      var visitBadge = '<span class="visit-badge ' + (visits > 2 ? 'hot' : '') + '"><i class="fa-solid fa-fire"></i> ' + visits + 'x Sesi</span>';
+
       var contactCell = '';
       if (hasValidPhone) {
-        contactCell = '<strong>' + l.phone + '</strong><br>' + sourceBadge + '<br>' + statusBadge;
+        contactCell = '<strong>' + l.phone + '</strong><br>' + sourceBadge + '<br>' + statusBadge + ' ' + visitBadge;
       } else {
-        contactCell = '<button type="button" class="phone-pending-btn" onclick="openEditLeadModal(\'' + l.id + '\')" title="Klik untuk menginput No. WhatsApp saat pelanggan chat"><i class="fa-brands fa-whatsapp"></i> + Input No. WA</button><br>' + sourceBadge + '<br>' + statusBadge;
+        contactCell = '<button type="button" class="phone-pending-btn" onclick="openEditLeadModal(\'' + l.id + '\')" title="Klik untuk menginput No. WhatsApp saat pelanggan chat"><i class="fa-brands fa-whatsapp"></i> + Input No. WA</button><br>' + sourceBadge + '<br>' + statusBadge + ' ' + visitBadge;
       }
 
-      var notesSnippet = l.notes ? '<br><small class="text-dim" style="font-style:italic;" title="' + l.notes.replace(/"/g, '&quot;') + '">📝 ' + (l.notes.length > 28 ? l.notes.substring(0, 28) + '...' : l.notes) + '</small>' : '';
+      var notesSnippet = l.notes ? '<br><small class="text-dim" style="font-style:italic;" title="' + l.notes.replace(/"/g, '&quot;') + '">📝 ' + (l.notes.length > 25 ? l.notes.substring(0, 25) + '...' : l.notes) + '</small>' : '';
 
       return '<tr>' +
-        '<td><span class="text-dim text-xs">' + (l.timestamp || '-') + '</span></td>' +
+        '<td><strong class="text-emerald" style="font-size:0.8rem;">' + (l.lastSeen || l.timestamp || '-') + '</strong><br><small class="text-dim">Awal: ' + (l.firstSeen || l.timestamp || '-') + '</small></td>' +
         '<td>' + avatarImg + '<strong>' + (l.name || '-') + '</strong>' + (l.email && l.email !== '-' ? '<br><small class="text-dim">' + l.email + '</small>' : '') + notesSnippet + '</td>' +
         '<td><span class="text-gold">' + (l.dob || '-') + '</span><br><small class="text-emerald">' + (l.zodiac || '') + (l.shio ? ' - ' + l.shio : '') + '</small></td>' +
         '<td>' + contactCell + '</td>' +
         '<td><strong class="text-emerald">' + (l.gemstone || 'Natural Aceh Jadeite') + '</strong><br><small class="text-gold">' + (l.price || 'Rp 1.850.000') + '</small></td>' +
         '<td>' +
+          '<button type="button" class="btn-detail" onclick="openLeadDetailModal(\'' + l.id + '\')" title="Buka Detail Customer 360 & Riwayat"><i class="fa-solid fa-eye"></i> Detail</button>' +
           (hasValidPhone ? '<a href="' + waUrl + '" target="_blank" class="btn-wa" title="Chat Pelanggan"><i class="fa-brands fa-whatsapp"></i> Chat</a>' : '') +
-          '<button type="button" class="btn-edit" onclick="openEditLeadModal(\'' + l.id + '\')" title="Edit Data & No. WA"><i class="fa-solid fa-pen-to-square"></i> Edit</button>' +
+          '<button type="button" class="btn-edit" onclick="openEditLeadModal(\'' + l.id + '\')" title="Edit Data & No. WA"><i class="fa-solid fa-pen-to-square"></i></button>' +
           '<button type="button" class="btn-del" onclick="deleteLead(\'' + l.id + '\')" title="Hapus prospek"><i class="fa-solid fa-trash-can"></i></button>' +
         '</td>' +
       '</tr>';
     }).join('');
+  }
+
+  function openLeadDetailModal(leadId) {
+    var lead = allLeads.find(function(l) { return l.id === leadId; });
+    if (!lead) return;
+
+    var cleanPhone = (lead.phone || '').replace(/[^0-9]/g, '');
+    var hasValidPhone = cleanPhone && cleanPhone.length >= 8 && lead.phone !== '-';
+    var waMsg = encodeURIComponent('Halo Bapak/Ibu ' + lead.name + ', kami dari FW JADE Medan Giok. Mengenai analisa Bazi & rekomendasi batu giok Anda (' + (lead.gemstone || 'Natural Aceh Jadeite') + '), apakah ada yang bisa kami bantu?');
+    var waUrl = hasValidPhone ? 'https://wa.me/' + cleanPhone + '?text=' + waMsg : 'https://wa.me/62811619173';
+
+    var btnWa = document.getElementById('btnDetailWaTrigger');
+    if (btnWa) {
+      btnWa.href = waUrl;
+      btnWa.style.display = hasValidPhone ? 'inline-flex' : 'none';
+    }
+
+    var btnEdit = document.getElementById('btnDetailEditTrigger');
+    if (btnEdit) {
+      btnEdit.onclick = function() {
+        closeLeadDetailModal();
+        openEditLeadModal(lead.id);
+      };
+    }
+
+    var activities = lead.activities || [
+      { timestamp: lead.lastSeen || lead.timestamp, event: lead.source || 'Sesi Terakhir', details: 'Aktivitas sistem tercatat' }
+    ];
+
+    var timelineHtml = activities.map(function(act) {
+      return '<div class="timeline-item">' +
+        '<div class="timeline-time">' + (act.timestamp || '-') + '</div>' +
+        '<div class="timeline-event">' + (act.event || 'Aktivitas') + '</div>' +
+        '<div class="timeline-detail">' + (act.details || '-') + '</div>' +
+      '</div>';
+    }).join('');
+
+    var avatarImg = lead.picture ? '<img src="' + lead.picture + '" style="width:42px;height:42px;border-radius:50%;border:2px solid var(--emerald);object-fit:cover;">' : '<div style="width:42px;height:42px;border-radius:50%;background:rgba(43,224,133,0.2);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--emerald);">' + (lead.name ? lead.name.charAt(0).toUpperCase() : 'U') + '</div>';
+
+    var bodyHtml = '<div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">' +
+      avatarImg +
+      '<div>' +
+        '<h3 style="font-size:1.1rem;font-weight:700;">' + (lead.name || 'Pengguna') + '</h3>' +
+        '<div style="font-size:0.75rem;color:var(--muted);">' + (lead.email || '-') + ' &bull; ' + (lead.phone && lead.phone !== '-' ? lead.phone : 'Belum Ada No. WA') + '</div>' +
+        '<div style="margin-top:4px;"><span class="status-badge ' + getStatusClass(lead.status) + '">' + (lead.status || 'Prospek Baru') + '</span> <span class="visit-badge hot"><i class="fa-solid fa-fire"></i> ' + (lead.totalVisits || 1) + 'x Sesi Akses</span></div>' +
+      '</div>' +
+    '</div>' +
+
+    '<div class="detail-grid-box">' +
+      '<div class="detail-row"><span class="detail-label">Tanggal Lahir (Bazi):</span><span class="detail-val text-gold">' + (lead.dob || '-') + '</span></div>' +
+      '<div class="detail-row"><span class="detail-label">Zodiak &amp; Shio:</span><span class="detail-val text-emerald">' + (lead.zodiac || '-') + ' / ' + (lead.shio || '-') + '</span></div>' +
+      '<div class="detail-row"><span class="detail-label">Elemen Wu Xing:</span><span class="detail-val">' + (lead.element || 'WOOD') + '</span></div>' +
+      '<div class="detail-row"><span class="detail-label">Batu Rekomendasi:</span><span class="detail-val text-emerald">' + (lead.gemstone || 'Natural Aceh Jadeite') + '</span></div>' +
+      '<div class="detail-row"><span class="detail-label">Estimasi Nilai:</span><span class="detail-val text-gold">' + (lead.price || 'Rp 1.850.000') + '</span></div>' +
+      '<div class="detail-row"><span class="detail-label">Kunjungan Pertama:</span><span class="detail-val text-dim">' + (lead.firstSeen || lead.timestamp || '-') + '</span></div>' +
+      '<div class="detail-row"><span class="detail-label">Sesi Terakhir:</span><span class="detail-val text-emerald">' + (lead.lastSeen || lead.timestamp || '-') + '</span></div>' +
+    '</div>' +
+
+    (lead.notes ? '<div style="margin-bottom:14px;background:rgba(255,200,87,0.06);border:1px solid rgba(255,200,87,0.2);padding:10px 12px;border-radius:8px;font-size:0.75rem;"><strong class="text-gold">📝 Catatan Admin:</strong><br>' + lead.notes + '</div>' : '') +
+
+    '<h4 style="font-size:0.85rem;font-weight:600;margin-bottom:8px;color:var(--gold);"><i class="fa-solid fa-clock-rotate-left"></i> Kronologi Riwayat Akses &amp; Audit Trail:</h4>' +
+    '<div class="timeline-wrap">' + timelineHtml + '</div>';
+
+    document.getElementById('detailModalBody').innerHTML = bodyHtml;
+    document.getElementById('leadDetailModal').style.display = 'flex';
+  }
+
+  function closeLeadDetailModal() {
+    document.getElementById('leadDetailModal').style.display = 'none';
   }
 
   function openEditLeadModal(leadId) {
@@ -426,7 +550,7 @@
       localStorage.setItem('fwjade_global_leads_vault', JSON.stringify(allLeads));
     } catch(e) {}
 
-    renderTable(allLeads);
+    filterTable();
     closeEditLeadModal();
 
     // Post update to Cloudflare API
@@ -452,7 +576,7 @@
     try {
       localStorage.setItem('fwjade_global_leads_vault', JSON.stringify(allLeads));
     } catch(e) {}
-    renderTable(allLeads);
+    filterTable();
 
     try {
       await fetch('/api/leads?admin=' + encodeURIComponent(token.email) + '&id=' + encodeURIComponent(leadId), {
@@ -464,7 +588,8 @@
 
   function filterTable() {
     var q = document.getElementById('searchInput').value.toLowerCase();
-    if (!q) { renderTable(allLeads); return; }
+    var sortMode = document.getElementById('sortSelect') ? document.getElementById('sortSelect').value : 'latest';
+    
     var filtered = allLeads.filter(function(l) {
       return (l.name && l.name.toLowerCase().includes(q)) ||
         (l.phone && l.phone.includes(q)) ||
@@ -473,18 +598,31 @@
         (l.notes && l.notes.toLowerCase().includes(q)) ||
         (l.status && l.status.toLowerCase().includes(q));
     });
+
+    if (sortMode === 'visits') {
+      filtered.sort(function(a, b) { return (b.totalVisits || 1) - (a.totalVisits || 1); });
+    } else if (sortMode === 'revenue') {
+      filtered.sort(function(a, b) {
+        var revA = parseInt((a.price || '0').replace(/[^0-9]/g, '')) || 0;
+        var revB = parseInt((b.price || '0').replace(/[^0-9]/g, '')) || 0;
+        return revB - revA;
+      });
+    } else if (sortMode === 'name') {
+      filtered.sort(function(a, b) { return (a.name || '').localeCompare(b.name || ''); });
+    }
+
     renderTable(filtered);
   }
 
   function exportCSV() {
     if (!allLeads || allLeads.length === 0) { alert('Belum ada data.'); return; }
-    var csv = 'Waktu,Nama,Email,Tgl Lahir,Zodiak,Shio,Elemen,WhatsApp,Status,Catatan,Batu,Harga\n';
+    var csv = 'ID,Nama,Email,No WhatsApp,Status,Total Sesi,Kunjungan Pertama,Sesi Terakhir,Tgl Lahir,Zodiak,Shio,Elemen,Batu,Harga,Catatan\n';
     allLeads.forEach(function(l) {
-      csv += ['"' + (l.timestamp || '') + '"', '"' + (l.name || '') + '"', '"' + (l.email || '') + '"', '"' + (l.dob || '') + '"', '"' + (l.zodiac || '') + '"', '"' + (l.shio || '') + '"', '"' + (l.element || '') + '"', '"' + (l.phone || '') + '"', '"' + (l.status || '') + '"', '"' + (l.notes || '').replace(/"/g, '""') + '"', '"' + (l.gemstone || '') + '"', '"' + (l.price || '') + '"'].join(',') + '\n';
+      csv += ['"' + (l.id || '') + '"', '"' + (l.name || '') + '"', '"' + (l.email || '') + '"', '"' + (l.phone || '') + '"', '"' + (l.status || '') + '"', '"' + (l.totalVisits || 1) + '"', '"' + (l.firstSeen || l.timestamp || '') + '"', '"' + (l.lastSeen || l.timestamp || '') + '"', '"' + (l.dob || '') + '"', '"' + (l.zodiac || '') + '"', '"' + (l.shio || '') + '"', '"' + (l.element || '') + '"', '"' + (l.gemstone || '') + '"', '"' + (l.price || '') + '"', '"' + (l.notes || '').replace(/"/g, '""') + '"'].join(',') + '\n';
     });
     var a = document.createElement('a');
     a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
-    a.download = 'fwjade_leads_' + new Date().toISOString().slice(0, 10) + '.csv';
+    a.download = 'fwjade_leads_enterprise_' + new Date().toISOString().slice(0, 10) + '.csv';
     a.click();
   }
 
