@@ -23,10 +23,10 @@ const AURA_CONFIG = {
     }
   },
 
-  // 3. Database Backend (Supabase)
+  // 3. Database Backend (Supabase Realtime & Storage)
   SUPABASE: {
-    URL: window.ENV?.VITE_SUPABASE_URL || 'https://your-project-id.supabase.co',
-    ANON_KEY: window.ENV?.VITE_SUPABASE_ANON_KEY || 'your_anon_key_here',
+    URL: 'https://scwmparhzzwhepxijgww.supabase.co',
+    ANON_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNjd21wYXJoenp3aGVweGlqZ3d3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMxNTU4ODYsImV4cCI6MjA4ODczMTg4Nn0.am6y97o6YL6l-sxrRXAXl0I29yGweGwVRkNqgfsEspE',
     TABLES: {
       USERS: 'aura_users',
       TRANSFERS: 'aura_transactions',

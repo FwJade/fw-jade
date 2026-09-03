@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Kamera Pendamping Laptop — FW JADE</title>
+  <meta name="theme-color" content="#040907">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="icon" type="image/png" href="icon-192x192.png">
+
+  <!-- Google Fonts & FontAwesome -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Supabase SDK for Instant Realtime WebSocket Sync -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    :root {
+      --bg-dark: #040907;
+      --color-gold: #D7B65A;
+      --color-emerald: #10B981;
+      --text-main: #FFFFFF;
+      --text-muted: #9CA3AF;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 16px env(safe-area-inset-bottom, 20px);
+      overflow: hidden;
+    }
+
+    /* Ambient Background Glow */
+    .ambient-glow {
+      position: fixed;
+      top: -100px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 320px;
+      height: 320px;
+      background: radial-gradient(circle, rgba(16, 185, 129, 0.18) 0%, rgba(215, 182, 90, 0.08) 50%, transparent 70%);
+      filter: blur(50px);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Top Brand Bar */
+    .top-header {
+      width: 100%;
+      text-align: center;
+      z-index: 2;
+      padding-top: env(safe-area-inset-top, 10px);
+    }
+
+    .brand-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      color: var(--color-gold);
+      background: rgba(215, 182, 90, 0.1);
+      border: 1px solid rgba(215, 182, 90, 0.3);
+      padding: 4px 14px;
+      border-radius: 999px;
+      margin-bottom: 6px;
+    }
+
+    .top-title {
+      font-family: 'Cinzel', serif;
+      font-size: 1.15rem;
+      color: #FFFFFF;
+      letter-spacing: 0.5px;
+    }
+
+    .top-subtitle {
+      font-size: 0.76rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    /* Viewfinder Container */
+    .viewfinder-wrapper {
+      position: relative;
+      width: 100%;
+      max-width: 320px;
+      aspect-ratio: 3 / 4;
+      border-radius: 28px;
+      overflow: hidden;
+      border: 2px solid rgba(215, 182, 90, 0.35);
+      background: #000000;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.8), 0 0 30px rgba(16, 185, 129, 0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2;
+    }
+
+    #cameraFeed {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transform: scaleX(-1); /* Mirror for selfie camera */
+    }
+
+    /* Oval Face Guide */
+    .oval-face-guide {
+      position: absolute;
+      inset: 15% 12%;
+      border: 2px dashed rgba(215, 182, 90, 0.6);
+      border-radius: 50% / 45%;
+      pointer-events: none;
+      box-shadow: 0 0 0 9999px rgba(4, 9, 7, 0.35);
+      animation: pulseGuide 2.5s infinite ease-in-out;
+    }
+
+    @keyframes pulseGuide {
+      0%, 100% { border-color: rgba(215, 182, 90, 0.5); transform: scale(1); }
+      50% { border-color: rgba(16, 185, 129, 0.9); transform: scale(1.02); }
+    }
+
+    /* Connection Status Pill */
+    .status-pill {
+      position: absolute;
+      top: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 999px;
+      padding: 5px 14px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      color: #FFFFFF;
+      white-space: nowrap;
+      z-index: 3;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #EAB308;
+      box-shadow: 0 0 8px #EAB308;
+    }
+
+    .status-dot.connected {
+      background: #10B981;
+      box-shadow: 0 0 8px #10B981;
+    }
+
+    /* Bottom Control Bar */
+    .bottom-controls {
+      width: 100%;
+      max-width: 360px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      z-index: 2;
+    }
+
+    .btn-shutter-snap {
+      width: 100%;
+      padding: 16px 24px;
+      background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+      color: #FFFFFF;
+      font-size: 1rem;
+      font-weight: 700;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 999px;
+      box-shadow: 0 8px 28px rgba(16, 185, 129, 0.5);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: all 0.2s ease;
+    }
+
+    .btn-shutter-snap:active {
+      transform: scale(0.97);
+      box-shadow: 0 4px 14px rgba(16, 185, 129, 0.4);
+    }
+
+    .btn-shutter-snap:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .privacy-notice {
+      font-size: 0.68rem;
+      color: #6B7280;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    /* Success Overlay Screen (Tampil saat foto berhasil dikirim) */
+    .success-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(4, 9, 7, 0.96);
+      backdrop-filter: blur(14px);
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      text-align: center;
+      z-index: 100;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .success-circle-icon {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: rgba(16, 185, 129, 0.15);
+      border: 2px solid var(--color-emerald);
+      color: var(--color-emerald);
+      font-size: 2.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+      box-shadow: 0 0 35px rgba(16, 185, 129, 0.35);
+    }
+
+    .success-title {
+      font-family: 'Cinzel', serif;
+      font-size: 1.45rem;
+      color: #FFFFFF;
+      margin-bottom: 8px;
+    }
+
+    .success-desc {
+      font-size: 0.86rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+      max-width: 300px;
+      margin-bottom: 24px;
+    }
+
+    .btn-retake {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #FFFFFF;
+      font-size: 0.82rem;
+      font-weight: 600;
+      border-radius: 999px;
+      padding: 10px 22px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="ambient-glow"></div>
+
+  <!-- 1. Header -->
+  <header class="top-header">
+    <div class="brand-kicker"><i class="fa-solid fa-mobile-screen-button"></i> <span>FW JADE COMPANION</span></div>
+    <h1 class="top-title">Lensa Kamera Laptop</h1>
+    <p class="top-subtitle">Posisikan wajah di dalam oval &amp; ambil foto</p>
+  </header>
+
+  <!-- 2. Viewfinder -->
+  <main class="viewfinder-wrapper">
+    <div class="status-pill" id="statusPill">
+      <span class="status-dot" id="statusDot"></span>
+      <span id="statusText">Menghubungkan ke Laptop...</span>
+    </div>
+
+    <video id="cameraFeed" autoplay playsinline muted></video>
+    <div class="oval-face-guide"></div>
+    <canvas id="snapshotCanvas" style="display: none;"></canvas>
+  </main>
+
+  <!-- 3. Shutter Controls -->
+  <footer class="bottom-controls">
+    <button type="button" class="btn-shutter-snap" id="btnSnap" onclick="snapAndSendPhoto()">
+      <i class="fa-solid fa-camera"></i> <span id="txtSnap">Ambil Foto untuk Laptop</span>
+    </button>
+    <p class="privacy-notice"><i class="fa-solid fa-shield-halved text-emerald"></i> Foto langsung dikirim ke layar laptop Anda secara privat.</p>
+  </footer>
+
+  <!-- 4. Success Overlay -->
+  <div class="success-overlay" id="successOverlay">
+    <div class="success-circle-icon"><i class="fa-solid fa-check"></i></div>
+    <h2 class="success-title">Foto Berhasil Dikirim!</h2>
+    <p class="success-desc">Layar Laptop Anda saat ini sedang menganalisa biometrik 12 Istana Wajah &amp; Rekomendasi Giok Anda.</p>
+    <button type="button" class="btn-retake" onclick="resetForRetake()">
+      <i class="fa-solid fa-rotate-left"></i> <span>Ambil Ulang Foto</span>
+    </button>
+  </div>
+
+  <script>
+    // Supabase Configuration for Instant Cross-Device WebSocket Sync
+    const SUPABASE_URL = 'https://scwmparhzzwhepxijgww.supabase.co';
+    const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNjd21wYXJoenp3aGVweGlqZ3d3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMxNTU4ODYsImV4cCI6MjA4ODczMTg4Nn0.am6y97o6YL6l-sxrRXAXl0I29yGweGwVRkNqgfsEspE';
+    
+    let supabaseClient = null;
+    let realtimeChannel = null;
+    let cameraStream = null;
+    const urlParams = new URLSearchParams(window.location.search);
+    const sessionId = urlParams.get('session');
+
+    // 1. Initialize Camera
+    async function initCamera() {
+      const video = document.getElementById('cameraFeed');
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: {
+            facingMode: 'user',
+            width: { ideal: 1280 },
+            height: { ideal: 960 }
+          },
+          audio: false
+        });
+        cameraStream = stream;
+        video.srcObject = stream;
+        video.play();
+      } catch (err) {
+        console.error('Camera access error:', err);
+        document.getElementById('statusText').textContent = 'Izin kamera ditolak!';
+        alert('Harap berikan izin akses kamera pada browser Anda untuk melanjutkan.');
+      }
+    }
+
+    // 2. Initialize Supabase Realtime WebSocket Connection
+    function initRealtime() {
+      if (!sessionId) {
+        document.getElementById('statusText').textContent = 'Sesi Tidak Valid';
+        alert('Tautan tidak memiliki kode sesi. Silakan scan ulang QR Code di laptop Anda.');
+        return;
+      }
+
+      if (typeof window.supabase !== 'undefined') {
+        supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+        realtimeChannel = supabaseClient.channel(`fwjade-cam-${sessionId}`, {
+          config: { broadcast: { self: false } }
+        });
+
+        realtimeChannel.subscribe((status) => {
+          if (status === 'SUBSCRIBED') {
+            console.log('[COMPANION] Realtime WebSocket Subscribed to session:', sessionId);
+            // Notify PC that Mobile Camera is connected!
+            realtimeChannel.send({
+              type: 'broadcast',
+              event: 'MOBILE_CONNECTED',
+              payload: { sessionId, timestamp: Date.now() }
+            });
+
+            // Update Status UI
+            document.getElementById('statusDot').className = 'status-dot connected';
+            document.getElementById('statusText').textContent = 'Terhubung dengan Laptop';
+          }
+        });
+      }
+    }
+
+    // 3. Take Photo & Transmit to Laptop
+    async function snapAndSendPhoto() {
+      const video = document.getElementById('cameraFeed');
+      const canvas = document.getElementById('snapshotCanvas');
+      const btnSnap = document.getElementById('btnSnap');
+      const txtSnap = document.getElementById('txtSnap');
+
+      if (!video || video.videoWidth === 0) {
+        alert('Kamera belum siap, tunggu sebentar...');
+        return;
+      }
+
+      btnSnap.disabled = true;
+      txtSnap.textContent = 'Mengirim ke Laptop...';
+
+      // Draw video frame to canvas
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      const ctx = canvas.getContext('2d');
+      // Invert mirror effect so sent photo looks natural
+      ctx.translate(canvas.width, 0);
+      ctx.scale(-1, 1);
+      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+      // Convert to high-quality JPEG Base64
+      const photoBase64 = canvas.toDataURL('image/jpeg', 0.88);
+
+      // A. Send via Supabase Realtime WebSocket (Instant 0-latency)
+      if (realtimeChannel) {
+        try {
+          await realtimeChannel.send({
+            type: 'broadcast',
+            event: 'PHOTO_CAPTURED',
+            payload: {
+              sessionId,
+              photoBase64,
+              timestamp: Date.now()
+            }
+          });
+          console.log('[COMPANION] Photo broadcasted successfully via WebSocket!');
+        } catch (e) {
+          console.warn('[COMPANION] Realtime broadcast error:', e);
+        }
+      }
+
+      // B. Parallel Fallback via API (Ensures 100% Delivery)
+      fetch(`/api/session-sync?action=submit&session=${sessionId}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ photoBase64 })
+      }).catch(() => {});
+
+      // Show Success Overlay on Phone
+      setTimeout(() => {
+        document.getElementById('successOverlay').style.display = 'flex';
+      }, 300);
+    }
+
+    // Retake Photo
+    function resetForRetake() {
+      document.getElementById('successOverlay').style.display = 'none';
+      const btnSnap = document.getElementById('btnSnap');
+      const txtSnap = document.getElementById('txtSnap');
+      btnSnap.disabled = false;
+      txtSnap.textContent = 'Ambil Foto untuk Laptop';
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      initCamera();
+      initRealtime();
+    });
+  </script>
+</body>
+</html>

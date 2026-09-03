@@ -1,10 +1,11 @@
-const CACHE_NAME = "aurora-vip-v56";
+const CACHE_NAME = "aurora-vip-v57";
 const urlsToCache = [
   "/",
   "/index.html",
-  "/style.css?v=56",
-  "/app.js?v=56",
-  "/config.js?v=56"
+  "/camera.html",
+  "/style.css?v=57",
+  "/app.js?v=57",
+  "/config.js?v=57"
 ];
 
 self.addEventListener("install", event => {

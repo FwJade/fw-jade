@@ -4269,6 +4269,7 @@ document.addEventListener('keydown', (e) => {
 // ==========================================================================
 let companionPollInterval = null;
 let activeCompanionSessionId = null;
+let companionSupabaseChannel = null;
 
 async function openCompanionQrModal() {
   const modal = document.getElementById('modalCompanionCamera');
@@ -4290,9 +4291,9 @@ async function openCompanionQrModal() {
     statusBadge.className = 'companion-status-badge';
   }
 
-  // 3. Build Full Direct Companion URL
+  // 3. Build Full Direct Companion URL pointing directly to dedicated camera.html!
   const origin = window.location.origin || `${window.location.protocol}//${window.location.host}`;
-  const companionUrl = `${origin}/?session=${activeCompanionSessionId}&mode=companion`;
+  const companionUrl = `${origin}/camera.html?session=${activeCompanionSessionId}`;
 
   // 4. Render Dynamic QR Code
   if (qrWrap) {
@@ -4320,21 +4321,79 @@ async function openCompanionQrModal() {
   modal.style.display = 'flex';
   document.body.style.overflow = 'hidden';
 
-  // 6. Notify Edge API to create session
-  try {
-    await fetch(`/api/session-sync?action=create&session=${activeCompanionSessionId}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ clientInfo: { userAgent: navigator.userAgent } })
-    });
-  } catch (e) {
-    console.warn('[COMPANION] Session creation warning:', e);
-  }
+  // 6. Connect to Supabase Realtime Channel (Instant WebSocket Communication)
+  initCompanionSupabaseChannel(activeCompanionSessionId);
 
-  // 7. Start Real-Time Session Polling on PC
+  // 7. Parallel Polling Fallback
   startCompanionPolling(activeCompanionSessionId);
 }
 window.openCompanionQrModal = openCompanionQrModal;
+
+function initCompanionSupabaseChannel(sessionId) {
+  if (companionSupabaseChannel) {
+    try { companionSupabaseChannel.unsubscribe(); } catch (e) {}
+    companionSupabaseChannel = null;
+  }
+
+  try {
+    if (typeof window.supabase !== 'undefined' && AURA_CONFIG.SUPABASE.URL) {
+      const sbClient = window.supabase.createClient(
+        AURA_CONFIG.SUPABASE.URL,
+        AURA_CONFIG.SUPABASE.ANON_KEY
+      );
+
+      companionSupabaseChannel = sbClient.channel(`fwjade-cam-${sessionId}`, {
+        config: { broadcast: { self: false } }
+      });
+
+      companionSupabaseChannel
+        .on('broadcast', { event: 'MOBILE_CONNECTED' }, () => {
+          console.log('[COMPANION] Mobile phone connected via WebSocket!');
+          const statusBadge = document.getElementById('companionStatusBadge');
+          if (statusBadge) {
+            statusBadge.innerHTML = '<i class="fa-solid fa-mobile-screen text-emerald"></i> <span>🟢 Kamera HP Terhubung! Sedang Membidik Wajah...</span>';
+            statusBadge.className = 'companion-status-badge status-connected';
+          }
+        })
+        .on('broadcast', { event: 'PHOTO_CAPTURED' }, ({ payload }) => {
+          console.log('[COMPANION] Photo captured and received via WebSocket!');
+          if (payload && payload.photoBase64) {
+            handleCompanionPhotoSuccess(payload.photoBase64);
+          }
+        })
+        .subscribe((status) => {
+          console.log('[COMPANION] Supabase Realtime Channel status:', status);
+        });
+    }
+  } catch (err) {
+    console.warn('[COMPANION] Supabase realtime init error:', err);
+  }
+}
+
+function handleCompanionPhotoSuccess(photoBase64) {
+  if (companionPollInterval) {
+    clearInterval(companionPollInterval);
+    companionPollInterval = null;
+  }
+  if (companionSupabaseChannel) {
+    try { companionSupabaseChannel.unsubscribe(); } catch (e) {}
+    companionSupabaseChannel = null;
+  }
+
+  const statusBadge = document.getElementById('companionStatusBadge');
+  if (statusBadge) {
+    statusBadge.innerHTML = '<i class="fa-solid fa-circle-check text-emerald"></i> <span>✅ Foto Diterima! Menampilkan Hasil di Layar Laptop...</span>';
+    statusBadge.className = 'companion-status-badge status-success';
+  }
+
+  setTimeout(() => {
+    closeCompanionQrModal();
+
+    // Execute Biometrics & Poster directly on PC with the photo received from Mobile!
+    AppState.user.lastSnapshotBase64 = photoBase64;
+    executeBiometricCaptureAndScan(photoBase64);
+  }, 500);
+}
 
 function closeCompanionQrModal() {
   const modal = document.getElementById('modalCompanionCamera');
@@ -4346,13 +4405,17 @@ function closeCompanionQrModal() {
     clearInterval(companionPollInterval);
     companionPollInterval = null;
   }
+  if (companionSupabaseChannel) {
+    try { companionSupabaseChannel.unsubscribe(); } catch (e) {}
+    companionSupabaseChannel = null;
+  }
 }
 window.closeCompanionQrModal = closeCompanionQrModal;
 
 function copyCompanionLink() {
   if (!activeCompanionSessionId) return;
   const origin = window.location.origin || `${window.location.protocol}//${window.location.host}`;
-  const companionUrl = `${origin}/?session=${activeCompanionSessionId}&mode=companion`;
+  const companionUrl = `${origin}/camera.html?session=${activeCompanionSessionId}`;
 
   navigator.clipboard.writeText(companionUrl).then(() => {
     const copyTxt = document.getElementById('txtCopyCompanion');
@@ -4388,128 +4451,20 @@ function startCompanionPolling(sessionId) {
 
       if (session.status === 'connected') {
         if (statusBadge) {
-          statusBadge.innerHTML = '<i class="fa-solid fa-mobile-screen text-emerald"></i> <span>📱 HP Terhubung! Sedang Memindai Wajah...</span>';
+          statusBadge.innerHTML = '<i class="fa-solid fa-mobile-screen text-emerald"></i> <span>🟢 HP Terhubung! Sedang Membidik Wajah...</span>';
           statusBadge.className = 'companion-status-badge status-connected';
         }
       } else if (session.status === 'completed' && session.payload) {
         isCompleted = true;
-        clearInterval(companionPollInterval);
-        companionPollInterval = null;
-
-        if (statusBadge) {
-          statusBadge.innerHTML = '<i class="fa-solid fa-circle-check text-emerald"></i> <span>✅ Berhasil Memindai! Menampilkan Hasil di Layar Laptop...</span>';
-          statusBadge.className = 'companion-status-badge status-success';
+        const photo = session.payload.photoBase64;
+        if (photo) {
+          handleCompanionPhotoSuccess(photo);
         }
-
-        setTimeout(() => {
-          closeCompanionQrModal();
-
-          // Execute Biometrics & Poster directly on PC with the photo received from Mobile!
-          const photo = session.payload.photoBase64;
-          if (photo) {
-            AppState.user.lastSnapshotBase64 = photo;
-            executeBiometricCaptureAndScan(photo);
-          }
-        }, 800);
       }
     } catch (err) {
-      console.warn('[COMPANION] Polling warning:', err);
+      // Polling network warning silently
     }
-  }, 1400);
-}
-
-async function transmitCompanionScanData(sessionId, photoBase64) {
-  try {
-    await fetch(`/api/session-sync?action=submit&session=${sessionId}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        photoBase64,
-        userData: AppState.user
-      })
-    });
-    console.log('[COMPANION] Scan data transmitted successfully to PC session:', sessionId);
-
-    // Stop mobile camera stream
-    if (AppState.camera && AppState.camera.stream) {
-      try {
-        AppState.camera.stream.getTracks().forEach(t => t.stop());
-        AppState.camera.stream = null;
-      } catch (e) {}
-    }
-
-    // Show celebratory banner and guidance on mobile
-    const banner = document.getElementById('companionActiveBanner');
-    if (banner) {
-      banner.innerHTML = '<i class="fa-solid fa-circle-check text-emerald"></i> <span><strong>✅ Foto Berhasil Terkirim!</strong> Hasil analisa wajah &amp; aura Anda telah otomatis tampil di layar Laptop/PC Anda. Silakan lanjutkan di layar monitor Anda.</span>';
-      banner.style.background = 'rgba(16, 185, 129, 0.25)';
-      banner.style.borderColor = 'rgba(16, 185, 129, 0.7)';
-    }
-
-    const txtBtn = document.getElementById('txtStartCam');
-    if (txtBtn) txtBtn.textContent = '✅ Terkirim ke Layar Laptop';
-  } catch (err) {
-    console.error('[COMPANION] Failed to transmit scan data:', err);
-  }
-}
-
-function startCompanionMobileScanner(sessionId) {
-  // 1. Hide hero and all step forms strictly (NO login or data entry required on companion mobile!)
-  const secHero = document.getElementById('secHero');
-  const secIdentityForm = document.getElementById('secIdentityForm');
-  const secAuraResults = document.getElementById('secAuraResults');
-  const secDermatology = document.getElementById('secDermatology');
-  const secGemstone = document.getElementById('secGemstone');
-  const secManifestation = document.getElementById('secManifestation');
-  const secTrustViral = document.getElementById('secTrustViral');
-
-  if (secHero) secHero.style.setProperty('display', 'none', 'important');
-  if (secIdentityForm) secIdentityForm.style.setProperty('display', 'none', 'important');
-  if (secAuraResults) secAuraResults.style.setProperty('display', 'none', 'important');
-  if (secDermatology) secDermatology.style.setProperty('display', 'none', 'important');
-  if (secGemstone) secGemstone.style.setProperty('display', 'none', 'important');
-  if (secManifestation) secManifestation.style.setProperty('display', 'none', 'important');
-  if (secTrustViral) secTrustViral.style.setProperty('display', 'none', 'important');
-
-  // 2. Open Scanner Step directly
-  const secScanner = document.getElementById('secScanner');
-  if (secScanner) {
-    secScanner.style.setProperty('display', 'block', 'important');
-    secScanner.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }
-
-  // 3. Show Companion Active Banner
-  const banner = document.getElementById('companionActiveBanner');
-  if (banner) {
-    banner.style.display = 'flex';
-    banner.innerHTML = '<i class="fa-solid fa-mobile-screen-button text-gold"></i> <span><strong>Kamera HP Terhubung:</strong> Arahkan wajah ke kamera depan dan klik tombol "Ambil Foto" di bawah. Hasil analisa akan langsung tampil di layar Laptop/PC Anda.</span>';
-  }
-
-  // 4. Auto-launch mobile camera directly
-  startWebcam();
-}
-
-function checkCompanionUrlHandoff() {
-  try {
-    const params = new URLSearchParams(window.location.search);
-    const session = params.get('session');
-    const mode = params.get('mode');
-
-    if (session && mode === 'companion') {
-      console.log('[COMPANION] Mobile companion handoff detected. Session ID:', session);
-      AppState.companionSessionId = session;
-
-      // 1. Notify Backend Edge that Mobile is Connected
-      fetch(`/api/session-sync?action=connect&session=${session}`, { method: 'POST' }).catch(() => {});
-
-      // 2. Directly open mobile camera scanner without asking for form or login!
-      setTimeout(() => {
-        startCompanionMobileScanner(session);
-      }, 150);
-    }
-  } catch (e) {
-    console.warn('[COMPANION] URL check error:', e);
-  }
+  }, 1200);
 }
 
 // Initialize All Features on startup
@@ -4525,7 +4480,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initThreeJsJadeStudio();
   initMagneticTouchPhysics();
   initMiniSearchEngine();
-  checkCompanionUrlHandoff();
 });
 
 

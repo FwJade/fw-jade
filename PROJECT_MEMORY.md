@@ -177,12 +177,14 @@
       * Menambahkan bar lencana kepatuhan & otentikasi di bawah tombol kamera: Standar PADG Bank Indonesia, Sertifikasi Biometrik Global ISO/IEC 30107-3, On-Device AI Neural Mesh 100% Privat, dan Enkripsi SSL Edge 256-Bit.
       * Menyertakan tautan langsung ke Pusat Keamanan & Integritas Data (`security.html`) untuk memperkuat kepercayaan dan kredibilitas pengguna.
 * **2026-09-03 (Bagian 17):** **Cross-Device Companion Camera & Instant QR Handoff Engine**:
-   1. **Fitur Companion Camera (Kamera HP untuk PC/Laptop)**:
-      * Menambahkan kapabilitas bagi pengguna di komputer / laptop tanpa webcam (atau yang ingin kualitas kamera smartphone lebih jernih) untuk memindai wajah via HP dan hasil analisa langsung otomatis terbuka di layar PC/Laptop.
-   2. **Arsitektur Sesi Cloudflare Edge (`/api/session-sync`)**:
-      * Endpoint edge functions yang mengelola *lifecycle* sesi: `create`, `connect`, `submit`, dan `get` dengan proteksi masa kedaluwarsa otomatis (15 menit) dan enkripsi state.
-   3. **Modal QR Sync & Handoff Otomatis**:
-      * Modal `#modalCompanionCamera` di PC dengan render QR Code dinamis (`qrcodejs`), indikator status real-time, tombol salin tautan, serta *auto-transition* ke Step 3 (Hasil Aura Poster) seketika foto diterima dari smartphone.
+* **2026-09-03 (Bagian 18):** **Industry-Standard Pure Camera Companion Architecture (`camera.html` + Supabase Realtime WebSocket)**:
+   1. **Dedicated Minimalist Companion View (`camera.html`)**:
+      * Memisahkan total halaman HP dari aplikasi utama (`index.html`). HP kini hanya membuka antarmuka kamera murni berukuran super ringan (< 30KB) dengan oval guide dan tombol shutter langsung.
+      * Menghilangkan seluruh menu, login, form, bazi, 3D studio, dan kalkulasi di HP — HP murni berfungsi sebagai sensor kamera perangkat keras (*hardware remote lens*).
+   2. **Supabase Realtime WebSocket Synchronization Engine**:
+      * Mengatasi keterbatasan isolasi memori pada Cloudflare Pages Functions dengan menyambungkan PC dan HP melalui kanal WebSocket Realtime (`fwjade-cam-${sessionId}`).
+      * Menghadirkan koneksi instan 0-latency: status PC langsung berubah menjadi hijau (*HP Terhubung*), dan saat tombol foto ditekan di HP, foto langsung terkirim via WebSocket, modal di PC tertutup otomatis, dan layar PC langsung menjalankan kalkulasi dan menampilkan Step 3 (Hasil Aura & Poster).
+
 
 
 
