@@ -161,7 +161,10 @@
   <!-- Official Google Identity Services SDK -->
   <script src="https://accounts.google.com/gsi/client" async defer></script>
 
-  <link rel="stylesheet" href="style.css?v=53">
+  <!-- QR Code Generator Library for Companion Camera Sync -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+  <link rel="stylesheet" href="style.css?v=54">
 </head>
 <body class="theme-quiet-luxury">
   <!-- 0. Fullscreen Immersive Raw Crystal Backdrop -->
@@ -548,6 +551,12 @@
         </div>
         
         <div class="step-scanner-wrapper">
+          <!-- Companion Mobile Mode Active Indicator -->
+          <div class="companion-active-mode-banner" id="companionActiveBanner" style="display: none;">
+            <i class="fa-solid fa-link text-gold"></i>
+            <span><strong>Mode Kamera Pendamping Aktif:</strong> Foto scan wajah Anda akan otomatis dikirim ke layar Laptop/PC Anda.</span>
+          </div>
+
           <div class="scanner-kicker-badge"><i class="fa-solid fa-sparkles text-gold"></i> BIOMETRIK MIAN XIANG &amp; AURA CHI</div>
           <h2 class="step-main-title">Analisa Wajah &amp; Kemakmuran</h2>
           <p class="step-main-subtitle">Arahkan wajah ke bingkai oval untuk memindai 12 Istana Wajah &amp; energi aura giok.</p>
@@ -567,7 +576,10 @@
               <div class="fallback-camera-box">
                 <i class="fa-solid fa-camera-retro fallback-icon"></i>
                 <p class="fallback-lead">Kamera Siap Diaktifkan</p>
-                <span class="fallback-sub">Klik tombol di bawah untuk membuka kamera atau unggah foto wajah</span>
+                <span class="fallback-sub">Klik tombol di bawah untuk membuka kamera atau gunakan kamera HP Anda</span>
+                <button type="button" class="btn-fallback-companion" onclick="openCompanionQrModal()">
+                  <i class="fa-solid fa-mobile-screen-button text-gold"></i> <span>Gunakan Kamera HP (Scan QR)</span>
+                </button>
               </div>
             </div>
           </div>
@@ -605,7 +617,10 @@
             <div class="scanner-alt-action">
               <input type="file" id="faceUploadInput" accept="image/*" style="display: none;" onchange="handleFacePhotoUpload(event)" />
               <button type="button" class="btn-subtle-upload" onclick="document.getElementById('faceUploadInput').click()">
-                <i class="fa-solid fa-cloud-arrow-up"></i> <span>Atau Unggah Foto Wajah dari Galeri</span>
+                <i class="fa-solid fa-cloud-arrow-up"></i> <span>Upload Galeri</span>
+              </button>
+              <button type="button" class="btn-subtle-upload btn-companion-trigger" onclick="openCompanionQrModal()">
+                <i class="fa-solid fa-qrcode text-gold"></i> <span>Gunakan Kamera HP</span>
               </button>
             </div>
 
@@ -2410,6 +2425,42 @@
     </div>
   </div>
 
+  <!-- =========================================================================
+       COMPANION CAMERA QR SYNC MODAL (PC/Laptop to Mobile Handoff)
+       ========================================================================= -->
+  <div class="luxury-modal-overlay" id="modalCompanionCamera" style="display: none;">
+    <div class="luxury-modal-card companion-qr-modal-card">
+      <button type="button" class="modal-close-icon" onclick="closeCompanionQrModal()">&times;</button>
+      
+      <div class="companion-modal-header">
+        <div class="companion-badge-pill"><i class="fa-solid fa-mobile-screen-button text-gold"></i> <span>CROSS-DEVICE COMPANION</span></div>
+        <h3 class="companion-modal-title">Pindai Wajah Pakai Kamera HP</h3>
+        <p class="companion-modal-subtitle">Arahkan kamera smartphone Anda ke QR Code di bawah untuk membuka kamera depan dan mengirim hasil analisa ke laptop ini secara otomatis.</p>
+      </div>
+
+      <div class="companion-qr-box">
+        <div id="companionQrCanvas" class="qr-canvas-wrap"></div>
+        <div class="companion-status-badge" id="companionStatusBadge">
+          <i class="fa-solid fa-circle-notch fa-spin text-gold"></i> <span>Menunggu kamera HP terhubung...</span>
+        </div>
+      </div>
+
+      <div class="companion-session-details">
+        <div class="session-id-display">
+          <span class="session-id-lbl">Kode Sesi:</span>
+          <code id="companionSessionCode">FW-CAM-SYNC</code>
+        </div>
+        <button type="button" class="btn-copy-companion-link" id="btnCopyCompanionLink" onclick="copyCompanionLink()">
+          <i class="fa-solid fa-link"></i> <span id="txtCopyCompanion">Salin Tautan Sesi</span>
+        </button>
+      </div>
+
+      <div class="companion-security-note">
+        <i class="fa-solid fa-shield-check text-emerald"></i> <span>Sesi terenkripsi &amp; otomatis kedaluwarsa dalam 10 menit. Foto diproses privat di perangkat Anda.</span>
+      </div>
+    </div>
+  </div>
+
   <!-- External Luxury AI & Multimedia Libraries (Industry Gold Standard) -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/minisearch@6.3.0/dist/umd/index.min.js" crossorigin="anonymous"></script>
@@ -2419,7 +2470,7 @@
   <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 
   <!-- Centralized Config & Application Logic -->
-  <script src="config.js?v=53"></script>
-  <script src="app.js?v=53"></script>
+  <script src="config.js?v=54"></script>
+  <script src="app.js?v=54"></script>
 </body>
 </html>

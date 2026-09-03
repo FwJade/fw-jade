@@ -3903,6 +3903,193 @@ body.style-explorer .view-explorer-secondary {
   background: rgba(255, 200, 87, 0.05);
 }
 
+.btn-companion-trigger {
+  border-color: rgba(215, 182, 90, 0.35);
+  color: #F3F4F6;
+  background: rgba(215, 182, 90, 0.06);
+}
+
+.btn-companion-trigger:hover {
+  border-color: var(--color-gold);
+  background: rgba(215, 182, 90, 0.15);
+}
+
+/* ── COMPANION CAMERA QR SYNC SUITE ────────────────────────────────────────── */
+.btn-fallback-companion {
+  margin-top: 10px;
+  background: rgba(255, 200, 87, 0.1);
+  border: 1px solid rgba(255, 200, 87, 0.35);
+  color: #F3F4F6;
+  font-size: 0.76rem;
+  font-weight: 600;
+  border-radius: var(--radius-full);
+  padding: 6px 14px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  transition: all 0.25s ease;
+}
+
+.btn-fallback-companion:hover {
+  background: rgba(255, 200, 87, 0.2);
+  border-color: var(--color-gold);
+  transform: translateY(-1px);
+}
+
+.companion-active-mode-banner {
+  background: rgba(43, 224, 133, 0.1);
+  border: 1px solid rgba(43, 224, 133, 0.35);
+  border-radius: 12px;
+  padding: 10px 14px;
+  font-size: 0.78rem;
+  color: #E2E8F0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+  text-align: left;
+  line-height: 1.4;
+}
+
+.companion-qr-modal-card {
+  max-width: 440px;
+  width: 92%;
+  background: radial-gradient(circle at 50% 0%, rgba(20, 35, 28, 0.98) 0%, rgba(5, 12, 9, 0.98) 100%);
+  border: 1.5px solid rgba(215, 182, 90, 0.35);
+  border-radius: 24px;
+  padding: 28px 24px;
+  text-align: center;
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.9), 0 0 30px rgba(43, 224, 133, 0.15);
+  position: relative;
+}
+
+.companion-badge-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--color-gold);
+  background: rgba(255, 200, 87, 0.08);
+  border: 1px solid rgba(255, 200, 87, 0.25);
+  border-radius: var(--radius-full);
+  padding: 3px 12px;
+  margin-bottom: 8px;
+}
+
+.companion-modal-title {
+  font-family: var(--font-serif);
+  font-size: 1.35rem;
+  color: #FFFFFF;
+  margin-bottom: 6px;
+}
+
+.companion-modal-subtitle {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  line-height: 1.45;
+  margin-bottom: 18px;
+}
+
+.companion-qr-box {
+  background: #FFFFFF;
+  padding: 16px;
+  border-radius: 18px;
+  display: inline-block;
+  margin: 0 auto 16px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+}
+
+.qr-canvas-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.qr-canvas-wrap img,
+.qr-canvas-wrap canvas {
+  display: block;
+  margin: 0 auto;
+}
+
+.companion-status-badge {
+  margin-top: 10px;
+  font-size: 0.72rem;
+  color: #1F2937;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.companion-status-badge.status-connected {
+  color: #059669;
+}
+
+.companion-status-badge.status-success {
+  color: #10B981;
+}
+
+.companion-session-details {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 8px 14px;
+  margin-bottom: 14px;
+}
+
+.session-id-display {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.session-id-display code {
+  color: var(--color-gold);
+  font-weight: 700;
+  background: rgba(255, 200, 87, 0.1);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.btn-copy-companion-link {
+  background: none;
+  border: 1px solid rgba(215, 182, 90, 0.3);
+  color: var(--color-gold);
+  font-size: 0.72rem;
+  border-radius: var(--radius-full);
+  padding: 4px 10px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.2s ease;
+}
+
+.btn-copy-companion-link:hover {
+  background: rgba(215, 182, 90, 0.15);
+  border-color: var(--color-gold);
+}
+
+.companion-security-note {
+  font-size: 0.68rem;
+  color: #8C9CA4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  line-height: 1.35;
+}
+
 .scan-time-note {
   font-size: 0.72rem;
   color: var(--text-dim);

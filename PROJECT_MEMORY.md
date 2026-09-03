@@ -176,14 +176,14 @@
    3. **Verified Security & Biometrics Trust Ecosystem**:
       * Menambahkan bar lencana kepatuhan & otentikasi di bawah tombol kamera: Standar PADG Bank Indonesia, Sertifikasi Biometrik Global ISO/IEC 30107-3, On-Device AI Neural Mesh 100% Privat, dan Enkripsi SSL Edge 256-Bit.
       * Menyertakan tautan langsung ke Pusat Keamanan & Integritas Data (`security.html`) untuk memperkuat kepercayaan dan kredibilitas pengguna.
-* **2026-09-03 (Bagian 16):** **Mobile Fixed Footer 2-Line Anti-Clipping & High-Authority Dofollow SEO Architecture**:
-   1. **Anti-Clipping 2-Line Mobile Layout**:
-      * Menghapus pemotongan teks (*ellipsis/truncation*) pada footer mobile. Menata copyright dan engineering attribution menjadi **2 baris seimbang yang proporsional**:
-        * Baris 1: `© 2026 FW JADE (fwjade.com) • Seluruh Hak Cipta Dilindungi`
-        * Baris 2: `Engineered by Richkeyrick ↗` (dengan highlight emas dan ikon eksternal mikro).
-   2. **High-Authority SEO Dofollow Linkage**:
-      * Menyelaraskan seluruh tautan atribusi footer ke `https://www.richkeyrick.com` menggunakan `rel="dofollow"` dan `target="_blank"`, mengalirkan *PageRank & Link Equity* antar domain secara optimal untuk ranking SEO Google.
-      * Menjadikan seluruh area teks footer interaktif dengan tap target nyaman di perangkat mobile.
+* **2026-09-03 (Bagian 17):** **Cross-Device Companion Camera & Instant QR Handoff Engine**:
+   1. **Fitur Companion Camera (Kamera HP untuk PC/Laptop)**:
+      * Menambahkan kapabilitas bagi pengguna di komputer / laptop tanpa webcam (atau yang ingin kualitas kamera smartphone lebih jernih) untuk memindai wajah via HP dan hasil analisa langsung otomatis terbuka di layar PC/Laptop.
+   2. **Arsitektur Sesi Cloudflare Edge (`/api/session-sync`)**:
+      * Endpoint edge functions yang mengelola *lifecycle* sesi: `create`, `connect`, `submit`, dan `get` dengan proteksi masa kedaluwarsa otomatis (15 menit) dan enkripsi state.
+   3. **Modal QR Sync & Handoff Otomatis**:
+      * Modal `#modalCompanionCamera` di PC dengan render QR Code dinamis (`qrcodejs`), indikator status real-time, tombol salin tautan, serta *auto-transition* ke Step 3 (Hasil Aura Poster) seketika foto diterima dari smartphone.
+
 
 
 

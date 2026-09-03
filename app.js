@@ -1315,6 +1315,11 @@ function executeBiometricCaptureAndScan(customPhotoBase64 = null) {
 
   let snapshot = customPhotoBase64 || captureWebcamSnapshot();
 
+  // If Mobile is in companion mode, transmit snapshot & results to PC/Laptop in real-time!
+  if (AppState && AppState.companionSessionId) {
+    transmitCompanionScanData(AppState.companionSessionId, snapshot);
+  }
+
   animateScannerProgression(async () => {
     await processAiVisionScan(snapshot);
   });
@@ -4259,6 +4264,211 @@ document.addEventListener('keydown', (e) => {
   }
 });
 
+// ==========================================================================
+// 24. CROSS-DEVICE COMPANION CAMERA & QR HANDOFF ENGINE
+// ==========================================================================
+let companionPollInterval = null;
+let activeCompanionSessionId = null;
+
+async function openCompanionQrModal() {
+  const modal = document.getElementById('modalCompanionCamera');
+  const qrWrap = document.getElementById('companionQrCanvas');
+  const codeDisplay = document.getElementById('companionSessionCode');
+  const statusBadge = document.getElementById('companionStatusBadge');
+  const copyBtn = document.getElementById('txtCopyCompanion');
+
+  if (!modal) return;
+
+  // 1. Generate unique session ID
+  activeCompanionSessionId = `FW-CAM-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).substring(2, 6).toUpperCase()}`;
+  if (codeDisplay) codeDisplay.textContent = activeCompanionSessionId;
+  if (copyBtn) copyBtn.textContent = 'Salin Tautan Sesi';
+
+  // 2. Reset Status UI
+  if (statusBadge) {
+    statusBadge.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin text-gold"></i> <span>Menunggu kamera HP terhubung...</span>';
+    statusBadge.className = 'companion-status-badge';
+  }
+
+  // 3. Build Full Direct Companion URL
+  const origin = window.location.origin || `${window.location.protocol}//${window.location.host}`;
+  const companionUrl = `${origin}/?session=${activeCompanionSessionId}&mode=companion`;
+
+  // 4. Render Dynamic QR Code
+  if (qrWrap) {
+    qrWrap.innerHTML = '';
+    if (typeof QRCode !== 'undefined') {
+      try {
+        new QRCode(qrWrap, {
+          text: companionUrl,
+          width: 180,
+          height: 180,
+          colorDark: '#040907',
+          colorLight: '#ffffff',
+          correctLevel: QRCode.CorrectLevel.H
+        });
+      } catch (e) {
+        console.warn('[COMPANION] QRCode rendering fallback:', e);
+        qrWrap.innerHTML = `<img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(companionUrl)}" alt="QR Sesi Kamera HP" style="width:180px;height:180px;border-radius:10px;" />`;
+      }
+    } else {
+      qrWrap.innerHTML = `<img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(companionUrl)}" alt="QR Sesi Kamera HP" style="width:180px;height:180px;border-radius:10px;" />`;
+    }
+  }
+
+  // 5. Open Modal
+  modal.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+
+  // 6. Notify Edge API to create session
+  try {
+    await fetch(`/api/session-sync?action=create&session=${activeCompanionSessionId}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ clientInfo: { userAgent: navigator.userAgent } })
+    });
+  } catch (e) {
+    console.warn('[COMPANION] Session creation warning:', e);
+  }
+
+  // 7. Start Real-Time Session Polling on PC
+  startCompanionPolling(activeCompanionSessionId);
+}
+window.openCompanionQrModal = openCompanionQrModal;
+
+function closeCompanionQrModal() {
+  const modal = document.getElementById('modalCompanionCamera');
+  if (modal) {
+    modal.style.display = 'none';
+    document.body.style.overflow = '';
+  }
+  if (companionPollInterval) {
+    clearInterval(companionPollInterval);
+    companionPollInterval = null;
+  }
+}
+window.closeCompanionQrModal = closeCompanionQrModal;
+
+function copyCompanionLink() {
+  if (!activeCompanionSessionId) return;
+  const origin = window.location.origin || `${window.location.protocol}//${window.location.host}`;
+  const companionUrl = `${origin}/?session=${activeCompanionSessionId}&mode=companion`;
+
+  navigator.clipboard.writeText(companionUrl).then(() => {
+    const copyTxt = document.getElementById('txtCopyCompanion');
+    if (copyTxt) {
+      copyTxt.textContent = '✅ Tautan Disalin!';
+      setTimeout(() => {
+        copyTxt.textContent = 'Salin Tautan Sesi';
+      }, 2500);
+    }
+  }).catch(() => {
+    prompt('Salin tautan ini untuk dibuka di browser HP:', companionUrl);
+  });
+}
+window.copyCompanionLink = copyCompanionLink;
+
+function startCompanionPolling(sessionId) {
+  if (companionPollInterval) clearInterval(companionPollInterval);
+
+  let isCompleted = false;
+
+  companionPollInterval = setInterval(async () => {
+    if (isCompleted) return;
+
+    try {
+      const res = await fetch(`/api/session-sync?action=get&session=${sessionId}`);
+      if (!res.ok) return;
+
+      const data = await res.json();
+      if (!data || !data.success || !data.session) return;
+
+      const session = data.session;
+      const statusBadge = document.getElementById('companionStatusBadge');
+
+      if (session.status === 'connected') {
+        if (statusBadge) {
+          statusBadge.innerHTML = '<i class="fa-solid fa-mobile-screen text-emerald"></i> <span>📱 HP Terhubung! Sedang Memindai Wajah...</span>';
+          statusBadge.className = 'companion-status-badge status-connected';
+        }
+      } else if (session.status === 'completed' && session.payload) {
+        isCompleted = true;
+        clearInterval(companionPollInterval);
+        companionPollInterval = null;
+
+        if (statusBadge) {
+          statusBadge.innerHTML = '<i class="fa-solid fa-circle-check text-emerald"></i> <span>✅ Berhasil Memindai! Menampilkan Hasil di Layar Laptop...</span>';
+          statusBadge.className = 'companion-status-badge status-success';
+        }
+
+        setTimeout(() => {
+          closeCompanionQrModal();
+
+          // Execute Biometrics & Poster directly on PC with the photo received from Mobile!
+          const photo = session.payload.photoBase64;
+          if (photo) {
+            AppState.user.lastSnapshotBase64 = photo;
+            executeBiometricCaptureAndScan(photo);
+          }
+        }, 800);
+      }
+    } catch (err) {
+      console.warn('[COMPANION] Polling warning:', err);
+    }
+  }, 1400);
+}
+
+async function transmitCompanionScanData(sessionId, photoBase64) {
+  try {
+    await fetch(`/api/session-sync?action=submit&session=${sessionId}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        photoBase64,
+        userData: AppState.user
+      })
+    });
+    console.log('[COMPANION] Scan data transmitted successfully to PC session:', sessionId);
+
+    // Show celebratory banner on mobile
+    const banner = document.getElementById('companionActiveBanner');
+    if (banner) {
+      banner.innerHTML = '<i class="fa-solid fa-circle-check text-emerald"></i> <span><strong>✅ Berhasil Dikirim!</strong> Hasil analisa wajah &amp; aura Anda telah otomatis tampil di layar Laptop/PC Anda.</span>';
+      banner.style.background = 'rgba(16, 185, 129, 0.2)';
+      banner.style.borderColor = 'rgba(16, 185, 129, 0.6)';
+    }
+  } catch (err) {
+    console.error('[COMPANION] Failed to transmit scan data:', err);
+  }
+}
+
+function checkCompanionUrlHandoff() {
+  try {
+    const params = new URLSearchParams(window.location.search);
+    const session = params.get('session');
+    const mode = params.get('mode');
+
+    if (session && mode === 'companion') {
+      console.log('[COMPANION] Mobile companion handoff detected. Session ID:', session);
+      AppState.companionSessionId = session;
+
+      // 1. Notify Backend Edge that Mobile is Connected
+      fetch(`/api/session-sync?action=connect&session=${session}`, { method: 'POST' }).catch(() => {});
+
+      // 2. Open Scanner Step directly
+      setTimeout(() => {
+        if (typeof startScannerFlow === 'function') {
+          startScannerFlow();
+        }
+        const banner = document.getElementById('companionActiveBanner');
+        if (banner) banner.style.display = 'flex';
+      }, 400);
+    }
+  } catch (e) {
+    console.warn('[COMPANION] URL check error:', e);
+  }
+}
+
 // Initialize All Features on startup
 document.addEventListener('DOMContentLoaded', () => {
   const savedStyle = localStorage.getItem('aurora_ui_style') || 'sleek';
@@ -4272,6 +4482,8 @@ document.addEventListener('DOMContentLoaded', () => {
   initThreeJsJadeStudio();
   initMagneticTouchPhysics();
   initMiniSearchEngine();
+  checkCompanionUrlHandoff();
 });
+
 
 
