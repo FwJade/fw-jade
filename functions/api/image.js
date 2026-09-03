@@ -1,8 +1,8 @@
 /**
  * Cloudflare Pages Function: /api/image
  * Transforms user portrait into the 2035 Haute Future Executive Portrait
- * Powered by Leonardo.Ai Phoenix 1.0 & Lucid Origin on Cloudflare Workers AI
- * Guaranteed Photorealistic, Zero Cartoon, Authentic Indonesian Features
+ * Powered by FLUX.2 [klein] 4B with Reference Image (input_image_0)
+ * Preserves the user's authentic facial identity, structure, eyes, and smile
  */
 
 export async function onRequestPost(context) {
@@ -28,16 +28,61 @@ export async function onRequestPost(context) {
 
     const setting = 'seated in an executive penthouse boardroom, floor-to-ceiling glass windows overlooking panoramic twilight city skyline, cinematic atmospheric lighting, 85mm f/1.4 portrait lens, natural skin pores, realistic human photography, sharp focus, 8k resolution';
 
-    const futureExecutivePrompt = isMale
-      ? `High-fashion editorial photograph of a successful 30-year-old Indonesian gentleman, authentic Indonesian Asian facial features, warm confident expression, neat modern haircut, natural skin texture with visible pores, wearing ${attire}, ${setting}. Authentic photography, Hasselblad medium format, highly detailed, photorealistic, no cartoon, no 3d render, no airbrushing`
-      : `High-fashion editorial photograph of an elegant 28-year-old Indonesian businesswoman, authentic Indonesian Asian facial features, confident radiant expression, groomed dark hair, natural skin texture with visible pores, wearing ${attire}, ${setting}. Authentic photography, Hasselblad medium format, highly detailed, photorealistic, no cartoon, no 3d render, no airbrushing`;
-
     let generatedImageUrl = null;
     let engineUsed = 'none';
 
-    // 1. PRIMARY: Leonardo.Ai Phoenix 1.0 (Highest Photorealism Studio Quality)
-    if (accountId && apiToken) {
+    // 1. PRIMARY: FLUX.2 Klein 4B with Reference Image input_image_0 (Preserves User's Exact Face & Features)
+    if (imageBase64 && accountId && apiToken) {
       try {
+        const cleanBase64 = imageBase64.replace(/^data:image\/(png|jpeg|jpg|webp);base64,/, '');
+        const binaryStr = atob(cleanBase64);
+        const bytes = new Uint8Array(binaryStr.length);
+        for (let i = 0; i < binaryStr.length; i++) {
+          bytes[i] = binaryStr.charCodeAt(i);
+        }
+        const blob = new Blob([bytes], { type: 'image/jpeg' });
+
+        const form = new FormData();
+        const kleinPrompt = `Transform the person in input_image_0 into a successful 2035 Indonesian tech CEO wearing ${attire}, ${setting}. Preserve the authentic face, facial structure, eyes, nose, mouth, smile, and hairstyle of the person in input_image_0. Photorealistic portrait photography, 8k resolution, Hasselblad lens, no cartoon, no airbrushing.`;
+        form.append('prompt', kleinPrompt);
+        form.append('input_image_0', blob, 'face_reference.jpg');
+
+        const formResponse = new Response(form);
+        const fluxKleinRes = await fetch(
+          `https://api.cloudflare.com/client/v4/accounts/${accountId}/ai/run/@cf/black-forest-labs/flux-2-klein-4b`,
+          {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${apiToken}`,
+              'Content-Type': formResponse.headers.get('content-type')
+            },
+            body: formResponse.body
+          }
+        );
+
+        if (fluxKleinRes.status === 200) {
+          const buffer = await fluxKleinRes.arrayBuffer();
+          const binary = String.fromCharCode(...new Uint8Array(buffer));
+          const b64 = btoa(binary);
+          generatedImageUrl = `data:image/jpeg;base64,${b64}`;
+          engineUsed = '@cf/black-forest-labs/flux-2-klein-4b';
+          console.log('[CF AI] FLUX.2 Klein 4B with reference image generated successfully');
+        } else {
+          const errData = await fluxKleinRes.json().catch(() => ({}));
+          console.warn('[CF AI] FLUX.2 Klein 4B non-200 response:', fluxKleinRes.status, errData);
+        }
+      } catch (err) {
+        console.warn('[CF AI] FLUX.2 Klein 4B execution error:', err);
+      }
+    }
+
+    // 2. SECONDARY: Leonardo.Ai Phoenix 1.0 (Photorealistic Studio Quality)
+    if (!generatedImageUrl && accountId && apiToken) {
+      try {
+        const phoenixPrompt = isMale
+          ? `High-fashion editorial photograph of a successful 30-year-old Indonesian gentleman, authentic Indonesian Asian facial features, warm confident expression, neat modern haircut, natural skin texture with visible pores, wearing ${attire}, ${setting}. Authentic photography, Hasselblad medium format, highly detailed, photorealistic, no cartoon, no 3d render`
+          : `High-fashion editorial photograph of an elegant 28-year-old Indonesian businesswoman, authentic Indonesian Asian facial features, confident radiant expression, groomed dark hair, natural skin texture with visible pores, wearing ${attire}, ${setting}. Authentic photography, Hasselblad medium format, highly detailed, photorealistic, no cartoon, no 3d render`;
+
         const phoenixRes = await fetch(
           `https://api.cloudflare.com/client/v4/accounts/${accountId}/ai/run/@cf/leonardo/phoenix-1.0`,
           {
@@ -46,9 +91,7 @@ export async function onRequestPost(context) {
               'Authorization': `Bearer ${apiToken}`,
               'Content-Type': 'application/json'
             },
-            body: JSON.stringify({
-              prompt: futureExecutivePrompt
-            })
+            body: JSON.stringify({ prompt: phoenixPrompt })
           }
         );
 
@@ -58,70 +101,9 @@ export async function onRequestPost(context) {
           const b64 = btoa(binary);
           generatedImageUrl = `data:image/jpeg;base64,${b64}`;
           engineUsed = '@cf/leonardo/phoenix-1.0';
-          console.log('[CF AI] Leonardo Phoenix 1.0 generated successfully');
         }
       } catch (err) {
-        console.warn('[CF AI] Leonardo Phoenix error, trying Lucid Origin:', err);
-      }
-    }
-
-    // 2. SECONDARY: Leonardo.Ai Lucid Origin
-    if (!generatedImageUrl && accountId && apiToken) {
-      try {
-        const lucidRes = await fetch(
-          `https://api.cloudflare.com/client/v4/accounts/${accountId}/ai/run/@cf/leonardo/lucid-origin`,
-          {
-            method: 'POST',
-            headers: {
-              'Authorization': `Bearer ${apiToken}`,
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-              prompt: futureExecutivePrompt
-            })
-          }
-        );
-
-        if (lucidRes.status === 200) {
-          const buffer = await lucidRes.arrayBuffer();
-          const binary = String.fromCharCode(...new Uint8Array(buffer));
-          const b64 = btoa(binary);
-          generatedImageUrl = `data:image/jpeg;base64,${b64}`;
-          engineUsed = '@cf/leonardo/lucid-origin';
-          console.log('[CF AI] Leonardo Lucid Origin generated successfully');
-        }
-      } catch (err) {
-        console.warn('[CF AI] Leonardo Lucid Origin error:', err);
-      }
-    }
-
-    // 3. TERTIARY: FLUX.1 Schnell
-    if (!generatedImageUrl && accountId && apiToken) {
-      try {
-        const fluxRes = await fetch(
-          `https://api.cloudflare.com/client/v4/accounts/${accountId}/ai/run/@cf/black-forest-labs/flux-1-schnell`,
-          {
-            method: 'POST',
-            headers: {
-              'Authorization': `Bearer ${apiToken}`,
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-              prompt: futureExecutivePrompt,
-              steps: 4
-            })
-          }
-        );
-
-        if (fluxRes.status === 200) {
-          const fluxData = await fluxRes.json();
-          if (fluxData.result && fluxData.result.image) {
-            generatedImageUrl = `data:image/jpeg;base64,${fluxData.result.image}`;
-            engineUsed = '@cf/black-forest-labs/flux-1-schnell';
-          }
-        }
-      } catch (err) {
-        console.warn('[CF AI] FLUX Schnell error:', err);
+        console.warn('[CF AI] Leonardo Phoenix error:', err);
       }
     }
 

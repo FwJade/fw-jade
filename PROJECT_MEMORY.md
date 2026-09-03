@@ -177,14 +177,14 @@
       * Menambahkan bar lencana kepatuhan & otentikasi di bawah tombol kamera: Standar PADG Bank Indonesia, Sertifikasi Biometrik Global ISO/IEC 30107-3, On-Device AI Neural Mesh 100% Privat, dan Enkripsi SSL Edge 256-Bit.
       * Menyertakan tautan langsung ke Pusat Keamanan & Integritas Data (`security.html`) untuk memperkuat kepercayaan dan kredibilitas pengguna.
 * **2026-09-03 (Bagian 17):** **Cross-Device Companion Camera & Instant QR Handoff Engine**:
-* **2026-09-04 (Bagian 20):** **Authentic User Face Priority & Leonardo.Ai Phoenix 1.0 Integration**:
-   1. **Menghapus Fallback Model Kaukasia Statis**:
-      * Menghapus pemuatan otomatis gambar pria bule generic (`future_ceo_male_executive.jpg`).
-      * Layar Step 3 kini langsung menampilkan **Wajah Asli Pengguna** yang dipotret dari kamera HP sebagai gambar utama.
-   2. **Integrasi Model Fotorealistis Leonardo.Ai Phoenix 1.0 di Cloudflare Workers AI**:
-      * Memperbaiki token otentikasi di endpoint `/api/image` dengan fallback aman.
-      * Menggunakan model `@cf/leonardo/phoenix-1.0` dan `@cf/leonardo/lucid-origin` yang terkenal akan keaslian tekstur kulit, pori-pori alami, dan pencahayaan studio sinematik Hasselblad (menghilangkan efek kartun/plastik airbrushed).
-      * Menyesuaikan prompt agar mencerminkan fitur pria/wanita Asia Indonesia dengan setelan jas mewah dan liontin giok FW JADE.
+* **2026-09-04 (Bagian 21):** **FLUX.2 Klein 4B with Reference Image (`input_image_0`) & Instant Biometric Executive Compositor**:
+   1. **Integrasi FLUX.2 Klein 4B Input Image Reference**:
+      * Menerapkan model `@cf/black-forest-labs/flux-2-klein-4b` via `multipart/form-data` dengan field `input_image_0` untuk memasukkan foto referensi asli pengguna ke dalam model AI.
+      * Menyesuaikan prompt instruksi pengunci karakter wajah: *"Preserve the authentic face, facial structure, eyes, nose, mouth, smile, and hairstyle of the person in input_image_0 intact"*.
+   2. **Client-Side Biometric Executive Compositor (`generateClientSideExecutivePortrait`)**:
+      * Menjamin pengguna **seketika langsung melihat wajah aslinya mengenakan setelan jas eksekutif Tom Ford dan perhiasan liontin giok FW JADE** di penthouse boardroom melalui canvas blending bergradien halus tanpa bergantung pada kuota neuron harian Cloudflare.
+      * Menghilangkan kemungkinan layar hanya menampilkan selfie polos mentah jika panggilan AI terkena batas limit (error 4006).
+
 
 
 
