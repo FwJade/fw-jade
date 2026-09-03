@@ -1929,7 +1929,7 @@ function generateLuxuryAuraCard() {
 
   ctx.fillStyle = '#8E9894';
   ctx.font = '400 10px Poppins, sans-serif';
-  ctx.fillText('WhatsApp Concierge: +62 811-619-173 • Medan, Indonesia', 225, 706);
+  ctx.fillText('WhatsApp CS: +62 811-619-173 • Medan, Indonesia', 225, 706);
 
   ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
   ctx.font = '400 9px Poppins, sans-serif';
