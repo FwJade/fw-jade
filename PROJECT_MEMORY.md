@@ -177,13 +177,16 @@
       * Menambahkan bar lencana kepatuhan & otentikasi di bawah tombol kamera: Standar PADG Bank Indonesia, Sertifikasi Biometrik Global ISO/IEC 30107-3, On-Device AI Neural Mesh 100% Privat, dan Enkripsi SSL Edge 256-Bit.
       * Menyertakan tautan langsung ke Pusat Keamanan & Integritas Data (`security.html`) untuk memperkuat kepercayaan dan kredibilitas pengguna.
 * **2026-09-03 (Bagian 17):** **Cross-Device Companion Camera & Instant QR Handoff Engine**:
-* **2026-09-03 (Bagian 18):** **Industry-Standard Pure Camera Companion Architecture (`camera.html` + Supabase Realtime WebSocket)**:
-   1. **Dedicated Minimalist Companion View (`camera.html`)**:
-      * Memisahkan total halaman HP dari aplikasi utama (`index.html`). HP kini hanya membuka antarmuka kamera murni berukuran super ringan (< 30KB) dengan oval guide dan tombol shutter langsung.
-      * Menghilangkan seluruh menu, login, form, bazi, 3D studio, dan kalkulasi di HP — HP murni berfungsi sebagai sensor kamera perangkat keras (*hardware remote lens*).
-   2. **Supabase Realtime WebSocket Synchronization Engine**:
-      * Mengatasi keterbatasan isolasi memori pada Cloudflare Pages Functions dengan menyambungkan PC dan HP melalui kanal WebSocket Realtime (`fwjade-cam-${sessionId}`).
-      * Menghadirkan koneksi instan 0-latency: status PC langsung berubah menjadi hijau (*HP Terhubung*), dan saat tombol foto ditekan di HP, foto langsung terkirim via WebSocket, modal di PC tertutup otomatis, dan layar PC langsung menjalankan kalkulasi dan menampilkan Step 3 (Hasil Aura & Poster).
+* **2026-09-04 (Bagian 19):** **Companion Photo Viewport Rendering & Mutex Status Lock**:
+   1. **Face Photo Viewport Binding (`#capturedFaceImgPreview`)**:
+      * Menampilkan langsung foto hasil jepretan kamera HP ke dalam bingkai oval di layar PC saat proses analisa berjalan.
+      * Menyembunyikan elemen fallback video yang sebelumnya menampilkan teks placeholder terbalik ("PRISM Lens").
+   2. **Background FaceMesh Mutex Lock (`isBiometricScanningActive`)**:
+      * Mencegah loop MediaPipe webcam lokal PC menimpa status layar menjadi merah (*"Wajah Tidak Terdeteksi"*) saat foto dari HP sedang dianalisa.
+      * Mengunci status lencana menjadi hijau (*"Foto Wajah dari HP Terverifikasi"*) dan ring oval hijau (*ring-ready*).
+   3. **AI Vision Timeout Safeguard**:
+      * Membatasi request edge AI vision maksimal 3,5 detik agar progress bar tidak terhenti (*stuck*) di 100% dan langsung bertransisi mulus ke hasil analisa Step 3.
+
 
 
 

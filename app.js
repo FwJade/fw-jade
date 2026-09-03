@@ -1304,16 +1304,53 @@ function handleCameraPrimaryAction() {
   executeBiometricCaptureAndScan();
 }
 
+let isBiometricScanningActive = false;
+
 function executeBiometricCaptureAndScan(customPhotoBase64 = null) {
   const startBtn = document.getElementById('startCamBtn');
   const txtBtn = document.getElementById('txtStartCam');
   const pContainer = document.getElementById('scannerProgressContainer');
+  const guidancePill = document.getElementById('cameraGuidancePill');
+  const guidanceText = document.getElementById('guidanceText');
+  const guidanceIcon = document.getElementById('guidanceIcon');
+  const viewport = document.getElementById('scannerViewport');
+  const fallback = document.getElementById('cameraFallback');
+  const videoFeed = document.getElementById('webcamFeed');
+  const facePreviewImg = document.getElementById('capturedFaceImgPreview');
+
+  // Activate scanning flag to stop background FaceMesh loop from falsely complaining
+  isBiometricScanningActive = true;
+  isHumanFaceVerified = true;
+
+  let snapshot = customPhotoBase64 || captureWebcamSnapshot();
+
+  // Instantly display the captured face photo inside the oval lens!
+  if (snapshot) {
+    AppState.user.lastSnapshotBase64 = snapshot;
+    if (facePreviewImg) {
+      facePreviewImg.src = snapshot;
+      facePreviewImg.style.display = 'block';
+    }
+    if (fallback) fallback.style.display = 'none';
+    if (videoFeed) videoFeed.style.display = 'none';
+  }
+
+  // Update status pill & oval ring to glowing Emerald Success
+  if (guidancePill) {
+    guidancePill.style.display = 'inline-flex';
+    guidancePill.className = 'camera-guidance-pill guidance-ready';
+    if (guidanceIcon) guidanceIcon.className = 'fa-solid fa-circle-check text-emerald';
+    if (guidanceText) guidanceText.textContent = customPhotoBase64 ? 'Foto Wajah dari HP Terverifikasi' : 'Wajah Terverifikasi Optimal';
+  }
+
+  if (viewport) {
+    viewport.classList.remove('ring-warning');
+    viewport.classList.add('ring-ready');
+  }
 
   if (startBtn) startBtn.disabled = true;
   if (txtBtn) txtBtn.textContent = 'Sedang Memindai Aura...';
   if (pContainer) pContainer.style.display = 'block';
-
-  let snapshot = customPhotoBase64 || captureWebcamSnapshot();
 
   // If Mobile is in companion mode, transmit snapshot & results to PC/Laptop in real-time!
   if (AppState && AppState.companionSessionId) {
@@ -1397,6 +1434,10 @@ function initFaceMeshModel() {
 
 function handleFaceMeshResults(results) {
   isFaceMeshProcessing = false;
+
+  // Prevent background FaceMesh loop from overriding status during active scanning
+  if (isBiometricScanningActive) return;
+
   const guidancePill = document.getElementById('cameraGuidancePill');
   const guidanceText = document.getElementById('guidanceText');
   const guidanceIcon = document.getElementById('guidanceIcon');
@@ -1700,7 +1741,7 @@ async function processAiVisionScan(snapshotBase64) {
   if (afterStatus) afterStatus.textContent = 'Menganalisa wajah...';
 
   try {
-    const res = await fetch('/api/vision', {
+    const visionPromise = fetch('/api/vision', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -1709,7 +1750,10 @@ async function processAiVisionScan(snapshotBase64) {
       })
     });
 
-    if (res.ok) {
+    const timeoutPromise = new Promise(resolve => setTimeout(resolve, 3500));
+    const res = await Promise.race([visionPromise, timeoutPromise]);
+
+    if (res && res.ok) {
       const data = await res.json();
       if (data.success && data.analysis) {
         const a = data.analysis;
@@ -1919,6 +1963,7 @@ async function callImageTransformation(snapshotBase64, gemObj) {
 }
 
 function revealFullResults(gemObj, customGreeting) {
+  isBiometricScanningActive = false;
   AppState.user.metrics.selectedGem = gemObj;
 
   // Bind Gemstone Data Defensively

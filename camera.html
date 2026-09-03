@@ -408,17 +408,28 @@
       btnSnap.disabled = true;
       txtSnap.textContent = 'Mengirim ke Laptop...';
 
-      // Draw video frame to canvas
-      canvas.width = video.videoWidth;
-      canvas.height = video.videoHeight;
+      // Smart Downscale to 640px max for ultra-fast instant WebSocket transfer
+      const maxDim = 640;
+      let w = video.videoWidth || 640;
+      let h = video.videoHeight || 480;
+      if (w > maxDim || h > maxDim) {
+        if (w > h) {
+          h = Math.round((h * maxDim) / w);
+          w = maxDim;
+        } else {
+          w = Math.round((w * maxDim) / h);
+          h = maxDim;
+        }
+      }
+      canvas.width = w;
+      canvas.height = h;
       const ctx = canvas.getContext('2d');
-      // Invert mirror effect so sent photo looks natural
       ctx.translate(canvas.width, 0);
       ctx.scale(-1, 1);
-      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+      ctx.drawImage(video, 0, 0, w, h);
 
-      // Convert to high-quality JPEG Base64
-      const photoBase64 = canvas.toDataURL('image/jpeg', 0.88);
+      // Convert to compressed high-speed JPEG Base64 (~60KB)
+      const photoBase64 = canvas.toDataURL('image/jpeg', 0.82);
 
       // A. Send via Supabase Realtime WebSocket (Instant 0-latency)
       if (realtimeChannel) {
