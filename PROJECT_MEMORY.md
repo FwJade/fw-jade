@@ -176,10 +176,11 @@
    3. **Verified Security & Biometrics Trust Ecosystem**:
       * Menambahkan bar lencana kepatuhan & otentikasi di bawah tombol kamera: Standar PADG Bank Indonesia, Sertifikasi Biometrik Global ISO/IEC 30107-3, On-Device AI Neural Mesh 100% Privat, dan Enkripsi SSL Edge 256-Bit.
       * Menyertakan tautan langsung ke Pusat Keamanan & Integritas Data (`security.html`) untuk memperkuat kepercayaan dan kredibilitas pengguna.
-* **2026-09-03 (Bagian 14):** **Security Center Symmetrical 6-Card Grid Expansion (`security.html`)**:
-   1. **Integrasi Penuh RICHKEYRICK AI & SkyNET AI**:
-      * Menambahkan 2 kartu teknologi mandiri pada pilar arsitektur keamanan:
-        * **RICHKEYRICK AI Neural Engine**: Mesin orkestrasi Bazi, 12 Istana Mian Xiang, & resonansi energi giok instan.
-        * **SkyNET AI Autonomous Matrix**: Sistem pertahanan cerdas otonom aktif 24/7 (Anti-DDoS, inspeksi anomali trafik edge, enkripsi real-time, failover tanpa downtime).
-      * Menghasilkan grid 3x2 (6 kartu) yang 100% simetris, kokoh, dan representatif terhadap teknologi komprehensif yang menopang FW JADE.
+* **2026-09-03 (Bagian 15):** **Mobile View Minimalist Fixed Sticky Trademark Footer Overhaul**:
+   1. **Eliminasi Kesemakan Footer Mobile**:
+      * Menghapus tumpukan 7 link legal dan brand badge raksasa di layar mobile (`.footer-luxury-strip` & `.f-bottom-tags` di-hide pada layar mobile). Seluruh tautan legal tetap tersedia secara rapi dan komprehensif di Slide-Over Trust Drawer (`#luxurySidebarDrawer`).
+   2. **Fixed Sticky Trademark & Copyright Strip**:
+      * Menetapkan footer mobile sebagai bar tetap yang menempel rapi di bagian bawah layar (*fixed sticky bottom bar* dengan *backdrop-filter blur*, border tipis gold, dan ukuran font mikro yang elegan).
+      * Memberikan ruang bernapas maksimal (*airy sanctuary*) bagi elemen Hero di tampilan ponsel.
+
 
