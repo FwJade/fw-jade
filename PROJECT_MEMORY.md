@@ -124,3 +124,5 @@
      * Menautkan nama **`Richkeyrick`** langsung ke `https://www.richkeyrick.com` dengan atribut `target="_blank" rel="noopener"` (**Dofollow** tanpa `nofollow`) untuk mengalirkan otoritas SEO secara optimal sebagai web pilar terhubung.
   4. **Penyusunan Peta Standar Kepercayaan Biometrik Resmi**:
      * Menyusun arsitektur kepatuhan regulasi Indonesia (Bank Indonesia PADG BI No. 24/7/PADG/2022, UU PDP No. 27/2022 Pasal 4 & 12, PSrE Kominfo) dan standar biometrik global (ISO/IEC 30107-3 PAD iBeta Level 1 & 2, ISO/IEC 19794-5, ICAO 9303, FIDO Alliance).
+  5. **Auto-Deploy & Continuous Sync Policy (Mandatory Rule)**:
+     * Ditetapkan aturan operasional wajib: Setiap ada modifikasi kode atau fitur, agent WAJIB langsung melakukan commit, push ke GitHub `origin/main`, dan memicu pipeline deployment otomatis agar pengguna dapat langsung menguji hasil perubahan secara live di web publik.
