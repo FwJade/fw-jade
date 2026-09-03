@@ -564,12 +564,6 @@
               <div class="hud-circle-laser" id="hudLaserLine"></div>
             </div>
 
-            <!-- Real-Time Face Distance & Position Guidance Pill -->
-            <div class="camera-guidance-pill" id="cameraGuidancePill" style="display: none;">
-              <i class="fa-solid fa-expand" id="guidanceIcon"></i>
-              <span id="guidanceText">Arahkan wajah ke lingkaran</span>
-            </div>
-
             <!-- Fallback State when camera inactive -->
             <div class="camera-fallback" id="cameraFallback">
               <div class="fallback-camera-box">
@@ -577,6 +571,14 @@
                 <p class="fallback-lead">Kamera Siap Diaktifkan</p>
                 <span class="fallback-sub">Klik tombol di bawah untuk membuka kamera atau unggah foto wajah</span>
               </div>
+            </div>
+          </div>
+
+          <!-- Real-Time Face Distance & Position Guidance Pill (Anchored Under Lens) -->
+          <div class="camera-guidance-pill-wrap">
+            <div class="camera-guidance-pill" id="cameraGuidancePill" style="display: none;">
+              <i class="fa-solid fa-expand" id="guidanceIcon"></i>
+              <span id="guidanceText">Arahkan wajah ke lingkaran</span>
             </div>
           </div>
 
@@ -610,12 +612,6 @@
             </div>
 
             <p class="scan-time-note"><i class="fa-solid fa-shield-halved"></i> Biometrik diproses aman &amp; privat via Cloudflare AI (10–15 detik)</p>
-          </div>
-
-          <!-- Live Snapshot Preview (Shown after capture) -->
-          <div class="snapshot-preview-wrap" id="snapshotPreviewWrap" style="display: none;">
-            <p class="snapshot-preview-label"><i class="fa-solid fa-camera-rotate"></i> FOTO WAJAH YANG SEDANG DIANALISA</p>
-            <img id="snapshotCapturePreview" alt="Foto wajah yang dianalisa" />
           </div>
         </div>
       </section>
@@ -2382,7 +2378,7 @@
   <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 
   <!-- Centralized Config & Application Logic -->
-  <script src="config.js?v=40"></script>
-  <script src="app.js?v=40"></script>
+  <script src="config.js?v=41"></script>
+  <script src="app.js?v=41"></script>
 </body>
 </html>

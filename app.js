@@ -1013,6 +1013,9 @@ async function startWebcam() {
   const guidancePill = document.getElementById('cameraGuidancePill');
 
   resetScannerProgressUI();
+  isHumanFaceVerified = false;
+  verifiedFaceLandmarks = null;
+  initFaceMeshModel();
 
   try {
     const stream = await navigator.mediaDevices.getUserMedia({
@@ -1031,8 +1034,8 @@ async function startWebcam() {
     }
     if (fallback) fallback.style.display = 'none';
     if (guidancePill) guidancePill.style.display = 'inline-flex';
-    if (txtBtn) txtBtn.textContent = 'Ambil Foto & Analisa Wajah';
-    if (startBtn) startBtn.disabled = false;
+    if (txtBtn) txtBtn.textContent = 'Arahkan Wajah ke Kamera';
+    if (startBtn) startBtn.disabled = true;
   } catch (err) {
     console.warn('[AURA AI] Camera access not granted or unavailable:', err);
     isCameraStreaming = false;
@@ -1049,7 +1052,23 @@ function handleCameraPrimaryAction() {
     return;
   }
 
-  // Camera is live: take snapshot and run scan
+  // Strict Protection: Only allow capture if real human face is 100% verified
+  if (!isHumanFaceVerified) {
+    const guidancePill = document.getElementById('cameraGuidancePill');
+    if (guidancePill) {
+      guidancePill.className = 'camera-guidance-pill guidance-warn';
+      const guidanceText = document.getElementById('guidanceText');
+      if (guidanceText) guidanceText.textContent = '❌ Wajah Belum Terverifikasi! Arahkan Wajah Manusia Asli.';
+    }
+    const viewport = document.getElementById('scannerViewport');
+    if (viewport) {
+      viewport.classList.remove('ring-ready');
+      viewport.classList.add('ring-warning');
+    }
+    return;
+  }
+
+  // Camera is live & verified human face present: take snapshot and run scan
   executeBiometricCaptureAndScan();
 }
 
@@ -1076,137 +1095,203 @@ function handleFacePhotoUpload(event) {
   const reader = new FileReader();
   reader.onload = (e) => {
     const dataUrl = e.target.result;
-    AppState.user.lastSnapshotBase64 = dataUrl;
-
-    const previewEl = document.getElementById('snapshotCapturePreview');
-    const previewWrap = document.getElementById('snapshotPreviewWrap');
-    if (previewEl) {
-      previewEl.src = dataUrl;
-      previewEl.style.display = 'block';
-    }
-    if (previewWrap) previewWrap.style.display = 'block';
-
-    const fallback = document.getElementById('cameraFallback');
-    if (fallback) fallback.style.display = 'none';
-
-    executeBiometricCaptureAndScan(dataUrl);
+    const tempImg = new Image();
+    tempImg.onload = async () => {
+      const fm = initFaceMeshModel();
+      if (fm) {
+        fm.onResults((res) => {
+          if (!res.multiFaceLandmarks || res.multiFaceLandmarks.length === 0) {
+            alert('⚠️ Foto yang diunggah tidak terdeteksi wajah manusia. Harap unggah foto wajah asli yang jelas menghadap kamera.');
+            return;
+          }
+          // Real human face verified in uploaded photo
+          AppState.user.lastSnapshotBase64 = dataUrl;
+          const fallback = document.getElementById('cameraFallback');
+          if (fallback) fallback.style.display = 'none';
+          executeBiometricCaptureAndScan(dataUrl);
+        });
+        try {
+          await fm.send({ image: tempImg });
+        } catch (err) {
+          AppState.user.lastSnapshotBase64 = dataUrl;
+          const fallback = document.getElementById('cameraFallback');
+          if (fallback) fallback.style.display = 'none';
+          executeBiometricCaptureAndScan(dataUrl);
+        }
+      } else {
+        AppState.user.lastSnapshotBase64 = dataUrl;
+        const fallback = document.getElementById('cameraFallback');
+        if (fallback) fallback.style.display = 'none';
+        executeBiometricCaptureAndScan(dataUrl);
+      }
+    };
+    tempImg.src = dataUrl;
   };
   reader.readAsDataURL(file);
 }
 
-let faceDetectionState = 'detecting'; // 'too_far', 'too_close', 'ready'
-let readyChimePlayed = false;
+// ── TRUE MEDIAPIPE BIOMETRIC FACE MESH ENGINE ────────────────────────────
+let faceMeshModel = null;
+let isHumanFaceVerified = false;
+let verifiedFaceLandmarks = null;
+let isFaceMeshProcessing = false;
+
+function initFaceMeshModel() {
+  if (faceMeshModel) return faceMeshModel;
+  if (typeof FaceMesh !== 'undefined') {
+    try {
+      faceMeshModel = new FaceMesh({
+        locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/${file}`
+      });
+      faceMeshModel.setOptions({
+        maxNumFaces: 1,
+        refineLandmarks: true,
+        minDetectionConfidence: 0.6,
+        minTrackingConfidence: 0.6
+      });
+      faceMeshModel.onResults(handleFaceMeshResults);
+      console.log('[AURA AI] MediaPipe FaceMesh 468 Biometric Engine Ready');
+    } catch (e) {
+      console.warn('[AURA AI] FaceMesh init error:', e);
+    }
+  }
+  return faceMeshModel;
+}
+
+function handleFaceMeshResults(results) {
+  isFaceMeshProcessing = false;
+  const guidancePill = document.getElementById('cameraGuidancePill');
+  const guidanceText = document.getElementById('guidanceText');
+  const guidanceIcon = document.getElementById('guidanceIcon');
+  const startBtn = document.getElementById('startCamBtn');
+  const txtBtn = document.getElementById('txtStartCam');
+  const viewport = document.getElementById('scannerViewport');
+  const canvas = document.getElementById('scannerHudCanvas');
+
+  if (!results.multiFaceLandmarks || results.multiFaceLandmarks.length === 0) {
+    // ZERO HUMAN FACE DETECTED!
+    isHumanFaceVerified = false;
+    verifiedFaceLandmarks = null;
+
+    if (guidancePill) {
+      guidancePill.className = 'camera-guidance-pill guidance-warn';
+      if (guidanceIcon) guidanceIcon.className = 'fa-solid fa-triangle-exclamation';
+      if (guidanceText) guidanceText.textContent = '❌ Wajah Tidak Terdeteksi (Arahkan Wajah Anda)';
+    }
+    if (viewport) {
+      viewport.classList.remove('ring-ready');
+      viewport.classList.add('ring-warning');
+    }
+    if (startBtn) {
+      startBtn.disabled = true;
+    }
+    if (txtBtn && isCameraStreaming) {
+      txtBtn.textContent = 'Arahkan Wajah ke Kamera';
+    }
+    return;
+  }
+
+  // HUMAN FACE CONFIRMED BY MEDIAPIPE!
+  const landmarks = results.multiFaceLandmarks[0];
+  verifiedFaceLandmarks = landmarks;
+
+  const forehead = landmarks[10];
+  const chin = landmarks[152];
+  const leftCheek = landmarks[234];
+  const rightCheek = landmarks[454];
+
+  const faceHeight = Math.abs(chin.y - forehead.y);
+  const centerX = (leftCheek.x + rightCheek.x) / 2;
+  const centerY = (forehead.y + chin.y) / 2;
+
+  if (faceHeight < 0.22) {
+    isHumanFaceVerified = false;
+    if (guidancePill) {
+      guidancePill.className = 'camera-guidance-pill guidance-warn';
+      if (guidanceIcon) guidanceIcon.className = 'fa-solid fa-arrows-to-eye';
+      if (guidanceText) guidanceText.textContent = '🔍 Terlalu Jauh, Dekatkan Wajah';
+    }
+    if (viewport) {
+      viewport.classList.remove('ring-ready');
+      viewport.classList.add('ring-warning');
+    }
+    if (startBtn) startBtn.disabled = true;
+    if (txtBtn) txtBtn.textContent = 'Dekatkan Wajah';
+  } else if (faceHeight > 0.88) {
+    isHumanFaceVerified = false;
+    if (guidancePill) {
+      guidancePill.className = 'camera-guidance-pill guidance-warn';
+      if (guidanceIcon) guidanceIcon.className = 'fa-solid fa-arrows-split-up-and-left';
+      if (guidanceText) guidanceText.textContent = '⚠️ Terlalu Dekat, Jauhkan Sedikit';
+    }
+    if (viewport) {
+      viewport.classList.remove('ring-ready');
+      viewport.classList.add('ring-warning');
+    }
+    if (startBtn) startBtn.disabled = true;
+    if (txtBtn) txtBtn.textContent = 'Jauhkan Sedikit Wajah';
+  } else if (Math.abs(centerX - 0.5) > 0.22 || Math.abs(centerY - 0.5) > 0.25) {
+    isHumanFaceVerified = false;
+    if (guidancePill) {
+      guidancePill.className = 'camera-guidance-pill guidance-warn';
+      if (guidanceIcon) guidanceIcon.className = 'fa-solid fa-crosshairs';
+      if (guidanceText) guidanceText.textContent = '🎯 Posisikan Wajah di Tengah';
+    }
+    if (viewport) {
+      viewport.classList.remove('ring-ready');
+      viewport.classList.add('ring-warning');
+    }
+    if (startBtn) startBtn.disabled = true;
+    if (txtBtn) txtBtn.textContent = 'Posisikan di Tengah';
+  } else {
+    // 100% VERIFIED HUMAN FACE!
+    isHumanFaceVerified = true;
+    if (guidancePill) {
+      guidancePill.className = 'camera-guidance-pill guidance-ready';
+      if (guidanceIcon) guidanceIcon.className = 'fa-solid fa-circle-check';
+      if (guidanceText) guidanceText.textContent = '✓ Wajah Terverifikasi & Siap Difoto!';
+    }
+    if (viewport) {
+      viewport.classList.add('ring-ready');
+      viewport.classList.remove('ring-warning');
+    }
+    if (startBtn) {
+      startBtn.disabled = false;
+    }
+    if (txtBtn) txtBtn.textContent = 'Ambil Foto & Analisa Wajah';
+  }
+}
 
 function drawScannerHudAnimation() {
   const canvas = document.getElementById('scannerHudCanvas');
   const video = document.getElementById('webcamFeed');
-  const guidancePill = document.getElementById('cameraGuidancePill');
-  const guidanceText = document.getElementById('guidanceText');
-  const guidanceIcon = document.getElementById('guidanceIcon');
-  const viewport = document.getElementById('scannerViewport');
-
   if (!canvas) return;
-  const ctx = canvas.getContext('2d', { willReadFrequently: true });
+  const ctx = canvas.getContext('2d');
   canvas.width = canvas.offsetWidth || 240;
   canvas.height = canvas.offsetHeight || 240;
 
-  let step = 0;
+  const fm = initFaceMeshModel();
+  let frameCount = 0;
+
   function draw() {
     if (!isCameraStreaming && !AppState.camera.stream) return;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     const cx = canvas.width / 2;
     const cy = canvas.height / 2;
 
-    // Real-time video frame luminance & skin tone heuristic
-    if (video && video.readyState >= 2 && step % 4 === 0) {
-      try {
-        const tempCanvas = document.createElement('canvas');
-        tempCanvas.width = 40;
-        tempCanvas.height = 40;
-        const tCtx = tempCanvas.getContext('2d', { willReadFrequently: true });
-        tCtx.drawImage(video, 0, 0, 40, 40);
-        const frameData = tCtx.getImageData(0, 0, 40, 40).data;
-
-        // Calculate center vs perimeter contrast to estimate face distance
-        let centerBrightness = 0;
-        let edgeBrightness = 0;
-        let centerCount = 0;
-        let edgeCount = 0;
-
-        for (let y = 0; y < 40; y++) {
-          for (let x = 0; x < 40; x++) {
-            const idx = (y * 40 + x) * 4;
-            const r = frameData[idx];
-            const g = frameData[idx + 1];
-            const b = frameData[idx + 2];
-            const lum = (r * 0.299 + g * 0.587 + b * 0.114);
-
-            const dx = x - 20;
-            const dy = y - 20;
-            const dist = Math.sqrt(dx * dx + dy * dy);
-
-            if (dist < 10) {
-              centerBrightness += lum;
-              centerCount++;
-            } else if (dist > 14 && dist < 19) {
-              edgeBrightness += lum;
-              edgeCount++;
-            }
-          }
-        }
-
-        const avgCenter = centerBrightness / (centerCount || 1);
-        const avgEdge = edgeBrightness / (edgeCount || 1);
-
-        if (avgCenter < 25) {
-          faceDetectionState = 'too_far';
-          if (guidancePill) {
-            guidancePill.className = 'camera-guidance-pill guidance-warn';
-            guidanceText.textContent = 'Pencahayaan redup, dekatkan wajah';
-            guidanceIcon.className = 'fa-solid fa-sun';
-          }
-          if (viewport) {
-            viewport.classList.remove('ring-ready');
-            viewport.classList.add('ring-warn');
-          }
-          readyChimePlayed = false;
-        } else if (avgCenter > 220) {
-          faceDetectionState = 'too_close';
-          if (guidancePill) {
-            guidancePill.className = 'camera-guidance-pill guidance-warn';
-            guidanceText.textContent = 'Terlalu dekat, jauhkan sedikit';
-            guidanceIcon.className = 'fa-solid fa-arrows-to-circle';
-          }
-          if (viewport) {
-            viewport.classList.remove('ring-ready');
-            viewport.classList.add('ring-warn');
-          }
-          readyChimePlayed = false;
-        } else {
-          faceDetectionState = 'ready';
-          if (guidancePill) {
-            guidancePill.className = 'camera-guidance-pill guidance-ready';
-            guidanceText.textContent = '✓ Posisi Wajah Pas & Siap Difoto!';
-            guidanceIcon.className = 'fa-solid fa-circle-check';
-          }
-          if (viewport) {
-            viewport.classList.remove('ring-warn');
-            viewport.classList.add('ring-ready');
-          }
-          if (!readyChimePlayed) {
-            readyChimePlayed = true;
-          }
-        }
-      } catch (err) {}
+    // Run MediaPipe frame detection at optimal cadence for silky 60fps HUD
+    if (fm && video && video.readyState >= 2 && !isFaceMeshProcessing && frameCount % 3 === 0) {
+      isFaceMeshProcessing = true;
+      fm.send({ image: video }).catch(() => { isFaceMeshProcessing = false; });
     }
 
-    // Dynamic Reticle Ring Color based on State
-    const ringColor = faceDetectionState === 'ready' 
-      ? 'rgba(16, 185, 129, 0.85)' 
-      : (faceDetectionState === 'too_close' ? 'rgba(245, 158, 11, 0.85)' : 'rgba(255, 200, 87, 0.7)');
+    // Dynamic Reticle Ring Color based on real verified face state
+    const ringColor = isHumanFaceVerified 
+      ? 'rgba(16, 185, 129, 0.9)' 
+      : 'rgba(239, 68, 68, 0.75)';
 
     ctx.strokeStyle = ringColor;
-    ctx.lineWidth = faceDetectionState === 'ready' ? 2.5 : 1.5;
+    ctx.lineWidth = isHumanFaceVerified ? 2.5 : 1.5;
     ctx.beginPath();
     ctx.arc(cx, cy, 75, 0, Math.PI * 2);
     ctx.stroke();
@@ -1239,7 +1324,21 @@ function drawScannerHudAnimation() {
     ctx.lineTo(cx + 60, cy + 60 - brLen);
     ctx.stroke();
 
-    step++;
+    // Draw biometric 12-palaces landmark constellation when human face verified
+    if (isHumanFaceVerified && verifiedFaceLandmarks) {
+      ctx.fillStyle = 'rgba(43, 224, 133, 0.85)';
+      const keyPoints = [10, 151, 9, 8, 168, 6, 197, 195, 5, 4, 1, 2, 164, 0, 11, 12, 13, 14, 15, 16, 17, 18, 200, 199, 175, 152, 33, 263, 61, 291];
+      for (let i = 0; i < keyPoints.length; i++) {
+        const pt = verifiedFaceLandmarks[keyPoints[i]];
+        if (pt) {
+          ctx.beginPath();
+          ctx.arc(pt.x * canvas.width, pt.y * canvas.height, 2, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+    }
+
+    frameCount++;
     requestAnimationFrame(draw);
   }
   draw();

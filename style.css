@@ -7597,6 +7597,7 @@ body.theme-imperial-light .celestial-emblem-svg circle[fill] {
 body.theme-imperial-light .hero-brand-title {
   background: linear-gradient(135deg, #0A1C16 0%, #163B30 50%, #8C6D23 100%) !important;
   -webkit-background-clip: text !important;
+  background-clip: text !important;
   -webkit-text-fill-color: transparent !important;
   text-shadow: none !important;
   filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.08)) !important;
@@ -8539,42 +8540,49 @@ body.theme-imperial-light .u-no-scan-note {
 /* =========================================================================
    REAL-TIME CAMERA GUIDANCE PILL & DYNAMIC FACE RING
    ========================================================================= */
+.camera-guidance-pill-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: -10px auto 18px auto;
+  min-height: 36px;
+  position: relative;
+  z-index: 10;
+}
+
 .camera-guidance-pill {
-  position: absolute;
-  bottom: 14px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: rgba(6, 12, 10, 0.88);
-  border: 1px solid rgba(43, 224, 133, 0.4);
+  position: relative;
+  background: rgba(8, 20, 15, 0.95);
+  border: 1px solid rgba(43, 224, 133, 0.45);
   color: #fff;
-  padding: 5px 14px;
+  padding: 6px 18px;
   border-radius: 30px;
-  font-size: 0.72rem;
+  font-size: 0.76rem;
   font-weight: 600;
   letter-spacing: 0.04em;
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  z-index: 5;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+  gap: 8px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
   pointer-events: none;
   white-space: nowrap;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .camera-guidance-pill.guidance-warn {
-  border-color: rgba(255, 200, 87, 0.7);
-  color: #FFC857;
-  box-shadow: 0 0 15px rgba(255, 200, 87, 0.3);
+  border-color: rgba(239, 68, 68, 0.8) !important;
+  background: rgba(30, 8, 8, 0.95) !important;
+  color: #FCA5A5 !important;
+  box-shadow: 0 0 25px rgba(239, 68, 68, 0.4) !important;
 }
 
 .camera-guidance-pill.guidance-ready {
-  border-color: #10B981;
-  background: rgba(6, 30, 20, 0.92);
-  color: #34D399;
-  box-shadow: 0 0 20px rgba(16, 185, 129, 0.5);
+  border-color: #10B981 !important;
+  background: rgba(6, 30, 20, 0.95) !important;
+  color: #34D399 !important;
+  box-shadow: 0 0 25px rgba(16, 185, 129, 0.45) !important;
 }
 
 /* Dynamic State on Circular Viewport Ring */
@@ -8583,9 +8591,18 @@ body.theme-imperial-light .u-no-scan-note {
   box-shadow: 0 0 40px rgba(16, 185, 129, 0.6), inset 0 0 25px rgba(16, 185, 129, 0.25) !important;
 }
 
+.circular-camera-viewport.ring-warning,
 .circular-camera-viewport.ring-warn {
-  border-color: #F59E0B !important;
-  box-shadow: 0 0 30px rgba(245, 158, 11, 0.5), inset 0 0 20px rgba(245, 158, 11, 0.2) !important;
+  border-color: #EF4444 !important;
+  box-shadow: 0 0 35px rgba(239, 68, 68, 0.5), inset 0 0 20px rgba(239, 68, 68, 0.25) !important;
+}
+
+.btn-shutter-royal:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  filter: grayscale(0.5);
+  transform: none !important;
+  box-shadow: none !important;
 }
 
 /* =========================================================================

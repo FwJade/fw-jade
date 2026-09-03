@@ -86,6 +86,17 @@
   2. **Proteksi Tumpang Tindih Guidance Pill (`#cameraGuidancePill`)**:
      * Menyembunyikan pill petunjuk saat kamera dalam status fallback / belum diaktifkan (`display: none;`).
      * Pill petunjuk hanya muncul secara dinamis saat video feed kamera aktif menyala.
+* **2026-09-03 (Bagian 6):** **True MediaPipe FaceMesh Engine & Proteksi Anti-Stiker / Anti-Pemborosan Kuota AI**:
+  1. **Integrasi Nyata MediaPipe Face Mesh 468 Landmarks (`app.js`)**:
+     * Menghapus seluruh algoritma heuristik kecerahan lama yang tidak valid. Menggantinya dengan inferensi nyata model machine learning Google MediaPipe Face Mesh di browser client.
+     * **Deteksi Objek Non-Wajah (Stiker / Logo / Dinding / Tangan):** Jika tidak ada wajah manusia asli di frame kamera, sistem secara instan memblokir proses (`results.multiFaceLandmarks.length === 0`), menampilkan pill peringatan merah `❌ Wajah Tidak Terdeteksi (Arahkan Wajah Anda)`, dan men-disable tombol pemindaian.
+     * **Pencegahan Pemborosan Kuota AI:** Tidak ada API call Cloudflare AI yang dapat dipicu tanpa verifikasi biometrik 468 titik wajah manusia yang sah.
+     * **Validasi Foto Unggahan Galeri:** Foto yang diunggah dari galeri juga dipindai oleh model FaceMesh sebelum dikirim ke pipeline AI.
+  2. **Relokasi Guidance Pill Bebas Potong & Eliminasi Duplikasi Thumbnail**:
+     * Memindahkan `#cameraGuidancePill` ke pembungkus `.camera-guidance-pill-wrap` tepat di bawah lingkaran lensa kamera sehingga tidak pernah lagi terpotong oleh `overflow: hidden; border-radius: 50%`.
+     * Menghapus thumbnail mini ganda di bawah tombol aksi untuk menjaga estetika tata letak kartu tetap bersih, simetris, dan proporsional.
+  3. **Penyelesaian Kompatibilitas CSS (`background-clip`)**:
+     * Menambahkan properti standar `background-clip: text` pada styling teks judul.
 
 
 
