@@ -884,6 +884,10 @@ function closeScannerFlowToHome() {
       AppState.camera.stream = null;
     } catch (e) {}
   }
+  isCameraStreaming = false;
+  if (typeof resetScannerProgressUI === 'function') {
+    resetScannerProgressUI();
+  }
 
   // Hide all step sections
   const secForm = document.getElementById('secIdentityForm');
@@ -910,6 +914,10 @@ function closeScannerFlowToHome() {
   }
 }
 window.closeScannerFlowToHome = closeScannerFlowToHome;
+window.handleFacePhotoUpload = handleFacePhotoUpload;
+window.handleCameraPrimaryAction = handleCameraPrimaryAction;
+window.resetScannerProgressUI = resetScannerProgressUI;
+
 
 function startScannerFlow() {
   initIdentityFormSelectors();
@@ -968,158 +976,139 @@ function prefillFormIfLoggedIn() {
 window.prefillFormIfLoggedIn = prefillFormIfLoggedIn;
 
 
+let isCameraStreaming = false;
+
+function resetScannerProgressUI() {
+  const pBar = document.getElementById('scanProgressFill');
+  const pTxt = document.getElementById('scanProgressPercent');
+  const pContainer = document.getElementById('scannerProgressContainer');
+  const stageTxt = document.getElementById('scanStageTxt');
+  const snapPreview = document.getElementById('snapshotPreviewWrap');
+  const startBtn = document.getElementById('startCamBtn');
+  const txtBtn = document.getElementById('txtStartCam');
+
+  if (pBar) pBar.style.width = '0%';
+  if (pTxt) pTxt.textContent = '0%';
+  if (pContainer) pContainer.style.display = 'none';
+  if (stageTxt) stageTxt.textContent = 'Mempersiapkan pemindaian biometrik...';
+  if (snapPreview) snapPreview.style.display = 'none';
+  if (startBtn) startBtn.disabled = false;
+  if (txtBtn) txtBtn.textContent = isCameraStreaming ? 'Ambil Foto & Analisa Wajah' : 'Buka Kamera & Mulai';
+
+  const chkLight = document.getElementById('chkLight');
+  const chkPos = document.getElementById('chkPos');
+  const chkFilter = document.getElementById('chkFilter');
+  if (chkLight) chkLight.classList.add('active');
+  if (chkPos) chkPos.classList.add('active');
+  if (chkFilter) chkFilter.classList.add('active');
+}
+
 async function startWebcam() {
   const video = document.getElementById('webcamFeed');
   const fallback = document.getElementById('cameraFallback');
+  const txtBtn = document.getElementById('txtStartCam');
+  const startBtn = document.getElementById('startCamBtn');
+
+  resetScannerProgressUI();
 
   try {
     const stream = await navigator.mediaDevices.getUserMedia({
       video: { width: { ideal: 640 }, height: { ideal: 480 }, facingMode: 'user' }
     });
     AppState.camera.stream = stream;
+    isCameraStreaming = true;
+
     if (video) {
       video.srcObject = stream;
       video.onloadedmetadata = () => {
         video.play();
-        initMediaPipeFaceMesh(video);
+        drawScannerHudAnimation();
       };
     }
     if (fallback) fallback.style.display = 'none';
-    animateScannerProgression();
+    if (txtBtn) txtBtn.textContent = 'Ambil Foto & Analisa Wajah';
+    if (startBtn) startBtn.disabled = false;
   } catch (err) {
-    console.warn('Camera access fallback triggered:', err);
-    simulateScan();
+    console.warn('[AURA AI] Camera access not granted or unavailable:', err);
+    isCameraStreaming = false;
+    if (fallback) fallback.style.display = 'flex';
+    if (txtBtn) txtBtn.textContent = 'Coba Buka Kamera Lagi';
   }
 }
 
-function initMediaPipeFaceMesh(videoElement) {
-  const canvas = document.getElementById('scannerHudCanvas');
-  if (!canvas || typeof FaceMesh === 'undefined') {
-    drawScannerHudAnimation();
+function handleCameraPrimaryAction() {
+  const video = document.getElementById('webcamFeed');
+  if (!isCameraStreaming || !AppState.camera.stream || !video || video.videoWidth === 0) {
+    startWebcam();
     return;
   }
 
-  const ctx = canvas.getContext('2d');
-  canvas.width = canvas.offsetWidth || 280;
-  canvas.height = canvas.offsetHeight || 280;
-
-  try {
-    if (!faceMeshInstance) {
-      faceMeshInstance = new FaceMesh({
-        locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/${file}`
-      });
-
-      faceMeshInstance.setOptions({
-        maxNumFaces: 1,
-        refineLandmarks: true,
-        minDetectionConfidence: 0.5,
-        minTrackingConfidence: 0.5
-      });
-
-      faceMeshInstance.onResults((results) => {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        
-        if (results.multiFaceLandmarks && results.multiFaceLandmarks.length > 0) {
-          const landmarks = results.multiFaceLandmarks[0];
-          
-          // Draw 468 3D Triangulation Mesh in Glowing Emerald
-          ctx.fillStyle = 'rgba(43, 224, 133, 0.65)';
-          ctx.strokeStyle = 'rgba(43, 224, 133, 0.25)';
-          ctx.lineWidth = 0.5;
-
-          // Connect key contour lines
-          for (let i = 0; i < landmarks.length; i += 4) {
-            const pt = landmarks[i];
-            const x = pt.x * canvas.width;
-            const y = pt.y * canvas.height;
-
-            ctx.beginPath();
-            ctx.arc(x, y, 1.5, 0, Math.PI * 2);
-            ctx.fill();
-          }
-
-          // Highlight 4 Mian Xiang Palaces in Sacred Gold
-          const keyNodes = [
-            { idx: 10, name: 'Guan Lu (Dahi)' },
-            { idx: 4, name: 'Dun Tai (Hidung)' },
-            { idx: 234, name: 'Qi (Pipi Kiri)' },
-            { idx: 454, name: 'Qi (Pipi Kanan)' },
-            { idx: 152, name: 'Di Ge (Dagu)' }
-          ];
-
-          keyNodes.forEach(node => {
-            if (landmarks[node.idx]) {
-              const pt = landmarks[node.idx];
-              const x = pt.x * canvas.width;
-              const y = pt.y * canvas.height;
-
-              ctx.fillStyle = '#FFC857';
-              ctx.shadowColor = '#FFC857';
-              ctx.shadowBlur = 8;
-              ctx.beginPath();
-              ctx.arc(x, y, 3.5, 0, Math.PI * 2);
-              ctx.fill();
-              ctx.shadowBlur = 0;
-            }
-          });
-        }
-      });
-    }
-
-    // Connect Camera Stream to FaceMesh Processor
-    if (typeof Camera !== 'undefined') {
-      const camera = new Camera(videoElement, {
-        onFrame: async () => {
-          if (faceMeshInstance && videoElement.videoWidth > 0) {
-            await faceMeshInstance.send({ image: videoElement });
-          }
-        },
-        width: 480,
-        height: 480
-      });
-      camera.start();
-      isMediaPipeActive = true;
-    } else {
-      drawScannerHudAnimation();
-    }
-  } catch (err) {
-    console.warn('FaceMesh initialization fallback:', err);
-    drawScannerHudAnimation();
-  }
+  // Camera is live: take snapshot and run scan
+  executeBiometricCaptureAndScan();
 }
 
-function simulateScan() {
-  const fallback = document.getElementById('cameraFallback');
-  if (fallback) fallback.style.display = 'none';
-  drawScannerHudAnimation();
-  animateScannerProgression();
+function executeBiometricCaptureAndScan(customPhotoBase64 = null) {
+  const startBtn = document.getElementById('startCamBtn');
+  const txtBtn = document.getElementById('txtStartCam');
+  const pContainer = document.getElementById('scannerProgressContainer');
+
+  if (startBtn) startBtn.disabled = true;
+  if (txtBtn) txtBtn.textContent = 'Sedang Memindai Aura...';
+  if (pContainer) pContainer.style.display = 'block';
+
+  let snapshot = customPhotoBase64 || captureWebcamSnapshot();
+
+  animateScannerProgression(async () => {
+    await processAiVisionScan(snapshot);
+  });
+}
+
+function handleFacePhotoUpload(event) {
+  const file = event.target.files?.[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const dataUrl = e.target.result;
+    AppState.user.lastSnapshotBase64 = dataUrl;
+
+    const previewEl = document.getElementById('snapshotCapturePreview');
+    const previewWrap = document.getElementById('snapshotPreviewWrap');
+    if (previewEl) {
+      previewEl.src = dataUrl;
+      previewEl.style.display = 'block';
+    }
+    if (previewWrap) previewWrap.style.display = 'block';
+
+    const fallback = document.getElementById('cameraFallback');
+    if (fallback) fallback.style.display = 'none';
+
+    executeBiometricCaptureAndScan(dataUrl);
+  };
+  reader.readAsDataURL(file);
 }
 
 function drawScannerHudAnimation() {
   const canvas = document.getElementById('scannerHudCanvas');
   if (!canvas) return;
   const ctx = canvas.getContext('2d');
-  canvas.width = canvas.offsetWidth || 280;
-  canvas.height = canvas.offsetHeight || 280;
+  canvas.width = canvas.offsetWidth || 240;
+  canvas.height = canvas.offsetHeight || 240;
 
   let step = 0;
   function draw() {
+    if (!isCameraStreaming && !AppState.camera.stream) return;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     const cx = canvas.width / 2;
     const cy = canvas.height / 2;
 
-    ctx.fillStyle = 'rgba(43, 224, 133, 0.7)';
-    for (let i = 0; i < 32; i++) {
-      const angle = (i / 32) * Math.PI * 2 + step * 0.02;
-      const rx = 55 + Math.sin(i * 3 + step * 0.05) * 8;
-      const ry = 75 + Math.cos(i * 2 + step * 0.05) * 10;
-      const x = cx + Math.cos(angle) * rx;
-      const y = cy + Math.sin(angle) * ry;
+    // Glowing subtle targeting reticle
+    ctx.strokeStyle = 'rgba(43, 224, 133, 0.4)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.arc(cx, cy, 70, 0, Math.PI * 2);
+    ctx.stroke();
 
-      ctx.beginPath();
-      ctx.arc(x, y, 2, 0, Math.PI * 2);
-      ctx.fill();
-    }
     step++;
     requestAnimationFrame(draw);
   }
@@ -1129,8 +1118,6 @@ function drawScannerHudAnimation() {
 function captureWebcamSnapshot() {
   const video = document.getElementById('webcamFeed');
 
-  // BUG 4 FIX: Generate a valid minimal black JPEG base64 as placeholder
-  // so vision API never receives empty string (which causes HTTP 400)
   function generatePlaceholderBase64() {
     const c = document.createElement('canvas');
     c.width = 64; c.height = 64;
@@ -1155,79 +1142,72 @@ function captureWebcamSnapshot() {
   canvas.height = 480;
   const ctx = canvas.getContext('2d');
 
-  // Crop & draw center square
+  // Crop center square
   const minDim = Math.min(video.videoWidth, video.videoHeight);
   const startX = (video.videoWidth - minDim) / 2;
   const startY = (video.videoHeight - minDim) / 2;
 
   ctx.drawImage(video, startX, startY, minDim, minDim, 0, 0, 480, 480);
-  const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
+  const dataUrl = canvas.toDataURL('image/jpeg', 0.88);
   AppState.user.lastSnapshotBase64 = dataUrl;
 
-  // BUG 2 FIX: Show live snapshot preview in scanner section immediately after capture
   const previewEl = document.getElementById('snapshotCapturePreview');
+  const previewWrap = document.getElementById('snapshotPreviewWrap');
   if (previewEl) {
     previewEl.src = dataUrl;
     previewEl.style.display = 'block';
-    // Animate it in
-    previewEl.style.opacity = '0';
-    requestAnimationFrame(() => {
-      previewEl.style.transition = 'opacity 0.5s ease';
-      previewEl.style.opacity = '1';
-    });
   }
+  if (previewWrap) previewWrap.style.display = 'block';
+
   return dataUrl;
 }
 
-function animateScannerProgression() {
+function animateScannerProgression(onComplete) {
   const pBar = document.getElementById('scanProgressFill');
   const pTxt = document.getElementById('scanProgressPercent');
-  const chkLight = document.getElementById('chkLight');
-  const chkPos = document.getElementById('chkPos');
-  const chkFilter = document.getElementById('chkFilter');
+  const stageTxt = document.getElementById('scanStageTxt');
 
   playChimeReverb();
 
+  const stages = [
+    { threshold: 0, text: 'Memindai 12 Istana Wajah (Mian Xiang)...' },
+    { threshold: 28, text: 'Membaca Titik Dahi, Hidung & Vitalitas Chi...' },
+    { threshold: 60, text: 'Menyelaraskan Frekuensi Elemen Bazi & Giok FW JADE...' },
+    { threshold: 85, text: 'Merender Manifestasi Kemakmuran Bangsawan...' }
+  ];
+
   let percent = 0;
   const interval = setInterval(async () => {
-    percent += 4;
+    percent += 3;
+    if (percent > 100) percent = 100;
+
     if (pBar) pBar.style.width = `${percent}%`;
     if (pTxt) pTxt.textContent = `${percent}%`;
 
-    if (percent >= 30 && chkLight) chkLight.classList.add('active');
-    if (percent >= 65 && chkPos) chkPos.classList.add('active');
-    if (percent >= 90 && chkFilter) chkFilter.classList.add('active');
+    for (let s of stages) {
+      if (percent >= s.threshold && stageTxt) {
+        stageTxt.textContent = s.text;
+      }
+    }
 
     if (percent >= 100) {
       clearInterval(interval);
 
-      // Gold & Emerald Particle Celebration Confetti
+      // Celebration Confetti
       if (typeof confetti === 'function') {
         confetti({
-          particleCount: 60,
+          particleCount: 50,
           spread: 70,
           origin: { y: 0.6 },
           colors: ['#2BE085', '#FFC857', '#059669', '#FBBF24']
         });
       }
 
-      // BUG 4 FIX: Retry snapshot capture up to 3 times with 500ms delay
-      // to ensure video stream has fully loaded before capturing
-      let snapshot = captureWebcamSnapshot();
-      const video = document.getElementById('webcamFeed');
-      if (!snapshot || (video && video.videoWidth === 0)) {
-        // Wait for video to be truly ready
-        await new Promise(resolve => setTimeout(resolve, 500));
-        snapshot = captureWebcamSnapshot();
+      if (typeof onComplete === 'function') {
+        await onComplete();
       }
-      if (!snapshot || (video && video.videoWidth === 0)) {
-        await new Promise(resolve => setTimeout(resolve, 800));
-        snapshot = captureWebcamSnapshot();
-      }
-      console.log('[AURA AI] Snapshot captured, size:', snapshot ? snapshot.length : 0);
-      await processAiVisionScan(snapshot);
     }
-  }, 60);
+  }, 65);
 }
 
 async function processAiVisionScan(snapshotBase64) {
@@ -1325,16 +1305,17 @@ async function callImageTransformation(snapshotBase64, gemObj) {
   if (beforePanel) beforePanel.style.display = 'flex';
   if (afterSpinner) afterSpinner.style.display = 'flex';
   if (afterImg) afterImg.style.display = 'none';
-  if (afterStatus) afterStatus.textContent = 'Membuat transformasi aura...';
+  if (afterStatus) afterStatus.textContent = 'Merender Manifestasi Bangsawan...';
 
   try {
     const reqBody = {
       gemName: gemObj.name || 'Natural Aceh Jadeite',
-      gemColor: gemObj.color || 'Emerald Green',
-      promptAdd: `${gemObj.element_id || 'Wood'} element aura, luxury editorial portrait`
+      gemColor: gemObj.color || 'Imperial Emerald Green',
+      gender: AppState.user.gender || 'female',
+      element: AppState.user.metrics.element || 'WOOD'
     };
-    // Only include image if real webcam capture happened
-    if (snapshotBase64 && snapshotBase64.length > 5000) {
+    // Include image if webcam or uploaded capture occurred
+    if (snapshotBase64 && snapshotBase64.length > 500) {
       reqBody.imageBase64 = snapshotBase64;
     }
 
@@ -1348,7 +1329,7 @@ async function callImageTransformation(snapshotBase64, gemObj) {
       const data = await res.json();
       if (data.success && data.imageUrl) {
         if (afterSpinner) afterSpinner.style.display = 'none';
-        if (afterStatus) afterStatus.textContent = 'Transformasi Aura Selesai';
+        if (afterStatus) afterStatus.textContent = 'Manifestasi Bangsawan FW JADE';
         if (afterImg) {
           afterImg.src = data.imageUrl;
           afterImg.style.display = 'block';
@@ -2252,10 +2233,8 @@ function bindEventHandlers() {
 
   // Scanner Actions
   const startCam = document.getElementById('startCamBtn');
-  if (startCam) startCam.addEventListener('click', startWebcam);
+  if (startCam) startCam.addEventListener('click', handleCameraPrimaryAction);
 
-  const simScan = document.getElementById('simulateScanBtn');
-  if (simScan) simScan.addEventListener('click', simulateScan);
 
   // Share Actions (Gambar 3)
   const btnShareWA = document.getElementById('btnShareWA');

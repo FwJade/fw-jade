@@ -41,6 +41,16 @@
   3. **Eliminasi Duplikasi Nama & Sesi Pasca-Login**: Ketika user sudah login via Google, seluruh blok login Google otomatis disembunyikan 100% (`display: none`). User tidak lagi disajikan kartu sesi besar dengan avatar dan username ganda di tengah formulir (karena identitas sudah terpampang di bar profil sudut kanan atas).
   4. **Badge Verifikasi Google Halus**: Menambahkan indikator minimalis `✓ Google Terhubung` di sebelah label Nama Lengkap tanpa memakan ruang vertikal.
   5. **Dukungan Dual-Protocol Google Identity**: Mengintegrasikan `google.accounts.oauth2.initTokenClient` untuk pemicu 1-klik pada custom button dengan tetap menjaga kompatibilitas Google One-Tap (`g_id_onload`) dan verifikasi sesi Master Admin `fwjade.com@gmail.com`.
+* **2026-09-03 (Bagian 2):** **Restorasi Cloudflare Workers AI, Vision Nyata Llama 3.2, Inpainting Bangsawan & Redesign Total Step 2 Scanner**:
+  1. **Restorasi Token Cloudflare & Lisensi Model**: Memperbarui API token Cloudflare baru (`cfut_...`) dengan izin Workers AI aktif ke akun `Fwjade.com@gmail.com's Account` (`291e6764f7f2db2c4ea3142d31e71045`), serta menyelesaikan persetujuan lisensi Meta Llama 3.2 Vision.
+  2. **Aktivasi AI Vision Nyata (`/api/vision`)**: Mengganti template fallback hardcode dengan analisis multimodal nyata dari `@cf/meta/llama-3.2-11b-vision-instruct` Cloudflare. AI kini benar-benar membaca fitur fisik wajah pengguna (Istana Karier Dahi, Istana Rezeki Hidung, Istana Vitalitas Mata/Pipi, dan Istana Perisai Dagu) secara unik per foto dalam waktu ~1,5 detik.
+  3. **Aktivasi AI Inpainting Transformasi Bangsawan (`/api/image`)**: Berhasil menguji dan mengintegrasikan model `@cf/runwayml/stable-diffusion-v1-5-inpainting` di Cloudflare Workers AI (Status 200). Mengunci wajah asli pengguna 100% agar tidak terdistorsi menjadi kartun atau orang asing, sembari mengubah busana dan latar belakang menjadi busana bangsawan kekaisaran sutra mewah dengan perhiasan giok asli FW JADE dan pendaran aura chi zamrud.
+  4. **Pembersihan UI & Redesign Total Step 2 (`#secScanner`)**:
+     * Menghapus tombol mockup *"Simulasi AI Mesh"* (animasi 32 butiran canvas statis) selamanya.
+     * Mengubah tata letak menjadi 100% simetris tengah (*Center-Aligned Haute Horlogerie*) dengan badge biometrik emas, lingkaran kamera live berbingkai zamrud dan laser reticle dinamis.
+     * Menyediakan **1 Tombol Shutter Tunggal**: *"Ambil Foto & Analisa Wajah"* dan opsi alternatif *"Unggah Foto Wajah dari Galeri"*.
+     * Memperbaiki bug progress bar: nilai 0% saat awal, dan hanya berjalan dinamis saat pemindaian foto berlangsung dengan 4 tahap panduan teks real-time (*Memindai Istana Wajah* -> *Membaca Titik Dahi & Rezeki* -> *Menyelaraskan Elemen Bazi & Giok* -> *Merender Manifestasi Bangsawan*).
+  5. **Integrasi Kunci API Ollama Cloud**: Memasang kunci API Ollama Cloud (`OLLAMA_API_KEY`) ke `.env` & `.env.example`, menguji dan memvalidasi akses gratis model `nemotron-3-nano:30b`, `gemma4:31b`, `gpt-oss:20b`, dan `gpt-oss:120b`.
 
 
 

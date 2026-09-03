@@ -550,60 +550,67 @@
         </div>
         
         <div class="step-scanner-wrapper">
-          <h2 class="step-main-title">Analisa Wajah &amp; Aura</h2>
-          <p class="step-main-subtitle">Pastikan wajah terlihat jelas di dalam bingkai</p>
+          <div class="scanner-kicker-badge"><i class="fa-solid fa-sparkles text-gold"></i> BIOMETRIK MIAN XIANG &amp; AURA CHI</div>
+          <h2 class="step-main-title">Analisa Wajah &amp; Kemakmuran</h2>
+          <p class="step-main-subtitle">Arahkan wajah Anda ke dalam bingkai kamera untuk memindai 12 Istana Wajah dan keselarasan energi giok</p>
 
           <!-- Circular Live Camera Viewport -->
-          <div class="circular-camera-viewport">
+          <div class="circular-camera-viewport" id="scannerViewport">
             <video id="webcamFeed" autoplay playsinline muted></video>
             <canvas id="scannerHudCanvas"></canvas>
             
             <div class="circular-hud-overlay">
               <div class="hud-circle-ring"></div>
-              <div class="hud-circle-laser"></div>
+              <div class="hud-circle-laser" id="hudLaserLine"></div>
             </div>
 
-            <!-- Fallback State -->
+            <!-- Fallback State when camera inactive -->
             <div class="camera-fallback" id="cameraFallback">
-              <i class="fa-solid fa-camera fallback-icon"></i>
-              <p>Arahkan kamera ke wajah Anda</p>
+              <div class="fallback-camera-box">
+                <i class="fa-solid fa-camera-retro fallback-icon"></i>
+                <p class="fallback-lead">Kamera Siap Diaktifkan</p>
+                <span class="fallback-sub">Klik tombol di bawah untuk membuka kamera atau unggah foto wajah</span>
+              </div>
             </div>
           </div>
 
-          <!-- 3 Checkpoints -->
+          <!-- 3 Checkpoints (Compact Centered Row) -->
           <div class="scanner-checklist-cards">
-            <div class="check-pill active" id="chkLight"><i class="fa-solid fa-check"></i> <span>Pencahayaan cukup</span></div>
-            <div class="check-pill active" id="chkPos"><i class="fa-solid fa-check"></i> <span>Wajah menghadap kamera</span></div>
-            <div class="check-pill active" id="chkFilter"><i class="fa-solid fa-check"></i> <span>Tanpa filter / makeup tebal</span></div>
+            <div class="check-pill active" id="chkLight"><i class="fa-solid fa-circle-check"></i> <span>Pencahayaan cukup</span></div>
+            <div class="check-pill active" id="chkPos"><i class="fa-solid fa-circle-check"></i> <span>Wajah menghadap depan</span></div>
+            <div class="check-pill active" id="chkFilter"><i class="fa-solid fa-circle-check"></i> <span>Tanpa kacamata / filter</span></div>
           </div>
 
-          <!-- Mulai Scan Button -->
-          <div class="scanner-cta-wrap">
-            <button class="luxury-btn btn-scan-action-primary" id="startCamBtn">
-              <i class="fa-solid fa-camera"></i> <span id="txtStartCam">Mulai Scan</span>
+          <!-- Dynamic Scanning Progression (Hidden initially, visible only during scan) -->
+          <div class="scanner-progress-container" id="scannerProgressContainer" style="display: none;">
+            <div class="scanner-stage-badge" id="scanStageTxt">Mempersiapkan pemindaian biometrik...</div>
+            <div class="progress-bar-wrap">
+              <div class="progress-bar-fill" id="scanProgressFill" style="width: 0%;"></div>
+            </div>
+            <div class="progress-percentage-txt" id="scanProgressPercent">0%</div>
+          </div>
+
+          <!-- Single Luxury Shutter Action + Alternative Upload -->
+          <div class="scanner-cta-wrap" id="scannerCtaWrap">
+            <button type="button" class="luxury-btn btn-shutter-royal" id="startCamBtn">
+              <i class="fa-solid fa-camera"></i> <span id="txtStartCam">Ambil Foto &amp; Analisa Wajah</span>
             </button>
-            <button class="luxury-btn btn-scan-action-secondary" id="simulateScanBtn" style="margin-top: 8px;">
-              <i class="fa-solid fa-sparkles"></i> <span>Simulasi AI Mesh</span>
-            </button>
-            <p class="scan-time-note">Proses hanya memakan waktu 10-15 detik</p>
+            
+            <div class="scanner-alt-action">
+              <input type="file" id="faceUploadInput" accept="image/*" style="display: none;" onchange="handleFacePhotoUpload(event)" />
+              <button type="button" class="btn-subtle-upload" onclick="document.getElementById('faceUploadInput').click()">
+                <i class="fa-solid fa-cloud-arrow-up"></i> <span>Atau Unggah Foto Wajah dari Galeri</span>
+              </button>
+            </div>
+
+            <p class="scan-time-note"><i class="fa-solid fa-shield-halved"></i> Biometrik diproses aman &amp; privat via Cloudflare AI (10–15 detik)</p>
           </div>
 
-          <!-- Progress Bar -->
-          <div class="progress-bar-wrap" style="margin-top: 15px;">
-            <div class="progress-bar-fill" id="scanProgressFill" style="width: 0%"></div>
+          <!-- Live Snapshot Preview (Shown after capture) -->
+          <div class="snapshot-preview-wrap" id="snapshotPreviewWrap" style="display: none;">
+            <p class="snapshot-preview-label"><i class="fa-solid fa-camera-rotate"></i> FOTO WAJAH YANG SEDANG DIANALISA</p>
+            <img id="snapshotCapturePreview" alt="Foto wajah yang dianalisa" />
           </div>
-          <div class="progress-percentage-txt" id="scanProgressPercent">0%</div>
-
-          <!-- BUG 2 FIX: Live snapshot preview — shows the face that was captured and sent to AI -->
-          <div class="snapshot-preview-wrap" id="snapshotPreviewWrap" style="display:block; margin-top:12px; text-align:center;">
-            <p class="snapshot-preview-label" style="font-size:0.7rem; color: var(--clr-emerald); letter-spacing:0.12em; margin-bottom:6px; opacity:0.8;"><i class="fa-solid fa-camera-rotate"></i> FOTO WAJAH YANG DIANALISA</p>
-            <img id="snapshotCapturePreview" alt="Foto wajah yang dianalisa" style="display:none; width:90px; height:90px; border-radius:50%; object-fit:cover; border:2px solid var(--clr-emerald); box-shadow:0 0 16px rgba(43,224,133,0.4); margin:0 auto;" />
-          </div>
-
-        </div>
-
-        <div class="step-indicator-connector">
-          <i class="fa-solid fa-chevron-down"></i>
         </div>
       </section>
 
