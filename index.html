@@ -206,17 +206,17 @@
           <span id="themeText" class="desk-only-text">Terang</span>
         </button>
         <a href="catalog.html" class="nav-pill-btn nav-link-btn" title="Katalog Koleksi Giok &amp; Permata Alami FW JADE">
-          <i class="fa-solid fa-store text-emerald"></i> <span>Katalog</span>
+          <i class="fa-solid fa-store text-emerald"></i> <span data-i18n="navCatalog">Katalog</span>
         </a>
         <a href="about.html" class="nav-pill-btn nav-link-btn desk-only-nav" title="Kisah FW JADE Sejak 2009">
-          <i class="fa-solid fa-book-open"></i> <span>Tentang Kami</span>
+          <i class="fa-solid fa-book-open"></i> <span data-i18n="navAbout">Tentang Kami</span>
         </a>
         <a href="contact.html" class="nav-pill-btn nav-link-btn" title="Konsultasi &amp; Kontak Galeri FW JADE">
-          <i class="fa-solid fa-gem text-gold"></i> <span class="desk-only-text">Konsultasi</span>
+          <i class="fa-solid fa-gem text-gold"></i> <span class="desk-only-text" data-i18n="navConsult">Konsultasi</span>
         </a>
-        <button class="nav-pill-btn desk-only-nav" id="langToggleBtn" title="Ganti Bahasa">
+        <!-- Pure Flag Language Switcher (Visible on Both Desktop & Mobile) -->
+        <button class="nav-pill-btn lang-flag-btn" id="langToggleBtn" onclick="toggleLanguage()" title="Ganti Bahasa (Indonesia / English)" aria-label="Ganti Bahasa (Indonesia / English)">
           <span class="lang-flag" id="langFlag">🇮🇩</span>
-          <span class="lang-text" id="langText">ID</span>
         </button>
         <!-- User Account / Profile Badge (Integrated within Nav Controls) -->
         <button class="nav-pill-btn" id="btnUserAccountNav" onclick="openUserAccountModal()" title="Profil & Data Akun Saya" aria-label="Buka Profil dan Data Akun">
@@ -1742,12 +1742,12 @@
               <span class="drawer-badge" id="drawerThemeBadge">Tema</span>
             </button>
             <button class="drawer-nav-item drawer-action-item" onclick="toggleLanguageFromDrawer()" type="button">
-              <div class="drawer-item-icon cyan-bg"><i class="fa-solid fa-globe"></i></div>
+              <div class="drawer-item-icon cyan-bg"><span id="drawerLangFlagIcon" style="font-size: 1.25rem;">🇮🇩</span></div>
               <div class="drawer-item-text">
-                <span class="drawer-item-title">Bahasa / Language</span>
-                <span class="drawer-item-desc" id="drawerLangDesc">Bahasa Indonesia (ID)</span>
+                <span class="drawer-item-title" id="drawerLangTitle">Bahasa / Language</span>
+                <span class="drawer-item-desc" id="drawerLangDesc">Bahasa Indonesia (Klik untuk English)</span>
               </div>
-              <span class="drawer-badge" id="drawerLangBadge">🇮🇩 ID</span>
+              <span class="drawer-badge" id="drawerLangBadge">🇮🇩 Indonesia</span>
             </button>
           </div>
         </div>

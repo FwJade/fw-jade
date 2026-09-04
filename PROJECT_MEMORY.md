@@ -210,3 +210,18 @@
       * Fitur logout aman yang membersihkan token dan mengembalikan antarmuka ke layar login secara instan tanpa redirect berulang.
    4. **Navigasi Terpadu**:
       * Menambahkan akses tautan Admin Portal pada Footer & Sidebar Drawer `index.html`, serta pada footer `catalog.html`.
+* **2026-09-05 (Bagian 24):** **Bilingual i18n Translation Engine & Pure Flag Language Controller (`index.html`, `app.js`, `catalog.html`, `style.css`)**:
+   1. **Diagnosis & Solusi Akar Masalah (Root Cause Fix)**:
+      * Menemukan dan memperbaiki error JavaScript runtime `TypeError` di mana kode lama berusaha menyetel `textContent` pada elemen `#langLabel` yang tidak eksis di DOM.
+      * Menghapus kelas pembatas `.desk-only-nav` agar tombol pengalih bahasa dapat diakses di perangkat mobile maupun desktop.
+   2. **Antarmuka Bendera Murni (Pure Flag Controller)**:
+      * Mengganti tombol kombinasi teks (`ID` / `EN`) dengan **ikon bendera murni** (`🇮🇩` untuk Bahasa Indonesia, `🇬🇧` untuk Bahasa Inggris).
+      * Desain luxury pill ultra-kompak (`min-width: 38px`) dengan hover micro-animation scale 1.12x dan glow zamrud tanpa memakan ruang navbar.
+      * Menyinkronkan tombol bendera di Navbar dan Mobile Slide-Over Drawer (`#drawerLangFlagIcon`, `#drawerLangBadge`, `#drawerLangDesc`).
+   3. **Mesin Penerjemah DOM Menyeluruh (`I18N_DICTIONARY` & `applyLanguage`)**:
+      * Membangun kamus translasi bilingual lengkap mencakup: Navigasi, Hero Headline, Panduan Scan, Form Bazi, Kamera Biometrik, Kartu Hasil Aura, Konsultasi Chat, hingga Drawer & Footer.
+      * Menerapkan terjemahan DOM instan (<5ms) tanpa me-reload halaman web.
+      * Mengintegrasikan `AppState.lang` dengan sintesis suara (`speechSynthesis` id-ID vs en-US), pengenalan suara (`webkitSpeechRecognition`), dan prompt AI.
+      * Menyimpan preferensi bahasa pengguna di `localStorage` (`fw_jade_lang`) untuk persistensi lintas sesi dan tab.
+   4. **Ekstensi ke Halaman Katalog (`catalog.html`)**:
+      * Menambahkan tombol bendera serupa di navbar `catalog.html` dengan fungsi `applyCatalogLanguage()` dan `toggleCatalogLang()` yang tersinkronisasi.

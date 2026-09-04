@@ -816,6 +816,9 @@
       <a href="/catalog.html" class="nav-pill-btn active"><i class="fa-solid fa-store"></i> <span>Katalog</span></a>
       <a href="/about.html" class="nav-pill-btn"><i class="fa-solid fa-book-open"></i> <span>Kisah Kami</span></a>
       <a href="/contact.html" class="nav-pill-btn"><i class="fa-solid fa-gem text-gold"></i> <span>Konsultasi</span></a>
+      <button class="nav-pill-btn lang-flag-btn" id="catalogLangBtn" onclick="toggleCatalogLang()" title="Ganti Bahasa (Indonesia / English)" style="cursor: pointer; padding: 5px 11px; min-width: 38px;">
+        <span id="catalogLangFlag" style="font-size: 1.15rem; line-height: 1;">🇮🇩</span>
+      </button>
     </nav>
   </header>
 
@@ -1305,8 +1308,41 @@
       ];
     }
 
+    function applyCatalogLanguage(lang) {
+      const isEn = lang === 'en';
+      const flagEl = document.getElementById('catalogLangFlag');
+      const btnEl = document.getElementById('catalogLangBtn');
+      if (flagEl) flagEl.textContent = isEn ? '🇬🇧' : '🇮🇩';
+      if (btnEl) btnEl.title = isEn ? 'Ganti ke Bahasa Indonesia / 🇮🇩' : 'Switch to English / 🇬🇧';
+
+      const heroH1 = document.querySelector('.catalog-h1');
+      if (heroH1) heroH1.textContent = isEn ? 'Masterpiece Collection of Natural Jade & Fine Gems' : 'Koleksi Mahakarya Giok & Permata Alami';
+      const heroSub = document.querySelector('.catalog-subtitle');
+      if (heroSub) heroSub.textContent = isEn ? 'Curated natural Burmese & Indonesian jade, wealth-attracting merchant stones, and laboratory-certified Far-Infrared healing crystals.' : 'Pusaka perhiasan giok asli Burma & Nusantara, batu saudagar penarik rezeki, serta kristal terapi bio-fisika FIR terkurasi dengan sertifikat lab resmi.';
+
+      const aiTitle = document.querySelector('.ai-bridge-text h4');
+      if (aiTitle) aiTitle.textContent = isEn ? 'Confused Which Gemstone Matches Your Energy?' : 'Bingung Memilih Batu yang Selaras dengan Energi Anda?';
+      const aiDesc = document.querySelector('.ai-bridge-text p');
+      if (aiDesc) aiDesc.textContent = isEn ? 'Let AI Face & Aura Scanner calculate your Bazi elements and find the most resonant gemstone for you.' : 'Gunakan AI Face & Aura Scanner untuk membaca 12 Istana Wajah dan menghitung elemen Bazi penarik hoki Anda.';
+      const aiBtn = document.querySelector('.btn-try-ai span');
+      if (aiBtn) aiBtn.textContent = isEn ? 'Try AI Aura Scan' : 'Coba Scan Aura Wajah';
+
+      try { localStorage.setItem('fw_jade_lang', lang); } catch(e) {}
+    }
+
+    function toggleCatalogLang() {
+      const current = localStorage.getItem('fw_jade_lang') || 'id';
+      const next = current === 'id' ? 'en' : 'id';
+      applyCatalogLanguage(next);
+    }
+    window.toggleCatalogLang = toggleCatalogLang;
+
     // Auto initialize on DOM ready
-    document.addEventListener('DOMContentLoaded', initCatalog);
+    document.addEventListener('DOMContentLoaded', () => {
+      initCatalog();
+      const savedLang = localStorage.getItem('fw_jade_lang') || 'id';
+      applyCatalogLanguage(savedLang);
+    });
   </script>
 </body>
 </html>

@@ -8,7 +8,7 @@
 // 1. STATE & DATABASE
 // ==========================================
 const AppState = {
-  lang: 'id', // 'id' | 'en'
+  lang: (typeof localStorage !== 'undefined' && localStorage.getItem('fw_jade_lang')) || 'id', // 'id' | 'en'
   user: {
     name: 'Kolektor Yang Terhormat',
     isRegistered: false,
@@ -3144,11 +3144,10 @@ function bindEventHandlers() {
     document.getElementById('tutorialModal').classList.remove('open');
   });
 
-  // Language Switcher
+  // Language Switcher (Pure Flag Toggle)
   const langBtn = document.getElementById('langToggleBtn');
   if (langBtn) langBtn.addEventListener('click', () => {
-    AppState.lang = AppState.lang === 'id' ? 'en' : 'id';
-    document.getElementById('langLabel').textContent = AppState.lang.toUpperCase();
+    toggleLanguage();
   });
 
   // Auth / Gated Revelation Flow
@@ -4465,18 +4464,306 @@ function closeSidebarDrawer() {
 }
 window.closeSidebarDrawer = closeSidebarDrawer;
 
-function toggleLanguageFromDrawer() {
-  const langToggleBtn = document.getElementById('langToggleBtn');
-  if (langToggleBtn) {
-    langToggleBtn.click();
-    const langFlag = document.getElementById('langFlag')?.textContent || '🇮🇩';
-    const langText = document.getElementById('langText')?.textContent || 'ID';
-    const badge = document.getElementById('drawerLangBadge');
-    const desc = document.getElementById('drawerLangDesc');
-    if (badge) badge.textContent = `${langFlag} ${langText}`;
-    if (desc) desc.textContent = langText === 'EN' ? 'English (Global)' : 'Bahasa Indonesia (ID)';
+// ==========================================================================
+// 23.5 FULL BILINGUAL (ID / EN) I18N ENGINE & PURE FLAG CONTROLLER
+// ==========================================================================
+const I18N_DICTIONARY = {
+  id: {
+    // Navigation
+    navCatalog: 'Katalog',
+    navAbout: 'Tentang Kami',
+    navConsult: 'Konsultasi',
+    navAccount: 'Akun',
+    themeLight: 'Terang',
+    themeDark: 'Gelap',
+
+    // Hero Section
+    heroHeadline: 'Pancaran Auramu Menuntun Rezeki & Jodohmu',
+    heroDescription: 'Eksplorasi pembacaan 12 Istana Wajah (Mian Xiang) dan frekuensi getaran batu mulia alami untuk keselarasan energi Chi.',
+    heroHeritage: 'DIRANCANG DI MEDAN SEJAK 2009',
+    heroCtaHeadline: 'ANALISA WAJAH & AURA',
+    heroCtaSub: 'Temukan giok alami selaras energi Anda',
+    heroAssure1: '1x Free Scan',
+    heroAssure2: 'Privasi Terjamin',
+    heroAssure3: 'Batu Hari Ini',
+    heroCompactScan: 'Analisa Wajah & Aura (Kamera)',
+    heroChatTrigger: 'Tanyakan Master Aura AI',
+    heroOmniboxPlaceholder: 'Tanya Master Aura tentang filosofi giok, batu rezeki, cinta, atau feng shui...',
+    heroAskBtn: 'Ask Aura',
+    trendingTitle: 'Pilih Topik Konsultasi:',
+
+    // Bazi Form
+    baziStepBadge: '1. PENYELARASAN JIWA • Data Kelahiran & Bazi',
+    baziHeaderBadge: 'Kalender Kosmik & Fisiognomi',
+    baziTitle: 'Penyelarasan Data Spiritual',
+    baziSubtitle: 'Lengkapi data Anda agar pembacaan biometrik kamera & elemen Bazi selaras 100%',
+    baziBtnSubmit: 'Lanjutkan ke Kamera & Pindai Biometrik',
+
+    // Scanner
+    scannerStepBadge: '2. SCAN WAJAH & AURA',
+    scannerKicker: 'BIOMETRIK MIAN XIANG & AURA CHI',
+    scannerTitle: 'Analisa Wajah & Kemakmuran',
+    scannerSubtitle: 'Arahkan wajah ke bingkai oval untuk memindai 12 Istana Wajah & energi aura giok.',
+    checkLight: 'Pencahayaan cukup',
+    checkPos: 'Wajah hadap depan',
+    checkFilter: 'Tanpa filter',
+    txtStartCam: 'Ambil Foto & Analisa Wajah',
+    txtUploadPhoto: 'Upload Galeri',
+    txtCompanionCam: 'Gunakan Kamera HP',
+    cameraFallbackLead: 'Kamera Siap Diaktifkan',
+    cameraFallbackSub: 'Klik tombol di bawah untuk membuka kamera atau gunakan kamera HP Anda',
+
+    // Results
+    auraHeading: 'Hasil Aura Anda',
+    dominantElementLabel: 'Elemen Dominan',
+    btnLensScience: 'Sains & Bio-Fisika',
+    btnLensMystic: 'Metafisika & Horoskop',
+    lblVitality: 'Vitalitas Holistik',
+    lblEnergyBalance: 'Energi Balance',
+    lblFortuneLevel: 'Keberuntungan',
+    lblEnergyReco: 'Rekomendasi Energi',
+    stepBadgeGemstone: '3. REKOMENDASI BATU • Selaras dengan Aura Anda',
+    btnDownloadCert: 'Download Sertifikat Resmi (HD)',
+    btnShareWA: 'Kirim ke WhatsApp Kurator',
+
+    // Chat
+    chatStepBadge: '4. TANYA AURORA • Tanya lebih dalam tentang hasil Anda',
+    chatRoomTitle: 'Tanya Master Aura',
+    chatInputPlaceholder: 'Tanya lebih lanjut...',
+
+    // Drawer
+    drawerNavLabel: 'Navigasi Utama',
+    drawerCatalogTitle: 'Katalog Koleksi Produk',
+    drawerCatalogDesc: 'Etalase Giok & Permata Alami Grade A',
+    drawerAboutTitle: 'Tentang Kami',
+    drawerAboutDesc: 'Warisan & Filosofi FW Jade Sejak 2009',
+    drawerConsultTitle: 'Konsultasi Galeri',
+    drawerConsultDesc: 'Konsultasi Langsung via WhatsApp CS Galeri',
+    drawerAdminTitle: 'Portal Master Admin',
+    drawerThemeTitle: 'Tema Tampilan',
+    drawerLangTitle: 'Bahasa / Language',
+    drawerLangDesc: 'Bahasa Indonesia (Klik untuk English)',
+    drawerLangBadge: '🇮🇩 Indonesia',
+    drawerLegalLabel: 'Protokol Integritas & Legal',
+
+    // Footer
+    footerCatalog: 'Katalog Koleksi',
+    footerPillars: '3 Pilar Integritas',
+    footerCopyright: '© 2026 FW JADE (fwjade.com) • Seluruh Hak Cipta Dilindungi'
+  },
+  en: {
+    // Navigation
+    navCatalog: 'Catalog',
+    navAbout: 'About Us',
+    navConsult: 'Consultation',
+    navAccount: 'Account',
+    themeLight: 'Light',
+    themeDark: 'Dark',
+
+    // Hero Section
+    heroHeadline: 'Discover Your Guardian Stone',
+    heroDescription: "The World's First Luxury Gemstone & Face Aura Oracle, calculating 12 Face Palaces (Mian Xiang) and natural gemstone vibrational frequencies for Chi balance.",
+    heroHeritage: 'CRAFTED IN MEDAN SINCE 2009',
+    heroCtaHeadline: 'FACE & AURA ANALYSIS',
+    heroCtaSub: 'Discover natural jade aligned with your energy',
+    heroAssure1: '1x Free Scan',
+    heroAssure2: 'Privacy Guaranteed',
+    heroAssure3: "Today's Stone",
+    heroCompactScan: 'Face & Aura Analysis (Camera)',
+    heroChatTrigger: 'Ask Master Aura AI',
+    heroOmniboxPlaceholder: 'Ask Master Aura about jade philosophy, wealth stone, love, or feng shui...',
+    heroAskBtn: 'Ask Aura',
+    trendingTitle: 'Popular Inquiries:',
+
+    // Bazi Form
+    baziStepBadge: '1. SOUL HARMONY • Birth Data & Bazi',
+    baziHeaderBadge: 'Cosmic Calendar & Physiognomy',
+    baziTitle: 'Spiritual Data Alignment',
+    baziSubtitle: 'Complete your details for 100% harmonized biometric & Bazi readings',
+    baziBtnSubmit: 'Proceed to Camera & Biometric Scan',
+
+    // Scanner
+    scannerStepBadge: '2. FACE & AURA SCAN',
+    scannerKicker: 'MIAN XIANG BIOMETRICS & CHI AURA',
+    scannerTitle: 'Face & Prosperity Analysis',
+    scannerSubtitle: 'Align your face with the oval frame to scan 12 Face Palaces & jade energy.',
+    checkLight: 'Adequate light',
+    checkPos: 'Face forward',
+    checkFilter: 'No filter',
+    txtStartCam: 'Capture Photo & Analyze Face',
+    txtUploadPhoto: 'Upload Photo',
+    txtCompanionCam: 'Use Phone Camera',
+    cameraFallbackLead: 'Camera Ready to Activate',
+    cameraFallbackSub: 'Click the button below to open camera or use your phone camera',
+
+    // Results
+    auraHeading: 'Your Aura Reading',
+    dominantElementLabel: 'Dominant Element',
+    btnLensScience: 'Science & Biophysics',
+    btnLensMystic: 'Metaphysics & Horoscope',
+    lblVitality: 'Holistic Vitality',
+    lblEnergyBalance: 'Energy Balance',
+    lblFortuneLevel: 'Fortune Level',
+    lblEnergyReco: 'Energy Recommendation',
+    stepBadgeGemstone: '3. GEMSTONE RECOMMENDATION • Aligned with Your Aura',
+    btnDownloadCert: 'Download Official Certificate (HD)',
+    btnShareWA: 'Send to Curator WhatsApp',
+
+    // Chat
+    chatStepBadge: '4. ASK AURORA • Inquire further about your results',
+    chatRoomTitle: 'Ask Master Aura',
+    chatInputPlaceholder: 'Ask further questions...',
+
+    // Drawer
+    drawerNavLabel: 'Main Navigation',
+    drawerCatalogTitle: 'Product Catalog',
+    drawerCatalogDesc: 'Natural Grade A Jadeite & Gemstones',
+    drawerAboutTitle: 'About Us',
+    drawerAboutDesc: 'FW Jade Heritage & Philosophy Since 2009',
+    drawerConsultTitle: 'Gallery Consultation',
+    drawerConsultDesc: 'Direct WhatsApp Consultation with Gallery CS',
+    drawerAdminTitle: 'Master Admin Portal',
+    drawerThemeTitle: 'Theme Appearance',
+    drawerLangTitle: 'Language',
+    drawerLangDesc: 'English (Click for Indonesian)',
+    drawerLangBadge: '🇬🇧 English',
+    drawerLegalLabel: 'Integrity & Legal Protocols',
+
+    // Footer
+    footerCatalog: 'Collection Catalog',
+    footerPillars: '3 Integrity Pillars',
+    footerCopyright: '© 2026 FW JADE (fwjade.com) • All Rights Reserved'
   }
+};
+
+function applyLanguage(lang) {
+  const selectedLang = (lang === 'en') ? 'en' : 'id';
+  const dict = I18N_DICTIONARY[selectedLang] || I18N_DICTIONARY.id;
+  AppState.lang = selectedLang;
+
+  try {
+    localStorage.setItem('fw_jade_lang', selectedLang);
+  } catch (e) {}
+
+  // 1. Update Pure Flag Navbar Button
+  const langFlag = document.getElementById('langFlag');
+  const langToggleBtn = document.getElementById('langToggleBtn');
+  if (langFlag) {
+    langFlag.textContent = selectedLang === 'id' ? '🇮🇩' : '🇬🇧';
+  }
+  if (langToggleBtn) {
+    langToggleBtn.title = selectedLang === 'id' ? 'Switch to English / 🇬🇧' : 'Ganti ke Bahasa Indonesia / 🇮🇩';
+    langToggleBtn.setAttribute('aria-label', langToggleBtn.title);
+  }
+
+  // 2. Update Drawer Language Element
+  const drawerFlag = document.getElementById('drawerLangFlagIcon');
+  const drawerBadge = document.getElementById('drawerLangBadge');
+  const drawerDesc = document.getElementById('drawerLangDesc');
+  const drawerTitle = document.getElementById('drawerLangTitle');
+  if (drawerFlag) drawerFlag.textContent = selectedLang === 'id' ? '🇮🇩' : '🇬🇧';
+  if (drawerBadge) drawerBadge.textContent = dict.drawerLangBadge;
+  if (drawerDesc) drawerDesc.textContent = dict.drawerLangDesc;
+  if (drawerTitle) drawerTitle.textContent = dict.drawerLangTitle;
+
+  // 3. Update Theme Text
+  const themeText = document.getElementById('themeText');
+  if (themeText) {
+    const isLight = document.body.classList.contains('light-theme');
+    themeText.textContent = isLight ? dict.themeDark : dict.themeLight;
+  }
+
+  // 4. Update data-i18n attributes
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (dict[key]) {
+      el.textContent = dict[key];
+    }
+  });
+
+  // 5. Update Key Elements by ID and Selectors
+  const safeText = (selector, val) => {
+    try {
+      const el = selector.startsWith('#')
+        ? document.getElementById(selector.slice(1))
+        : document.querySelector(selector);
+      if (el && val) el.textContent = val;
+    } catch(e) {}
+  };
+  const safePlaceholder = (id, val) => {
+    try {
+      const el = document.getElementById(id);
+      if (el && val) el.placeholder = val;
+    } catch(e) {}
+  };
+
+  // Nav
+  safeText('#navAccountLabel', dict.navAccount);
+
+  // Hero
+  safeText('.hero-sacred-headline', dict.heroHeadline);
+  safeText('.hero-sacred-description', dict.heroDescription);
+  safeText('.heritage-text', dict.heroHeritage);
+  safeText('.cta-headline', dict.heroCtaHeadline);
+  safeText('.cta-sub', dict.heroCtaSub);
+  safeText('#btnSwitchToScan .compact-text', dict.heroCompactScan);
+  safeText('#txtTriggerAura', dict.heroChatTrigger);
+  safePlaceholder('omniboxInput', dict.heroOmniboxPlaceholder);
+  safeText('#txtAiOracleBtn', dict.heroAskBtn);
+  safeText('#txtTrendingTitle', dict.trendingTitle);
+
+  // Bazi Form
+  safeText('#secIdentityForm .step-badge-indicator', dict.baziStepBadge);
+  safeText('#secIdentityForm .form-header-badge span', dict.baziHeaderBadge);
+  safeText('#secIdentityForm .step-main-title', dict.baziTitle);
+  safeText('#secIdentityForm .step-main-subtitle', dict.baziSubtitle);
+  safeText('#btnSubmitIdentity span', dict.baziBtnSubmit);
+
+  // Scanner
+  safeText('#secScanner .step-badge-indicator', dict.scannerStepBadge);
+  safeText('.scanner-kicker-badge', dict.scannerKicker);
+  safeText('#secScanner .step-main-title', dict.scannerTitle);
+  safeText('#secScanner .step-main-subtitle', dict.scannerSubtitle);
+  safeText('#chkLight span', dict.checkLight);
+  safeText('#chkPos span', dict.checkPos);
+  safeText('#chkFilter span', dict.checkFilter);
+  safeText('#txtStartCam', dict.txtStartCam);
+  safeText('#cameraFallback .fallback-lead', dict.cameraFallbackLead);
+  safeText('#cameraFallback .fallback-sub', dict.cameraFallbackSub);
+
+  // Results
+  safeText('#txtAuraResultHeading', dict.auraHeading);
+  safeText('#txtDominantElementLabel', dict.dominantElementLabel);
+  safeText('#btnLensScience span', dict.btnLensScience);
+  safeText('#btnLensMystic span', dict.btnLensMystic);
+  safeText('#lblVitality', dict.lblVitality);
+  safeText('#lblEnergyBalance', dict.lblEnergyBalance);
+  safeText('#lblFortuneLevel', dict.lblFortuneLevel);
+  safeText('#lblEnergyReco', dict.lblEnergyReco);
+  safeText('#btnDownloadCertDoc span', dict.btnDownloadCert);
+  safeText('#btnShareCertWA span', dict.btnShareWA);
+
+  // Chat
+  safeText('.chat-room-title', dict.chatRoomTitle);
+  safePlaceholder('contextualInput', dict.chatInputPlaceholder);
+
+  // Drawer
+  safeText('#drawerNavLabel', dict.drawerNavLabel);
+  safeText('#drawerLegalLabel', dict.drawerLegalLabel);
+  safeText('#drawerThemeTitle', dict.drawerThemeTitle);
 }
+
+function toggleLanguage() {
+  const target = (AppState.lang === 'id') ? 'en' : 'id';
+  applyLanguage(target);
+}
+
+function toggleLanguageFromDrawer() {
+  toggleLanguage();
+}
+
+window.toggleLanguage = toggleLanguage;
+window.applyLanguage = applyLanguage;
 window.toggleLanguageFromDrawer = toggleLanguageFromDrawer;
 
 // Bind ESC key to close drawer
@@ -4693,6 +4980,9 @@ function startCompanionPolling(sessionId) {
 document.addEventListener('DOMContentLoaded', () => {
   const savedStyle = localStorage.getItem('aurora_ui_style') || 'sleek';
   setUIStyle(savedStyle);
+
+  // Initialize Multilingual Language & Flag
+  applyLanguage(AppState.lang);
 
   initIdentityFormSelectors();
   initAdminPortal();
