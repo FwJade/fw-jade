@@ -177,13 +177,26 @@
       * Menambahkan bar lencana kepatuhan & otentikasi di bawah tombol kamera: Standar PADG Bank Indonesia, Sertifikasi Biometrik Global ISO/IEC 30107-3, On-Device AI Neural Mesh 100% Privat, dan Enkripsi SSL Edge 256-Bit.
       * Menyertakan tautan langsung ke Pusat Keamanan & Integritas Data (`security.html`) untuk memperkuat kepercayaan dan kredibilitas pengguna.
 * **2026-09-03 (Bagian 17):** **Cross-Device Companion Camera & Instant QR Handoff Engine**:
-* **2026-09-04 (Bagian 21):** **FLUX.2 Klein 4B with Reference Image (`input_image_0`) & Instant Biometric Executive Compositor**:
-   1. **Integrasi FLUX.2 Klein 4B Input Image Reference**:
-      * Menerapkan model `@cf/black-forest-labs/flux-2-klein-4b` via `multipart/form-data` dengan field `input_image_0` untuk memasukkan foto referensi asli pengguna ke dalam model AI.
-      * Menyesuaikan prompt instruksi pengunci karakter wajah: *"Preserve the authentic face, facial structure, eyes, nose, mouth, smile, and hairstyle of the person in input_image_0 intact"*.
-   2. **Client-Side Biometric Executive Compositor (`generateClientSideExecutivePortrait`)**:
-      * Menjamin pengguna **seketika langsung melihat wajah aslinya mengenakan setelan jas eksekutif Tom Ford dan perhiasan liontin giok FW JADE** di penthouse boardroom melalui canvas blending bergradien halus tanpa bergantung pada kuota neuron harian Cloudflare.
-      * Menghilangkan kemungkinan layar hanya menampilkan selfie polos mentah jika panggilan AI terkena batas limit (error 4006).
+* **2026-09-05 (Bagian 22):** **Dedicated Luxury Product Catalog (`catalog.html`) & Master Admin Inventory CRUD Engine (`admin.html`)**:
+   1. **Peluncuran Halaman Publik Katalog Mandiri (`catalog.html`)**:
+      * Membangun etalase produk publik berestetika *Haute Joaillerie* (Dark Emerald `#070a0e`, Emas `#FFC857`, Tipografi *Bodoni Moda* & *Cormorant Garamond*).
+      * Dilengkapi Smart AI Bridge Banner: Menjembatani pengunjung katalog untuk mencoba AI Aura & Face Scanner secara gratis.
+      * Multi-Faceted Search & Filter: Filter Elemen Wu Xing (Kayu, Api, Tanah, Logam, Air), Kategori Perhiasan (Gelang, Cincin, Liontin, Bongkahan), Rentang Harga, dan Pencarian Real-Time nama batu/origin.
+      * Modal Quick View 360° & Sertifikat Digital: Menampilkan matriks lab gemologi lengkap (SG, Mohs, FIR peak 8-14 µm) dan manfaat kesehatan/energi.
+      * Dual Sales Funnel: Pembelian instan via WhatsApp Concierge (+62 811-619-173) dengan teks pre-filled otomatis (Nama Produk, SKU, Harga) dan Payment Gateway Midtrans Snap (QRIS/VA).
+   2. **Master Admin Inventory Management System (`admin.html`)**:
+      * Menambahkan Tab Switcher elegan: `👥 Leads & Konsumen 360°` vs `💎 Katalog & Inventori Produk`.
+      * Form Modal CRUD Produk Lengkap: Nama Produk, Nama Gemologi Indonesia, Kategori, Harga Resmi, Status Stok (*Tersedia*, *Dipesan*, *Terjual*), Asal Tambang (Origin), Tipe Mineral, Dimensi & Berat, Kekerasan Mohs, Elemen Wu Xing, Tuah/Khasiat, dan Deskripsi Lab.
+      * Manajemen Foto Fleksibel: Mendukung input URL gambar atau Upload File langsung dari HP/PC dengan kompresi cerdas canvas otomatis (max 800px) dan live preview thumbnail.
+      * Kartu Statistik Inventori: Total Koleksi, Ready Stock, Terjual, dan Estimasi Total Nilai Aset Portofolio.
+   3. **Cloudflare Serverless REST API (`/functions/api/products.js`)**:
+      * Edge runtime endpoints: `GET`, `POST`, `DELETE`, dan `OPTIONS` CORS.
+      * Dual-Vault Persistence: Menyimpan data secara permanen di Cloudflare KV (`PRODUCTS_KV`) / GitHub Gist Database (`products.json`) dengan fallback aman ke memory edge & Master Local Storage Vault.
+   4. **Sinkronisasi Dinamis ke AI Aura Scanner & Navigasi Terpadu (`app.js`, `index.html`, `sitemap.xml`)**:
+      * Modul AI di `app.js` (`syncCatalogProductsToGemstoneDatabase`) secara reaktif mengintegrasikan produk live dari katalog ke dalam bank rekomendasi AI, memprioritaskan batu mulia yang berstatus *Tersedia*.
+      * Menghubungkan menu "Katalog" di Top Glass Navbar, Mobile Slide-Over Drawer (`#luxurySidebarDrawer`), dan Grand Single-Strip Footer.
+      * Mendaftarkan URL `https://fwjade.com/catalog.html` ke dalam `sitemap.xml` dengan prioritas 0.95 untuk pengindeksan mesin pencari Google.
+
 
 
 

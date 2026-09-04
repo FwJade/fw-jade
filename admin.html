@@ -118,8 +118,27 @@
     .detail-val{font-weight:600}
     
     .empty-state{padding:48px;text-align:center;color:var(--muted)}
-    .empty-state i{font-size:2rem;margin-bottom:10px;opacity:0.4;display:block}
-    @media(max-width:960px){.table-wrap{overflow-x:auto}.admin-content{padding:14px}table{min-width:760px}.stat-grid{grid-template-columns:1fr 1fr}th,td{padding:10px 8px;font-size:0.75rem}}
+    /* Admin Navigation Tabs */
+    .admin-nav-tabs{display:flex;align-items:center;gap:8px;margin-left:10px}
+    .admin-nav-tab{background:rgba(255,255,255,0.04);border:1px solid var(--border);color:var(--muted);padding:6px 14px;border-radius:20px;cursor:pointer;font-size:0.75rem;font-weight:600;font-family:'Inter',sans-serif;display:inline-flex;align-items:center;gap:6px;transition:all 0.2s}
+    .admin-nav-tab:hover{background:rgba(255,255,255,0.08);color:var(--text)}
+    .admin-nav-tab.active{background:rgba(43,224,133,0.15);border-color:var(--emerald);color:var(--emerald)}
+    .admin-nav-tab.gold.active{background:rgba(255,200,87,0.15);border-color:var(--gold);color:var(--gold)}
+
+    /* Product Specific UI */
+    .product-thumb-cell{display:flex;align-items:center;gap:12px}
+    .product-thumb-img{width:46px;height:46px;border-radius:8px;object-fit:cover;border:1px solid rgba(216,195,144,0.3);flex-shrink:0;background:#050d09}
+    .product-name-title{font-weight:600;font-size:0.84rem;color:var(--text)}
+    .product-spec-sub{font-size:0.7rem;color:var(--muted);margin-top:2px}
+    .badge-stock{font-size:0.65rem;padding:2px 7px;border-radius:5px;font-weight:600;display:inline-block;white-space:nowrap}
+    .badge-stock.available{background:rgba(43,224,133,0.15);color:var(--emerald);border:1px solid rgba(43,224,133,0.3)}
+    .badge-stock.reserved{background:rgba(255,200,87,0.15);color:var(--gold);border:1px solid rgba(255,200,87,0.3)}
+    .badge-stock.sold{background:rgba(255,107,107,0.15);color:var(--red);border:1px solid rgba(255,107,107,0.3)}
+    .badge-element{font-size:0.65rem;padding:2px 6px;border-radius:4px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);color:var(--text)}
+    .img-preview-box{width:100%;height:130px;border-radius:8px;border:1px dashed rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;overflow:hidden;background:rgba(0,0,0,0.3);margin-top:8px}
+    .img-preview-box img{max-width:100%;max-height:100%;object-fit:contain}
+
+    @media(max-width:960px){.table-wrap{overflow-x:auto}.admin-content{padding:14px}table{min-width:760px}.stat-grid{grid-template-columns:1fr 1fr}th,td{padding:10px 8px;font-size:0.75rem}.admin-nav-tabs{order:3;width:100%;margin-left:0;margin-top:8px}}
   </style>
 </head>
 <body>
@@ -139,6 +158,18 @@
       <div class="admin-logo">FW <span>JADE</span></div>
     </a>
     <div class="admin-badge"><i class="fa-solid fa-shield-halved"></i> Admin Portal</div>
+
+    <!-- Admin Master Tabs Switcher -->
+    <div class="admin-nav-tabs">
+      <button type="button" class="admin-nav-tab active" id="tabBtnLeads" onclick="switchAdminTab('leads')">
+        <i class="fa-solid fa-users"></i> <span>Leads &amp; Konsumen 360°</span>
+      </button>
+      <button type="button" class="admin-nav-tab gold" id="tabBtnProducts" onclick="switchAdminTab('products')">
+        <i class="fa-solid fa-gem"></i> <span>Katalog &amp; Inventori Produk</span>
+      </button>
+    </div>
+
+    <a href="/catalog.html" target="_blank" class="btn-to-landing" title="Buka Halaman Katalog Publik"><i class="fa-solid fa-store"></i> <span>Lihat Katalog</span></a>
     <a href="/" class="btn-to-landing" title="Buka Website Publik Landing Page"><i class="fa-solid fa-house"></i> <span>Website Utama</span></a>
     <div class="admin-user-info">
       <img id="adminAvatar" class="admin-avatar" src="" alt="Admin" style="display:none;">
@@ -149,31 +180,88 @@
       <button class="btn-logout" onclick="adminLogout()"><i class="fa-solid fa-right-from-bracket"></i> Keluar</button>
     </div>
   </div>
+
   <div class="admin-content">
-    <div class="page-title"><i class="fa-solid fa-users text-emerald"></i> Master Leads Portal</div>
-    <div class="page-subtitle">Database prospek pelanggan &amp; Audit Trail Customer 360° — Standar Produksi Enterprise</div>
-    <div class="stat-grid">
-      <div class="stat-card"><div class="stat-label">Total Pelanggan Unik</div><div class="stat-value emerald" id="statTotal">-</div></div>
-      <div class="stat-card"><div class="stat-label">Potensi Omset</div><div class="stat-value gold" id="statRevenue">-</div></div>
-      <div class="stat-card"><div class="stat-label">Status Akses</div><div class="stat-value" style="font-size:1rem;">Master Admin <i class="fa-solid fa-circle-check text-emerald"></i></div></div>
-      <div class="stat-card"><div class="stat-label">Data Terakhir Dimuat</div><div class="stat-value text-xs" style="font-size:0.9rem;" id="statLastLoad">-</div></div>
+    <!-- ==========================================
+         VIEW 1: LEADS & CUSTOMER 360° PORTAL
+         ========================================== -->
+    <div id="leadsSection">
+      <div class="page-title"><i class="fa-solid fa-users text-emerald"></i> Master Leads Portal</div>
+      <div class="page-subtitle">Database prospek pelanggan &amp; Audit Trail Customer 360° — Standar Produksi Enterprise</div>
+      <div class="stat-grid">
+        <div class="stat-card"><div class="stat-label">Total Pelanggan Unik</div><div class="stat-value emerald" id="statTotal">-</div></div>
+        <div class="stat-card"><div class="stat-label">Potensi Omset</div><div class="stat-value gold" id="statRevenue">-</div></div>
+        <div class="stat-card"><div class="stat-label">Status Akses</div><div class="stat-value" style="font-size:1rem;">Master Admin <i class="fa-solid fa-circle-check text-emerald"></i></div></div>
+        <div class="stat-card"><div class="stat-label">Data Terakhir Dimuat</div><div class="stat-value text-xs" style="font-size:0.9rem;" id="statLastLoad">-</div></div>
+      </div>
+      <div class="toolbar">
+        <input type="search" class="search-input" id="searchInput" placeholder="Cari nama, email, WhatsApp, atau batu..." oninput="filterTable()">
+        <select id="sortSelect" class="form-select" style="max-width: 220px; padding: 9px 12px;" onchange="filterTable()">
+          <option value="latest">Urutkan: Sesi Terbaru</option>
+          <option value="visits">Urutkan: Paling Sering Akses (VIP)</option>
+          <option value="revenue">Urutkan: Potensi Omset</option>
+          <option value="name">Urutkan: Nama (A-Z)</option>
+        </select>
+        <button class="btn-action secondary" onclick="loadLeads()"><i class="fa-solid fa-rotate"></i> Refresh &amp; Sinkron</button>
+        <button class="btn-action gold" onclick="exportCSV()"><i class="fa-solid fa-file-csv"></i> Unduh CSV / Excel</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Sesi Terakhir / Pertama</th><th>Nama Pelanggan</th><th>Tgl Lahir / Bazi</th><th>Kontak &amp; Frekuensi</th><th>Batu Rekomendasi</th><th>Aksi Admin</th></tr></thead>
+          <tbody id="leadsTableBody"><tr><td colspan="6" class="text-center"><i class="fa-solid fa-spinner fa-spin text-emerald"></i> Memuat data...</td></tr></tbody>
+        </table>
+      </div>
     </div>
-    <div class="toolbar">
-      <input type="search" class="search-input" id="searchInput" placeholder="Cari nama, email, WhatsApp, atau batu..." oninput="filterTable()">
-      <select id="sortSelect" class="form-select" style="max-width: 220px; padding: 9px 12px;" onchange="filterTable()">
-        <option value="latest">Urutkan: Sesi Terbaru</option>
-        <option value="visits">Urutkan: Paling Sering Akses (VIP)</option>
-        <option value="revenue">Urutkan: Potensi Omset</option>
-        <option value="name">Urutkan: Nama (A-Z)</option>
-      </select>
-      <button class="btn-action secondary" onclick="loadLeads()"><i class="fa-solid fa-rotate"></i> Refresh &amp; Sinkron</button>
-      <button class="btn-action gold" onclick="exportCSV()"><i class="fa-solid fa-file-csv"></i> Unduh CSV / Excel</button>
-    </div>
-    <div class="table-wrap">
-      <table>
-        <thead><tr><th>Sesi Terakhir / Pertama</th><th>Nama Pelanggan</th><th>Tgl Lahir / Bazi</th><th>Kontak &amp; Frekuensi</th><th>Batu Rekomendasi</th><th>Aksi Admin</th></tr></thead>
-        <tbody id="leadsTableBody"><tr><td colspan="6" class="text-center"><i class="fa-solid fa-spinner fa-spin text-emerald"></i> Memuat data...</td></tr></tbody>
-      </table>
+
+    <!-- ==========================================
+         VIEW 2: PRODUCT CATALOG & INVENTORY PORTAL
+         ========================================== -->
+    <div id="productsSection" style="display: none;">
+      <div class="page-title"><i class="fa-solid fa-gem text-gold"></i> Manajemen Katalog &amp; Inventori Produk</div>
+      <div class="page-subtitle">Kelola etalase batu giok &amp; permata mulia, harga resmi, spesifikasi lab, dan status stok &mdash; Tersinkronisasi Otomatis ke catalog.html</div>
+      <div class="stat-grid">
+        <div class="stat-card"><div class="stat-label">Total Koleksi Terdaftar</div><div class="stat-value gold" id="statProdTotal">-</div></div>
+        <div class="stat-card"><div class="stat-label">Koleksi Ready Stock</div><div class="stat-value emerald" id="statProdAvailable">-</div></div>
+        <div class="stat-card"><div class="stat-label">Koleksi Terjual / Sold</div><div class="stat-value" id="statProdSold" style="color:var(--muted);">-</div></div>
+        <div class="stat-card"><div class="stat-label">Estimasi Nilai Inventori</div><div class="stat-value gold" id="statProdValue">-</div></div>
+      </div>
+      <div class="toolbar">
+        <input type="search" class="search-input" id="searchProductInput" placeholder="Cari nama koleksi, jenis batu, asal daerah, atau elemen..." oninput="filterProductsTable()">
+        <select id="filterProductCategory" class="form-select" style="max-width: 190px; padding: 9px 12px;" onchange="filterProductsTable()">
+          <option value="all">Semua Kategori</option>
+          <option value="Gelang">Gelang / Bangle</option>
+          <option value="Cincin">Cincin / Rings</option>
+          <option value="Liontin">Liontin / Pendants</option>
+          <option value="Bongkahan">Bongkahan Alami</option>
+          <option value="Koleksi Khusus">Koleksi Khusus</option>
+        </select>
+        <select id="filterProductStatus" class="form-select" style="max-width: 160px; padding: 9px 12px;" onchange="filterProductsTable()">
+          <option value="all">Semua Status</option>
+          <option value="Tersedia">Tersedia (Ready)</option>
+          <option value="Dipesan">Dipesan (Reserved)</option>
+          <option value="Terjual">Terjual (Sold Out)</option>
+        </select>
+        <button class="btn-action primary" onclick="openAddProductModal()"><i class="fa-solid fa-plus"></i> + Tambah Koleksi Baru</button>
+        <button class="btn-action secondary" onclick="loadProducts()"><i class="fa-solid fa-rotate"></i> Refresh &amp; Sinkron</button>
+        <a href="/catalog.html" target="_blank" class="btn-action gold" style="text-decoration:none;"><i class="fa-solid fa-store"></i> Lihat Katalog Publik</a>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Koleksi Permata / Perhiasan</th>
+              <th>Kategori &amp; Elemen</th>
+              <th>Asal Tambang &amp; Spesifikasi</th>
+              <th>Harga Resmi</th>
+              <th>Status Stok</th>
+              <th>Aksi Admin</th>
+            </tr>
+          </thead>
+          <tbody id="productsTableBody">
+            <tr><td colspan="6" class="text-center"><i class="fa-solid fa-spinner fa-spin text-gold"></i> Memuat inventori produk...</td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </div>
@@ -268,6 +356,127 @@
       <div class="modal-actions">
         <button type="button" class="btn-action secondary" onclick="closeEditLeadModal()">Batal</button>
         <button type="submit" class="btn-action primary"><i class="fa-solid fa-floppy-disk"></i> Simpan &amp; Sinkron</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- =========================================================================
+     MODAL TAMBAH / EDIT KOLEKSI PRODUK & INVENTORI (Admin Management)
+     ========================================================================= -->
+<div id="productModal" class="lead-modal-overlay" style="display: none;">
+  <div class="lead-modal-card" style="max-width: 650px;">
+    <div class="modal-header">
+      <div class="modal-title" id="productModalTitle"><i class="fa-solid fa-gem text-gold"></i> Tambah Koleksi Batu Baru</div>
+      <button type="button" class="modal-close-btn" onclick="closeProductModal()">&times;</button>
+    </div>
+    <form id="productForm" onsubmit="event.preventDefault(); saveProduct();">
+      <input type="hidden" id="prodId">
+      
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+        <div class="form-group">
+          <label class="form-label">Nama Koleksi (Komersial) *</label>
+          <input type="text" id="prodName" class="form-input" placeholder="Contoh: Natural Aceh Jadeite Bangle Grade A" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Nama Gemologi / Indonesia</label>
+          <input type="text" id="prodNameId" class="form-input" placeholder="Contoh: Gelang Giok Hijau Aceh Alami">
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px;">
+        <div class="form-group">
+          <label class="form-label">Kategori Perhiasan *</label>
+          <select id="prodCategory" class="form-select" required>
+            <option value="Gelang / Bangle">Gelang / Bangle</option>
+            <option value="Cincin / Rings">Cincin / Rings</option>
+            <option value="Liontin / Pendants">Liontin / Pendants</option>
+            <option value="Bongkahan Alami">Bongkahan Alami</option>
+            <option value="Koleksi Khusus">Koleksi Khusus</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Harga Resmi (IDR) *</label>
+          <input type="text" id="prodPrice" class="form-input" placeholder="Contoh: Rp 1.850.000" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Status Stok *</label>
+          <select id="prodStatus" class="form-select">
+            <option value="Tersedia">Tersedia (Ready Stock)</option>
+            <option value="Dipesan">Dipesan (Reserved)</option>
+            <option value="Terjual">Terjual (Sold Out)</option>
+          </select>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+        <div class="form-group">
+          <label class="form-label">Asal Daerah / Tambang (Origin)</label>
+          <input type="text" id="prodOrigin" class="form-input" placeholder="Contoh: Nagan Raya, Aceh, Indonesia">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Jenis Mineral / Tipe Gemologi</label>
+          <input type="text" id="prodType" class="form-input" placeholder="Contoh: Jadeite-Pyroxene Mineral">
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px;">
+        <div class="form-group">
+          <label class="form-label">Dimensi / Ukuran</label>
+          <input type="text" id="prodDimensions" class="form-input" placeholder="Diameter 58 mm • Tebal 11 mm">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Berat / Karat</label>
+          <input type="text" id="prodWeight" class="form-input" placeholder="52.4 Carat (10.48 g)">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Kekerasan Mohs</label>
+          <input type="text" id="prodMohs" class="form-input" placeholder="6.8 / 10 Mohs">
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+        <div class="form-group">
+          <label class="form-label">Elemen Wu Xing (Bazi)</label>
+          <select id="prodElement" class="form-select">
+            <option value="WOOD">Kayu (Wood / 木) — Kesehatan &amp; Rezeki Berkelanjutan</option>
+            <option value="WATER / EARTH">Air &amp; Bumi (Water/Earth) — Detoks &amp; Proteksi</option>
+            <option value="EARTH / METAL">Bumi &amp; Logam (Earth/Metal) — Magnet Modal &amp; Penjualan</option>
+            <option value="FIRE / SPIRIT">Api &amp; Jiwa (Fire/Spirit) — Pengasihan &amp; Karisma</option>
+            <option value="WATER / WOOD">Air &amp; Kayu (Water/Wood) — Karir &amp; Prestise</option>
+            <option value="FIRE">Api (Fire / 火) — Keberanian &amp; Anti-Bala</option>
+            <option value="METAL / EARTH">Logam &amp; Bumi (Metal/Earth) — Pelindung Aset</option>
+            <option value="EARTH / FIRE">Bumi &amp; Api (Earth/Fire) — Insting &amp; Wibawa</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Tuah / Energi Spesifik</label>
+          <input type="text" id="prodEnergy" class="form-input" placeholder="Contoh: Harmony, Health & Sustained Wealth">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Deskripsi Khasiat &amp; Sains Lab (FIR, Medis Komplementer &amp; Metafisika)</label>
+        <textarea id="prodDescription" class="form-textarea" placeholder="Jelaskan karakteristik visual, emisi gelombang Far Infrared (FIR), sensasi dingin batu, serta tuah keberuntungannya..."></textarea>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label"><i class="fa-solid fa-image text-emerald"></i> Foto Produk (URL atau Unggah File)</label>
+        <div style="display: flex; gap: 8px;">
+          <input type="text" id="prodImageUrl" class="form-input" placeholder="https://domain.com/foto-giok.jpg" oninput="updateImagePreview(this.value)">
+          <label class="btn-action secondary" style="cursor: pointer; white-space: nowrap;">
+            <i class="fa-solid fa-cloud-arrow-up"></i> Upload Foto
+            <input type="file" id="prodImageFile" accept="image/*" style="display: none;" onchange="handleProductImageFile(this)">
+          </label>
+        </div>
+        <div class="img-preview-box" id="imagePreviewContainer">
+          <span style="color: var(--muted); font-size: 0.75rem;"><i class="fa-regular fa-image"></i> Pratinjau Foto Produk</span>
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button type="button" class="btn-action secondary" onclick="closeProductModal()">Batal</button>
+        <button type="submit" class="btn-action primary" id="btnSaveProduct"><i class="fa-solid fa-floppy-disk"></i> Simpan ke Katalog</button>
       </div>
     </form>
   </div>
@@ -673,6 +882,335 @@
     a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
     a.download = 'fwjade_leads_enterprise_' + new Date().toISOString().slice(0, 10) + '.csv';
     a.click();
+  }
+
+  // ==========================================
+  // TAB SWITCHER: LEADS vs PRODUCT INVENTORY
+  // ==========================================
+  function switchAdminTab(tab) {
+    var leadsSec = document.getElementById('leadsSection');
+    var prodSec = document.getElementById('productsSection');
+    var btnLeads = document.getElementById('tabBtnLeads');
+    var btnProd = document.getElementById('tabBtnProducts');
+
+    if (tab === 'products') {
+      if (leadsSec) leadsSec.style.display = 'none';
+      if (prodSec) prodSec.style.display = 'block';
+      if (btnLeads) btnLeads.classList.remove('active');
+      if (btnProd) btnProd.classList.add('active');
+      loadProducts();
+    } else {
+      if (leadsSec) leadsSec.style.display = 'block';
+      if (prodSec) prodSec.style.display = 'none';
+      if (btnLeads) btnLeads.classList.add('active');
+      if (btnProd) btnProd.classList.remove('active');
+    }
+  }
+
+  // ==========================================
+  // PRODUCT CATALOG & INVENTORY MANAGEMENT
+  // ==========================================
+  var allProducts = [];
+
+  async function loadProducts() {
+    var tbody = document.getElementById('productsTableBody');
+    var statTotal = document.getElementById('statProdTotal');
+    var statAvailable = document.getElementById('statProdAvailable');
+    var statSold = document.getElementById('statProdSold');
+    var statValue = document.getElementById('statProdValue');
+    if (tbody) {
+      tbody.innerHTML = '<tr><td colspan="6" class="text-center"><i class="fa-solid fa-spinner fa-spin text-gold"></i> Mengambil data produk dari Cloudflare Edge &amp; Master Vault...</td></tr>';
+    }
+
+    var serverProducts = [];
+    try {
+      var res = await fetch('/api/products');
+      if (res.ok) {
+        var data = await res.json();
+        if (data.success && Array.isArray(data.data)) {
+          serverProducts = data.data;
+        }
+      }
+    } catch(e) { console.warn('Server products fetch error:', e); }
+
+    var localProducts = [];
+    try {
+      var raw = localStorage.getItem('fwjade_global_products_vault');
+      if (raw) localProducts = JSON.parse(raw);
+    } catch(e) {}
+    if (!Array.isArray(localProducts)) localProducts = [];
+
+    // Merge by id
+    var pMap = new Map();
+    serverProducts.forEach(function(p) { if (p.id) pMap.set(p.id, p); });
+    localProducts.forEach(function(p) {
+      if (p.id && !pMap.has(p.id)) {
+        pMap.set(p.id, p);
+        fetch('/api/products', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(p)
+        }).catch(function() {});
+      }
+    });
+
+    allProducts = Array.from(pMap.values());
+    try {
+      localStorage.setItem('fwjade_global_products_vault', JSON.stringify(allProducts));
+    } catch(e) {}
+
+    filterProductsTable();
+
+    if (statTotal) statTotal.textContent = allProducts.length + ' Item';
+    var readyCount = allProducts.filter(function(p) { return p.status === 'Tersedia'; }).length;
+    var soldCount = allProducts.filter(function(p) { return p.status === 'Terjual'; }).length;
+    if (statAvailable) statAvailable.textContent = readyCount + ' Item';
+    if (statSold) statSold.textContent = soldCount + ' Item';
+
+    var totalVal = allProducts.reduce(function(acc, p) {
+      var num = p.priceNum || parseInt(String(p.price || '0').replace(/[^0-9]/g, '')) || 0;
+      return acc + num;
+    }, 0);
+    if (statValue) statValue.textContent = 'Rp ' + totalVal.toLocaleString('id-ID');
+  }
+
+  function renderProductsTable(products) {
+    var tbody = document.getElementById('productsTableBody');
+    if (!tbody) return;
+    if (!products || products.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="6" class="empty-state"><i class="fa-solid fa-box-open"></i>Belum ada koleksi produk yang cocok dengan pencarian / filter.</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = products.map(function(p) {
+      var defaultImg = 'https://images.unsplash.com/photo-1611591475805-4700d14b4344?auto=format&fit=crop&w=800&q=80';
+      var imgSrc = p.image || defaultImg;
+      
+      var stockClass = 'available';
+      if (p.status === 'Dipesan') stockClass = 'reserved';
+      if (p.status === 'Terjual') stockClass = 'sold';
+
+      return '<tr>' +
+        '<td><div class="product-thumb-cell">' +
+          '<img src="' + imgSrc + '" class="product-thumb-img" alt="Gem" onerror="this.src=\'' + defaultImg + '\'">' +
+          '<div>' +
+            '<div class="product-name-title">' + (p.name || '-') + '</div>' +
+            '<div class="product-spec-sub">' + (p.name_id || '') + '</div>' +
+          '</div>' +
+        '</div></td>' +
+
+        '<td><div><strong style="font-size:0.8rem;color:var(--text);">' + (p.category || 'Perhiasan') + '</strong></div>' +
+        '<div style="margin-top:3px;"><span class="badge-element">' + (p.element_id || p.element || 'Wood') + '</span></div></td>' +
+
+        '<td><div style="font-size:0.8rem;color:var(--gold);font-weight:500;">' + (p.origin || 'Indonesia') + '</div>' +
+        '<div class="product-spec-sub">' + (p.mohs || '6.8 Mohs') + ' &bull; ' + (p.weight || '-') + '</div></td>' +
+
+        '<td><div style="font-weight:700;color:var(--emerald);font-size:0.9rem;">' + (p.price || 'Rp 0') + '</div></td>' +
+
+        '<td><span class="badge-stock ' + stockClass + '">' + (p.status || 'Tersedia') + '</span></td>' +
+
+        '<td><div class="action-btn-group">' +
+          '<button type="button" class="btn-icon-square btn-edit-icon" onclick="openEditProductModal(\'' + p.id + '\')" title="Edit Produk &amp; Harga"><i class="fa-solid fa-pen-to-square"></i></button>' +
+          '<button type="button" class="btn-icon-square btn-del-icon" onclick="deleteProduct(\'' + p.id + '\')" title="Hapus Produk dari Katalog"><i class="fa-solid fa-trash-can"></i></button>' +
+        '</div></td>' +
+      '</tr>';
+    }).join('');
+  }
+
+  function filterProductsTable() {
+    var qInput = document.getElementById('searchProductInput');
+    var q = qInput ? qInput.value.toLowerCase().trim() : '';
+    var catSelect = document.getElementById('filterProductCategory');
+    var cat = catSelect ? catSelect.value : 'all';
+    var stSelect = document.getElementById('filterProductStatus');
+    var st = stSelect ? stSelect.value : 'all';
+
+    var filtered = allProducts.filter(function(p) {
+      var matchQ = !q ||
+        (p.name && p.name.toLowerCase().includes(q)) ||
+        (p.name_id && p.name_id.toLowerCase().includes(q)) ||
+        (p.origin && p.origin.toLowerCase().includes(q)) ||
+        (p.type && p.type.toLowerCase().includes(q)) ||
+        (p.element && p.element.toLowerCase().includes(q)) ||
+        (p.category && p.category.toLowerCase().includes(q));
+
+      var matchCat = (cat === 'all') || (p.category && p.category.toLowerCase().includes(cat.toLowerCase()));
+      var matchSt = (st === 'all') || (p.status === st);
+
+      return matchQ && matchCat && matchSt;
+    });
+
+    renderProductsTable(filtered);
+  }
+
+  function openAddProductModal() {
+    document.getElementById('productModalTitle').innerHTML = '<i class="fa-solid fa-gem text-gold"></i> Tambah Koleksi Batu Baru';
+    document.getElementById('prodId').value = 'prod-' + Date.now();
+    document.getElementById('prodName').value = '';
+    document.getElementById('prodNameId').value = '';
+    document.getElementById('prodCategory').value = 'Gelang / Bangle';
+    document.getElementById('prodPrice').value = '';
+    document.getElementById('prodStatus').value = 'Tersedia';
+    document.getElementById('prodOrigin').value = 'Nagan Raya, Aceh, Indonesia';
+    document.getElementById('prodType').value = 'Natural Jadeite-Pyroxene Grade A';
+    document.getElementById('prodDimensions').value = '';
+    document.getElementById('prodWeight').value = '';
+    document.getElementById('prodMohs').value = '6.8 / 10 Mohs';
+    document.getElementById('prodElement').value = 'WOOD';
+    document.getElementById('prodEnergy').value = 'Harmony, Health & Sustained Wealth';
+    document.getElementById('prodDescription').value = '';
+    document.getElementById('prodImageUrl').value = '';
+    updateImagePreview('');
+    document.getElementById('productModal').style.display = 'flex';
+  }
+
+  function openEditProductModal(id) {
+    var p = allProducts.find(function(item) { return item.id === id; });
+    if (!p) return;
+
+    document.getElementById('productModalTitle').innerHTML = '<i class="fa-solid fa-pen-to-square text-gold"></i> Edit Koleksi: ' + (p.name || '');
+    document.getElementById('prodId').value = p.id;
+    document.getElementById('prodName').value = p.name || '';
+    document.getElementById('prodNameId').value = p.name_id || '';
+    document.getElementById('prodCategory').value = p.category || 'Gelang / Bangle';
+    document.getElementById('prodPrice').value = p.price || '';
+    document.getElementById('prodStatus').value = p.status || 'Tersedia';
+    document.getElementById('prodOrigin').value = p.origin || '';
+    document.getElementById('prodType').value = p.type || '';
+    document.getElementById('prodDimensions').value = p.dimensions || '';
+    document.getElementById('prodWeight').value = p.weight || '';
+    document.getElementById('prodMohs').value = p.mohs || '';
+    document.getElementById('prodElement').value = p.element || 'WOOD';
+    document.getElementById('prodEnergy').value = p.energy || '';
+    document.getElementById('prodDescription').value = p.description || '';
+    document.getElementById('prodImageUrl').value = p.image || '';
+    updateImagePreview(p.image || '');
+    document.getElementById('productModal').style.display = 'flex';
+  }
+
+  function closeProductModal() {
+    document.getElementById('productModal').style.display = 'none';
+  }
+
+  function updateImagePreview(url) {
+    var box = document.getElementById('imagePreviewContainer');
+    if (!box) return;
+    if (url && url.trim().length > 5) {
+      box.innerHTML = '<img src="' + url.trim() + '" alt="Preview" onerror="this.onerror=null; this.parentElement.innerHTML=\'<span style=\\\'color:var(--red);font-size:0.75rem;\\\'>Gambar gagal dimuat</span>\';">';
+    } else {
+      box.innerHTML = '<span style="color:var(--muted);font-size:0.75rem;"><i class="fa-regular fa-image"></i> Pratinjau Foto Produk</span>';
+    }
+  }
+
+  function handleProductImageFile(input) {
+    if (!input.files || !input.files[0]) return;
+    var file = input.files[0];
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      var img = new Image();
+      img.onload = function() {
+        var canvas = document.createElement('canvas');
+        var maxW = 800;
+        var scale = maxW / Math.max(img.width, maxW);
+        canvas.width = Math.min(img.width, maxW);
+        canvas.height = img.height * scale;
+        var ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        var compressedDataUrl = canvas.toDataURL('image/jpeg', 0.85);
+        document.getElementById('prodImageUrl').value = compressedDataUrl;
+        updateImagePreview(compressedDataUrl);
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  async function saveProduct() {
+    var id = document.getElementById('prodId').value || ('prod-' + Date.now());
+    var name = document.getElementById('prodName').value.trim();
+    var name_id = document.getElementById('prodNameId').value.trim() || name;
+    var category = document.getElementById('prodCategory').value;
+    var price = document.getElementById('prodPrice').value.trim();
+    var status = document.getElementById('prodStatus').value;
+    var origin = document.getElementById('prodOrigin').value.trim();
+    var type = document.getElementById('prodType').value.trim();
+    var dimensions = document.getElementById('prodDimensions').value.trim();
+    var weight = document.getElementById('prodWeight').value.trim();
+    var mohs = document.getElementById('prodMohs').value.trim();
+    var element = document.getElementById('prodElement').value;
+    var energy = document.getElementById('prodEnergy').value.trim();
+    var description = document.getElementById('prodDescription').value.trim();
+    var image = document.getElementById('prodImageUrl').value.trim() || 'https://images.unsplash.com/photo-1611591475805-4700d14b4344?auto=format&fit=crop&w=800&q=80';
+
+    var priceNum = parseInt(price.replace(/[^0-9]/g, '')) || 1000000;
+    if (!price.toLowerCase().includes('rp')) {
+      price = 'Rp ' + priceNum.toLocaleString('id-ID');
+    }
+
+    var existingIdx = allProducts.findIndex(function(p) { return p.id === id; });
+    var productObj = Object.assign({}, (existingIdx >= 0 ? allProducts[existingIdx] : {}), {
+      id: id,
+      name: name,
+      name_id: name_id,
+      category: category,
+      price: price,
+      priceNum: priceNum,
+      status: status,
+      origin: origin || 'Indonesia',
+      type: type || 'Natural Mineral Grade A',
+      dimensions: dimensions || '-',
+      weight: weight || '-',
+      mohs: mohs || '6.5–7.0 Mohs',
+      element: element,
+      element_id: element,
+      energy: energy || 'Keberuntungan & Keseimbangan',
+      description: description || 'Koleksi perhiasan giok dan batu mulia terkurasi FW JADE.',
+      image: image,
+      updatedAt: new Date().toISOString()
+    });
+
+    if (existingIdx >= 0) {
+      allProducts[existingIdx] = productObj;
+    } else {
+      productObj.createdAt = new Date().toISOString();
+      allProducts.unshift(productObj);
+    }
+
+    try {
+      localStorage.setItem('fwjade_global_products_vault', JSON.stringify(allProducts));
+    } catch(e) {}
+
+    filterProductsTable();
+    closeProductModal();
+
+    // Persist to Serverless API
+    try {
+      await fetch('/api/products', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(productObj)
+      });
+    } catch(e) { console.warn('Product save to server warning:', e); }
+
+    loadProducts();
+  }
+
+  async function deleteProduct(id) {
+    if (!confirm('Apakah Anda yakin ingin menghapus produk ini dari katalog?')) return;
+    
+    allProducts = allProducts.filter(function(p) { return p.id !== id; });
+    try {
+      localStorage.setItem('fwjade_global_products_vault', JSON.stringify(allProducts));
+    } catch(e) {}
+    filterProductsTable();
+
+    try {
+      await fetch('/api/products?id=' + encodeURIComponent(id), {
+        method: 'DELETE'
+      });
+    } catch(e) { console.warn('Product delete from server warning:', e); }
+
+    loadProducts();
   }
 
   function adminLogout() {

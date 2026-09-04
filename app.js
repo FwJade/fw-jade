@@ -49,7 +49,7 @@ const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.dummy_key';
 let mockHistoryDB = [];
 
 
-const GemstoneDatabase = [
+let GemstoneDatabase = [
   {
     id: 'giok-aceh',
     name: 'Natural Aceh Jadeite',
@@ -167,6 +167,86 @@ const GemstoneDatabase = [
     keywords: ['kecubung', 'amethyst', 'pengasihan', 'jodoh', 'tidur', 'insomnia', 'wibawa', 'pikat']
   }
 ];
+window.GemstoneDatabase = GemstoneDatabase;
+
+// Auto-Sync Live Catalog Inventory to AI Engine
+async function syncCatalogProductsToGemstoneDatabase() {
+  try {
+    let localProducts = [];
+    const raw = localStorage.getItem('fwjade_global_products_vault');
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed) && parsed.length > 0) localProducts = parsed;
+    }
+
+    if (localProducts.length > 0) {
+      integrateCatalogToGemstones(localProducts);
+    }
+
+    // Background fetch latest live inventory from Cloudflare API
+    fetch('/api/products')
+      .then(res => res.json())
+      .then(data => {
+        if (data && data.success && Array.isArray(data.data) && data.data.length > 0) {
+          localStorage.setItem('fwjade_global_products_vault', JSON.stringify(data.data));
+          integrateCatalogToGemstones(data.data);
+        }
+      })
+      .catch(function() {});
+  } catch(e) {
+    console.warn('Catalog inventory sync warning:', e);
+  }
+}
+
+function integrateCatalogToGemstones(products) {
+  if (!Array.isArray(products) || products.length === 0) return;
+  const available = products.filter(p => p.status !== 'Terjual');
+  if (available.length === 0) return;
+
+  const existingIds = new Set(GemstoneDatabase.map(g => g.id));
+  available.forEach(p => {
+    const gemObj = {
+      id: p.id,
+      name: p.name,
+      name_id: p.name_id || p.name,
+      cert: p.cert || 'Sertifikat Alami Grade A (GIA Standard)',
+      element: p.element || 'WOOD',
+      element_id: p.element_id || p.element || 'Wood (Kayu / 木)',
+      energy: p.energy || 'Harmony & Growth',
+      description: p.description || 'Perhiasan giok alami asli terkurasi FW JADE.',
+      price: p.price || 'Rp 1.500.000',
+      origin: p.origin || 'Nagan Raya, Aceh',
+      type: p.type || 'Natural Mineral Grade A',
+      color: p.color || 'Hijau Alami Translusen',
+      specEnergy: p.energy || 'Harmony & Growth',
+      icon: 'fa-gem',
+      chemFormula: p.chemFormula || 'NaAlSi₂O₆ Complex',
+      mohs: p.mohs || '6.8 / 10',
+      sg: p.sg || '3.33 g/cm³',
+      firPeak: p.firPeak || '9.35 µm',
+      firCoherence: '8–14 µm Spektrum Emisi Alami',
+      ftirPurity: 'Grade A Natural (Tanpa Resin)',
+      oxygenBoost: '+23.4%',
+      zetaPotential: 'ζ ≤ -15 mV (Aktif)',
+      viscosityRed: '-18.6% (Lancar)',
+      zodiacMatch: p.zodiacMatch || 'Taurus, Cancer, Capricorn, Pisces',
+      shioMatch: p.shioMatch || 'Naga, Macan, Kuda, Kelinci',
+      wuXingCycle: p.wuXingCycle || `${p.element || 'Wood'} → Mengalirkan Chi Kemakmuran & Keberuntungan`,
+      keywords: Array.isArray(p.keywords) ? p.keywords : ['giok', 'permata', 'batu'],
+      image: p.image || ''
+    };
+
+    if (!existingIds.has(gemObj.id)) {
+      GemstoneDatabase.push(gemObj);
+      existingIds.add(gemObj.id);
+    } else {
+      const idx = GemstoneDatabase.findIndex(g => g.id === gemObj.id);
+      if (idx >= 0) GemstoneDatabase[idx] = Object.assign({}, GemstoneDatabase[idx], gemObj);
+    }
+  });
+
+  window.GemstoneDatabase = GemstoneDatabase;
+}
 
 const IN_SCOPE_KEYWORDS = [
   'batu', 'giok', 'akik', 'kristal', 'gem', 'stone', 'jade', 'ruby', 'amethyst', 'kecubung',
@@ -187,6 +267,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initDualMode();       // ← Dual Mode System
   bindEventHandlers();
   initSpeechRecognition();
+  syncCatalogProductsToGemstoneDatabase();
   AppState.user.metrics.selectedGem = GemstoneDatabase[0];
   updateScienceAndAstroMetrics(GemstoneDatabase[0]);
   // Restore user session from localStorage (anti-logout on refresh)

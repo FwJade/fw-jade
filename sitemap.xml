@@ -19,7 +19,18 @@
     </image:image>
   </url>
 
-  <!-- 2. About Us / Story Since 2009 -->
+  <!-- 2. Katalog Koleksi Perhiasan Giok & Permata Mulia -->
+  <url>
+    <loc>https://fwjade.com/catalog.html</loc>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.95</priority>
+    <xhtml:link rel="alternate" hreflang="id" href="https://fwjade.com/catalog.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://fwjade.com/catalog.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://fwjade.com/catalog.html" />
+  </url>
+
+  <!-- 3. About Us / Story Since 2009 -->
   <url>
     <loc>https://fwjade.com/about.html</loc>
     <lastmod>2026-08-31</lastmod>

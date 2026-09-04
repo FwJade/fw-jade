@@ -298,14 +298,125 @@ graph TD
 
 ---
 
-## 8. TAHAPAN EKSEKUSI (*ROADMAP*)
+## 8. TAHAPAN EKSEKUSI ASAL (*HISTORICAL ROADMAP*)
 
-* **Phase 1 (Saat Ini):**
-  * Pembangunan Prototipe Penuh **AURORA AI Web Application**:
-    * Antarmuka Luxury Emerald & Gold (Google Omnibox + ChatGPT Voice Mode).
-    * Modul Kamera Face & Aura Scanner interaktif.
-    * Mesin Penjawab Batu Lengkap (Kesehatan, Mistis, Rezeki, Feng Shui) + Guardrail Filter.
-    * Simulasi Pembayaran Rp 10.000 Midtrans & WhatsApp CTA.
-    * Mode Bahasa Indonesia & English.
-* **Phase 2:** Integrasi Live API Midtrans Production & Database Supabase untuk Cloud Biometrics.
-* **Phase 3:** Kampanye Peluncuran & Integrasi Toko Resmi FW Jade Medan.
+* **Phase 1:** Pembangunan Prototipe Penuh AURORA AI Web Application (Face Scanner, Chat Oracle, Voice AI).
+* **Phase 2:** Integrasi Live API Midtrans Production, Google OAuth 2.0 GIS, dan Leads Management di Admin Portal.
+* **Phase 3:** Kampanye Peluncuran, Dual-Vault Cloudflare KV Data Storage & Integrasi Toko Resmi FW Jade Medan.
+
+---
+
+## 9. SPESIFIKASI FITUR BARU: DEDICATED PRODUCT CATALOG & MASTER ADMIN INVENTORY MANAGEMENT (v1.1)
+
+### 9.1 Latar Belakang & Tujuan Bisnis
+* **Problem Statement:** Saat ini rekomendasi produk hanya dapat diakses setelah pengguna menyelesaikan alur pemindaian biometrik wajah (*Face & Aura Scanner*) atau percakapan AI Oracle. Pengunjung yang ingin langsung melihat-lihat etalase koleksi perhiasan giok asli, membandingkan spesifikasi karat/harga, atau langsung melakukan pembelian instan (*Direct Purchase*) belum memiliki halaman etalase tersendiri.
+* **Tujuan Utama:**
+  1. Memberikan etalase visual khusus (*Dedicated Luxury Showcase*) di URL mandiri `/catalog.html` (atau `/katalog.html`) yang dapat diakses publik tanpa login.
+  2. Memungkinkan transaksi langsung (*Direct Sales Funnel*) melalui 2 kanal: (a) WhatsApp Concierge Galeri Medan (+62 811-619-173) dengan draf pesan otomatis rapi, dan (b) Payment Gateway Instan Midtrans (QRIS / GoPay / VA BCA / Kartu).
+  3. Menyediakan kontrol penuh bagi Master Administrator (`fwjade.com@gmail.com`) di `admin.html` untuk menambah, memperbarui, mengunggah foto, dan menghapus produk tanpa perlu menyentuh kodingan.
+  4. Menyelaraskan inventori live admin dengan AI Aura Scanner sehingga AI selalu merekomendasikan produk yang benar-benar siap jual (*In Stock*).
+
+---
+
+### 9.2 Spesifikasi Fungsional Halaman Katalog Publik (`catalog.html`)
+
+#### A. Arsitektur Antarmuka & Luxury Aesthetics
+* **Theme Alignment:** Mengikuti desain *Haute Joaillerie* FW JADE: Latar belakang kristal zamrud malam (`#070a0e`), aksen emas kekaisaran (`#FFC857` / `#D4AF37`), efek kaca buram (*glassmorphism*), dan tipografi editorial (*Cormorant Garamond & Inter*).
+* **Responsive Multi-Viewport:** 100% mulus di Desktop (3-4 kolom kartu), Tablet (2-3 kolom), dan Smartphone (1-2 kolom nyaman dioperasikan satu tangan).
+* **Header Promo & Banner AI Bridge:** Banner elegan di bagian atas: *"Koleksi Pusaka Giok & Permata Alami FW JADE Medan Sejak 2009"* dengan tombol CTA cerdas: *"Bingung memilih batu yang cocok dengan auramu? [Coba Analisa Wajah Gratis &rarr;]"*.
+
+#### B. Search & Multi-Faceted Filter Engine
+Pengunjung dapat memfilter katalog secara instan di sisi klien tanpa jeda:
+1. **Filter Elemen Wu Xing (Bazi):** Semua Elemen, Kayu (Wood), Api (Fire), Tanah (Earth), Logam (Metal), Air (Water).
+2. **Filter Kategori Produk:** Semua Kategori, Gelang Giok (*Bangle*), Cincin Pria/Wanita (*Rings*), Liontin Pusaka (*Pendants*), Tasbih/Rosario Giok, Bongkahan Alami (*Rough/Raw Specimen*).
+3. **Filter Khasiat / Energi Dominan:** Rezeki & Bisnis, Kesehatan & Detoks Darah (FIR), Proteksi & Tolak Bala, Pengasihan & Wibawa.
+4. **Filter Rentang Harga:** Seluruh Harga, Di Bawah 1 Juta, 1 - 3 Juta, 3 - 10 Juta, Koleksi Masterpiece (> 10 Juta).
+5. **Real-Time Search Bar:** Mencari instan berdasarkan nama batu, jenis mineral, atau asal tambang (misal: "Aceh", "Citrine", "Bacan", "Burma").
+
+#### C. Kartu Produk Luxury (Product Card Spec)
+Setiap kartu menampilkan:
+* Foto utama produk dengan rasio proporsional, efek kilau faset saat di-hover.
+* Badge Keaslian: `✓ Grade A Natural (Untreated)`.
+* Badge Elemen & Energi: misal `🪵 Kayu • Pembuka Pintu Rezeki`.
+* Judul Produk & Spesifikasi Lab Ringkas: Asal tambang (Origin), Skala Mohs, Karat/Dimensi.
+* Harga Resmi IDR berformat rupiah tegas (`Rp 1.850.000`).
+* Tombol Cepat: `Lihat Detail` & `Beli Langsung`.
+
+#### D. Modal Quick View 360° & Sertifikat Keaslian
+Ketika produk diklik, sistem membuka modal interaktif elegan:
+* Galeri foto multi-sudut (tampak depan, serat tembus cahaya senter giok, tampak pada model).
+* Tabel Spesifikasi Lengkap: Rumus Kimia, Berat Jenis (SG), Spektrum FIR Peak (µm), Tingkat Translusensi, Asal Tambang.
+* Ulasan Metafisika & Bazi: Kecocokan Shio, Zodiak, serta Penjelasan Manfaat Kesehatan.
+* Dua Kanal Transaksi Langsung:
+  * **Kanal 1 (WhatsApp Concierge):** Membuka WhatsApp resmi Galeri Medan dengan pesan: *"Halo Galeri FW JADE, saya tertarik meminang [Nama Produk] (SKU: FWJ-xxx) seharga [Rp xxx]. Apakah produk ini masih tersedia?"*.
+  * **Kanal 2 (Beli Sekarang via Midtrans):** Membuka popup Snap Midtrans resmi untuk pembayaran instan QRIS/VA. Pasca pembayaran sukses, sistem otomatis menerbitkan Sertifikat Keaslian Digital resmi ber-nomor seri unik atas nama pembeli.
+
+---
+
+### 9.3 Spesifikasi Modul Master Admin Inventory (`admin.html`)
+
+#### A. Akses & Hak Istimewa
+* Terproteksi gerbang autentikasi Google Identity Services (GIS).
+* Hanya akun terverifikasi `fwjade.com@gmail.com` yang diizinkan mengakses kontrol inventori.
+
+#### B. Navigasi Tab Admin
+* **Tab 1: 👥 Master Leads Portal** (Manajemen data prospek pelanggan & Customer 360° yang sudah berjalan).
+* **Tab 2: 💎 Katalog & Inventori Produk** (Sub-modul baru untuk kelola stok dan produk).
+
+#### C. Operasi Manajemen Produk (CRUD)
+1. **Tambah Produk Baru (`+ Tambah Produk Baru`):**
+   * Modal form lengkap yang memvalidasi:
+     * Nama Produk & Nama Latin/Gemologi.
+     * Kategori Produk (Dropdown: Gelang, Cincin, Liontin, Bongkahan, Koleksi Khusus).
+     * Harga Produk (IDR numerik).
+     * Status Ketersediaan: `Tersedia (In Stock)`, `Dipesan (Reserved)`, `Terjual (Sold Out)`.
+     * Asal Daerah / Tambang (Origin).
+     * Dimensi (mm) & Berat (Carat).
+     * Kekerasan Skala Mohs & Berat Jenis (SG).
+     * Elemen Wu Xing (Kayu, Api, Tanah, Logam, Air).
+     * Kecocokan Zodiak & Shio.
+     * Manfaat Kesehatan (FIR / Terapi) & Tuah Mistis/Rezeki.
+     * Foto Produk: Input URL gambar eksternal/CDN atau upload file foto langsung (disimpan base64 / cloud storage).
+2. **Edit Produk (`Ubah Data`):**
+   * Mengubah harga, promo diskon, mengganti foto, memperbarui status stok (*In Stock* &rarr; *Sold Out*).
+3. **Hapus Produk (`Hapus`):**
+   * Menghapus produk dari katalog dengan modal konfirmasi keamanan.
+4. **Toggle Tampilan Beranda (`Featured in Home`):**
+   * Menentukan produk mana yang dijadikan highlight di landing page utama.
+
+---
+
+### 9.4 Spesifikasi API Backend Serverless (`/functions/api/products.js`)
+
+* **Teknologi:** Cloudflare Pages Function (Edge Worker V8 Runtime).
+* **Mekanisme Persistensi Data (Dual-Vault Architecture):**
+  1. **Primary Cloud Persistence:** Cloudflare KV (`PRODUCTS_KV`) atau GitHub Gist API Persistent DB (menggunakan kredensial aman di Cloudflare Secrets).
+  2. **Client Fallback:** Master Local Storage Vault (`fwjade_global_products_vault`) dan Curated Seed Data awal (mengadopsi `GemstoneDatabase` yang sudah ada).
+* **Spesifikasi Endpoints:**
+  * `GET /api/products`: Mengambil daftar seluruh produk aktif dengan filter opsional (category, element, status).
+  * `POST /api/products`: Menambahkan produk baru atau memperbarui produk existing (memerlukan payload valid & otorisasi admin).
+  * `DELETE /api/products?id={productId}`: Menghapus produk berdasarkan ID unik.
+  * `OPTIONS /api/products`: Mendukung CORS preflight lengkap untuk integrasi aman.
+
+---
+
+### 9.5 Integrasi Dinamis dengan AI Aura Scanner (`app.js`)
+
+* Saat data produk di-update oleh admin di `/api/products`, modul rekomendasi AI di `app.js` (`matchGemstoneForUser`) akan secara otomatis memprioritaskan rekomendasi batu mulia yang statusnya **"Tersedia (In Stock)"** dalam katalog.
+* Menghilangkan kemungkinan AI merekomendasikan batu yang sudah habis terjual (*Sold Out*).
+
+---
+
+### 9.6 Kriteria Keberhasilan & Acceptance Criteria (QA Matrix)
+
+| ID | Skenario Uji | Kriteria Sukses |
+| :--- | :--- | :--- |
+| **QA-CAT-01** | Akses Halaman Katalog Publik | Pengguna umum dapat membuka `/catalog.html` tanpa hambatan login, melihat seluruh kartu produk dengan foto, spesifikasi, dan harga yang rapi. |
+| **QA-CAT-02** | Filter & Pencarian Cepat | Filter berdasarkan Elemen Wu Xing, Kategori, dan Search query merender hasil secara instan (< 100ms) tanpa memuat ulang halaman. |
+| **QA-CAT-03** | Pembelian via WhatsApp Concierge | Menekan tombol "Beli via WhatsApp" membuka aplikasi WhatsApp dengan nomor resmi +62 811-619-173 serta teks pesan otomatis yang memuat Nama Produk, SKU, dan Harga. |
+| **QA-CAT-04** | Pembelian via Midtrans Snap | Menekan tombol "Beli Langsung" memunculkan popup pembayaran Midtrans Snap (QRIS/VA) yang valid. |
+| **QA-ADM-01** | Akses Khusus Master Admin | Pengunjung non-admin tidak dapat melihat form tambah produk di `admin.html`. Hanya login Google `fwjade.com@gmail.com` yang dapat membuka tab inventori. |
+| **QA-ADM-02** | Tambah & Edit Produk | Admin dapat menambahkan produk baru dengan foto dan deskripsi lengkap. Produk baru seketika muncul di `catalog.html`. |
+| **QA-ADM-03** | Persistensi Data Cloudflare | Data produk yang ditambahkan tetap tersimpan permanen saat halaman di-refresh, browser ditutup, atau dibuka dari perangkat berbeda. |
+| **QA-NAV-01** | Tautan Navigasi Terpadu | Tombol menu "Katalog" dapat diakses dari navbar atas `index.html`, sidebar drawer mobile, dan footer resmi. |
+
