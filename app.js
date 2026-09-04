@@ -471,13 +471,15 @@ function applyGoogleProfile(payload, rawCredential = null) {
     if (email && email.toLowerCase() === 'fwjade.com@gmail.com') {
       AppState.user.isAdmin = true;
       try {
-        sessionStorage.setItem('fw_jade_admin_token', JSON.stringify({
+        const tokenObj = JSON.stringify({
           email: email,
           name: name,
           picture: picture,
           credential: rawCredential || 'gis_oauth_token',
           grantedAt: Date.now()
-        }));
+        });
+        sessionStorage.setItem('fw_jade_admin_token', tokenObj);
+        localStorage.setItem('fw_jade_admin_token', tokenObj);
       } catch (e) {}
       playChimeReverb();
       setTimeout(() => { window.location.href = '/admin.html'; }, 600);

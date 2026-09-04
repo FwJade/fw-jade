@@ -196,12 +196,17 @@
       * Modul AI di `app.js` (`syncCatalogProductsToGemstoneDatabase`) secara reaktif mengintegrasikan produk live dari katalog ke dalam bank rekomendasi AI, memprioritaskan batu mulia yang berstatus *Tersedia*.
       * Menghubungkan menu "Katalog" di Top Glass Navbar, Mobile Slide-Over Drawer (`#luxurySidebarDrawer`), dan Grand Single-Strip Footer.
       * Mendaftarkan URL `https://fwjade.com/catalog.html` ke dalam `sitemap.xml` dengan prioritas 0.95 untuk pengindeksan mesin pencari Google.
-
-
-
-
-
-
-
-
-
+* **2026-09-05 (Bagian 23):** **Master Admin Direct Google Authentication & Login Gate Redesign (`admin.html`)**:
+   1. **Master Admin Login Portal Card (`admin.html`)**:
+      * Menghapus auto-redirect paksa 3 detik pada `#authGate` yang sebelumnya mengunci admin keluar sebelum sempat login.
+      * Mendesain kartu login eksklusif berestetika *Haute Horlogerie / Haute Joaillerie* (Dark Emerald, Glassmorphic 14px blur, Gold Border, dan Security Clearance Badge `fwjade.com@gmail.com`).
+   2. **Google Identity Services (GIS) & Direct Login Button**:
+      * Menyematkan script SDK Google Identity Services (`https://accounts.google.com/gsi/client`) langsung di `<head>` `admin.html`.
+      * Menyediakan tombol interaktif Google Sign-In (`googleAdminBtnWrap` + fallback custom Google button dengan prompt akun) sehingga admin dapat masuk dengan 1-klik langsung dari halaman `admin.html`.
+      * Validasi otorisasi ketat: Hanya mengizinkan kredensial resmi dengan email `fwjade.com@gmail.com`.
+      * Visual Alert System: Menampilkan notifikasi error deskriptif jika pengguna mencoba login menggunakan akun Google lain yang bukan Master Admin.
+   3. **Dual Session-LocalStorage Persistence (24 Jam)**:
+      * Token otentikasi disimpan tersinkronisasi di `sessionStorage` dan `localStorage` selama 24 jam, memastikan admin tidak terlempar keluar saat me-refresh atau membuka multi-tab.
+      * Fitur logout aman yang membersihkan token dan mengembalikan antarmuka ke layar login secara instan tanpa redirect berulang.
+   4. **Navigasi Terpadu**:
+      * Menambahkan akses tautan Admin Portal pada Footer & Sidebar Drawer `index.html`, serta pada footer `catalog.html`.
