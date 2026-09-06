@@ -253,3 +253,14 @@
        * Menghilangkan kebocoran email master admin `(fwjade.com@gmail.com)` yang sebelumnya tertera pada deskripsi menu drawer publik.
        * Memperketat [`robots.txt`](file:///d:/fw%20jade/robots.txt) dengan menambahkan direktif `Disallow: /admin.html` dan `Disallow: /admin` untuk melarang bot dan web crawler mengindeks rute portal admin.
        * Akses portal tetap aman dan fungsional 100% secara privat bagi Master Administrator: dapat diakses langsung via URL rahasia `/admin.html` atau otomatis ter-redirect saat login Google SSO dengan akun resmi `fwjade.com@gmail.com`.
+* **2026-09-07 (Bagian 27):** **Hero Copywriting Transformation & Brand Repositioning toward Wellness & Quality of Life (`app.js`, `index.html`)**:
+   1. **Pembaruan Tagline & Headline Hero Beranda**:
+      * Menggantikan teks lama *"Pancaran Auramu Menuntun Rezeki & Jodohmu"* menjadi **"Aura yang Selaras. Hidup yang Berkualitas."**
+      * Mengeliminasi keterlibatan diksi "jodoh" yang mempersempit positioning brand atau terkesan ramalan cinta/zodiak remaja.
+      * Menyelaraskan brand FW JADE dengan nilai universal dan prestisius: harmoni aura, kualitas hidup, vitalitas kesehatan, dan kesejahteraan sejati (*well-being*).
+   2. **Penyempurnaan Sub-Headline / Deskripsi Hero**:
+      * Menggantikan deskripsi lama menjadi: *"Analisis wajah dan energi untuk memahami kekuatan alami yang mendukung kesejahteraan Anda."*
+   3. **Penyelarasan Omnibox Placeholder**:
+      * Menyelaraskan teks placeholder pencarian Master Aura AI dari kata "cinta" menjadi: *"Tanya Master Aura tentang filosofi giok, batu rezeki, kesehatan, atau feng shui..."*
+   4. **Verifikasi Visual**:
+      * Pengujian browser membuktikan teks ter-render simetris dan elegan dengan tipografi *Cormorant Garamond* dan *Poppins*, selaras sempurna dengan nuansa *Haute Horlogerie & Luxury Jadeite*.

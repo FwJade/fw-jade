@@ -4558,8 +4558,8 @@ const I18N_DICTIONARY = {
     themeDark: 'Gelap',
 
     // Hero Section
-    heroHeadline: 'Pancaran Auramu Menuntun Rezeki & Jodohmu',
-    heroDescription: 'Eksplorasi pembacaan 12 Istana Wajah (Mian Xiang) dan frekuensi getaran batu mulia alami untuk keselarasan energi Chi.',
+    heroHeadline: 'Aura yang Selaras. Hidup yang Berkualitas.',
+    heroDescription: 'Analisis wajah dan energi untuk memahami kekuatan alami yang mendukung kesejahteraan Anda.',
     heroHeritage: 'DIRANCANG DI MEDAN SEJAK 2009',
     heroCtaHeadline: 'ANALISA WAJAH & AURA',
     heroCtaSub: 'Temukan giok alami selaras energi Anda',
@@ -4568,7 +4568,7 @@ const I18N_DICTIONARY = {
     heroAssure3: 'Batu Hari Ini',
     heroCompactScan: 'Analisa Wajah & Aura (Kamera)',
     heroChatTrigger: 'Tanyakan Master Aura AI',
-    heroOmniboxPlaceholder: 'Tanya Master Aura tentang filosofi giok, batu rezeki, cinta, atau feng shui...',
+    heroOmniboxPlaceholder: 'Tanya Master Aura tentang filosofi giok, batu rezeki, kesehatan, atau feng shui...',
     heroAskBtn: 'Ask Aura',
     trendingTitle: 'Pilih Topik Konsultasi:',
 
