@@ -223,5 +223,10 @@
       * Menerapkan terjemahan DOM instan (<5ms) tanpa me-reload halaman web.
       * Mengintegrasikan `AppState.lang` dengan sintesis suara (`speechSynthesis` id-ID vs en-US), pengenalan suara (`webkitSpeechRecognition`), dan prompt AI.
       * Menyimpan preferensi bahasa pengguna di `localStorage` (`fw_jade_lang`) untuk persistensi lintas sesi dan tab.
-   4. **Ekstensi ke Halaman Katalog (`catalog.html`)**:
-      * Menambahkan tombol bendera serupa di navbar `catalog.html` dengan fungsi `applyCatalogLanguage()` dan `toggleCatalogLang()` yang tersinkronisasi.
+* **2026-09-06 (Bagian 25):** **1x Free Scan Forever Gate & VIP Paywall System (`app.js`, `index.html`, `style.css`)**:
+   1. **Proteksi Akses Gratis 1x Seumur Hidup (Anti-Abuse)**:
+      * Menerapkan aturan bisnis ketat: setiap pengguna baru hanya memiliki hak **1x akses pemindaian gratis selamanya**.
+      * Saat hasil scan pertama selesai ditampilkan (`revealFullResults`), sistem secara otomatis mengunci status pengguna secara permanen (`fwjade_free_scan_done` di `localStorage` dan profil `freeScanUsed: true`).
+   2. **Gerbang VIP Paywall Modal (`#modalVipPaywall`)**:
+      * Memblokir pemindaian ke-2 dan seterusnya pada semua titik masuk: Webcam Laptop (`startWebcam`, `handleCameraPrimaryAction`), Upload Galeri (`handleFacePhotoUpload`), dan Kamera HP Companion (`openCompanionQrModal`).
+      * Menampilkan modal VIP eksklusif dengan ikon mahkota emas dan penawaran layanan privat: Pemindaian Ulang Tanpa Batas, Kurasi Giok Imperial Khusus Peta Bazi Lahir, dan Konsultasi Privat 1-on-1 dengan Gemologist & Master Feng Shui FW JADE via WhatsApp Concierge.

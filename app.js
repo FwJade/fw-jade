@@ -1320,7 +1320,75 @@ function resetScannerProgressUI() {
   if (chkFilter) chkFilter.classList.add('active');
 }
 
+// =========================================================================
+// 1X FREE SCAN FOREVER ENFORCEMENT & VIP PAYWALL GATE
+// =========================================================================
+function hasUsedFreeScan() {
+  if (AppState && AppState.user && AppState.user.freeScanUsed) return true;
+  try {
+    const record = localStorage.getItem('fwjade_free_scan_done');
+    if (record) {
+      const parsed = JSON.parse(record);
+      if (parsed && parsed.used) return true;
+    }
+    const savedUser = JSON.parse(localStorage.getItem('fw_jade_user') || '{}');
+    if (savedUser && savedUser.freeScanUsed) return true;
+  } catch (e) {}
+  return false;
+}
+window.hasUsedFreeScan = hasUsedFreeScan;
+
+function markFreeScanAsUsed() {
+  try {
+    const record = {
+      used: true,
+      timestamp: Date.now(),
+      userName: (AppState && AppState.user && AppState.user.name) || 'Kolektor FW JADE',
+      userPhone: (AppState && AppState.user && AppState.user.phone) || '',
+      userEmail: (AppState && AppState.user && AppState.user.email) || ''
+    };
+    localStorage.setItem('fwjade_free_scan_done', JSON.stringify(record));
+
+    if (AppState && AppState.user) {
+      AppState.user.freeScanUsed = true;
+      const savedUser = JSON.parse(localStorage.getItem('fw_jade_user') || '{}');
+      savedUser.freeScanUsed = true;
+      localStorage.setItem('fw_jade_user', JSON.stringify(savedUser));
+    }
+  } catch (e) {}
+}
+window.markFreeScanAsUsed = markFreeScanAsUsed;
+
+function openVipPaywallModal() {
+  const modal = document.getElementById('modalVipPaywall');
+  if (modal) {
+    modal.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+  }
+}
+window.openVipPaywallModal = openVipPaywallModal;
+
+function closeVipPaywallModal() {
+  const modal = document.getElementById('modalVipPaywall');
+  if (modal) {
+    modal.style.display = 'none';
+    document.body.style.overflow = '';
+  }
+}
+window.closeVipPaywallModal = closeVipPaywallModal;
+
+function checkFreeScanEligibility() {
+  if (hasUsedFreeScan()) {
+    openVipPaywallModal();
+    return false;
+  }
+  return true;
+}
+window.checkFreeScanEligibility = checkFreeScanEligibility;
+
 async function startWebcam() {
+  if (!checkFreeScanEligibility()) return;
+
   const video = document.getElementById('webcamFeed');
   const fallback = document.getElementById('cameraFallback');
   const txtBtn = document.getElementById('txtStartCam');
@@ -1361,6 +1429,8 @@ async function startWebcam() {
 }
 
 function handleCameraPrimaryAction() {
+  if (!checkFreeScanEligibility()) return;
+
   const video = document.getElementById('webcamFeed');
   if (!isCameraStreaming || !AppState.camera.stream || !video || video.videoWidth === 0) {
     startWebcam();
@@ -1390,6 +1460,8 @@ function handleCameraPrimaryAction() {
 let isBiometricScanningActive = false;
 
 function executeBiometricCaptureAndScan(customPhotoBase64 = null) {
+  if (!checkFreeScanEligibility()) return;
+
   const startBtn = document.getElementById('startCamBtn');
   const txtBtn = document.getElementById('txtStartCam');
   const pContainer = document.getElementById('scannerProgressContainer');
@@ -1446,6 +1518,11 @@ function executeBiometricCaptureAndScan(customPhotoBase64 = null) {
 }
 
 function handleFacePhotoUpload(event) {
+  if (!checkFreeScanEligibility()) {
+    if (event && event.target) event.target.value = '';
+    return;
+  }
+
   const file = event.target.files?.[0];
   if (!file) return;
 
@@ -2256,6 +2333,9 @@ function revealFullResults(gemObj, customGreeting) {
 
   // Apply element-adaptive theming
   applyElementTheme(AppState.user.metrics.element || gemObj.element || 'WOOD');
+
+  // Permanently enforce 1x Free Scan limit
+  markFreeScanAsUsed();
 
   // Update curiosity hook with specific gem context
   updateCuriosityHook(gemObj);
@@ -4781,6 +4861,8 @@ let activeCompanionSessionId = null;
 let companionSupabaseChannel = null;
 
 async function openCompanionQrModal() {
+  if (!checkFreeScanEligibility()) return;
+
   const modal = document.getElementById('modalCompanionCamera');
   const qrWrap = document.getElementById('companionQrCanvas');
   const codeDisplay = document.getElementById('companionSessionCode');

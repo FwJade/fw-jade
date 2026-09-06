@@ -165,7 +165,7 @@
   <!-- QR Code Generator Library for Companion Camera Sync -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
-  <link rel="stylesheet" href="style.css?v=60">
+  <link rel="stylesheet" href="style.css?v=61">
 </head>
 <body class="theme-quiet-luxury">
   <!-- 0. Fullscreen Immersive Raw Crystal Backdrop -->
@@ -2485,6 +2485,49 @@
       <div class="companion-security-note">
         <i class="fa-solid fa-shield-check text-emerald"></i> <span>Sesi terenkripsi &amp; otomatis kedaluwarsa dalam 10 menit. Foto diproses privat di perangkat Anda.</span>
       </div>
+  <!-- =========================================================================
+       VIP PAYWALL MODAL (1x Free Scan Forever Enforcement)
+       ========================================================================= -->
+  <div class="luxury-modal-overlay" id="modalVipPaywall" style="display: none;" onclick="if(event.target === this) closeVipPaywallModal()">
+    <div class="luxury-modal-card vip-paywall-modal-card">
+      <button type="button" class="modal-close-icon" onclick="closeVipPaywallModal()">&times;</button>
+      
+      <div class="vip-paywall-icon-wrap">
+        <i class="fa-solid fa-crown"></i>
+      </div>
+
+      <div class="companion-badge-pill" style="margin-bottom: 12px;">
+        <i class="fa-solid fa-gem text-gold"></i> <span>FW JADE VIP EXCLUSIVE</span>
+      </div>
+
+      <h3 class="vip-paywall-title">Akses Gratis 1x Telah Selesai</h3>
+      <p class="vip-paywall-sub">
+        Anda telah menggunakan <strong>1x kuota gratis</strong> analisa biometrik 12 Istana Wajah &amp; energi aura chi. Pemindaian selanjutnya merupakan layanan privat VIP FW JADE.
+      </p>
+
+      <div class="vip-perks-box">
+        <div class="vip-perk-item">
+          <i class="fa-solid fa-circle-check"></i>
+          <span><strong>Pemindaian Ulang Multi-Dimensi:</strong> Akses scan wajah &amp; pembacaan aura tanpa batas.</span>
+        </div>
+        <div class="vip-perk-item">
+          <i class="fa-solid fa-circle-check"></i>
+          <span><strong>Kurasi Master Feng Shui:</strong> Penyelarasan batu giok imperial khusus peta lahir Bazi Anda.</span>
+        </div>
+        <div class="vip-perk-item">
+          <i class="fa-solid fa-circle-check"></i>
+          <span><strong>Konsultasi Privat 1-on-1:</strong> Layanan kurasi perhiasan eksklusif bersama Gemologist FW JADE.</span>
+        </div>
+      </div>
+
+      <div class="vip-paywall-actions">
+        <a href="https://wa.me/62811619173?text=Halo%20FW%20JADE%20Medan%2C%20saya%20sudah%20menggunakan%201x%20kuota%20scan%20gratis.%20Saya%20ingin%20konsultasi%20paket%20VIP%20dan%20pemesanan%20giok." target="_blank" class="btn-vip-upgrade">
+          <i class="fa-brands fa-whatsapp"></i> <span>Aktivasi Layanan VIP via WhatsApp</span>
+        </a>
+        <button type="button" class="btn-action-close-vip" onclick="closeVipPaywallModal()">
+          <span>Kembali ke Halaman Utama</span>
+        </button>
+      </div>
     </div>
   </div>
 
@@ -2497,7 +2540,7 @@
   <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 
   <!-- Centralized Config & Application Logic -->
-  <script src="config.js?v=60"></script>
-  <script src="app.js?v=60"></script>
+  <script src="config.js?v=61"></script>
+  <script src="app.js?v=61"></script>
 </body>
 </html>
