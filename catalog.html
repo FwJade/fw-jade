@@ -326,12 +326,18 @@
       color: #fff;
     }
 
-    /* Filter Chips */
+    /* Filter Chips (Horizontal Swipeable Row) */
     .filter-group {
       display: flex;
       align-items: center;
       gap: 8px;
-      flex-wrap: wrap;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      padding-bottom: 4px;
+    }
+    .filter-group::-webkit-scrollbar {
+      display: none;
     }
     .filter-label {
       font-size: 0.72rem;
@@ -340,9 +346,11 @@
       color: var(--text-dim);
       font-weight: 600;
       margin-right: 4px;
+      white-space: nowrap;
+      flex-shrink: 0;
     }
     .filter-chip {
-      padding: 5px 14px;
+      padding: 6px 14px;
       border-radius: 20px;
       border: 1px solid var(--border-subtle);
       background: rgba(255, 255, 255, 0.03);
@@ -351,6 +359,8 @@
       cursor: pointer;
       transition: all 0.2s;
       user-select: none;
+      white-space: nowrap;
+      flex-shrink: 0;
     }
     .filter-chip:hover {
       border-color: rgba(255, 255, 255, 0.2);
@@ -773,13 +783,351 @@
       text-decoration: underline;
     }
 
+    /* Mobile Drawer & Responsive Styles */
+    .btn-mobile-menu-trigger {
+      display: none;
+    }
+
+    /* Mobile Slide-Over Luxury Drawer */
+    .luxury-sidebar-drawer {
+      position: fixed;
+      inset: 0;
+      z-index: 999999;
+      visibility: hidden;
+      pointer-events: none;
+      transition: visibility 0.35s ease;
+    }
+    .luxury-sidebar-drawer.open {
+      visibility: visible;
+      pointer-events: auto;
+    }
+    .drawer-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(2, 6, 4, 0.82);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      opacity: 0;
+      transition: opacity 0.35s ease;
+    }
+    .luxury-sidebar-drawer.open .drawer-backdrop {
+      opacity: 1;
+    }
+    .drawer-panel {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 88%;
+      max-width: 360px;
+      height: 100%;
+      background: linear-gradient(180deg, rgba(8, 22, 16, 0.98) 0%, rgba(4, 12, 9, 0.99) 100%);
+      border-left: 1.5px solid rgba(216, 195, 144, 0.35);
+      box-shadow: -15px 0 50px rgba(0, 0, 0, 0.9), 0 0 30px rgba(43, 224, 133, 0.1);
+      transform: translateX(100%);
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      box-sizing: border-box;
+    }
+    .luxury-sidebar-drawer.open .drawer-panel {
+      transform: translateX(0);
+    }
+    .drawer-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 20px 16px;
+      border-bottom: 1px solid rgba(216, 195, 144, 0.15);
+      background: rgba(0, 0, 0, 0.25);
+    }
+    .drawer-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .drawer-diamond-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: rgba(216, 195, 144, 0.1);
+      border: 1px solid rgba(216, 195, 144, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+    }
+    .drawer-brand-info {
+      display: flex;
+      flex-direction: column;
+    }
+    .drawer-brand-name {
+      font-family: 'Cinzel', serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: #FFFFFF;
+    }
+    .drawer-brand-sub {
+      font-size: 0.68rem;
+      color: #D8C390;
+      letter-spacing: 0.5px;
+    }
+    .drawer-close-btn {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #D1D5DB;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .drawer-close-btn:hover {
+      background: rgba(255, 255, 255, 0.15);
+      color: #FFF;
+      transform: rotate(90deg);
+    }
+    .drawer-body {
+      padding: 18px 20px 30px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      flex: 1;
+    }
+    .drawer-section {
+      display: flex;
+      flex-direction: column;
+    }
+    .drawer-section-label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: #8E9894;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-bottom: 10px;
+    }
+    .drawer-nav-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .drawer-nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 14px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: 14px;
+      text-decoration: none;
+      color: #FFFFFF;
+      transition: all 0.25s ease;
+      cursor: pointer;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .drawer-nav-item:hover, .drawer-nav-item.active {
+      background: rgba(216, 195, 144, 0.08);
+      border-color: rgba(216, 195, 144, 0.3);
+      transform: translateX(3px);
+    }
+    .drawer-item-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.95rem;
+      flex-shrink: 0;
+    }
+    .drawer-item-icon.emerald-bg {
+      background: rgba(43, 224, 133, 0.12);
+      color: #2BE085;
+    }
+    .drawer-item-icon.gold-bg {
+      background: rgba(216, 195, 144, 0.15);
+      color: #D8C390;
+    }
+    .drawer-item-text {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+    }
+    .drawer-item-title {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: #FFFFFF;
+    }
+    .drawer-item-desc {
+      font-size: 0.68rem;
+      color: #8E9894;
+    }
+    .drawer-chevron {
+      font-size: 0.72rem;
+      color: #5A6964;
+    }
+    .drawer-legal-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .drawer-legal-chip {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 12px;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(216, 195, 144, 0.1);
+      border-radius: 10px;
+      color: #B2BCB8;
+      font-size: 0.76rem;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+    .drawer-legal-chip:hover {
+      background: rgba(216, 195, 144, 0.08);
+      border-color: rgba(216, 195, 144, 0.25);
+      color: #FFFFFF;
+      transform: translateX(2px);
+    }
+    .drawer-footer-block {
+      margin-top: auto;
+      padding-top: 14px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .drawer-trust-tags {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .d-tag {
+      font-size: 0.66rem;
+      padding: 3px 8px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 20px;
+      color: #8E9894;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* Enhanced Media Queries for Mobile Perfection */
     @media (max-width: 768px) {
-      .top-nav { margin: 8px 12px; padding: 8px 14px; }
-      .catalog-container { padding: 0 14px; margin-top: 20px; }
-      .modal-content-grid { grid-template-columns: 1fr; gap: 16px; }
-      .product-grid { grid-template-columns: 1fr; }
-      .modal-main-img { height: 220px; }
-      .modal-actions-bar { flex-direction: column; }
+      .top-nav {
+        margin: 8px 10px;
+        padding: 8px 14px;
+      }
+      .nav-links .nav-desktop-only {
+        display: none !important;
+      }
+      .btn-mobile-menu-trigger {
+        display: inline-flex !important;
+        align-items: center;
+        justify-content: center;
+      }
+      .catalog-container {
+        padding: 0 12px;
+        margin-top: 16px;
+        margin-bottom: 40px;
+      }
+      .catalog-hero {
+        padding: 24px 10px 16px 10px;
+      }
+      .catalog-h1 {
+        font-size: 1.8rem;
+      }
+      .catalog-subtitle {
+        font-size: 0.82rem;
+        margin-bottom: 18px;
+      }
+      .ai-bridge-banner {
+        flex-direction: column;
+        align-items: stretch;
+        text-align: center;
+        padding: 16px 14px;
+        gap: 14px;
+      }
+      .ai-bridge-info {
+        flex-direction: column;
+        text-align: center;
+        gap: 10px;
+      }
+      .btn-bridge-cta {
+        width: 100%;
+        justify-content: center;
+        padding: 12px 16px;
+        font-size: 0.88rem;
+        box-sizing: border-box;
+      }
+      .modal-content-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+        padding: 18px 14px;
+      }
+      .product-grid {
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+        gap: 16px;
+      }
+      .modal-main-img {
+        height: 220px;
+      }
+      .modal-actions-bar {
+        flex-direction: column;
+        gap: 8px;
+      }
+      .btn-checkout-snap, .btn-checkout-wa {
+        width: 100%;
+        min-height: 44px;
+      }
+    }
+
+    @media (max-width: 540px) {
+      .product-grid {
+        grid-template-columns: 1fr;
+      }
+      .catalog-toolbar {
+        padding: 14px 12px;
+        margin-bottom: 20px;
+        border-radius: 14px;
+      }
+      .toolbar-row-top {
+        flex-direction: column;
+        gap: 10px;
+      }
+      .search-box {
+        min-width: 100%;
+        width: 100%;
+      }
+      .sort-box {
+        width: 100%;
+      }
+      .sort-box select {
+        width: 100%;
+        box-sizing: border-box;
+      }
+      .modal-card {
+        border-radius: 16px;
+        max-height: 94vh;
+      }
+      .modal-prod-title {
+        font-size: 1.35rem;
+      }
+      .modal-price-tag {
+        font-size: 1.35rem;
+      }
     }
   </style>
 
@@ -805,6 +1153,94 @@
   <!-- Ambient Backdrop -->
   <div class="catalog-backdrop"></div>
 
+  <!-- Mobile Slide-Over Luxury Drawer -->
+  <div class="luxury-sidebar-drawer" id="catalogSidebarDrawer" aria-hidden="true">
+    <div class="drawer-backdrop" onclick="closeCatalogDrawer()"></div>
+    <div class="drawer-panel">
+      <div class="drawer-header">
+        <div class="drawer-brand">
+          <div class="drawer-diamond-icon"><i class="fa-solid fa-gem text-gold"></i></div>
+          <div class="drawer-brand-info">
+            <span class="drawer-brand-name">FW JADE</span>
+            <span class="drawer-brand-sub">Medan Giok Est. 2009</span>
+          </div>
+        </div>
+        <button class="drawer-close-btn" onclick="closeCatalogDrawer()" aria-label="Tutup Menu">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="drawer-body">
+        <div class="drawer-section">
+          <span class="drawer-section-label">Navigasi Utama</span>
+          <div class="drawer-nav-list">
+            <a href="/" class="drawer-nav-item">
+              <div class="drawer-item-icon emerald-bg"><i class="fa-solid fa-house"></i></div>
+              <div class="drawer-item-text">
+                <span class="drawer-item-title">Beranda Utama</span>
+                <span class="drawer-item-desc">AURA AI &amp; Portal Penyelarasan Energi</span>
+              </div>
+              <i class="fa-solid fa-chevron-right drawer-chevron"></i>
+            </a>
+            <a href="/catalog.html" class="drawer-nav-item active">
+              <div class="drawer-item-icon emerald-bg"><i class="fa-solid fa-store"></i></div>
+              <div class="drawer-item-text">
+                <span class="drawer-item-title">Katalog Koleksi Produk</span>
+                <span class="drawer-item-desc">Etalase Giok &amp; Permata Alami Grade A</span>
+              </div>
+              <i class="fa-solid fa-chevron-right drawer-chevron"></i>
+            </a>
+            <a href="/about.html" class="drawer-nav-item">
+              <div class="drawer-item-icon emerald-bg"><i class="fa-solid fa-book-open"></i></div>
+              <div class="drawer-item-text">
+                <span class="drawer-item-title">Kisah &amp; Warisan Kami</span>
+                <span class="drawer-item-desc">Filosofi FW Jade Medan Sejak 2009</span>
+              </div>
+              <i class="fa-solid fa-chevron-right drawer-chevron"></i>
+            </a>
+            <a href="/contact.html" class="drawer-nav-item">
+              <div class="drawer-item-icon gold-bg"><i class="fa-solid fa-gem"></i></div>
+              <div class="drawer-item-text">
+                <span class="drawer-item-title">Konsultasi Galeri</span>
+                <span class="drawer-item-desc">Layanan Privat WhatsApp Concierge</span>
+              </div>
+              <i class="fa-solid fa-chevron-right drawer-chevron"></i>
+            </a>
+            <a href="/admin.html" class="drawer-nav-item">
+              <div class="drawer-item-icon gold-bg"><i class="fa-solid fa-shield-halved text-gold"></i></div>
+              <div class="drawer-item-text">
+                <span class="drawer-item-title">Portal Master Admin</span>
+                <span class="drawer-item-desc">Inventori &amp; Konsumen 360°</span>
+              </div>
+              <i class="fa-solid fa-chevron-right drawer-chevron"></i>
+            </a>
+          </div>
+        </div>
+        
+        <div class="drawer-section">
+          <span class="drawer-section-label">Pusat Informasi &amp; Legalitas</span>
+          <div class="drawer-legal-grid">
+            <a href="/security.html" class="drawer-legal-chip"><i class="fa-solid fa-lock text-emerald"></i> Pusat Keamanan &amp; Integritas Data</a>
+            <a href="/privacy.html" class="drawer-legal-chip"><i class="fa-solid fa-shield text-gold"></i> Kebijakan Privasi (UU PDP)</a>
+            <a href="/terms.html" class="drawer-legal-chip"><i class="fa-solid fa-scale-balanced text-gold"></i> Syarat &amp; Ketentuan Layanan</a>
+            <a href="/refund.html" class="drawer-legal-chip"><i class="fa-solid fa-rotate-left text-emerald"></i> Kebijakan Jaminan &amp; Retur</a>
+            <a href="/disclaimer.html" class="drawer-legal-chip"><i class="fa-solid fa-circle-info text-muted"></i> Penafian Gemologi &amp; Sains</a>
+          </div>
+        </div>
+
+        <div class="drawer-footer-block">
+          <a href="https://wa.me/62811619173?text=Halo%20FW%20JADE%20Medan,%20saya%20tertarik%20dengan%20koleksi%20batu%20giok%20dan%20ingin%20konsultasi" target="_blank" rel="noopener" class="btn-checkout-wa" style="text-decoration: none; width: 100%; border-radius: 25px; padding: 12px;">
+            <i class="fa-brands fa-whatsapp"></i> Chat WhatsApp Concierge
+          </a>
+          <div class="drawer-trust-tags">
+            <span class="d-tag"><i class="fa-solid fa-circle-check text-emerald"></i> 100% Grade A Natural</span>
+            <span class="d-tag"><i class="fa-solid fa-certificate text-gold"></i> Lab Certified</span>
+            <span class="d-tag"><i class="fa-solid fa-shield-halved text-emerald"></i> Medan Heritage 2009</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Top Glass Navigation -->
   <header class="top-nav">
     <a href="/" class="nav-brand-link" title="FW JADE — Kembali ke Beranda">
@@ -812,12 +1248,15 @@
       <span class="nav-logo-badge">Medan Giok</span>
     </a>
     <nav class="nav-links">
-      <a href="/" class="nav-pill-btn"><i class="fa-solid fa-house"></i> <span>Beranda</span></a>
-      <a href="/catalog.html" class="nav-pill-btn active"><i class="fa-solid fa-store"></i> <span>Katalog</span></a>
-      <a href="/about.html" class="nav-pill-btn"><i class="fa-solid fa-book-open"></i> <span>Kisah Kami</span></a>
-      <a href="/contact.html" class="nav-pill-btn"><i class="fa-solid fa-gem text-gold"></i> <span>Konsultasi</span></a>
+      <a href="/" class="nav-pill-btn nav-desktop-only"><i class="fa-solid fa-house"></i> <span>Beranda</span></a>
+      <a href="/catalog.html" class="nav-pill-btn active nav-desktop-only"><i class="fa-solid fa-store"></i> <span>Katalog</span></a>
+      <a href="/about.html" class="nav-pill-btn nav-desktop-only"><i class="fa-solid fa-book-open"></i> <span>Kisah Kami</span></a>
+      <a href="/contact.html" class="nav-pill-btn nav-desktop-only"><i class="fa-solid fa-gem text-gold"></i> <span>Konsultasi</span></a>
       <button class="nav-pill-btn lang-flag-btn" id="catalogLangBtn" onclick="toggleCatalogLang()" title="Ganti Bahasa (Indonesia / English)" style="cursor: pointer; padding: 5px 11px; min-width: 38px;">
         <span id="catalogLangFlag" style="font-size: 1.15rem; line-height: 1;">🇮🇩</span>
+      </button>
+      <button class="nav-pill-btn btn-mobile-menu-trigger" onclick="toggleCatalogDrawer()" aria-label="Buka Menu" style="cursor: pointer; padding: 6px 12px;">
+        <i class="fa-solid fa-bars" style="font-size: 1rem;"></i>
       </button>
     </nav>
   </header>
@@ -1324,11 +1763,30 @@
       if (aiTitle) aiTitle.textContent = isEn ? 'Confused Which Gemstone Matches Your Energy?' : 'Bingung Memilih Batu yang Selaras dengan Energi Anda?';
       const aiDesc = document.querySelector('.ai-bridge-text p');
       if (aiDesc) aiDesc.textContent = isEn ? 'Let AI Face & Aura Scanner calculate your Bazi elements and find the most resonant gemstone for you.' : 'Gunakan AI Face & Aura Scanner untuk membaca 12 Istana Wajah dan menghitung elemen Bazi penarik hoki Anda.';
-      const aiBtn = document.querySelector('.btn-try-ai span');
-      if (aiBtn) aiBtn.textContent = isEn ? 'Try AI Aura Scan' : 'Coba Scan Aura Wajah';
+      const aiBtn = document.querySelector('.btn-bridge-cta');
+      if (aiBtn) aiBtn.innerHTML = isEn ? '<i class="fa-solid fa-camera"></i> Free Face Analysis &rarr;' : '<i class="fa-solid fa-camera"></i> Analisa Wajah Gratis &rarr;';
 
       try { localStorage.setItem('fw_jade_lang', lang); } catch(e) {}
     }
+
+    function toggleCatalogDrawer() {
+      const drawer = document.getElementById('catalogSidebarDrawer');
+      if (drawer) drawer.classList.toggle('open');
+    }
+    function closeCatalogDrawer() {
+      const drawer = document.getElementById('catalogSidebarDrawer');
+      if (drawer) drawer.classList.remove('open');
+    }
+    window.toggleCatalogDrawer = toggleCatalogDrawer;
+    window.closeCatalogDrawer = closeCatalogDrawer;
+
+    // Close on Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeCatalogDrawer();
+        closeQuickViewModal();
+      }
+    });
 
     function toggleCatalogLang() {
       const current = localStorage.getItem('fw_jade_lang') || 'id';

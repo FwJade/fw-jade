@@ -223,10 +223,21 @@
       * Menerapkan terjemahan DOM instan (<5ms) tanpa me-reload halaman web.
       * Mengintegrasikan `AppState.lang` dengan sintesis suara (`speechSynthesis` id-ID vs en-US), pengenalan suara (`webkitSpeechRecognition`), dan prompt AI.
       * Menyimpan preferensi bahasa pengguna di `localStorage` (`fw_jade_lang`) untuk persistensi lintas sesi dan tab.
-* **2026-09-06 (Bagian 25):** **1x Free Scan Forever Gate & VIP Paywall System (`app.js`, `index.html`, `style.css`)**:
-   1. **Proteksi Akses Gratis 1x Seumur Hidup (Anti-Abuse)**:
-      * Menerapkan aturan bisnis ketat: setiap pengguna baru hanya memiliki hak **1x akses pemindaian gratis selamanya**.
-      * Saat hasil scan pertama selesai ditampilkan (`revealFullResults`), sistem secara otomatis mengunci status pengguna secara permanen (`fwjade_free_scan_done` di `localStorage` dan profil `freeScanUsed: true`).
-   2. **Gerbang VIP Paywall Modal (`#modalVipPaywall`)**:
-      * Memblokir pemindaian ke-2 dan seterusnya pada semua titik masuk: Webcam Laptop (`startWebcam`, `handleCameraPrimaryAction`), Upload Galeri (`handleFacePhotoUpload`), dan Kamera HP Companion (`openCompanionQrModal`).
-      * Menampilkan modal VIP eksklusif dengan ikon mahkota emas dan penawaran layanan privat: Pemindaian Ulang Tanpa Batas, Kurasi Giok Imperial Khusus Peta Bazi Lahir, dan Konsultasi Privat 1-on-1 dengan Gemologist & Master Feng Shui FW JADE via WhatsApp Concierge.
+* **2026-09-07 (Bagian 26):** **Comprehensive Mobile Responsiveness & Multi-Page Layout Architecture Hardening (`catalog.html`, `style.css`, `admin.html`, `about.html`, `contact.html`, `privacy.html`, `terms.html`, `security.html`, `cookies.html`, `refund.html`, `disclaimer.html`)**:
+   1. **Standarisasi Universal Mobile Navigation pada Katalog Mandiri (`catalog.html`)**:
+      * Memperbaiki tata letak navbar mobile: menyembunyikan 4 tombol teks panjang di smartphone, menampilkan logo brand di kiri serta tombol bendera bahasa dan tombol hamburger drawer di kanan.
+      * Menyematkan **Slide-Over Luxury Mobile Drawer (`#catalogSidebarDrawer`)** berestetika *Haute Horlogerie* dengan backdrop blur, tautan navigasi utama lengkap, navigasi legalitas, dan tombol direct WhatsApp Concierge.
+      * Menerapkan **Horizontal Swipeable Filter Chips** pada Elemen Wu Xing dan Kategori perhiasan dengan momentum touch scrolling tanpa membengkak vertikal.
+      * Mengoptimalkan Quick View Modal 360° untuk smartphone: padding 14px, gambar 200px, dan tombol checkout Snap + WA bertumpuk rapi dengan tinggi minimal 44px ramah sentuhan.
+   2. **Eliminasi Tabrakan Fixed Sticky Footer & Hero Fluid Typography (`style.css` & `index.html`)**:
+      * Menambahkan buffer padding bawah pada `.app-layout` sebesar `calc(78px + env(safe-area-inset-bottom, 14px)) !important;` sehingga tombol formulir, tombol chat AI, dan elemen footer tidak pernah tertutup oleh `.grand-luxury-footer` mengambang.
+      * Menghapus deklarasi berisiko `white-space: nowrap !important;` pada headline dan deskripsi Hero, menggantikannya dengan fluid responsive wrapping `text-wrap: balance` dan `word-break: break-word` yang anggun dan bebas terpotong di layar sempit maupun saat beralih bahasa.
+      * Memperbaiki Form Tanggal Lahir (Step 1 Bazi): menghapus pemaksaan 1-kolom 3 baris panjang pada baris 6361, menggantikannya dengan grid 3-kolom sebaris kompak (`1fr 1.35fr 1.15fr`) yang rapi dan elegan di mobile.
+      * Memperkuat batas container poster masa depan 2035 (`future-vision-poster-wrapper`) agar 100% bebas dari luapan horizontal (*zero horizontal overflow*).
+   3. **Hardening Responsif Panel Admin (`admin.html`)**:
+      * Mengintegrasikan media query bertingkat (`max-width: 680px` dan `max-width: 480px`) untuk topbar admin: logo di kiri, avatar & tombol logout di kanan, serta tab switch (`Leads 360°` vs `Inventori`) mengisi lebar penuh 50%-50% di baris kedua.
+      * Menyesuaikan grid kartu statistik omset dan prospek agar nilai angka puluhan juta tidak terpotong pada smartphone.
+      * Menyesuaikan toolbar pencarian, tombol aksi, dan modal form edit agar mudah dijangkau di layar sentuh.
+   4. **Standarisasi Responsivitas Suite Halaman Legal & Informasi**:
+      * Mengintegrasikan aturan responsive media query pada seluruh halaman legal ([`privacy.html`](file:///d:/fw%20jade/privacy.html), [`terms.html`](file:///d:/fw%20jade/terms.html), [`security.html`](file:///d:/fw%20jade/security.html), [`cookies.html`](file:///d:/fw%20jade/cookies.html), [`refund.html`](file:///d:/fw%20jade/refund.html), [`disclaimer.html`](file:///d:/fw%20jade/disclaimer.html)) dan halaman profil ([`about.html`](file:///d:/fw%20jade/about.html), [`contact.html`](file:///d:/fw%20jade/contact.html)).
+      * Mengganti padding body dan container kaku menjadi proporsional (`padding: 20px 12px 40px`), tipografi judul fluid clamp, dan tombol kembali selebar layar.

@@ -6359,7 +6359,12 @@ body.style-explorer .view-explorer-secondary {
     grid-template-columns: 1fr;
   }
   .dob-selectors-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1.35fr 1.15fr !important;
+    gap: 6px !important;
+  }
+  .dob-selectors-grid select {
+    padding: 10px 6px !important;
+    font-size: 0.8rem !important;
   }
   .derm-metrics-grid {
     grid-template-columns: 1fr;
@@ -7658,9 +7663,9 @@ body.theme-imperial-light .f-copy-meta {
     padding: 12px 14px 6px !important;
   }
 
-  /* 3. App Layout Natural Top-Anchored Flow */
+  /* 3. App Layout Natural Top-Anchored Flow with Fixed Footer Buffer */
   .app-layout {
-    padding: 14px 16px 30px !important;
+    padding: 14px 16px calc(78px + env(safe-area-inset-bottom, 14px)) !important;
     box-sizing: border-box !important;
     min-height: 100vh !important;
     display: flex !important;
@@ -7731,32 +7736,42 @@ body.theme-imperial-light .f-copy-meta {
     margin: 10px auto 12px !important;
   }
 
-  /* 6. Sacred Headline & Narrative Tagline */
+  /* 6. Sacred Headline & Narrative Tagline (Fluid Zero-Clipping Typography) */
   .hero-narrative-group {
     margin-bottom: 12px !important;
+    width: 100% !important;
+    max-width: 440px !important;
   }
 
   .hero-sacred-headline {
     font-size: clamp(1.04rem, 3.6vw, 1.28rem) !important;
-    white-space: nowrap !important;
-    line-height: 1.2 !important;
-    margin: 0 0 4px !important;
+    white-space: normal !important;
+    word-break: break-word !important;
+    text-wrap: balance !important;
+    line-height: 1.3 !important;
+    margin: 0 auto 6px !important;
     letter-spacing: 0.3px !important;
     color: #FFFFFF !important;
+    text-align: center !important;
   }
 
   .hero-sacred-description {
     font-size: clamp(0.72rem, 2.4vw, 0.84rem) !important;
-    white-space: nowrap !important;
-    line-height: 1.25 !important;
+    white-space: normal !important;
+    word-break: break-word !important;
+    text-wrap: balance !important;
+    line-height: 1.35 !important;
     letter-spacing: 0.15px !important;
-    margin-bottom: 10px !important;
+    margin: 0 auto 10px !important;
     color: #B2BCB8 !important;
+    max-width: 95% !important;
+    text-align: center !important;
   }
 
   .hero-heritage-badge {
     font-size: clamp(0.58rem, 2vw, 0.68rem) !important;
-    white-space: nowrap !important;
+    white-space: normal !important;
+    text-align: center !important;
     letter-spacing: 1.8px !important;
     padding: 4px 14px !important;
     max-width: 95% !important;
@@ -10131,16 +10146,44 @@ body.theme-imperial-light .u-no-scan-note {
 
 @media (max-width: 600px) {
   .future-vision-poster-wrapper {
-    padding: 20px 14px;
+    padding: 20px 12px;
+    max-width: 100%;
+    box-sizing: border-box;
+    overflow-x: hidden;
   }
   .poster-main-title {
     font-size: 1.15rem;
+    line-height: 1.3;
+  }
+  .poster-subtitle {
+    font-size: 0.72rem;
+    line-height: 1.4;
+  }
+  .p-portrait-frame {
+    max-width: 100%;
+    margin: 0 auto;
   }
   .p-assets-grid-8 {
     grid-template-columns: 1fr;
+    gap: 10px;
   }
   .p-roadmap-grid-4 {
     grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  .p-wealth-box, .p-chart-box {
+    padding: 16px 12px;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+  .p-actions-row {
+    flex-direction: column;
+    gap: 8px;
+  }
+  .btn-print-poster, .btn-ask-ai-future {
+    width: 100%;
+    justify-content: center;
+    min-height: 44px;
   }
 }
 
