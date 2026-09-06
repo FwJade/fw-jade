@@ -247,4 +247,9 @@
     6. **Eliminasi Redundansi Tautan Katalog Footer Desktop (`index.html`)**:
        * Menghapus tautan `Katalog Koleksi` dari bilah footer luxury (`.f-nav-links`).
        * Tautan katalog tetap eksklusif dan selalu dapat diakses di Header Nav Bar atas (`nav-pill-btn`) dan Mobile Slide-Over Drawer (`#sidebarDrawer`).
-       * Menjaga bilah footer 100% fokus pada *Brand Integrity & Legal Protocols* (3 Pilar Integritas, Terms, Privacy, Refund, Cookies, Security, Disclaimer, Admin Portal), menghasilkan tampilan footer yang lebih lega, simetris, dan bebas duplikasi.
+       * Menjaga bilah footer 100% fokus pada *Brand Integrity & Legal Protocols* (3 Pilar Integritas, Terms, Privacy, Refund, Cookies, Security, Disclaimer), menghasilkan tampilan footer yang lebih lega, simetris, dan bebas duplikasi.
+    7. **Privatisasi Penuh & Dekopling Publikasi Admin Portal (`index.html`, `catalog.html`, `robots.txt`)**:
+       * **Security Best Practice (Principle of Least Privilege)**: Mencabut seluruh tautan publik menuju `admin.html` dari Footer Beranda (`index.html`), Slide-Over Drawer Beranda (`#sidebarDrawer`), Footer Katalog (`catalog.html`), dan Slide-Over Drawer Katalog (`#catalogSidebarDrawer`).
+       * Menghilangkan kebocoran email master admin `(fwjade.com@gmail.com)` yang sebelumnya tertera pada deskripsi menu drawer publik.
+       * Memperketat [`robots.txt`](file:///d:/fw%20jade/robots.txt) dengan menambahkan direktif `Disallow: /admin.html` dan `Disallow: /admin` untuk melarang bot dan web crawler mengindeks rute portal admin.
+       * Akses portal tetap aman dan fungsional 100% secara privat bagi Master Administrator: dapat diakses langsung via URL rahasia `/admin.html` atau otomatis ter-redirect saat login Google SSO dengan akun resmi `fwjade.com@gmail.com`.
