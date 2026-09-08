@@ -264,3 +264,16 @@
       * Menyelaraskan teks placeholder pencarian Master Aura AI dari kata "cinta" menjadi: *"Tanya Master Aura tentang filosofi giok, batu rezeki, kesehatan, atau feng shui..."*
    4. **Verifikasi Visual**:
       * Pengujian browser membuktikan teks ter-render simetris dan elegan dengan tipografi *Cormorant Garamond* dan *Poppins*, selaras sempurna dengan nuansa *Haute Horlogerie & Luxury Jadeite*.
+* **2026-09-09 (Bagian 28):** **Mobile Catalog Header Overflow Fix, Document Boundary Hardening & 2-Column E-Commerce Grid Re-Deployment (`catalog.html`)**:
+   1. **Diagnosis & Solusi Header Meluap Horizontal (*Navbar Overflow Blowout*)**:
+      * Mendiagnosis penyebab visual terpotong di smartphone pada `fwjade.com/catalog`: edge server menyajikan versi statis awal yang belum memiliki aturan `.nav-desktop-only { display: none !important; }`, memicu 4 tombol teks desktop berjejer hingga lebar ~660px dan mendobrak lebar dokumen.
+      * Memperluas breakpoint mobile drawer dari 768px menjadi 860px (`@media (max-width: 860px)`). Di layar smartphone/tablet kecil, seluruh tautan teks disembunyikan 100% dan dipusatkan ke dalam Slide-Over Mobile Luxury Drawer (`#catalogSidebarDrawer`).
+      * Menyederhanakan navbar mobile: hanya menampilkan Logo `FW JADE` (kiri), Tombol Bendera Bahasa (`🇮🇩`/`🇬🇧`, kanan), dan Tombol Hamburger Drawer (`☰`, kanan) dalam 1 bar kapsul kristal mengambang yang proporsional.
+   2. **Proteksi Anti-Overflow Dokumen (*Document Boundary Hardening*)**:
+      * Menambahkan direktif `overflow-x: hidden !important; width: 100%; max-width: 100vw;` pada `html` dan `body`.
+      * Mengunci lebar `.top-nav` dengan `width: calc(100% - 16px); box-sizing: border-box;` agar tidak pernah dapat mendesak atau melampaui lebar layar fisik perangkat.
+   3. **Pemantapan Grid 2-Kolom E-Commerce Modern di Mobile**:
+      * Mengunci `.product-grid` di mobile pada `grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 8px !important;`.
+      * Mengoptimalkan proporsi kartu: foto seragam 145px, judul 2 baris rapi ter-clamp, badge Grade A minimalis, harga emerald jelas, dan tombol WhatsApp satu sentuhan selebar kartu.
+   4. **Direct Cloudflare Pages Deployment via Wrangler**:
+      * Mengeksekusi direct deployment ke Cloudflare Edge CDN melalui API token resmi (`node deploy.js`) agar perubahan langsung terdistribusi secara global tanpa tertahan keterlambatan webhook.
