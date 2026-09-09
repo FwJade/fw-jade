@@ -4607,9 +4607,9 @@ const I18N_DICTIONARY = {
     btnShareWA: 'Kirim ke WhatsApp Kurator',
 
     // Chat
-    chatStepBadge: '4. TANYA AURORA • Tanya lebih dalam tentang hasil Anda',
-    chatRoomTitle: 'Tanya Master Aura',
-    chatInputPlaceholder: 'Tanya lebih lanjut...',
+    chatStepBadge: '4. KONSULTASI MASTER AURA • Eksplorasi Energi & Sains',
+    chatRoomTitle: 'Master Aura AI',
+    chatInputPlaceholder: 'Tanya tentang batu, aura, kesehatan, atau feng shui Anda...',
 
     // Drawer
     drawerNavLabel: 'Navigasi Utama',
@@ -4690,9 +4690,9 @@ const I18N_DICTIONARY = {
     btnShareWA: 'Send to Curator WhatsApp',
 
     // Chat
-    chatStepBadge: '4. ASK AURORA • Inquire further about your results',
-    chatRoomTitle: 'Ask Master Aura',
-    chatInputPlaceholder: 'Ask further questions...',
+    chatStepBadge: '4. ASK MASTER AURA • Energy & Scientific Inquiry',
+    chatRoomTitle: 'Master Aura AI',
+    chatInputPlaceholder: 'Ask questions about your gemstone, aura, health, or feng shui...',
 
     // Drawer
     drawerNavLabel: 'Main Navigation',
@@ -4824,6 +4824,10 @@ function applyLanguage(lang) {
   safeText('#btnShareCertWA span', dict.btnShareWA);
 
   // Chat
+  const stepBadge4 = document.getElementById('chatStepBadgeIndicator');
+  if (stepBadge4 && dict.chatStepBadge) {
+    stepBadge4.innerHTML = `<i class="fa-solid fa-sparkles text-gold"></i> ${dict.chatStepBadge}`;
+  }
   safeText('.chat-room-title', dict.chatRoomTitle);
   safePlaceholder('contextualInput', dict.chatInputPlaceholder);
 

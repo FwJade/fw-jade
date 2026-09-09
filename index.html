@@ -1465,15 +1465,32 @@
            SECTION 05: STEP 4 — TANYA AURORA (KONSULTASI MASTER AURA)
            ========================================================================= -->
       <section class="section-card section-chat step-card-box" id="secManifestation" style="display: none;">
-        <div class="step-badge-indicator">4. TANYA AURORA • Tanya lebih dalam tentang hasil Anda</div>
+        <div class="step-card-header-bar">
+          <button type="button" class="btn-back-home-pill" onclick="document.getElementById('secGemstone').scrollIntoView({behavior:'smooth'});" title="Kembali ke Batu Penjaga">
+            <i class="fa-solid fa-arrow-left"></i> <span>Batu Penjaga</span>
+          </button>
+          <div class="step-badge-indicator" id="chatStepBadgeIndicator"><i class="fa-solid fa-sparkles text-gold"></i> 4. KONSULTASI MASTER AURA • Eksplorasi Energi &amp; Sains</div>
+          <button type="button" class="step-close-btn" onclick="closeScannerFlowToHome()" title="Kembali ke Beranda"><i class="fa-solid fa-house" style="font-size: 0.95rem;"></i></button>
+        </div>
 
         <div class="chat-consultation-card">
-          <div class="chat-header-row">
-            <button class="chat-back-btn" onclick="document.getElementById('secGemstone').scrollIntoView({behavior:'smooth'});">
-              <i class="fa-solid fa-arrow-left"></i>
-            </button>
-            <h3 class="chat-room-title">Tanya Master Aura</h3>
-            <div class="chat-menu-dot"><i class="fa-solid fa-ellipsis-vertical"></i></div>
+          <!-- Sanctuary Oracle Profile Header -->
+          <div class="oracle-consultation-header">
+            <div class="oracle-avatar-badge">
+              <div class="oracle-avatar-ring">
+                <i class="fa-solid fa-gem text-gold"></i>
+              </div>
+              <span class="oracle-online-pulse" title="Tersinkronisasi Real-Time"></span>
+            </div>
+            <div class="oracle-info-col">
+              <div class="oracle-title-row">
+                <h3 class="chat-room-title">Master Aura AI</h3>
+                <span class="oracle-role-pill">Oracle Giok &amp; Fisiognomi</span>
+              </div>
+              <p class="oracle-status-desc">
+                Tersinkronisasi dengan elemen Bazi kelahiran, titik fisiognomi wajah, dan frekuensi gelombang kristal batu rekomendasi Anda.
+              </p>
+            </div>
           </div>
 
           <!-- Chat Stream Dialog Box -->
@@ -1486,25 +1503,44 @@
             </div>
           </div>
 
-          <!-- Suggestion Prompt Chips (Gambar 2 Screen 4) -->
+          <!-- Suggestion Prompt Chips (Structured Guided Exploration) -->
+          <div class="prompt-chips-header">
+            <i class="fa-solid fa-compass-drafting text-gold"></i>
+            <span>Topik Eksplorasi Cepat &amp; Bukti Sains:</span>
+          </div>
           <div class="contextual-quick-chips">
-            <button class="c-chip" data-q="Bagaimana penjelasan ilmiah gelombang Far Infrared (FIR) dan dampak darah dari batu ini?">🔬 Bukti Sains FIR &amp; Darah</button>
-            <button class="c-chip" data-q="Bagaimana kecocokan batu ini dengan Zodiak &amp; Shio kelahiran saya?">☯️ Kecocokan Zodiak &amp; Shio</button>
-            <button class="c-chip" data-q="Bagaimana cara merawat dan membersihkan energi batu ini?">✨ Cara Merawat Giok</button>
-            <button class="c-chip" data-q="Berapa kekerasan Skala Mohs dan berat jenis resmi batu ini di laboratorium?">💎 Uji Lab &amp; Skala Mohs</button>
+            <button class="c-chip" data-q="Bagaimana penjelasan ilmiah gelombang Far Infrared (FIR) dan dampak darah dari batu ini?">
+              <i class="fa-solid fa-microscope text-cyan"></i>
+              <span>Bukti Sains FIR &amp; Mikrosirkulasi Darah</span>
+            </button>
+            <button class="c-chip" data-q="Bagaimana kecocokan batu ini dengan Zodiak &amp; Shio kelahiran saya?">
+              <i class="fa-solid fa-yin-yang text-gold"></i>
+              <span>Kecocokan Zodiak, Shio &amp; Elemen Wu Xing</span>
+            </button>
+            <button class="c-chip" data-q="Bagaimana cara merawat dan membersihkan energi batu ini?">
+              <i class="fa-solid fa-sparkles text-emerald"></i>
+              <span>Panduan Perawatan &amp; Pembersihan Energi Giok</span>
+            </button>
+            <button class="c-chip" data-q="Berapa kekerasan Skala Mohs dan berat jenis resmi batu ini di laboratorium?">
+              <i class="fa-solid fa-gem text-pink"></i>
+              <span>Uji Lab Mineralogi, Skala Mohs &amp; Berat Jenis</span>
+            </button>
           </div>
 
           <!-- Chat Input Bar -->
           <div class="context-input-row">
-            <input type="text" id="contextualInput" class="context-input" placeholder="Tanya lebih lanjut...">
-            <button class="step-mic-btn" onclick="toggleVoiceMic()"><i class="fa-solid fa-microphone"></i></button>
-            <button class="luxury-btn btn-primary btn-sm" id="btnSendContextQuery">
-              <i class="fa-solid fa-arrow-up"></i>
+            <div class="context-input-capsule">
+              <i class="fa-solid fa-comment-dots text-gold input-lead-icon"></i>
+              <input type="text" id="contextualInput" class="context-input" placeholder="Tanya tentang batu, aura, kesehatan, atau feng shui Anda...">
+              <button class="step-mic-btn" onclick="toggleVoiceMic()" title="Bicara dengan Suara"><i class="fa-solid fa-microphone"></i></button>
+            </div>
+            <button class="luxury-btn btn-send-luxury" id="btnSendContextQuery" title="Kirim Pertanyaan">
+              <span>Kirim</span> <i class="fa-solid fa-arrow-up"></i>
             </button>
           </div>
           <div class="chat-micro-disclaimer-note">
             <i class="fa-solid fa-shield-halved text-emerald"></i>
-            <span>Master Aura menyajikan eksplorasi filosofi &amp; kurasi batu giok, bukan nasehat medis klinis. <a href="disclaimer.html" target="_blank">Lihat Penafian Medis &amp; Hukum</a></span>
+            <span>Master Aura menyajikan eksplorasi filosofi budaya &amp; kurasi batu giok komplementer, bukan nasehat medis klinis. <a href="disclaimer.html" target="_blank">Lihat Penafian Medis &amp; Hukum</a></span>
           </div>
         </div>
 
