@@ -165,7 +165,7 @@
   <!-- QR Code Generator Library for Companion Camera Sync -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
-  <link rel="stylesheet" href="style.css?v=61">
+  <link rel="stylesheet" href="style.css?v=62">
 </head>
 <body class="theme-quiet-luxury">
   <!-- 0. Fullscreen Immersive Raw Crystal Backdrop -->
@@ -674,6 +674,23 @@
 
 
       <!-- =========================================================================
+           PROGRESSIVE RESULTS STEPPER NAV BAR (Opsi 1: Satu Fokus per Tahap)
+           ========================================================================= -->
+      <div class="results-stepper-nav-wrap" id="resultsStepperNavWrap" style="display: none;">
+        <div class="results-stepper-nav">
+          <button type="button" class="stepper-nav-pill active" id="tabNavAura" onclick="switchResultTab('aura')">
+            <i class="fa-solid fa-sparkles"></i> <span>1. Hasil Aura</span>
+          </button>
+          <button type="button" class="stepper-nav-pill" id="tabNavGem" onclick="switchResultTab('gem')">
+            <i class="fa-solid fa-gem"></i> <span>2. Batu Penjaga</span>
+          </button>
+          <button type="button" class="stepper-nav-pill" id="tabNavChat" onclick="switchResultTab('chat')">
+            <i class="fa-solid fa-comments"></i> <span>3. Tanya Master</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- =========================================================================
            SECTION 03: STEP 2 — HASIL AURA (Gambar 2 Screen 2)
            ========================================================================= -->
       <section class="section-card section-aura-results step-card-box" id="secAuraResults" style="display: none;">
@@ -681,677 +698,131 @@
           <button type="button" class="btn-back-home-pill" onclick="closeScannerFlowToHome()" title="Kembali ke Beranda">
             <i class="fa-solid fa-arrow-left"></i> <span>Beranda</span>
           </button>
-          <div class="step-badge-indicator"><i class="fa-solid fa-sparkles text-gold"></i> 3. HASIL AURA &amp; REKOMENDASI GIOK</div>
+          <div class="step-badge-indicator"><i class="fa-solid fa-sparkles text-gold"></i> 1. HASIL ANALISIS AURA</div>
           <button type="button" class="step-close-btn" onclick="closeScannerFlowToHome()" title="Kembali ke Beranda"><i class="fa-solid fa-house" style="font-size: 0.95rem;"></i></button>
         </div>
         
-        <!-- =========================================================================
-             GRAND 2035 FUTURE VISION DOSSIER & POSTER (REFERENSI GAMBAR 2)
-             ========================================================================= -->
-        <div class="future-vision-poster-wrapper" id="futureVisionPoster">
-          <!-- Poster Top Brand Bar -->
-          <div class="poster-grand-header">
-            <div class="poster-brand-logo">
-              <span class="poster-fwj">FW JADE</span>
-              <span class="poster-sub">AURA AI • WEALTH &amp; FUTURE ORACLE</span>
-            </div>
-            <div class="poster-headline-group">
-              <h1 class="poster-main-title">PROYEKSI AURA &amp; KEHIDUPAN MASA DEPAN</h1>
-              <p class="poster-subtitle">TRANSFORMASI MENJADI VERSI TERBAIK DIRI ANDA • BERDASARKAN ANALISIS AURA, ENERGI &amp; POTENSI DIRI</p>
-            </div>
-            <div class="poster-badge-right">
-              <span class="poster-year-pill" id="posterPeakYearBadge"><i class="fa-solid fa-crown text-gold"></i> TAHUN 2035</span>
-            </div>
-          </div>
-
-          <!-- Top 3-Column Pillar: Identitas Energi | Hero Executive Portrait | Posisi & Peran -->
-          <div class="poster-top-triptych">
-            <!-- Left Card: Identitas & 6 Radar Aura -->
-            <div class="poster-card poster-card-left">
-              <div class="p-card-header">
-                <i class="fa-solid fa-fingerprint text-emerald"></i> <span>IDENTITAS ENERGI</span>
-              </div>
-              <div class="p-meta-list">
-                <div class="p-meta-row"><span>Energi Dominan:</span> <strong id="pvDominantElement" class="text-emerald">Wood (Kayu)</strong></div>
-                <div class="p-meta-row"><span>Elemen Pendukung:</span> <strong id="pvSupportingElement" class="text-cyan">Water (Air)</strong></div>
-                <div class="p-meta-row"><span>Gender &amp; Usia:</span> <strong id="pvDemographics" class="text-gold">Pria • 31 Thn</strong></div>
-                <div class="p-meta-row"><span>Karakter Inti:</span> <strong id="pvCorePersona">Visioner &amp; Pemimpin</strong></div>
-                <div class="p-meta-row"><span>Jalur Hidup:</span> <strong id="pvLifePath">Executive Leadership</strong></div>
-                <div class="p-meta-row"><span>Misi Jiwa:</span> <span id="pvSoulMission" class="text-soft-gold">Membangun, Memimpin, Menginspirasi &amp; Menciptakan Warisan Abadi</span></div>
-              </div>
-
-              <!-- 6 Metrics Radar Progress Bars (Gambar 2) -->
-              <div class="p-radar-section">
-                <div class="p-radar-title"><i class="fa-solid fa-chart-simple text-gold"></i> RINGKASAN 6 POTENSI AURA</div>
-                <div class="p-bar-row">
-                  <div class="p-bar-label"><span>Karisma</span><strong id="pvRadarKarisma">92%</strong></div>
-                  <div class="p-track"><div class="p-fill" id="pvFillKarisma" style="width: 92%;"></div></div>
-                </div>
-                <div class="p-bar-row">
-                  <div class="p-bar-label"><span>Inteligensi</span><strong id="pvRadarInteligensi">89%</strong></div>
-                  <div class="p-track"><div class="p-fill" id="pvFillInteligensi" style="width: 89%;"></div></div>
-                </div>
-                <div class="p-bar-row">
-                  <div class="p-bar-label"><span>Kepemimpinan</span><strong id="pvRadarKepemimpinan">94%</strong></div>
-                  <div class="p-track"><div class="p-fill" id="pvFillKepemimpinan" style="width: 94%;"></div></div>
-                </div>
-                <div class="p-bar-row">
-                  <div class="p-bar-label"><span>Kreativitas</span><strong id="pvRadarKreativitas">88%</strong></div>
-                  <div class="p-track"><div class="p-fill" id="pvFillKreativitas" style="width: 88%;"></div></div>
-                </div>
-                <div class="p-bar-row">
-                  <div class="p-bar-label"><span>Spiritualitas</span><strong id="pvRadarSpiritual">85%</strong></div>
-                  <div class="p-track"><div class="p-fill" id="pvFillSpiritual" style="width: 85%;"></div></div>
-                </div>
-                <div class="p-bar-row">
-                  <div class="p-bar-label"><span>Daya Tarik</span><strong id="pvRadarDayaTarik">93%</strong></div>
-                  <div class="p-track"><div class="p-fill" id="pvFillDayaTarik" style="width: 93%;"></div></div>
-                </div>
-              </div>
-
-              <div class="p-quote-box">
-                <p>"Disiplin Hari Ini Menciptakan Kebebasan Esok Hari"</p>
-                <span>— FW JADE</span>
-              </div>
-            </div>
-
-            <!-- Center Column: Masterpiece Future Executive Portrait -->
-            <div class="poster-hero-center">
-              <div class="p-portrait-frame">
-                <div id="pvSpinner" class="p-portrait-spinner" style="display: none;">
-                  <i class="fa-solid fa-circle-notch fa-spin"></i>
-                  <span>Merender Wujud Puncak 2035...</span>
-                </div>
-                <img id="pvHeroPortrait" class="p-portrait-img" src="assets/future_ceo_male_executive.jpg" alt="Manifestasi Eksekutif Masa Depan Anda" />
-                <div class="p-portrait-overlay-glow"></div>
-                
-                <!-- Floating Mini Badge: Wajah Asli User Verified -->
-                <div class="p-verified-face-badge">
-                  <img id="pvOriginalThumbnail" class="p-thumb-face" src="" alt="Wajah Asli" style="display: none;" />
-                  <div>
-                    <span class="p-vb-status"><i class="fa-solid fa-circle-check text-emerald"></i> WAJAH ASLI TERVERIFIKASI</span>
-                    <span class="p-vb-sub">Identitas Biometrik Terkunci 100%</span>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Banner Below Portrait (Gambar 2) -->
-              <div class="p-future-ribbon">
-                <span class="p-ribbon-sub">VERSI DIRI ANDA DI MASA DEPAN</span>
-                <h2 class="p-ribbon-year" id="pvRibbonYear">TAHUN 2035</h2>
-                <p class="p-ribbon-desc">VERSI ANDA YANG TELAH MENCAPAI PUNCAK POTENSI KEHIDUPAN, KEKAYAAN, DAN KEBAHAGIAAN</p>
-              </div>
-            </div>
-
-            <!-- Right Card: Posisi & Peran & Status Kehidupan -->
-            <div class="poster-card poster-card-right">
-              <div class="p-card-header">
-                <i class="fa-solid fa-briefcase text-gold"></i> <span>POSISI &amp; PERAN</span>
-              </div>
-              <div class="p-role-hero">
-                <h3 id="pvFutureRoleTitle">FOUNDER &amp; CEO</h3>
-                <span class="p-role-sub" id="pvFutureRoleSub">BISNIS TEKNOLOGI &amp; INVESTOR</span>
-              </div>
-
-              <div class="p-role-stats-grid">
-                <div class="p-role-stat-item">
-                  <i class="fa-solid fa-building-circle-check text-gold"></i>
-                  <div>
-                    <span class="p-rs-k">Perusahaan Dimiliki:</span>
-                    <strong class="p-rs-v" id="pvCompaniesCount">3 Perusahaan Aktif</strong>
-                  </div>
-                </div>
-                <div class="p-role-stat-item">
-                  <i class="fa-solid fa-users text-cyan"></i>
-                  <div>
-                    <span class="p-rs-k">Tim yang Dipimpin:</span>
-                    <strong class="p-rs-v" id="pvTeamCount">50+ Profesional</strong>
-                  </div>
-                </div>
-                <div class="p-role-stat-item">
-                  <i class="fa-solid fa-money-bill-trend-up text-emerald"></i>
-                  <div>
-                    <span class="p-rs-k">Pendapatan Tahunan:</span>
-                    <strong class="p-rs-v text-emerald" id="pvAnnualIncome">+/- Rp 15 Miliar</strong>
-                  </div>
-                </div>
-                <div class="p-role-stat-item">
-                  <i class="fa-solid fa-earth-americas text-gold"></i>
-                  <div>
-                    <span class="p-rs-k">Pengaruh:</span>
-                    <strong class="p-rs-v" id="pvInfluenceLevel">Nasional &amp; Internasional</strong>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Status Kehidupan 4 Pilar -->
-              <div class="p-life-status-wrap">
-                <div class="p-radar-title"><i class="fa-solid fa-heart-pulse text-emerald"></i> STATUS KEHIDUPAN MASA DEPAN</div>
-                <div class="p-status-grid">
-                  <div class="p-status-box">
-                    <i class="fa-solid fa-vault text-gold"></i>
-                    <span class="p-sb-k">FINANSIAL</span>
-                    <strong class="p-sb-v text-emerald" id="pvFinansialStatus">SANGAT STABIL</strong>
-                  </div>
-                  <div class="p-status-box">
-                    <i class="fa-solid fa-handshake-angle text-cyan"></i>
-                    <span class="p-sb-k">SOSIAL</span>
-                    <strong class="p-sb-v text-gold" id="pvSosialStatus">BERPENGARUH</strong>
-                  </div>
-                  <div class="p-status-box">
-                    <i class="fa-solid fa-yin-yang text-emerald"></i>
-                    <span class="p-sb-k">SPIRITUAL</span>
-                    <strong class="p-sb-v text-cyan" id="pvSpiritualStatus">SEIMBANG</strong>
-                  </div>
-                  <div class="p-status-box">
-                    <i class="fa-solid fa-spa text-pink"></i>
-                    <span class="p-sb-k">KESEHATAN</span>
-                    <strong class="p-sb-v text-emerald" id="pvKesehatanStatus">OPTIMAL</strong>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Middle Section: 8 Infrastruktur Aset Masa Depan (Gambar 2 Grid) -->
-          <div class="poster-assets-section">
-            <div class="p-section-heading">
-              <span class="p-sh-num">8 ASET KEMAKMURAN MASA DEPAN</span>
-              <h3 class="p-sh-title">INFRASTRUKTUR ASET, GAYA HIDUP &amp; PORTOFOLIO KELAS ATAS</h3>
-            </div>
-
-            <div class="p-assets-grid-8">
-              <!-- Asset 1: Jam Tangan -->
-              <div class="p-asset-item">
-                <div class="p-ai-num">1. JAM TANGAN</div>
-                <div class="p-ai-thumb"><img src="assets/luxury_future_assets.jpg" alt="Rolex Day-Date 40 Everose Gold" style="object-position: 0% 0%;" /></div>
-                <h4 class="p-ai-name" id="pAsset1Name">ROLEX DAY-DATE 40 EVEROSE GOLD</h4>
-                <div class="p-ai-price" id="pAsset1Price">Rp 1.150.000.000</div>
-                <p class="p-ai-desc">Simbol Status, Prestise, &amp; Kepemimpinan Eksekutif Puncak</p>
-              </div>
-
-              <!-- Asset 2: Setelan Premium -->
-              <div class="p-asset-item">
-                <div class="p-ai-num">2. SETELAN PREMIUM</div>
-                <div class="p-ai-thumb"><img src="assets/luxury_future_assets.jpg" alt="Tom Ford Bespoke Classic Suit" style="object-position: 15% 75%;" /></div>
-                <h4 class="p-ai-name" id="pAsset2Name">TOM FORD CLASSIC BESPOKE SUIT</h4>
-                <div class="p-ai-price">Rp 80.000.000 - 150.000.000</div>
-                <p class="p-ai-desc">Material Super 150's Wool, Kesan Elegan, Berwibawa &amp; Karismatik</p>
-              </div>
-
-              <!-- Asset 3: Mobil Utama -->
-              <div class="p-asset-item">
-                <div class="p-ai-num">3. MOBIL UTAMA</div>
-                <div class="p-ai-thumb"><img src="assets/luxury_future_assets.jpg" alt="Rolls-Royce Cullinan Black Badge" style="object-position: 50% 75%;" /></div>
-                <h4 class="p-ai-name" id="pAsset3Name">ROLLS-ROYCE CULLINAN BLACK BADGE</h4>
-                <div class="p-ai-price">Rp 12.000.000.000</div>
-                <p class="p-ai-desc">Simbol Kesuksesan, Kebebasan Finansial &amp; Perlindungan Maksimal</p>
-              </div>
-
-              <!-- Asset 4: Rumah Utama -->
-              <div class="p-asset-item">
-                <div class="p-ai-num">4. RUMAH UTAMA</div>
-                <div class="p-ai-thumb"><img src="assets/luxury_future_assets.jpg" alt="Modern Luxury Villa Bali" style="object-position: 50% 70%;" /></div>
-                <h4 class="p-ai-name">MODERN LUXURY VILLA BALI</h4>
-                <div class="p-ai-price">Rp 20.000.000.000</div>
-                <p class="p-ai-desc">Pantai Indah Bali • 1.500 m² • Infinity Pool, Home Theater &amp; Gym</p>
-              </div>
-
-              <!-- Asset 5: Kantor / Bisnis -->
-              <div class="p-asset-item">
-                <div class="p-ai-num">5. KANTOR / BISNIS</div>
-                <div class="p-ai-thumb"><img src="assets/luxury_future_assets.jpg" alt="Kantor Pusat Perusahaan Jakarta" style="object-position: 60% 30%;" /></div>
-                <h4 class="p-ai-name">KANTOR PUSAT PERUSAHAAN</h4>
-                <div class="p-ai-price">1.200 m² • 50+ Karyawan</div>
-                <p class="p-ai-desc">SCBD Jakarta Selatan • Industri Solusi Digital &amp; Portofolio Bisnis</p>
-              </div>
-
-              <!-- Asset 6: Investasi Properti -->
-              <div class="p-asset-item">
-                <div class="p-ai-num">6. INVESTASI PROPERTI</div>
-                <div class="p-ai-thumb"><img src="assets/luxury_future_assets.jpg" alt="Portofolio Properti Komersial" style="object-position: 50% 20%;" /></div>
-                <h4 class="p-ai-name">PORTOFOLIO PROPERTI KOMERSIAL</h4>
-                <div class="p-ai-price">Rp 25.000.000.000</div>
-                <p class="p-ai-desc">5 Unit Apartemen Mewah, 2 Villa Resort &amp; 3 Ruko Komersial</p>
-              </div>
-
-              <!-- Asset 7: Gaya Hidup -->
-              <div class="p-asset-item">
-                <div class="p-ai-num">7. GAYA HIDUP</div>
-                <div class="p-ai-thumb"><img src="assets/luxury_future_assets.jpg" alt="Private Yacht & Luxury Travel" style="object-position: 85% 75%;" /></div>
-                <h4 class="p-ai-name">PRIVATE YACHT &amp; LUXURY TRAVEL</h4>
-                <div class="p-ai-price">Destinasi: Eropa, Dubai, Maldives</div>
-                <p class="p-ai-desc">Hobi: Golfing, Yacht Cruising, Art Collecting &amp; Filantropi</p>
-              </div>
-
-              <!-- Asset 8: Koleksi Mahakarya Giok FW JADE -->
-              <div class="p-asset-item">
-                <div class="p-ai-num">8. KOLEKSI PUSAKA</div>
-                <div class="p-ai-thumb"><img src="assets/luxury_future_assets.jpg" alt="FW JADE Imperial High-Jewellery" style="object-position: 30% 85%;" /></div>
-                <h4 class="p-ai-name">MAHAKARYA GIOK FW JADE MEDAN</h4>
-                <div class="p-ai-price">Pusaka Warisan Tak Ternilai</div>
-                <p class="p-ai-desc">Pendant Imperial Jadeite Grade A, Jam Tangan Mewah &amp; Aset Heritage</p>
-              </div>
-            </div>
-          </div>
-
-          <!-- Bottom Section: Proyeksi Kekayaan & Roadmap Menuju Masa Depan (Gambar 2) -->
-          <div class="poster-wealth-roadmap-section">
-            <div class="poster-wealth-grid">
-              <!-- Left: Proyeksi Kekayaan Bersih -->
-              <div class="p-wealth-box">
-                <div class="p-wb-title">PROYEKSI KEKAYAAN BERSIH • 2035</div>
-                <div class="p-wb-amount" id="pvNetWorthProjected">Rp 85.000.000.000+</div>
-                
-                <div class="p-donut-dist-row">
-                  <div class="p-dist-col"><strong class="text-emerald">40%</strong> <span>BISNIS</span></div>
-                  <div class="p-dist-col"><strong class="text-gold">30%</strong> <span>PROPERTI</span></div>
-                  <div class="p-dist-col"><strong class="text-cyan">20%</strong> <span>SAHAM</span></div>
-                  <div class="p-dist-col"><strong class="text-pink">10%</strong> <span>ASET LAIN</span></div>
-                </div>
-              </div>
-
-              <!-- Center: Grafik Pertumbuhan 10 Tahun (Bar Visualizer) -->
-              <div class="p-wealth-box">
-                <div class="p-wb-title">PROYEKSI PERTUMBUHAN KEKAYAAN (ESTIMASI 10 TAHUN)</div>
-                <div class="p-growth-bars-chart">
-                  <div class="p-gb-col">
-                    <span class="p-gb-val">5M</span>
-                    <div class="p-gb-bar" style="height: 12%;"></div>
-                    <span class="p-gb-yr">2025</span>
-                  </div>
-                  <div class="p-gb-col">
-                    <span class="p-gb-val">15M</span>
-                    <div class="p-gb-bar" style="height: 25%;"></div>
-                    <span class="p-gb-yr">2027</span>
-                  </div>
-                  <div class="p-gb-col">
-                    <span class="p-gb-val">25M</span>
-                    <div class="p-gb-bar" style="height: 40%;"></div>
-                    <span class="p-gb-yr">2029</span>
-                  </div>
-                  <div class="p-gb-col">
-                    <span class="p-gb-val">40M</span>
-                    <div class="p-gb-bar" style="height: 58%;"></div>
-                    <span class="p-gb-yr">2031</span>
-                  </div>
-                  <div class="p-gb-col">
-                    <span class="p-gb-val">60M</span>
-                    <div class="p-gb-bar" style="height: 78%;"></div>
-                    <span class="p-gb-yr">2033</span>
-                  </div>
-                  <div class="p-gb-col peak">
-                    <span class="p-gb-val text-gold">85M+</span>
-                    <div class="p-gb-bar peak" style="height: 100%;"></div>
-                    <span class="p-gb-yr text-gold">2035</span>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Right: Tujuan & Warisan -->
-              <div class="p-wealth-box">
-                <div class="p-wb-title">TUJUAN &amp; WARISAN UTAMA</div>
-                <div class="p-legacy-list">
-                  <div class="p-ll-item"><i class="fa-solid fa-crown text-gold"></i> <span>Membangun ekosistem bisnis teknologi yang berdaya tahan tinggi</span></div>
-                  <div class="p-ll-item"><i class="fa-solid fa-handshake text-emerald"></i> <span>Menciptakan lapangan kerja bagi ribuan generasi muda</span></div>
-                  <div class="p-ll-item"><i class="fa-solid fa-graduation-cap text-cyan"></i> <span>Mendirikan foundation sosial dan beasiswa pendidikan</span></div>
-                  <div class="p-ll-item"><i class="fa-solid fa-monument text-gold"></i> <span>Meninggalkan warisan positif dan nama baik yang abadi</span></div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Roadmap Menuju Masa Depan 4 Tahap (Gambar 2 Bottom) -->
-            <div class="poster-roadmap-wrap">
-              <div class="p-roadmap-heading"><i class="fa-solid fa-route text-gold"></i> ROADMAP STRATEGIS MENUJU TAHUN 2035</div>
-              <div class="p-roadmap-grid-4">
-                <div class="p-rm-card">
-                  <div class="p-rm-step">TAHAP 1 (2024 - 2025)</div>
-                  <ul>
-                    <li>Menguasai Skill &amp; Ilmu Strategis Baru</li>
-                    <li>Membangun Personal Brand &amp; Kredibilitas</li>
-                    <li>Merintis Bisnis &amp; Portofolio Pertama</li>
-                    <li>Menabung &amp; Memperkuat Fondasi Kas</li>
-                  </ul>
-                </div>
-                <div class="p-rm-card">
-                  <div class="p-rm-step">TAHAP 2 (2026 - 2028)</div>
-                  <ul>
-                    <li>Scale Up Bisnis Menjadi Profitabel</li>
-                    <li>Membentuk Tim Eksekutif Solid</li>
-                    <li>Diversifikasi Multi-Stream Income</li>
-                    <li>Investasi Properti Pertama</li>
-                  </ul>
-                </div>
-                <div class="p-rm-card">
-                  <div class="p-rm-step">TAHAP 3 (2029 - 2031)</div>
-                  <ul>
-                    <li>Ekspansi Bisnis ke Pasar Internasional</li>
-                    <li>Membangun Akumulasi Aset Skala Besar</li>
-                    <li>Meningkatkan Pengaruh &amp; Jejaring Elit</li>
-                    <li>Mencapai Kebebasan Finansial Total</li>
-                  </ul>
-                </div>
-                <div class="p-rm-card peak-card">
-                  <div class="p-rm-step text-gold">TAHAP 4 (2032 - 2035)</div>
-                  <ul>
-                    <li>Menjadi Pemimpin Industri &amp; Tokoh Elit</li>
-                    <li>Mencapai Puncak Kekayaan Puluhan Miliar</li>
-                    <li>Membantu &amp; Menginspirasi Banyak Orang</li>
-                    <li>Mewariskan Kesejahteraan bagi Keluarga</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-
-            <!-- Poster Quote Banner -->
-            <div class="poster-bottom-quote-banner">
-              <p>"MASA DEPAN ADALAH MILIK MEREKA YANG MENYIAPKANNYA HARI INI"</p>
-              <span>— FW JADE MEDAN —</span>
-            </div>
-
-            <!-- Action Buttons: Download Poster & Chat Advisor -->
-            <div class="poster-actions-bar">
-              <button type="button" class="luxury-btn btn-download-poster" onclick="window.print()">
-                <i class="fa-solid fa-download"></i> <span>Simpan Poster Masa Depan (Cetak / PDF)</span>
-              </button>
-              <button type="button" class="luxury-btn btn-ask-ai-future" onclick="document.getElementById('secManifestation').scrollIntoView({behavior: 'smooth'})">
-                <i class="fa-solid fa-comments"></i> <span>Tanya Strategi Sukses ke Master Aura AI</span>
-              </button>
-            </div>
-          </div>
-        </div>
-
-
-        <div class="results-header-row">
-          <h2 class="section-title" id="txtAuraResultHeading">Hasil Aura Anda</h2>
-          <div class="narrator-badge">
-            <i class="fa-solid fa-sparkles"></i> <span>Master Aura</span>
-          </div>
-        </div>
-
-        <!-- Dominant Element & Sacred Emblem -->
-        <div class="aura-summary-card">
-          <span class="element-label" id="txtDominantElementLabel">Elemen Dominan</span>
-          <h3 class="element-name" id="valAuraElement">WOOD</h3>
+        <!-- SLEEK LUXURY AURA DOSSIER (CLEAN, HUMAN-CENTERED & RELATABLE) -->
+        <div class="sleek-aura-dossier" id="sleekAuraDossier">
           
-          <div class="sacred-tree-emblem-wrap">
-            <div class="sacred-tree-circle">
-              <i class="fa-solid fa-tree sacred-icon"></i>
-              <div class="energy-glow-ring"></div>
-            </div>
+          <!-- Dossier Top Branding -->
+          <div class="sleek-dossier-header">
+            <span class="sleek-brand-badge"><i class="fa-solid fa-gem text-gold"></i> FW JADE MEDAN • EST. 2009</span>
+            <h1 class="sleek-main-title">Pancaran Aura &amp; Keseimbangan Diri Anda</h1>
+            <p class="sleek-subtitle">Penyelarasan energi alami wajah untuk mendukung ketenangan batin, kesehatan, dan kesejahteraan hidup</p>
           </div>
 
-          <div class="alignment-score-box">
-            <div class="score-large text-emerald" id="valAuraScore">96%</div>
-            <div class="score-caption" id="valAuraScoreCaption">AURA ALIGNMENT • Sangat Kuat</div>
-          </div>
-        </div>
-
-        <!-- 4 Metric Rows (Gambar 2 Screen 2) -->
-        <div class="metrics-details-box">
-          <div class="metric-row-item">
-            <div class="m-label"><i class="fa-solid fa-leaf text-emerald"></i> <span id="lblVitality">Vitalitas Holistik</span></div>
-            <div class="m-val" id="valVitality">91%</div>
-          </div>
-          <div class="metric-row-item">
-            <div class="m-label"><i class="fa-solid fa-yin-yang text-gold"></i> <span id="lblEnergyBalance">Energi Balance</span></div>
-            <div class="m-val text-emerald" id="valEnergyBalance">Optimal</div>
-          </div>
-          <div class="metric-row-item">
-            <div class="m-label"><i class="fa-solid fa-star text-gold"></i> <span id="lblFortuneLevel">Keberuntungan</span></div>
-            <div class="m-val text-gold" id="valFortuneLevel">Tinggi</div>
-          </div>
-          <div class="metric-row-item">
-            <div class="m-label"><i class="fa-solid fa-compass text-cyan"></i> <span id="lblEnergyReco">Rekomendasi Energi</span></div>
-            <div class="m-val" id="valEnergyReco">Menjaga stabilitas &amp; fokus</div>
-          </div>
-        </div>
-
-        <!-- DUAL-LENS SWITCHER: SAINS vs METAFISIKA -->
-        <div class="dual-lens-switcher-wrap">
-          <div class="lens-switcher-pill">
-            <button class="lens-tab-btn active" id="btnLensScience" onclick="switchDualLens('science')">
-              <i class="fa-solid fa-microscope text-emerald"></i>
-              <span>Sains &amp; Bio-Fisika</span>
-            </button>
-            <button class="lens-tab-btn" id="btnLensMystic" onclick="switchDualLens('mystic')">
-              <i class="fa-solid fa-yin-yang text-gold"></i>
-              <span>Metafisika &amp; Horoskop</span>
-            </button>
-          </div>
-          <span class="lens-sub-caption">Simulasi Riset Literatur Bio-Fisika &amp; Evaluasi Mineralogi Gemologi</span>
-        </div>
-
-        <!-- LENS VIEW 1: SAINS BIO-FISIKA & UJI LABORATORIUM -->
-        <div class="lens-panel-view" id="lensPanelScience">
-          
-          <!-- 1. Live FIR Spectral Coherence Waveform (8-14 µm) -->
-          <div class="science-fir-hud-card">
-            <div class="fir-hud-header">
-              <div class="fir-hud-title">
-                <i class="fa-solid fa-wave-square text-emerald"></i>
-                <span>Spektrometri Resonansi Far Infrared (FIR 8–14 µm)</span>
-              </div>
-              <span class="fir-hud-badge" id="valFirCoherenceBadge">8–14 µm Spektrum Emisi Alami</span>
-            </div>
+          <!-- Main 2-Column Showcase: Face Aura & Personal Guidance -->
+          <div class="sleek-grid-2col">
             
-            <div class="fir-spectrum-meter-wrap">
-              <div class="spectrum-range-labels">
-                <span>8.0 µm</span>
-                <span class="spectrum-peak-label text-emerald">Puncak Emisi Spektrometer: <strong id="valFirPeak">9.35 µm</strong></span>
-                <span>14.0 µm</span>
-              </div>
-              <div class="spectrum-meter-track">
-                <div class="spectrum-meter-fill" id="valFirProgressFill" style="width: 68%;"></div>
-                <div class="spectrum-peak-pointer" id="valFirPointer" style="left: 68%;"></div>
-              </div>
-            </div>
-            <p class="fir-hud-desc" id="valFirDesc">
-              Struktur kristal kisi silikat <span id="valChemFormula" class="text-emerald">NaAlSi₂O₆</span> memancarkan radiasi gelombang infra merah jauh alami (Far Infrared) yang memberikan sensasi kesejukan relaksasi pada kontak fisik.
-            </p>
-          </div>
-
-          <!-- 2. Mineralogy & Crystallography Lab Matrix -->
-          <div class="lab-specs-grid">
-            <div class="lab-spec-card">
-              <div class="lab-spec-icon"><i class="fa-solid fa-cube text-emerald"></i></div>
-              <div class="lab-spec-info">
-                <span class="lab-k">Formula Kimia</span>
-                <strong class="lab-v" id="valLabFormula">NaAlSi₂O₆</strong>
-              </div>
-            </div>
-            <div class="lab-spec-card">
-              <div class="lab-spec-icon"><i class="fa-solid fa-gem text-gold"></i></div>
-              <div class="lab-spec-info">
-                <span class="lab-k">Kekerasan Mohs</span>
-                <strong class="lab-v" id="valLabMohs">6.8 / 10 (Padat)</strong>
-              </div>
-            </div>
-            <div class="lab-spec-card">
-              <div class="lab-spec-icon"><i class="fa-solid fa-weight-hanging text-cyan"></i></div>
-              <div class="lab-spec-info">
-                <span class="lab-k">Berat Jenis (SG)</span>
-                <strong class="lab-v" id="valLabSG">3.33 g/cm³</strong>
-              </div>
-            </div>
-            <div class="lab-spec-card">
-              <div class="lab-spec-icon"><i class="fa-solid fa-shield-halved text-emerald"></i></div>
-              <div class="lab-spec-info">
-                <span class="lab-k">Kemurnian Mineral</span>
-                <strong class="lab-v text-emerald" id="valLabFTIR">Grade A Natural (Tanpa Resin)</strong>
-              </div>
-            </div>
-          </div>
-
-          <!-- 3. Dinamika Mikrosirkulasi Poiseuille -->
-          <div class="hemodynamic-card">
-            <div class="hemo-header">
-              <i class="fa-solid fa-heart-pulse text-pink"></i>
-              <span>Simulasi Bio-Fisika Mikrosirkulasi Kapiler (Literatur Poiseuille)</span>
-            </div>
-            <div class="hemo-metrics-row">
-              <div class="hemo-metric-col">
-                <span class="hemo-lbl">Peningkatan Oksigenasi</span>
-                <strong class="hemo-val text-emerald" id="valOxygenBoost">+23.4%</strong>
-              </div>
-              <div class="hemo-metric-col">
-                <span class="hemo-lbl">Zeta Potential Eritrosit</span>
-                <strong class="hemo-val text-cyan" id="valZetaPotential">ζ ≤ -15 mV (Aktif)</strong>
-              </div>
-              <div class="hemo-metric-col">
-                <span class="hemo-lbl">Penurunan Viskositas</span>
-                <strong class="hemo-val text-gold" id="valViscosityReduction">-18.6% (Lancar)</strong>
-              </div>
-            </div>
-          </div>
-
-          <!-- 3.5 Evaluasi Fisiognomi Kulit & Rekomendasi Terapi Alami -->
-          <div class="dermatology-health-card">
-            <div class="derm-header">
-              <div class="derm-title">
-                <i class="fa-solid fa-shield-virus text-emerald"></i>
-                <span>Estimasi Fisiognomi Kulit &amp; Skin Vitality Index</span>
-              </div>
-              <span class="derm-badge" id="valDermGrade">Status: Optimal Skin Vitality</span>
-            </div>
-
-            <div class="derm-metrics-grid">
-              <div class="derm-metric-box">
-                <span class="derm-lbl">Skin Barrier &amp; Kelembaban</span>
-                <div class="derm-val-bar">
-                  <div class="derm-bar-fill" id="valSkinBarrierFill" style="width: 88%;"></div>
+            <!-- Kolom Kiri: Foto Wajah Asli dengan Pendaran Aura Lembut -->
+            <div class="sleek-photo-card">
+              <div class="sleek-portrait-frame">
+                <img id="sleekUserFaceImg" class="sleek-portrait-img" src="assets/future_ceo_male_executive.jpg" alt="Pancaran Aura Wajah Anda" />
+                <div class="sleek-aura-halo-glow" id="sleekAuraGlow"></div>
+                <div class="sleek-verified-pill">
+                  <i class="fa-solid fa-circle-check text-emerald"></i>
+                  <span>Wajah Asli Terverifikasi</span>
                 </div>
-                <strong class="derm-score text-emerald" id="valSkinBarrierScore">88% (Segar &amp; Sehat)</strong>
               </div>
+              <div class="sleek-photo-caption">
+                <strong class="sleek-pc-name" id="sleekUserName">Sahabat FW JADE</strong>
+                <span class="sleek-pc-dob" id="sleekUserMeta">Energi Bazi &amp; Fisiognomi Alami</span>
+              </div>
+            </div>
 
-              <div class="derm-metric-box">
-                <span class="derm-lbl">Indeks Kelelahan &amp; Kantung Mata</span>
-                <div class="derm-val-bar">
-                  <div class="derm-bar-fill fill-amber" id="valEyeFatigueFill" style="width: 32%;"></div>
+            <!-- Kolom Kanan: Karakter Energi & Petuah Master Aura -->
+            <div class="sleek-insights-card">
+              
+              <!-- Elemen & Persentase Harmoni -->
+              <div class="sleek-element-strip">
+                <div class="sleek-element-badge">
+                  <i class="fa-solid fa-seedling text-emerald" id="sleekElementIcon"></i>
+                  <div>
+                    <span class="sleek-el-lbl">Elemen Aura Dominan:</span>
+                    <strong class="sleek-el-val" id="sleekElementTitle">Kayu Alami (Wood / 木)</strong>
+                  </div>
                 </div>
-                <strong class="derm-score text-gold" id="valEyeFatigueScore">32% (Kelelahan Ringan)</strong>
-              </div>
-            </div>
-
-            <div class="derm-reco-box">
-              <div class="derm-reco-icon"><i class="fa-solid fa-spa text-cyan"></i></div>
-              <div class="derm-reco-txt">
-                <strong>Rekomendasi Terapi Relaksasi Alami:</strong>
-                <p id="valDermTherapyNote">Gunakan sensasi pendinginan giok alami (Cooling Stone Relaxation) pada area bawah mata dan pipi selama 5 menit setiap pagi untuk membantu menyegarkan kulit wajah.</p>
-              </div>
-            </div>
-          </div>
-
-          <!-- 4. Empirical Customer Experience Survey Banner -->
-          <div class="cohort-trust-banner">
-            <div class="cohort-badge-icon">
-              <i class="fa-solid fa-award"></i>
-            </div>
-            <div class="cohort-badge-text">
-              <strong class="cohort-title">Survei Kepuasan &amp; Pengalaman Pelanggan FW JADE (2012–2026)</strong>
-              <p class="cohort-stats">
-                <span class="text-emerald">91.8%</span> merasakan ketenangan relaksasi batin • <span class="text-gold">93.2%</span> kepuasan perhiasan giok alami asli bersertifikat
-              </p>
-            </div>
-          </div>
-
-          <!-- 5. Strict In-Card Legal/Medical Disclaimer -->
-          <div class="lens-strict-disclaimer-box">
-            <i class="fa-solid fa-circle-info text-gold"></i>
-            <span><strong>Catatan Penafian:</strong> Penjelasan bio-fisika, FIR, dan terapi batu alami adalah referensi literatur komplementer holistik, bukan diagnosis atau intervensi medis klinis. Konsultasikan kondisi medis dengan dokter berizin. <a href="disclaimer.html" target="_blank">Lihat Dokumen Penafian Resmi &rarr;</a></span>
-          </div>
-
-        </div>
-
-        <!-- LENS VIEW 2: METAFISIKA, MIAN XIANG & HOROSKOP -->
-        <div class="lens-panel-view" id="lensPanelMystic" style="display: none;">
-          
-          <!-- FITUR 1: MIAN XIANG 12 PALACES (Landmark Titik Energi Wajah) -->
-          <div class="mian-xiang-card-wrap">
-            <div class="mx-header-row">
-              <span class="mx-badge"><i class="fa-solid fa-compass"></i> MIAN XIANG 12 PALACES</span>
-              <span class="mx-hint">Klik titik energi pada wajah untuk melihat detail</span>
-            </div>
-
-            <div class="mx-interactive-stage">
-              <!-- Face Energy Silhouette with Hotspots -->
-              <div class="mx-face-silhouette">
-                <div class="mx-face-contour"></div>
-                
-                <!-- Hotspot 1: Dahi (Istana Karier & Kebijaksanaan) -->
-                <button class="mx-hotspot-node node-forehead active" data-palace="career" title="Istana Karier & Kebijaksanaan">
-                  <span class="pulse-ring"></span>
-                  <i class="fa-solid fa-crown"></i>
-                </button>
-
-                <!-- Hotspot 2: Hidung (Istana Rezeki / Dun Tai) -->
-                <button class="mx-hotspot-node node-nose" data-palace="wealth" title="Istana Rezeki & Kemakmuran">
-                  <span class="pulse-ring"></span>
-                  <i class="fa-solid fa-coins"></i>
-                </button>
-
-                <!-- Hotspot 3: Pipi / Mata (Istana Vitalitas & Chi) -->
-                <button class="mx-hotspot-node node-cheek" data-palace="vitality" title="Istana Vitalitas & Chi">
-                  <span class="pulse-ring"></span>
-                  <i class="fa-solid fa-leaf"></i>
-                </button>
-
-                <!-- Hotspot 4: Dagu / Rahang (Istana Harmoni & Proteksi) -->
-                <button class="mx-hotspot-node node-chin" data-palace="harmony" title="Istana Harmoni & Proteksi">
-                  <span class="pulse-ring"></span>
-                  <i class="fa-solid fa-shield-halved"></i>
-                </button>
-              </div>
-
-              <!-- Dynamic Detail Drawer for Selected Palace -->
-              <div class="mx-palace-detail-card" id="mxDetailCard">
-                <div class="mx-detail-header">
-                  <span class="mx-detail-title" id="mxPalaceTitle">Istana Karier &amp; Kebijaksanaan (Guan Lu)</span>
-                  <span class="mx-detail-score" id="mxPalaceScore">94%</span>
+                <div class="sleek-score-badge">
+                  <span class="sleek-score-val" id="sleekAlignmentScore">96%</span>
+                  <span class="sleek-score-lbl">Harmoni Chi</span>
                 </div>
-                <p class="mx-detail-desc" id="mxPalaceDesc">
-                  Pancaran dahi Anda menunjukkan fokus strategis dan intuisi kepemimpinan yang sedang mencapai puncaknya. Membutuhkan batu berstruktur kristal padat untuk menjaga ketenangan keputusan.
+              </div>
+
+              <!-- 3 Karakter Alami Utama -->
+              <div class="sleek-traits-row" id="sleekTraitsContainer">
+                <span class="sleek-trait-pill"><i class="fa-solid fa-leaf text-emerald"></i> Tenang</span>
+                <span class="sleek-trait-pill"><i class="fa-solid fa-compass text-gold"></i> Bijaksana</span>
+                <span class="sleek-trait-pill"><i class="fa-solid fa-shield-halved text-cyan"></i> Fokus Stabil</span>
+              </div>
+
+              <!-- Petuah Bijak Master Aura -->
+              <div class="sleek-wisdom-quote">
+                <div class="sleek-quote-mark">“</div>
+                <p class="sleek-quote-text" id="sleekMasterAuraWisdom">
+                  Pancaran wajah Anda mencerminkan ketenangan batin, kejernihan berpikir, dan energi positif yang stabil. Sentuhan kesejukan alami batu giok sangat selaras untuk membantu meredakan penat harian, menjaga pikiran tetap rileks, serta memancarkan aura positif dalam setiap langkah Anda.
                 </p>
-                <div class="mx-detail-gem-match">
-                  <span class="mx-gem-lbl">Batu Penguat Istana Ini:</span>
-                  <strong class="mx-gem-val text-emerald" id="mxPalaceGem">Natural Aceh Jadeite (Grade A)</strong>
+                <span class="sleek-quote-author">— Master Aura FW JADE</span>
+              </div>
+
+              <!-- 3 Manfaat Sejati Giok untuk Keseharian (Bahasa Ramah & Jelas) -->
+              <div class="sleek-benefits-grid">
+                <div class="sleek-benefit-item">
+                  <div class="sleek-bi-icon"><i class="fa-solid fa-wind text-emerald"></i></div>
+                  <div class="sleek-bi-txt">
+                    <strong>Kesejukan &amp; Relaksasi</strong>
+                    <span>Sentuhan dingin giok alami memberi sensasi segar yang menenangkan tubuh dan pikiran.</span>
+                  </div>
+                </div>
+                <div class="sleek-benefit-item">
+                  <div class="sleek-bi-icon"><i class="fa-solid fa-heart text-gold"></i></div>
+                  <div class="sleek-bi-txt">
+                    <strong>Ketenangan Batin</strong>
+                    <span>Membantu menjaga kestabilan emosi, meredakan ketegangan, dan memelihara fokus harian.</span>
+                  </div>
+                </div>
+                <div class="sleek-benefit-item">
+                  <div class="sleek-bi-icon"><i class="fa-solid fa-gem text-cyan"></i></div>
+                  <div class="sleek-bi-txt">
+                    <strong>Penyelarasan Energi</strong>
+                    <span>Selaras dengan elemen diri sebagai perisai alami dan simbol kebaikan yang abadi.</span>
+                  </div>
                 </div>
               </div>
+
             </div>
           </div>
 
-          <!-- Zodiac & Shio Synergy Matrix Card -->
-          <div class="astrology-synergy-card">
-            <div class="astro-header">
-              <i class="fa-solid fa-ring text-gold"></i>
-              <span>Matriks Keselarasan Zodiak, Shio &amp; Elemen Semesta</span>
-            </div>
-            <div class="astro-grid">
-              <div class="astro-cell">
-                <span class="astro-k"><i class="fa-solid fa-moon text-cyan"></i> Zodiak Barat Selaras:</span>
-                <strong class="astro-v" id="valZodiacMatch">Taurus, Cancer, Capricorn, Pisces</strong>
-              </div>
-              <div class="astro-cell">
-                <span class="astro-k"><i class="fa-solid fa-sun text-gold"></i> Shio Tionghoa Selaras:</span>
-                <strong class="astro-v" id="valShioMatch">Naga, Macan, Kuda, Kelinci</strong>
-              </div>
-              <div class="astro-cell astro-full">
-                <span class="astro-k"><i class="fa-solid fa-compass text-emerald"></i> Siklus Wu Xing:</span>
-                <strong class="astro-v" id="valWuXingCycle">Kayu (Wood) → Mengalirkan Api Kemakmuran &amp; Stabilitas Rezeki</strong>
-              </div>
-            </div>
+          <!-- Quick Navigation Actions -->
+          <div class="sleek-dossier-actions">
+            <button type="button" class="luxury-btn btn-sleek-goto-gem" onclick="switchResultTab('gem')">
+              <i class="fa-solid fa-gem text-gold"></i> <span>Lanjut: Lihat Batu Giok Rekomendasi</span> <i class="fa-solid fa-arrow-right"></i>
+            </button>
+            <button type="button" class="luxury-btn btn-sleek-goto-chat" onclick="switchResultTab('chat')">
+              <i class="fa-solid fa-comments"></i> <span>Konsultasi Khusus Master Aura AI</span>
+            </button>
           </div>
 
-        </div>
+          <!-- Hidden Compatibility Fallback Anchors (Keamanan Runtime Script Lama) -->
+          <div style="display: none;" aria-hidden="true">
+            <span id="valAuraElement">WOOD</span>
+            <span id="valAuraScore">96%</span>
+            <span id="valVitality">91%</span>
+            <span id="valEnergyBalance">Optimal</span>
+            <span id="valFortuneLevel">Tinggi</span>
+            <span id="valEnergyReco">Menjaga stabilitas &amp; fokus</span>
+            <span id="pvDominantElement">Wood (Kayu)</span>
+            <span id="pvSupportingElement">Water (Air)</span>
+            <span id="pvDemographics">Pria • 30 Thn</span>
+            <span id="pvCorePersona">Tenang &amp; Bijaksana</span>
+            <span id="pvLifePath">Harmoni &amp; Kesejahteraan</span>
+            <span id="pvSoulMission">Menebarkan Kebaikan &amp; Ketenangan</span>
+            <span id="pvNetWorthProjected">Terselaraskan</span>
+            <span id="pvHeroPortrait"></span>
+            <span id="pvOriginalThumbnail"></span>
+            <span id="pvSpinner"></span>
+          </div>
 
-        <!-- Quick Ask Bar on Step 2 -->
-        <div class="step-quick-ask-box">
-          <input type="text" class="step-quick-input" id="step2QuickInput" placeholder="Tanya tentang hasil Anda...">
-          <button class="step-mic-btn" onclick="toggleVoiceMic()"><i class="fa-solid fa-microphone"></i></button>
-        </div>
-
-        <div class="step-indicator-connector">
-          <i class="fa-solid fa-chevron-down"></i>
         </div>
       </section>
 
@@ -1364,7 +835,10 @@
            ========================================================================= -->
       <section class="section-card section-gemstone step-card-box" id="secGemstone" style="display: none;">
         <div class="step-card-header-bar">
-          <div class="step-badge-indicator">✦ BATU PENJAGA &amp; REKOMENDASI TERBAIK UNTUK ANDA</div>
+          <button type="button" class="btn-back-home-pill" onclick="switchResultTab('aura')" title="Kembali ke Hasil Aura">
+            <i class="fa-solid fa-arrow-left"></i> <span>Hasil Aura</span>
+          </button>
+          <div class="step-badge-indicator"><i class="fa-solid fa-gem text-gold"></i> 2. BATU PENJAGA &amp; REKOMENDASI TERBAIK</div>
           <button type="button" class="step-close-btn" onclick="closeScannerFlowToHome()" title="Kembali ke Beranda"><i class="fa-solid fa-house" style="font-size: 0.95rem;"></i></button>
         </div>
         
@@ -1449,7 +923,7 @@
                 <button class="sub-action-btn" onclick="generateLuxuryAuraCard()">
                   <i class="fa-solid fa-share-nodes text-cyan"></i> <span>Unduh Kartu Aura</span>
                 </button>
-                <button class="sub-action-btn" onclick="document.getElementById('secManifestation').scrollIntoView({behavior:'smooth'});">
+                <button class="sub-action-btn" onclick="switchResultTab('chat')">
                   <i class="fa-solid fa-comments text-emerald"></i> <span>Tanya Master Aura</span>
                 </button>
               </div>
@@ -1457,6 +931,16 @@
 
           </div>
 
+        </div>
+
+        <!-- Stepper Bottom Navigation Row -->
+        <div class="stepper-bottom-nav-row">
+          <button type="button" class="luxury-btn btn-stepper-back" onclick="switchResultTab('aura')">
+            <i class="fa-solid fa-arrow-left"></i> <span>Kembali ke Hasil Aura</span>
+          </button>
+          <button type="button" class="luxury-btn btn-stepper-forward" onclick="switchResultTab('chat')">
+            <span>Lanjut: Konsultasi Master Aura</span> <i class="fa-solid fa-arrow-right"></i>
+          </button>
         </div>
       </section>
 
@@ -1466,10 +950,10 @@
            ========================================================================= -->
       <section class="section-card section-chat step-card-box" id="secManifestation" style="display: none;">
         <div class="step-card-header-bar">
-          <button type="button" class="btn-back-home-pill" onclick="document.getElementById('secGemstone').scrollIntoView({behavior:'smooth'});" title="Kembali ke Batu Penjaga">
+          <button type="button" class="btn-back-home-pill" onclick="switchResultTab('gem')" title="Kembali ke Batu Penjaga">
             <i class="fa-solid fa-arrow-left"></i> <span>Batu Penjaga</span>
           </button>
-          <div class="step-badge-indicator" id="chatStepBadgeIndicator"><i class="fa-solid fa-sparkles text-gold"></i> 4. KONSULTASI MASTER AURA • Eksplorasi Energi &amp; Sains</div>
+          <div class="step-badge-indicator" id="chatStepBadgeIndicator"><i class="fa-solid fa-comments text-gold"></i> 3. KONSULTASI MASTER AURA • Eksplorasi Energi &amp; Giok</div>
           <button type="button" class="step-close-btn" onclick="closeScannerFlowToHome()" title="Kembali ke Beranda"><i class="fa-solid fa-house" style="font-size: 0.95rem;"></i></button>
         </div>
 
@@ -1589,59 +1073,76 @@
           </div>
         </div>
 
-        <!-- Bottom Section: Bagikan Aura, My Aura Card, & Aksi Cepat (Gambar 3) -->
-        <div class="share-and-quick-actions-grid">
-          
-          <!-- Left: Bagikan Aura Anda -->
-          <div class="share-aura-col">
-            <h4 class="share-col-title">Bagikan Aura Anda<br><span class="share-col-sub">Inspire Others</span></h4>
-            <div class="share-social-buttons">
-              <button class="share-round-btn" id="btnShareWA" title="Bagikan ke WhatsApp"><i class="fa-brands fa-whatsapp"></i></button>
-              <button class="share-round-btn" title="Bagikan ke Instagram"><i class="fa-brands fa-instagram"></i></button>
-              <button class="share-round-btn" onclick="navigator.clipboard.writeText(window.location.href); alert('Link disalin ke clipboard!');" title="Salin Tautan"><i class="fa-solid fa-link"></i></button>
-              <button class="share-round-btn" id="btnDownloadCard" title="Unduh Kartu Aura"><i class="fa-solid fa-download"></i></button>
-            </div>
+        <!-- Bottom Section: Bagikan Aura & Aksi Cepat (Grid Simetris 2 Atas 2 Bawah - 2x2 Desktop) -->
+        <div class="actions-grid-2x2-wrapper">
+          <div class="actions-grid-2x2-header">
+            <h4 class="ag-main-title">Bagikan Aura &amp; Aksi Cepat</h4>
+            <p class="ag-subtitle">Simpan kartu digital Anda atau bagikan pancaran energi positif ini kepada sahabat dan keluarga</p>
           </div>
 
-          <!-- Middle: My Aura Card Preview (Gambar 3) -->
-          <div class="my-aura-card-col">
-            <span class="aura-card-tag-label">My Aura Card</span>
-            <div class="digital-aura-card-preview" id="digitalCardPreview" onclick="generateLuxuryAuraCard()">
-              <div class="card-preview-inner">
+          <div class="actions-grid-2x2">
+            <!-- Card 1 (Kiri Atas): Kartu Digital Aura -->
+            <div class="ag-card ag-card-preview" id="digitalCardPreview" onclick="generateLuxuryAuraCard()" role="button" tabindex="0" title="Unduh Kartu Aura">
+              <div class="ag-card-badge"><i class="fa-solid fa-gem text-gold"></i> KARTU DIGITAL AURA</div>
+              <div class="ag-card-body">
                 <div class="card-gem-thumb"></div>
                 <div class="card-preview-text">
                   <div class="c-elem">WOOD</div>
-                  <div class="c-score">96%</div>
+                  <div class="c-score">96% Harmoni</div>
                   <div class="c-stone">NATURAL ACEH JADEITE</div>
-                  <div class="c-role">My Guardian Stone</div>
-                  <div class="c-brand">✦ FW JADE</div>
+                  <div class="c-role">Batu Penjaga Terpilih</div>
+                  <span class="ag-click-hint"><i class="fa-solid fa-download text-emerald"></i> Ketuk untuk Unduh</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 2 (Kanan Atas): Unduh Format Story 9:16 -->
+            <div class="ag-card ag-card-story" id="btnDownloadCard" onclick="generateLuxuryAuraCard()" role="button" tabindex="0" title="Unduh Format 9:16 untuk Story">
+              <div class="ag-card-badge"><i class="fa-solid fa-mobile-screen text-cyan"></i> FORMAT STORY 9:16</div>
+              <div class="ag-card-body">
+                <div class="ag-icon-circle"><i class="fa-solid fa-cloud-arrow-down text-emerald"></i></div>
+                <div class="ag-card-meta">
+                  <strong class="ag-action-title">Unduh Poster Story</strong>
+                  <p class="ag-action-desc">Format proporsi 9:16 resolusi tinggi, siap dibagikan ke WhatsApp Status &amp; Instagram Story.</p>
+                  <span class="ag-click-hint"><i class="fa-solid fa-arrow-down"></i> Simpan Resolusi Penuh</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 3 (Kiri Bawah): Bagikan Langsung -->
+            <div class="ag-card ag-card-share">
+              <div class="ag-card-badge"><i class="fa-solid fa-share-nodes text-emerald"></i> BAGIKAN HASIL</div>
+              <div class="ag-card-body">
+                <div class="ag-social-col">
+                  <span class="ag-social-desc">Bagikan tautan hasil analisis kepada kerabat:</span>
+                  <div class="ag-social-buttons-row">
+                    <button type="button" class="ag-social-pill btn-wa" id="btnShareWA" title="Bagikan ke WhatsApp">
+                      <i class="fa-brands fa-whatsapp"></i> <span>WhatsApp</span>
+                    </button>
+                    <button type="button" class="ag-social-pill btn-ig" onclick="generateLuxuryAuraCard()" title="Bagikan ke Instagram">
+                      <i class="fa-brands fa-instagram"></i> <span>Instagram</span>
+                    </button>
+                    <button type="button" class="ag-social-pill btn-copy" onclick="navigator.clipboard.writeText(window.location.href); alert('Tautan berhasil disalin ke clipboard!');" title="Salin Tautan">
+                      <i class="fa-solid fa-link"></i> <span>Salin Link</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 4 (Kanan Bawah): Status Sesi & Jaminan Privasi -->
+            <div class="ag-card ag-card-status">
+              <div class="ag-card-badge"><i class="fa-solid fa-shield-halved text-gold"></i> STATUS SESI &amp; PRIVASI</div>
+              <div class="ag-card-body">
+                <div class="ag-icon-circle status-circle"><i class="fa-solid fa-circle-check text-emerald"></i></div>
+                <div class="ag-card-meta">
+                  <strong class="ag-action-title">Sesi Analisis Pertama Aktif</strong>
+                  <p class="ag-action-desc">100% Bebas Biaya • Data Biometrik Diproses Privat di Perangkat Anda • Tanpa Biaya Tersembunyi.</p>
+                  <span class="ag-status-verified"><i class="fa-solid fa-lock text-emerald"></i> Terenkripsi 256-Bit</span>
                 </div>
               </div>
             </div>
           </div>
-
-          <!-- Right: Aksi Cepat 3 Cards (Gambar 3) -->
-          <div class="quick-actions-col">
-            <span class="aura-card-tag-label">Aksi Cepat</span>
-            <div class="quick-cards-row">
-              <div class="q-card" onclick="generateLuxuryAuraCard()">
-                <div class="q-icon"><i class="fa-solid fa-mobile-screen"></i></div>
-                <h5 class="q-title">Kartu Aura 9:16</h5>
-                <p class="q-sub">Download &amp; Share</p>
-              </div>
-              <div class="q-card" onclick="document.getElementById('secAuraResults').scrollIntoView({behavior:'smooth'});">
-                <div class="q-icon"><i class="fa-solid fa-yin-yang"></i></div>
-                <h5 class="q-title">Before-After</h5>
-                <p class="q-sub">Lihat Perubahan</p>
-              </div>
-              <div class="q-card q-free">
-                <div class="q-icon"><i class="fa-solid fa-shield-halved text-emerald"></i></div>
-                <h5 class="q-title">Sesi Gratis Ke-1</h5>
-                <p class="q-sub text-emerald">Aktif (100% Free)</p>
-              </div>
-            </div>
-          </div>
-
         </div>
 
       </section>
@@ -2564,7 +2065,7 @@
   <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 
   <!-- Centralized Config & Application Logic -->
-  <script src="config.js?v=61"></script>
-  <script src="app.js?v=61"></script>
+  <script src="config.js?v=62"></script>
+  <script src="app.js?v=62"></script>
 </body>
 </html>
